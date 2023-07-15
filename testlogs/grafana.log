@@ -1,0 +1,5 @@
+logger=cleanup t=2024-02-17T07:46:32.791278225Z level=info msg="Completed cleanup jobs" duration=4.140739ms
+logger=grafana.update.checker t=2024-02-17T07:46:32.900579622Z level=info msg="Update check succeeded" duration=35.764472ms
+logger=plugins.update.checker t=2024-02-17T07:46:32.968630268Z level=info msg="Update check succeeded" duration=69.479795ms
+logger=infra.usagestats t=2024-02-17T07:47:15.842776507Z level=info msg="Usage stats are ready to report"
+logger=cleanup t=2024-02-17T07:56:32.791837625Z level=info msg="Completed cleanup jobs" duration=4.402219ms

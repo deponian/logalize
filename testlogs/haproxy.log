@@ -1,0 +1,5 @@
+[WARNING]  (1) : Server redis-backend/node0 was DOWN and now enters maintenance (DNS timeout status).
+[WARNING]  (1) : redis-backend/node0 changed its IP from (none) to 10.64.0.6 by k8s/10.124.16.10.
+[WARNING]  (1) : Server redis-backend/node0 ('node0.name.namespace.svc.cluster.local') is UP/READY (resolves again).
+[WARNING]  (1) : Server redis-backend/node0 administratively READY thanks to valid DNS answer.
+[WARNING]  (1) : redis-backend/node2 changed its IP from (none) to 10.64.2.8 by k8s/10.124.16.10.

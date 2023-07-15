@@ -1,0 +1,13 @@
+words:
+  warning:
+    fg: "#fcba03"
+    style: bold
+    list:
+      - "detected"
+      - "ignore"
+      - "miss"
+      - "readonly"
+      - "reload"
+      - "restart"
+      - "skip"
+      - "warn"

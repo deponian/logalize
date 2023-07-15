@@ -1,0 +1,5 @@
+time="2024-02-17T08:31:14Z" level=info msg="Alloc=17298 TotalAlloc=87016574 Sys=69477 NumGC=11189 Goroutines=106"
+time="2024-02-17T08:32:22Z" level=info msg="invalidated cache for resource in namespace: argocd with the name: argocd-notifications-secret"
+time="2024-02-17T08:32:22Z" level=info msg="invalidated cache for resource in namespace: argocd with the name: argocd-notifications-cm"
+time="2024-02-17T08:35:22Z" level=info msg="invalidated cache for resource in namespace: argocd with the name: argocd-notifications-secret"
+time="2024-02-17T08:35:22Z" level=info msg="invalidated cache for resource in namespace: argocd with the name: argocd-notifications-cm"

@@ -1,0 +1,83 @@
+# $remote_addr - $remote_user [$time_local] "$request" $status $body_bytes_sent "$http_referer" "$http_user_agent" $request_length $request_time [$proxy_upstream_name] [$proxy_alternative_upstream_name] $upstream_addr $upstream_response_length $upstream_response_time $upstream_status $req_id
+formats:
+  nginx-ingress-controller:
+    # $remote_addr
+    - pattern: (\d{1,3}(\.\d{1,3}){3} )
+      fg: "#f5ce42"
+    # -
+    - pattern: (- )
+      fg: "#807e7a"
+    # $remote_user
+    - pattern: ([^ ]+ )
+      fg: "#764a9e"
+    # [$time_local]
+    - pattern: (\[.+\] )
+      fg: "#148dd9"
+    # "$request"
+    - pattern: ("[^"]+" )
+      fg: "#9ddb56"
+    # $status
+    - pattern: (\d\d\d )
+      fg: "#ffffff"
+      alternatives:
+        - pattern: (2\d\d )
+          fg: "#00ff00"
+          style: bold
+        - pattern: (3\d\d )
+          fg: "#00ffff"
+          style: bold
+        - pattern: (4\d\d )
+          fg: "#ff0000"
+          style: bold
+        - pattern: (5\d\d )
+          fg: "#ff00ff"
+          style: bold
+    # $body_bytes_sent
+    - pattern: ([\d]+ )
+      fg: "#7d7d7d"
+    # "$http_referer"
+    - pattern: ("[^"]+" )
+      fg: "#3cc2d6"
+    # "$http_user_agent"
+    - pattern: ("[^"]+" )
+      fg: "#aa7dd1"
+    # $request_length
+    - pattern: (\d+ )
+      fg: "#3cc2d6"
+    # $request_time
+    - pattern: ([\d\.]+ )
+      fg: "#e3973b"
+    # [$proxy_upstream_name]
+    - pattern: (\[.+\] )
+      fg: "#148dd9"
+    # [$proxy_alternative_upstream_name]
+    - pattern: (\[.*\] )
+      fg: "#7d7d7d"
+    # $upstream_addr
+    - pattern: ((\d{1,3}(\.\d{1,3}){3}:\d+|-) )
+      fg: "#9ddb56"
+    # $upstream_response_length
+    - pattern: ((\d+|-) )
+      fg: "#aa7dd1"
+    # $upstream_response_time
+    - pattern: (([\d\.]+|-) )
+      fg: "#cfcc3e"
+    # $upstream_status
+    - pattern: ((\d\d\d|-) )
+      fg: "#ffffff"
+      alternatives:
+        - pattern: (2\d\d )
+          fg: "#00ff00"
+          style: bold
+        - pattern: (3\d\d )
+          fg: "#00ffff"
+          style: bold
+        - pattern: (4\d\d )
+          fg: "#ff0000"
+          style: bold
+        - pattern: (5\d\d )
+          fg: "#ff00ff"
+          style: bold
+    # $req_id
+    - pattern: ([[:xdigit:]]{32})
+      fg: "#e3973b"

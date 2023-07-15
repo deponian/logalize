@@ -1,0 +1,5 @@
+1:S 17 Feb 2024 00:39:12.500 * Starting automatic rewriting of AOF on 3886% growth
+1:S 17 Feb 2024 00:39:12.501 * Background append only file rewriting started by pid 4018569
+1:S 17 Feb 2024 00:39:12.556 * AOF rewrite child asks to stop sending diffs.
+4018569:C 17 Feb 2024 00:39:12.557 * Parent agreed to stop sending diffs. Finalizing AOF...
+4018569:C 17 Feb 2024 00:39:12.557 * Concatenating 0.00 MB of AOF diff received from parent.

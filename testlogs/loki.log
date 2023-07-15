@@ -1,0 +1,5 @@
+level=info ts=2024-02-17T09:10:31.867530876Z caller=index_set.go:86 msg="uploading table loki_index_19762"
+level=info ts=2024-02-17T09:10:31.867535341Z caller=index_set.go:107 msg="finished uploading table loki_index_19762"
+level=info ts=2024-02-17T09:10:31.867540288Z caller=index_set.go:185 msg="cleaning up unwanted indexes from table loki_index_19762"
+level=info ts=2024-02-17T09:10:31.867545952Z caller=index_set.go:86 msg="uploading table loki_index_19765"
+level=info ts=2024-02-17T09:10:31.867549945Z caller=index_set.go:107 msg="finished uploading table loki_index_19765"

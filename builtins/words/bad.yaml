@@ -1,0 +1,26 @@
+words:
+  bad:
+    fg: "#f06c62"
+    style: bold
+    list:
+      - "alarm"
+      - "block"
+      - "close"
+      - "critical"
+      - "deny"
+      - "disable"
+      - "down"
+      - "empty"
+      - "end"
+      - "error"
+      - "exit"
+      - "fail"
+      - "false"
+      - "fatal"
+      - "invalid"
+      - "offline"
+      - "shut"
+      - "stop"
+      - "terminate"
+      - "unable"
+      - "unreach"

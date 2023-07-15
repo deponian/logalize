@@ -1,0 +1,5 @@
+2024/02/16 00:12:57 [crit] 341169#341169: *121575 SSL_do_handshake() failed (SSL: error:0A00006C:SSL routines::bad key share) while SSL handshaking, client: 127.0.0.1, server: 127.0.0.1:443
+2024/02/16 14:44:53 [crit] 341169#341169: *122058 SSL_do_handshake() failed (SSL: error:0A00006C:SSL routines::bad key share) while SSL handshaking, client: 127.0.0.1, server: 127.0.0.1:443
+2024/02/16 15:21:02 [error] 341169#341169: *122114 upstream timed out (110: Connection timed out) while reading response header from upstream, client: 127.0.0.1, server: test.example.com, request: "GET /icons/www.example.com/icon.png HTTP/2.0", upstream: "http://127.0.0.1:80/icons/www.example.com/icon.png", host: "test.example.com"
+2024/02/16 19:13:44 [crit] 341169#341169: *122264 SSL_do_handshake() failed (SSL: error:0A00006C:SSL routines::bad key share) while SSL handshaking, client: 127.0.0.1, server: 127.0.0.1:443
+2024/02/16 20:41:36 [error] 341169#341169: *122380 client intended to send too large body: 10485761 bytes, client: 127.0.0.1, server: example.com, request: "POST / HTTP/1.1", host: "127.0.0.1"

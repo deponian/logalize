@@ -1,0 +1,43 @@
+---
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  test:
+    name: Run tests
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version-file: ./go.mod
+
+    - name: Unit tests
+      run: |
+        mv .testdata src/builtins
+        go test -coverprofile=coverage.out ./src && go tool cover -func=coverage.out
+
+    - name: Check that we didn't lose anything
+      run: diff <(cat testlogs/* | go run ./main.go | sed 's/\x1b\[[0-9;]*m//g') <(cat testlogs/*)
+
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v4.3.1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}

@@ -1,0 +1,5 @@
+127.0.0.102 - - [27/Jun/2023:07:13:16 +0000] "GET /language/en-GB/en-GB.xml HTTP/1.1" 403 9 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36" 619 0.003 [imgproxy-imgproxy-imgproxy-80] [] 10.64.6.9:8080 9 0.003 403 07d2cd60741517a6d8222f40757b94c4
+127.0.0.105 - - [27/Jun/2023:07:13:21 +0000] "GET /_health HTTP/1.1" 308 164 "-" "Blackbox Exporter/0.23.0" 113 0.000 [example-example-puma-3000] [] - - - - 6908e7e7a9b7b10695edb441277603a7
+127.0.0.106 - - [27/Jun/2023:07:13:21 +0000] "GET / HTTP/2.0" 200 40043 "-" "Blackbox Exporter/0.23.0" 37 0.108 [example-example-web-80] [] 10.64.4.3:80 40095 0.107 200 ccb80c4774bfc5b3858ffeb5eb773efa
+127.0.0.108 - - [27/Jun/2023:07:13:23 +0000] "GET /_health HTTP/1.1" 308 164 "-" "Blackbox Exporter/0.23.0" 113 0.000 [example-example-puma-3000] [] - - - - e59e9233e58fc62eeda7d13f702092f3
+127.0.0.109 - - [27/Jun/2023:07:13:25 +0000] "GET / HTTP/1.1" 200 0 "-" "Go-http-client/1.1" 133 0.004 [imgproxy-imgproxy-imgproxy-80] [] 10.64.6.9:8080 0 0.003 200 cbaa610f2b69af2cff28dfd202ae4466

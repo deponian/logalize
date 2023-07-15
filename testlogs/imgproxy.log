@@ -1,0 +1,5 @@
+INFO    [2024-02-17T09:09:44Z] Completed in 74.051µs /favicon.ico  request_id=df6ed152823aa941868c9dc4ed5b523d method=GET status=200 client_ip=34.96.5.1
+INFO    [2024-02-17T09:09:45Z] Started /health  request_id=413a0974f99f20e5c6449f884be9c8d5 method=GET client_ip=10.64.9.2
+INFO    [2024-02-17T09:09:45Z] Completed in 97.763µs /health  request_id=413a0974f99f20e5c6449f884be9c8d5 method=GET status=200 client_ip=10.64.9.2
+INFO    [2024-02-17T09:09:49Z] Started /health  request_id=yfyjFiu4AYUSiSdNImc-v method=GET client_ip=10.64.2.1
+INFO    [2024-02-17T09:09:49Z] Completed in 115.419µs /health  request_id=yfyjFiu4AYUSiSdNImc-v method=GET status=200 client_ip=10.64.2.1
