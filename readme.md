@@ -17,7 +17,7 @@
 Usage
 -----
 
-```bash
+```sh
 cat /path/to/logs/file.log | logalize
 ```
 
@@ -26,6 +26,13 @@ cat /path/to/logs/file.log | logalize
   <source media="(prefers-color-scheme: light)" srcset="images/avif/screenshot-light.avif">
   <img alt="Screenshot" src="images/avif/screenshot-light.avif">
 </picture>
+
+Installation
+------------
+
+```sh
+go install github.com/deponian/logalize@latest
+```
 
 How it works
 ------------
