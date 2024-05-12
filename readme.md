@@ -30,6 +30,8 @@ cat /path/to/logs/file.log | logalize
 Installation
 ------------
 
+Download the binary for your architecture from [releases](https://github.com/deponian/logalize/releases/latest) or use `go install` if you already have `$GOPATH/bin` in your `$PATH`:
+
 ```sh
 go install github.com/deponian/logalize@latest
 ```
