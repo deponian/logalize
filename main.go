@@ -14,15 +14,16 @@ import (
 )
 
 var (
-	version     string = "0.1.0"
-	releaseDate string = "2024-05-12"
+	version string = "0.1.0"
+	commit  string = "latest"
+	date    string = "2024-05-12"
 )
 
 //go:embed builtins/*
 var builtins embed.FS
 
 func main() {
-	logalize.SetGlobals(version, releaseDate)
+	logalize.SetGlobals(version, commit, date)
 
 	// parse options
 	options := logalize.Options{}

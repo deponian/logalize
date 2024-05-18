@@ -9,14 +9,14 @@ import (
 )
 
 func TestOptionsVersion(t *testing.T) {
-	SetGlobals("0.0.0", "1970-01-01")
+	SetGlobals("0.0.0", "latest", "1970-01-01")
 	options := Options{
 		ConfigPath: "",
 		NoBuiltins: true,
 	}
 	t.Run("TestOptionsVersion", func(t *testing.T) {
-		if options.Version() != "0.0.0 (1970-01-01)" {
-			t.Errorf("Options.Version() failed: got %v, want %v", options.Version(), "0.0.0 (test) 1970-01-01")
+		if options.Version() != "0.0.0 (latest) 1970-01-01" {
+			t.Errorf("Options.Version() failed: got %v, want %v", options.Version(), "0.0.0 (latest) 1970-01-01")
 		}
 	})
 }

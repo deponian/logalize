@@ -13,7 +13,7 @@ type Options struct {
 }
 
 func (Options) Version() string {
-	return fmt.Sprintf("%s (%s)", logalizeVersion, logalizeReleaseDate)
+	return fmt.Sprintf("%s (%s) %s", logalizeVersion, logalizeCommitHash, logalizeReleaseDate)
 }
 
 // ParseOptions parses command-line options

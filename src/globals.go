@@ -39,10 +39,12 @@ var colorProfile = termenv.ColorProfile()
 // will be used for --version flag
 var (
 	logalizeVersion     string
+	logalizeCommitHash  string
 	logalizeReleaseDate string
 )
 
-func SetGlobals(version, releaseDate string) {
+func SetGlobals(version, commit, date string) {
 	logalizeVersion = version
-	logalizeReleaseDate = releaseDate
+	logalizeCommitHash = commit
+	logalizeReleaseDate = date
 }
