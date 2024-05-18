@@ -3,6 +3,8 @@
 
 version: 1
 
+project_name: logalize
+
 before:
   hooks:
     - go mod tidy
@@ -14,21 +16,43 @@ builds:
       - linux
       - windows
       - darwin
+      - freebsd
+    goarch:
+      - amd64
+      - arm64
+      - 386
 
 archives:
-  - format: tar.gz
-    # this name template makes the OS and Arch compatible with the results of `uname`.
+  - id: binary
+    format: binary
+    files:
+    - none*
     name_template: >-
       {{ .ProjectName }}_
-      {{- title .Os }}_
+      {{- .Version }}_
+      {{- if eq .Os "darwin" }}macOS
+      {{- else }}{{ tolower .Os }}{{ end }}_
       {{- if eq .Arch "amd64" }}x86_64
       {{- else if eq .Arch "386" }}i386
       {{- else }}{{ .Arch }}{{ end }}
       {{- if .Arm }}v{{ .Arm }}{{ end }}
-    # use zip for windows archives
+  - id: binary-tar-zst
+    format: tar.zst
+    name_template: >-
+      {{ .ProjectName }}_
+      {{- .Version }}_
+      {{- if eq .Os "darwin" }}macOS
+      {{- else }}{{ tolower .Os }}{{ end }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+      {{- if .Arm }}v{{ .Arm }}{{ end }}
     format_overrides:
       - goos: windows
         format: zip
+
+checksum:
+  name_template: '{{ .ProjectName }}_checksums.txt'
 
 changelog:
   sort: asc
@@ -36,3 +60,50 @@ changelog:
     exclude:
       - "^docs:"
       - "^test:"
+      - "^build:"
+      - "^ci:"
+
+nfpms:
+  - package_name: logalize
+    homepage: "https://github.com/deponian/logalize"
+    maintainer: "Rufus Deponian <rufus@deponian.com>"
+    description: |
+      Fast and extensible log colorizer.
+      Alternative to ccze
+    license: "MIT"
+    formats:
+      - deb
+      - rpm
+      - archlinux
+    provides:
+    - logalize
+    section: "utils"
+    priority: "optional"
+    contents:
+      - src: ./.logalize.yaml
+        dst: /etc/{{ .ProjectName }}/logalize.yaml
+        type: config
+
+      - src: ./readme.md
+        dst: /usr/share/doc/{{ .ProjectName }}/README
+
+      - src: ./CHANGELOG.md
+        dst: /usr/share/doc/{{ .ProjectName }}/CHANGELOG
+
+      - src: ./LICENSE
+        dst: /usr/share/doc/{{ .ProjectName }}/LICENSE
+        packager: deb
+
+      - src: ./LICENSE
+        dst: /usr/share/doc/{{ .ProjectName }}/LICENSE
+        packager: rpm
+
+      - src: ./LICENSE
+        dst: /usr/share/licenses/{{ .ProjectName }}/LICENSE
+        packager: archlinux
+    rpm:
+      compression: zstd
+    deb:
+      compression: zstd
+    archlinux:
+      packager: Rufus Deponian <rufus@deponian.com>
