@@ -19,6 +19,7 @@ jobs:
       security-events: write  # for github/codeql-action/autobuild to send a status report
     name: Analyze
     runs-on: ubuntu-latest
+    if: ${{ !startsWith(github.event.head_commit.message, 'docs:') }}
 
     strategy:
       fail-fast: false

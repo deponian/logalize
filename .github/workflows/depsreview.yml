@@ -10,6 +10,7 @@ jobs:
   dependency-review:
     name: Run dependency review
     runs-on: ubuntu-latest
+    if: ${{ !startsWith(github.event.head_commit.message, 'docs:') }}
     steps:
       - name: 'Checkout Repository'
         uses: actions/checkout@v4
