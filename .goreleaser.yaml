@@ -41,7 +41,7 @@ archives:
       {{- .Version }}_
       {{- if eq .Os "darwin" }}macOS
       {{- else }}{{ tolower .Os }}{{ end }}_
-      {{- if eq .Arch "amd64" }}x86_64
+      {{- if eq .Arch "amd64" }}amd64
       {{- else if eq .Arch "386" }}i386
       {{- else }}{{ .Arch }}{{ end }}
       {{- if .Arm }}v{{ .Arm }}{{ end }}
@@ -52,7 +52,7 @@ archives:
       {{- .Version }}_
       {{- if eq .Os "darwin" }}macOS
       {{- else }}{{ tolower .Os }}{{ end }}_
-      {{- if eq .Arch "amd64" }}x86_64
+      {{- if eq .Arch "amd64" }}amd64
       {{- else if eq .Arch "386" }}i386
       {{- else }}{{ .Arch }}{{ end }}
       {{- if .Arm }}v{{ .Arm }}{{ end }}
@@ -88,6 +88,16 @@ nfpms:
     - logalize
     section: "utils"
     priority: "optional"
+    file_name_template: >-
+      {{ .PackageName }}_
+      {{- .Version }}_
+      {{- .Os }}_
+      {{- if eq .Arch "amd64" }}amd64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+      {{- with .Arm }}v{{ . }}{{ end }}
+      {{- with .Mips }}_{{ . }}{{ end }}
+      {{- if not (eq .Amd64 "v1") }}{{ .Amd64 }}{{ end }}
     contents:
       - src: ./.logalize.yaml
         dst: /etc/{{ .ProjectName }}/logalize.yaml
