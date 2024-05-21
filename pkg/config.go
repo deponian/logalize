@@ -10,6 +10,12 @@ import (
 	"github.com/knadh/koanf/v2"
 )
 
+// Options stores the values of command-line options
+type Options struct {
+	ConfigPath string // path to configuration file
+	NoBuiltins bool   // disable built-in log formats and words
+}
+
 func InitConfig(opts Options, builtins embed.FS) (*koanf.Koanf, error) {
 	config := koanf.New(".")
 

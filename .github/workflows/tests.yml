@@ -33,7 +33,7 @@ jobs:
     - name: Unit tests
       run: |
         mv .testdata src/builtins
-        go test -coverprofile=coverage.out ./src && go tool cover -func=coverage.out
+        go test -coverprofile=coverage.out ./pkg && go tool cover -func=coverage.out
 
     - name: Check that we didn't lose anything
       run: diff <(cat testlogs/* | go run ./main.go | sed 's/\x1b\[[0-9;]*m//g') <(cat testlogs/*)
