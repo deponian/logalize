@@ -202,5 +202,5 @@ Simplified version of the main loop:`)
 		".TH %s %v \"%s\" \"%s %s\" \"%s\"",
 		strings.ToUpper(name), section, date, name, version, description,
 	)
-	fmt.Println(doc.String())
+	fmt.Print(doc.String())
 }
