@@ -56,7 +56,7 @@ go install github.com/deponian/logalize@latest
 How it works
 ------------
 
-Logalize reads one line at a time and then checks if it matches one of log formats (`formats`), general regular expressions (`patterns`) or plain English words and their [inflected](https://en.wikipedia.org/wiki/Inflection) forms (`words`). See configuration below for more details.
+Logalize reads one line from stdin at a time and then checks if it matches one of log formats (`formats`), general regular expressions (`patterns`) or plain English words and their [inflected](https://en.wikipedia.org/wiki/Inflection) forms (`words`). See configuration below for more details.
 
 Simplified version of the main loop:
 1. Read a line from stdin

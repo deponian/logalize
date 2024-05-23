@@ -7,7 +7,7 @@ import (
 )
 
 var (
-	version string = "0.1.0"
+	version string = "0.0.0"
 	commit  string = "latest"
 	date    string = "2024-05-12"
 )
@@ -16,5 +16,6 @@ var (
 var builtins embed.FS
 
 func main() {
-	cmd.Execute(builtins, version, commit, date)
+	cmd.Init(builtins, version, commit, date)
+	cmd.Execute()
 }

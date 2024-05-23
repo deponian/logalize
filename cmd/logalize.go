@@ -12,14 +12,16 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func Execute(builtins embed.FS, version, commit, date string) {
+var LogalizeCmd *cobra.Command
+
+func Init(builtins embed.FS, version, commit, date string) {
 	options := logalize.Options{}
 
-	logalizeCmd := &cobra.Command{
+	LogalizeCmd = &cobra.Command{
 		Use:   "logalize",
-		Short: "Fast and extensible log colorizer. Alternative to ccze",
-		Long: `Logalize is fast and extensible log colorizer
-Alternative to ccze and colorize`,
+		Short: "fast and extensible log colorizer",
+		Long: `Logalize is log colorizer.
+It's fast and extensible alternative to ccze and colorize.`,
 		Version: fmt.Sprintf("%s (%s) %s", version, commit, date),
 		Run: func(cmd *cobra.Command, args []string) {
 			// build config
@@ -38,12 +40,15 @@ Alternative to ccze and colorize`,
 				log.Fatal(err)
 			}
 		},
+		DisableAutoGenTag: true,
 	}
 
-	logalizeCmd.Flags().StringVarP(&options.ConfigPath, "config", "c", "", "path to configuration file")
-	logalizeCmd.Flags().BoolVarP(&options.NoBuiltins, "no-builtins", "n", false, "disable built-in log formats and words")
+	LogalizeCmd.Flags().StringVarP(&options.ConfigPath, "config", "c", "", "path to configuration file")
+	LogalizeCmd.Flags().BoolVarP(&options.NoBuiltins, "no-builtins", "n", false, "disable built-in log formats and words")
+}
 
-	err := logalizeCmd.Execute()
+func Execute() {
+	err := LogalizeCmd.Execute()
 	if err != nil {
 		log.Fatal(err)
 	}
