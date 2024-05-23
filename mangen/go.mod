@@ -6,6 +6,7 @@ replace github.com/deponian/logalize => ../
 
 require (
 	github.com/deponian/logalize v0.0.0-00010101000000-000000000000
+	github.com/muesli/mango v0.2.0
 	github.com/muesli/mango-cobra v1.2.1-0.20230316100559-6d2870940103
 	github.com/muesli/roff v0.1.0
 )
@@ -27,7 +28,6 @@ require (
 	github.com/mattn/go-runewidth v0.0.15 // indirect
 	github.com/mitchellh/copystructure v1.2.0 // indirect
 	github.com/mitchellh/reflectwalk v1.0.2 // indirect
-	github.com/muesli/mango v0.2.0 // indirect
 	github.com/muesli/mango-pflag v0.1.0 // indirect
 	github.com/muesli/termenv v0.15.2 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
