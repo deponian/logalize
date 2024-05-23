@@ -32,7 +32,7 @@ jobs:
 
     - name: Unit tests
       run: |
-        mv .testdata src/builtins
+        mv .testdata pkg/builtins
         go test -coverprofile=coverage.out ./pkg && go tool cover -func=coverage.out
 
     - name: Check that we didn't lose anything
