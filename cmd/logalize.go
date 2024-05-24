@@ -23,6 +23,7 @@ func Init(builtins embed.FS, version, commit, date string) {
 		Long: `Logalize is log colorizer.
 It's fast and extensible alternative to ccze and colorize.`,
 		Version: fmt.Sprintf("%s (%s) %s", version, commit, date),
+		Args:    cobra.NoArgs,
 		Run: func(cmd *cobra.Command, args []string) {
 			// build config
 			lemmatizer, err := golem.New(en.New())
