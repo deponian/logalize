@@ -11,6 +11,7 @@ env_files:
 before:
   hooks:
     - ./scripts/generate_manpages.sh {{ .Version }}
+    - ./scripts/generate_completions.sh
 
 builds:
   - env:
@@ -120,18 +121,40 @@ nfpms:
         file_info:
           mode: 0644
 
+      - src: ./completions/logalize.bash
+        dst: /usr/share/bash-completion/completions/logalize
+        file_info:
+          mode: 0644
+      - src: ./completions/logalize.fish
+        dst: /usr/share/fish/vendor_completions.d/logalize.fish
+        file_info:
+          mode: 0644
+      - src: ./completions/logalize.zsh
+        dst: /usr/share/zsh/vendor-completions/_logalize
+        packager: deb
+        file_info:
+          mode: 0644
+      - src: ./completions/logalize.zsh
+        dst: /usr/share/zsh/vendor-completions/_logalize
+        packager: rpm
+        file_info:
+          mode: 0644
+      - src: ./completions/logalize.zsh
+        dst: /usr/share/zsh/site-functions/_logalize
+        packager: archlinux
+        file_info:
+          mode: 0644
+
       - src: ./LICENSE
         dst: /usr/share/doc/{{ .ProjectName }}/LICENSE
         packager: deb
         file_info:
           mode: 0644
-
       - src: ./LICENSE
         dst: /usr/share/doc/{{ .ProjectName }}/LICENSE
         packager: rpm
         file_info:
           mode: 0644
-
       - src: ./LICENSE
         dst: /usr/share/licenses/{{ .ProjectName }}/LICENSE
         packager: archlinux
