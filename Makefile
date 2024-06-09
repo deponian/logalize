@@ -83,6 +83,11 @@ coverage-func: test
 coverage-html: test
 	go tool cover -html=coverage.out
 
+## changelog: generate new changelog
+.PHONY: changelog
+changelog:
+	git cliff -c .cliff.toml --bump > CHANGELOG.md
+
 ## build: build the application
 .PHONY: build
 build: $(build_bindir)/$(VERSION)/$(app)
