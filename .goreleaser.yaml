@@ -10,8 +10,8 @@ env_files:
 
 before:
   hooks:
-    - ./scripts/generate_manpages.sh {{ .Version }}
-    - ./scripts/generate_completions.sh
+    - make VERSION={{ .Version }} manpage
+    - make completions
 
 builds:
   - env:
