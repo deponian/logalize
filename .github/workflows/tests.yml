@@ -32,11 +32,14 @@ jobs:
 
     - name: Unit tests
       run: |
-        mv .testdata pkg/builtins
-        go test -coverprofile=coverage.out ./pkg && go tool cover -func=coverage.out
+        make test
+
+    - name: Build the app
+      run: |
+        make build
 
     - name: Check that we didn't lose anything
-      run: diff <(cat testlogs/* | go run ./main.go | sed 's/\x1b\[[0-9;]*m//g') <(cat testlogs/*)
+      run: diff <(cat testlogs/* | ./dist/latest/logalize | sed 's/\x1b\[[0-9;]*m//g') <(cat testlogs/*)
 
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v4.3.1
