@@ -69,12 +69,18 @@ audit:
 ## test: run all tests
 .PHONY: test
 test:
-	go test -v -race ./pkg
-
-## coverage: run all tests and display coverage
-.PHONY: coverage
-coverage:
+	cp -r .testdata pkg/builtins
 	go test -v -race -coverprofile=coverage.out ./pkg
+	rm -rf pkg/builtins
+
+## coverage-func: run all tests and display coverage with "-func"
+.PHONY: coverage-func
+coverage-func: test
+	go tool cover -func=coverage.out
+
+## coverage-html: run all tests and display coverage with "-html"
+.PHONY: coverage-html
+coverage-html: test
 	go tool cover -html=coverage.out
 
 ## build: build the application
