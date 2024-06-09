@@ -9,7 +9,7 @@ import (
 	"github.com/muesli/termenv"
 )
 
-// representation of one capture group in a config file
+// CapGroup represents of one capture group in a config file
 type CapGroup struct {
 	Pattern      string       `koanf:"pattern"`
 	Foreground   string       `koanf:"fg"`
@@ -19,10 +19,10 @@ type CapGroup struct {
 	Regexp       *regexp.Regexp
 }
 
-// representation of a list of capture groups
+// CapGroupList represents of a list of capture groups
 type CapGroupList []CapGroup
 
-// representation of log format
+// LogFormat represents of log format
 type LogFormat struct {
 	Name      string
 	CapGroups CapGroupList
