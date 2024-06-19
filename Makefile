@@ -10,18 +10,18 @@ else
 endif
 
 # building vars
-EXTRA_LDFLAGS :=
+EXTRA_LDFLAGS ?=
 ldflags       := -s -w
 ldflags       += -X main.version=$(VERSION)
 ldflags       += -X main.commit=$(COMMIT)
 ldflags       += -X main.date=$(DATE)
 ldflags       += $(EXTRA_LDFLAGS)
 
-EXTRA_GOFLAGS :=
+EXTRA_GOFLAGS ?=
 goflags       := -trimpath
 goflags       += $(EXTRA_GOFLAGS)
 
-CGO_ENABLED ?= 0
+CGO_ENABLED ?= 1
 
 src := $(shell find . -type f -name '*.go' -print) go.mod go.sum
 
