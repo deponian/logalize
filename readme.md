@@ -46,6 +46,10 @@ sudo rpm -i logalize_X.X.X_linux_amd64.rpm
 ```sh
 sudo pacman -U logalize_X.X.X_linux_amd64.pkg.tar.zst
 ```
+or install from AUR:
+```sh
+yay -S logalize
+```
 
 Use `go install` if you already have `$GOPATH/bin` in your `$PATH`:
 
