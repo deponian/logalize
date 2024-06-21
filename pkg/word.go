@@ -2,6 +2,7 @@ package logalize
 
 import (
 	"slices"
+	"strings"
 
 	"github.com/aaaton/golem/v4"
 	"github.com/knadh/koanf/v2"
@@ -53,7 +54,9 @@ func (words *Words) highlightWord(word string) string {
 	allWordGroups := append(words.Other, words.Good, words.Bad)
 	for _, wordGroup := range allWordGroups {
 		lemma := words.Lemmatizer.Lemma(word)
-		if slices.Contains(wordGroup.List, lemma) || slices.Contains(wordGroup.List, word) {
+		if slices.Contains(wordGroup.List, lemma) ||
+			slices.Contains(wordGroup.List, word) ||
+			slices.Contains(wordGroup.List, strings.ToLower(word)) {
 			word = highlight(word, wordGroup.Foreground, wordGroup.Background, wordGroup.Style)
 			break
 		}
@@ -68,16 +71,22 @@ func (words *Words) highlightWord(word string) string {
 func (words *Words) highlightNegatedWord(phrase, negator, word string) string {
 	lemma := words.Lemmatizer.Lemma(word)
 	// good
-	if slices.Contains(words.Good.List, lemma) || slices.Contains(words.Good.List, word) {
+	if slices.Contains(words.Good.List, lemma) ||
+		slices.Contains(words.Good.List, word) ||
+		slices.Contains(words.Good.List, strings.ToLower(word)) {
 		return highlight(phrase, words.Bad.Foreground, words.Bad.Background, words.Bad.Style)
 	}
 	// bad
-	if slices.Contains(words.Bad.List, lemma) || slices.Contains(words.Bad.List, word) {
+	if slices.Contains(words.Bad.List, lemma) ||
+		slices.Contains(words.Bad.List, word) ||
+		slices.Contains(words.Bad.List, strings.ToLower(word)) {
 		return highlight(phrase, words.Good.Foreground, words.Good.Background, words.Good.Style)
 	}
 	// other
 	for _, wordGroup := range words.Other {
-		if slices.Contains(wordGroup.List, lemma) || slices.Contains(wordGroup.List, word) {
+		if slices.Contains(wordGroup.List, lemma) ||
+			slices.Contains(wordGroup.List, word) ||
+			slices.Contains(wordGroup.List, strings.ToLower(word)) {
 			return negator + " " + highlight(word, wordGroup.Foreground, wordGroup.Background, wordGroup.Style)
 		}
 	}
