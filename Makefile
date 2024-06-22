@@ -1,6 +1,5 @@
 # general vars
-app     := logalize
-DATE    := $(shell date '+%Y-%m-%d')
+app := logalize
 
 ifdef VERSION
   COMMIT := $(shell git rev-list -1 --abbrev-commit v$(VERSION))
@@ -8,6 +7,8 @@ else
   VERSION := latest
   COMMIT := $(shell git rev-parse --short HEAD)
 endif
+
+DATE := $(shell git show -s --date=format:'%Y-%m-%d' --format=%cd $(COMMIT))
 
 # building vars
 EXTRA_LDFLAGS ?=

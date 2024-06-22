@@ -30,7 +30,7 @@ builds:
       - -w
       - -X main.version={{ .Version }}
       - -X main.commit={{ .ShortCommit }}
-      - -X main.date={{ .Now.Format "2006-01-02" }}
+      - -X main.date={{ printf "%.10s" .CommitDate }}
 
 archives:
   - id: binary
