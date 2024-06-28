@@ -48,6 +48,10 @@ sudo pacman -U logalize_X.X.X_linux_amd64.pkg.tar.zst
 ```
 or install from AUR:
 ```sh
+# to install precompiled binary
+yay -S logalize-bin
+
+# to compile it on your machine
 yay -S logalize
 ```
 
