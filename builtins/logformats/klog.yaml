@@ -1,0 +1,55 @@
+# INFO:
+# klog format, useful for things like Cert Manager, Cluster Autoscaler and other Kubernetes-related logs
+#
+# SOURCE:
+# https://github.com/kubernetes/klog/blob/9ad246211af1ed84621ee94a26fcce0038b69cd1/klog.go#L581-L597
+#
+# SCHEME:
+# Lmmdd hh:mm:ss.uuuuuu threadid file:line] msg...
+#
+# where the fields are defined as follows:
+# 	L                A single character, representing the log level (eg 'I' for INFO)
+# 	mm               The month (zero padded; ie May is '05')
+# 	dd               The day (zero padded)
+# 	hh:mm:ss.uuuuuu  Time in hours, minutes and fractional seconds
+# 	threadid         The space-padded thread ID as returned by GetTID()
+# 	file             The file name
+# 	line             The line number
+# 	msg              The user-supplied message
+
+formats:
+  klog:
+    # Lmmdd
+    - pattern: ([IWEF][0-9]{4} )
+      fg: "#ffffff"
+      alternatives:
+        - pattern: (I[0-9]{4} )
+          fg: "#82aaff"
+          style: bold
+        - pattern: (W[0-9]{4} )
+          fg: "#ffc777"
+          style: bold
+        - pattern: (E[0-9]{4} )
+          fg: "#ff757f"
+          style: bold
+        - pattern: (F[0-9]{4} )
+          fg: "#c53b53"
+          style: bold
+    # hh:mm:ss.uuuuuu
+    - pattern: ([0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{6})
+      fg: "#4fd6be"
+    # threadid
+    - pattern: ([[:space:]]+[0-9]+ )
+      fg: "#636da6"
+    # file
+    - pattern: ([^:]+)
+      fg: "#89ddff"
+    # line
+    - pattern: (:[0-9]+)
+      fg: "#636da6"
+    # ]
+    - pattern: (] )
+      fg: "#ff966c"
+    # msg
+    - pattern: (.*)
+      fg: "#ffffff"
