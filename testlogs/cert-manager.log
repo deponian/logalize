@@ -5,8 +5,8 @@ I0201 19:41:04.836063       1 util.go:83] "cert-manager/controller/certificatere
 I0201 19:41:09.692504       1 setup.go:208] "cert-manager/clusterissuers: skipping re-verifying ACME account as cached registration details look sufficient" resource_name="letsencrypt-production" resource_namespace="" resource_kind="ClusterIssuer" resource_version="v1" related_resource_name="letsencrypt-production" related_resource_namespace="cert-manager" related_resource_kind="Secret"
 I0410 13:18:43.647834       1 controller.go:435] "serving insecurely as tls certificate data not provided" logger="cert-manager.controller"
 I0410 13:18:43.647851       1 controller.go:102] "listening for insecure connections" logger="cert-manager.controller" address="0.0.0.0:9402"
-I0410 13:18:43.650517       1 controller.go:129] "starting metrics server" logger="cert-manager.controller" address="[::]:9402"
+W0410 13:18:43.650517       1 controller.go:129] "starting metrics server" logger="cert-manager.controller" address="[::]:9402"
 I0410 13:18:43.650599       1 controller.go:175] "starting healthz server" logger="cert-manager.controller" address="[::]:9403"
-I0410 13:18:43.650671       1 controller.go:182] "starting leader election" logger="cert-manager.controller"
-I0410 13:18:43.655728       1 leaderelection.go:250] attempting to acquire leader lease cert-manager/cert-manager-controller...
+E0410 13:18:43.650671       1 controller.go:182] "starting leader election" logger="cert-manager.controller"
+F0410 13:18:43.655728       1 leaderelection.go:250] attempting to acquire leader lease cert-manager/cert-manager-controller...
 I0410 13:18:43.680075       1 leaderelection.go:260] successfully acquired lease cert-manager/cert-manager-controller
