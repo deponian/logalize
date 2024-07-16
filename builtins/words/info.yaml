@@ -1,0 +1,9 @@
+words:
+  info:
+    fg: "#1ba2f5"
+    style: bold
+    list:
+      - "info"
+      - "detected"
+      - "ignore"
+      - "readonly"
