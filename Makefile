@@ -71,7 +71,7 @@ audit:
 .PHONY: test
 test:
 	cp -r .testdata pkg/builtins
-	go test -v -race -coverprofile=coverage.out ./pkg
+	go test -race -coverprofile=coverage.out ./pkg
 	rm -rf pkg/builtins
 
 ## coverage-func: run all tests and display coverage with "-func"

@@ -71,6 +71,16 @@ func initLogFormats(config *koanf.Koanf) error {
 
 // highlight colorizes string and applies a style
 func highlight(str, fg, bg, style string) string {
+	if style == "patterns-and-words" {
+		return Patterns.highlight(str, true)
+	}
+	if style == "patterns" {
+		return Patterns.highlight(str, false)
+	}
+	if style == "words" {
+		return Words.highlight(str)
+	}
+
 	coloredStr := termenv.String(str)
 	if fg != "" {
 		coloredStr = coloredStr.Foreground(colorProfile.Color(fg))

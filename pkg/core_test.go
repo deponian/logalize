@@ -32,6 +32,34 @@ formats:
       bg: "#76fb99"
       style: underline
 
+  portafisco-patterns:
+    - pattern: (\d{1} - )
+      fg: "#f5ce42"
+    - pattern: (.*)
+      style: patterns
+
+  portafisco-words:
+    - pattern: (\d{2} - )
+      fg: "#f5ce42"
+    - pattern: (.*)
+      style: words
+
+  portafisco-patterns-and-words:
+    - pattern: (\d{3} - )
+      fg: "#f5ce42"
+    - pattern: (.*)
+      style: patterns-and-words
+
+  portafisco-combined:
+    - pattern: (\d{4} - )
+      fg: "#f5ce42"
+    - pattern: (".*" )
+      style: patterns
+    - pattern: (".*" )
+      style: words
+    - pattern: («.*»)
+      style: patterns-and-words
+
 patterns:
   string:
     priority: 500
@@ -101,6 +129,11 @@ words:
 		{`127.0.0.1 - [test] "testing"`, "\x1b[38;2;245;206;65m127.0.0.1 \x1b[0m\x1b[48;2;118;73;158m- \x1b[0m\x1b[1m[test] \x1b[0m\x1b[38;2;157;175;153;48;2;118;251;153;4m\"testing\"\x1b[0m\n"},
 		{`127.0.0.2 test [test hello] "testing again"`, "\x1b[38;2;245;206;65m127.0.0.2 \x1b[0m\x1b[48;2;118;73;158mtest \x1b[0m\x1b[1m[test hello] \x1b[0m\x1b[38;2;157;175;153;48;2;118;251;153;4m\"testing again\"\x1b[0m\n"},
 		{`127.0.0.3 ___ [.] "_"`, "\x1b[38;2;245;206;65m127.0.0.3 \x1b[0m\x1b[48;2;118;73;158m___ \x1b[0m\x1b[1m[.] \x1b[0m\x1b[38;2;157;175;153;48;2;118;251;153;4m\"_\"\x1b[0m\n"},
+		{`0 - hello bye`, "\x1b[38;2;245;206;65m0 - \x1b[0mhello bye\n"},
+		{`1 - 777 hello 1.1.1.1 true toni rufus`, "\x1b[38;2;245;206;65m1 - \x1b[0m\x1b[38;2;255;255;255m777\x1b[0m hello \x1b[38;2;255;0;0;48;2;255;255;0;1m1.1.1.1\x1b[0m true toni rufus\n"},
+		{`22 - 777 hello 1.1.1.1 true toni rufus`, "\x1b[38;2;245;206;65m22 - \x1b[0m777 hello 1.1.1.1 \x1b[38;2;81;250;138;1mtrue\x1b[0m \x1b[38;2;248;52;178;4mtoni\x1b[0m rufus\n"},
+		{`333 - 777 hello 1.1.1.1 true toni rufus`, "\x1b[38;2;245;206;65m333 - \x1b[0m\x1b[38;2;255;255;255m777\x1b[0m hello \x1b[38;2;255;0;0;48;2;255;255;0;1m1.1.1.1\x1b[0m \x1b[38;2;81;250;138;1mtrue\x1b[0m \x1b[38;2;248;52;178;4mtoni\x1b[0m rufus\n"},
+		{`4444 - "777 hello 1.1.1.1 true toni rufus" "777 hello 1.1.1.1 true toni rufus" «777 hello 1.1.1.1 true toni rufus»`, "\x1b[38;2;245;206;65m4444 - \x1b[0m\x1b[38;2;0;255;0m\"777 hello 1.1.1.1 true toni rufus\"\x1b[0m \"777 hello 1.1.1.1 \x1b[38;2;81;250;138;1mtrue\x1b[0m \x1b[38;2;248;52;178;4mtoni\x1b[0m rufus\" «\x1b[38;2;255;255;255m777\x1b[0m hello \x1b[38;2;255;0;0;48;2;255;255;0;1m1.1.1.1\x1b[0m \x1b[38;2;81;250;138;1mtrue\x1b[0m \x1b[38;2;248;52;178;4mtoni\x1b[0m rufus»\n"},
 
 		// pattern
 		{`"string"`, "\x1b[38;2;0;255;0m\"string\"\x1b[0m\n"},

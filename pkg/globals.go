@@ -10,7 +10,7 @@ import (
 var (
 	capGroupRegexp    = regexp.MustCompile(`^\(.+\)$`)
 	colorRegexp       = regexp.MustCompile(`^(#[[:xdigit:]]{6}|[[:digit:]]{1,3})?$`)
-	styleRegexp       = regexp.MustCompile(`^(bold|faint|italic|underline|overline|crossout|reverse)?$`)
+	styleRegexp       = regexp.MustCompile(`^(bold|faint|italic|underline|overline|crossout|reverse|words|patterns|patterns-and-words)?$`)
 	wordRegexp        = regexp.MustCompile(`[A-Za-z]+`)
 	negatedWordRegexp = regexp.MustCompile(`(` +
 		// complex negation
