@@ -9,7 +9,7 @@ import (
 	"github.com/muesli/termenv"
 )
 
-// CapGroup represents of one capture group in a config file
+// CapGroup represents one capture group in a config file
 type CapGroup struct {
 	Pattern      string       `koanf:"pattern"`
 	Foreground   string       `koanf:"fg"`
@@ -19,38 +19,42 @@ type CapGroup struct {
 	Regexp       *regexp.Regexp
 }
 
-// CapGroupList represents of a list of capture groups
+// CapGroupList represents a list of capture groups
 type CapGroupList []CapGroup
 
-// LogFormat represents of log format
+// LogFormat represents a log format
 type LogFormat struct {
 	Name      string
 	CapGroups CapGroupList
 	Regexp    *regexp.Regexp
 }
 
+// LogFormatList represents a list of log formats
+type LogFormatList []LogFormat
+
+var LogFormats LogFormatList
+
 // InitLogFormats returns list of LogFormats collected
 // from *koanf.Koanf configuration
-func initLogFormats(config *koanf.Koanf) ([]LogFormat, error) {
-	var logFormats []LogFormat
-
+func initLogFormats(config *koanf.Koanf) error {
+	LogFormats = LogFormatList{}
 	for _, formatName := range config.MapKeys("formats") {
 		var logFormat LogFormat
 		logFormat.Name = formatName
 		if err := config.Unmarshal("formats."+formatName, &logFormat.CapGroups); err != nil {
-			return nil, err
+			return err
 		}
-		logFormats = append(logFormats, logFormat)
+		LogFormats = append(LogFormats, logFormat)
 	}
 
-	for i, format := range logFormats {
+	for i, format := range LogFormats {
 		// check that all patterns are valid regular expressions
 		if err := format.checkCapGroups(); err != nil {
-			return nil, err
+			return err
 		}
 
 		// build regexp for whole log format line
-		logFormats[i].Regexp = format.buildRegexp()
+		LogFormats[i].Regexp = format.buildRegexp()
 
 		// build regexps for capture groups' alternatives
 		for _, cg := range format.CapGroups {
@@ -61,7 +65,8 @@ func initLogFormats(config *koanf.Koanf) ([]LogFormat, error) {
 			}
 		}
 	}
-	return logFormats, nil
+
+	return nil
 }
 
 // highlight colorizes string and applies a style

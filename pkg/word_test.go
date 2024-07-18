@@ -58,18 +58,17 @@ words:
 		t.Errorf("Error during config loading: %s", err)
 	}
 	t.Run("TestWordsInitGood", func(t *testing.T) {
-		words, err := initWords(config, lemmatizer)
-		if err != nil {
+		if err := initWords(config, lemmatizer); err != nil {
 			t.Errorf("InitWords() failed with this error: %s", err)
 		}
-		if !cmp.Equal(words.Good, goodGroup) {
-			t.Errorf("got %v, want %v", words.Good, goodGroup)
+		if !cmp.Equal(Words.Good, goodGroup) {
+			t.Errorf("got %v, want %v", Words.Good, goodGroup)
 		}
-		if !cmp.Equal(words.Bad, badGroup) {
-			t.Errorf("got %v, want %v", words.Bad, badGroup)
+		if !cmp.Equal(Words.Bad, badGroup) {
+			t.Errorf("got %v, want %v", Words.Bad, badGroup)
 		}
-		if !cmp.Equal(words.Other, otherGroups) {
-			t.Errorf("got %v, want %v", words.Other, otherGroups)
+		if !cmp.Equal(Words.Other, otherGroups) {
+			t.Errorf("got %v, want %v", Words.Other, otherGroups)
 		}
 	})
 
@@ -83,8 +82,7 @@ words:
 		t.Errorf("Error during config loading: %s", err)
 	}
 	t.Run("TestWordsInitBad", func(t *testing.T) {
-		_, err := initWords(config, lemmatizer)
-		if err == nil {
+		if err := initWords(config, lemmatizer); err == nil {
 			t.Errorf("InitWords() should have failed")
 		}
 	})
@@ -144,12 +142,11 @@ words:
 		if err := config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
 			t.Errorf("Error during config loading: %s", err)
 		}
-		words, err := initWords(config, lemmatizer)
-		if err != nil {
+		if err := initWords(config, lemmatizer); err != nil {
 			t.Errorf("InitWords() failed with this error: %s", err)
 		}
 		t.Run(testname, func(t *testing.T) {
-			colored := words.highlightWord(tt.plain)
+			colored := Words.highlightWord(tt.plain)
 			if colored != tt.colored {
 				t.Errorf("got %s, want %s", colored, tt.colored)
 			}
@@ -232,13 +229,12 @@ words:
 		if err := config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
 			t.Errorf("Error during config loading: %s", err)
 		}
-		words, err := initWords(config, lemmatizer)
-		if err != nil {
+		if err := initWords(config, lemmatizer); err != nil {
 			t.Errorf("InitWords() failed with this error: %s", err)
 		}
 		t.Run(testname, func(t *testing.T) {
 			m := negatedWordRegexp.FindStringSubmatchIndex(tt.plain)
-			colored := words.highlightNegatedWord(tt.plain[m[0]:m[1]], tt.plain[m[2]:m[3]], tt.plain[m[4]:m[5]])
+			colored := Words.highlightNegatedWord(tt.plain[m[0]:m[1]], tt.plain[m[2]:m[3]], tt.plain[m[4]:m[5]])
 			if colored != tt.colored {
 				t.Errorf("got %s, want %s", colored, tt.colored)
 			}
@@ -327,12 +323,11 @@ words:
 		if err := config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
 			t.Errorf("Error during config loading: %s", err)
 		}
-		words, err := initWords(config, lemmatizer)
-		if err != nil {
+		if err := initWords(config, lemmatizer); err != nil {
 			t.Errorf("InitWords() failed with this error: %s", err)
 		}
 		t.Run(testname, func(t *testing.T) {
-			colored := words.highlight(tt.plain)
+			colored := Words.highlight(tt.plain)
 			if colored != tt.colored {
 				t.Errorf("got %s, want %s", colored, tt.colored)
 			}

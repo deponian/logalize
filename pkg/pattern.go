@@ -14,25 +14,28 @@ type Pattern struct {
 	CapGroup *CapGroup
 }
 
-// InitPatterns returns global list of patterns collected
-// from *koanf.Koanf configuration
-func initPatterns(config *koanf.Koanf) ([]Pattern, error) {
-	patterns := []Pattern{}
+type PatternList []Pattern
 
+var Patterns PatternList
+
+// InitPatterns initializes global list of patterns collected
+// from *koanf.Koanf configuration
+func initPatterns(config *koanf.Koanf) error {
+	Patterns = PatternList{}
 	for _, patternName := range config.MapKeys("patterns") {
 		var pattern Pattern
 		pattern.Name = patternName
 		pattern.Priority = config.Int("patterns." + patternName + ".priority")
 		if err := config.Unmarshal("patterns."+patternName, &pattern.CapGroup); err != nil {
-			return nil, err
+			return err
 		}
-		patterns = append(patterns, pattern)
+		Patterns = append(Patterns, pattern)
 	}
 
-	for _, pattern := range patterns {
+	for _, pattern := range Patterns {
 		// validate patterns' capture groups
 		if err := pattern.CapGroup.check(); err != nil {
-			return nil, fmt.Errorf("[pattern: %s] %s", pattern.Name, err)
+			return fmt.Errorf("[pattern: %s] %s", pattern.Name, err)
 		}
 
 		// build main regexp
@@ -46,16 +49,17 @@ func initPatterns(config *koanf.Koanf) ([]Pattern, error) {
 		}
 	}
 	// sort by priority
-	sort.Slice(patterns, func(i, j int) bool {
-		iv, jv := patterns[i], patterns[j]
+	sort.Slice(Patterns, func(i, j int) bool {
+		iv, jv := Patterns[i], Patterns[j]
 		return iv.Priority > jv.Priority
 	})
-	return patterns, nil
+
+	return nil
 }
 
 // HighlightPatternsAndWords colorizes various patterns
-// like IP address, date, HTTP response code and special words
-func highlightPatternsAndWords(str string, patterns []Pattern, words Words) string {
+// like IP address, date, HTTP response code and (optionally) special words
+func (patterns PatternList) highlight(str string, highlightWords bool) string {
 	if str == "" {
 		return str
 	}
@@ -64,13 +68,17 @@ func highlightPatternsAndWords(str string, patterns []Pattern, words Words) stri
 	for _, pattern := range patterns {
 		matches := pattern.CapGroup.Regexp.FindStringSubmatchIndex(str)
 		if matches != nil {
-			leftPart := highlightPatternsAndWords(str[0:matches[0]], patterns, words)
+			leftPart := patterns.highlight(str[0:matches[0]], highlightWords)
 			match := pattern.CapGroup.highlight(str[matches[0]:matches[1]])
-			rightPart := highlightPatternsAndWords(str[matches[1]:], patterns, words)
+			rightPart := patterns.highlight(str[matches[1]:], highlightWords)
 			return leftPart + match + rightPart
 		}
 	}
 
 	// words
-	return words.highlight(str)
+	if highlightWords {
+		str = Words.highlight(str)
+	}
+
+	return str
 }

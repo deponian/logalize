@@ -44,11 +44,10 @@ patterns:
 		t.Errorf("Error during config loading: %s", err)
 	}
 	t.Run("TestPatternsInit", func(t *testing.T) {
-		patterns, err := initPatterns(config)
-		if err != nil {
+		if err := initPatterns(config); err != nil {
 			t.Errorf("InitPatterns() failed with this error: %s", err)
 		}
-		for i, pattern := range patterns {
+		for i, pattern := range Patterns {
 			pattern.CapGroup.Regexp = nil
 			if !cmp.Equal(pattern.Name, correctPatterns[i].Name) {
 				t.Errorf("got %v, want %v", pattern.Name, correctPatterns[i].Name)
@@ -72,8 +71,7 @@ patterns:
 		t.Errorf("Error during config loading: %s", err)
 	}
 	t.Run("TestPatternsInitBadYAML", func(t *testing.T) {
-		_, err := initPatterns(config)
-		if err == nil {
+		if err := initPatterns(config); err == nil {
 			t.Errorf("InitPatterns() should have failed")
 		}
 	})
@@ -90,8 +88,7 @@ patterns:
 		t.Errorf("Error during config loading: %s", err)
 	}
 	t.Run("TestPatternsInitBadPattern", func(t *testing.T) {
-		_, err := initPatterns(config)
-		if err == nil {
+		if err := initPatterns(config); err == nil {
 			t.Errorf("InitPatterns() should have failed")
 		}
 	})
@@ -183,16 +180,14 @@ words:
 		if err := config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
 			t.Errorf("Error during config loading: %s", err)
 		}
-		patterns, err := initPatterns(config)
-		if err != nil {
+		if err := initPatterns(config); err != nil {
 			t.Errorf("InitPatterns() failed with this error: %s", err)
 		}
-		words, err := initWords(config, lemmatizer)
-		if err != nil {
+		if err := initWords(config, lemmatizer); err != nil {
 			t.Errorf("InitWords() failed with this error: %s", err)
 		}
 		t.Run(testname, func(t *testing.T) {
-			colored := highlightPatternsAndWords(tt.plain, patterns, words)
+			colored := Patterns.highlight(tt.plain, true)
 			if colored != tt.colored {
 				t.Errorf("got %v, want %v", colored, tt.colored)
 			}

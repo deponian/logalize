@@ -69,28 +69,27 @@ formats:
 		t.Errorf("Error during config loading: %s", err)
 	}
 	t.Run("TestFormatsInit", func(t *testing.T) {
-		formats, err := initLogFormats(config)
-		if err != nil {
+		if err := initLogFormats(config); err != nil {
 			t.Errorf("InitLogFormats() failed with this error: %s", err)
 		}
 
 		// check alternatives' regexps
 		// yeah, I know, it's disgusting, don't look at it, look away
-		checkRegexp := func(format *LogFormat, alt int, correctRegexp string) {
+		checkRegexp := func(format LogFormat, alt int, correctRegexp string) {
 			if format.CapGroups[4].Alternatives[alt].Regexp.String() != correctRegexp {
-				t.Errorf("got %v, want %v", formats[0].CapGroups[4].Alternatives[alt].Regexp.String(), correctRegexp)
+				t.Errorf("got %v, want %v", LogFormats[0].CapGroups[4].Alternatives[alt].Regexp.String(), correctRegexp)
 			}
 			format.CapGroups[4].Alternatives[alt].Regexp = nil
 		}
-		checkRegexp(&formats[0], 0, `(1\d\d)`)
-		checkRegexp(&formats[0], 1, `(2\d\d)`)
-		checkRegexp(&formats[0], 2, `(3\d\d)`)
-		checkRegexp(&formats[0], 3, `(4\d\d)`)
-		checkRegexp(&formats[0], 4, `(5\d\d)`)
+		checkRegexp(LogFormats[0], 0, `(1\d\d)`)
+		checkRegexp(LogFormats[0], 1, `(2\d\d)`)
+		checkRegexp(LogFormats[0], 2, `(3\d\d)`)
+		checkRegexp(LogFormats[0], 3, `(4\d\d)`)
+		checkRegexp(LogFormats[0], 4, `(5\d\d)`)
 
 		// check other fields
-		if !cmp.Equal(formats[0].CapGroups, correctCapGroups) {
-			t.Errorf("got %v, want %v", formats[0].CapGroups, correctCapGroups)
+		if !cmp.Equal(LogFormats[0].CapGroups, correctCapGroups) {
+			t.Errorf("got %v, want %v", LogFormats[0].CapGroups, correctCapGroups)
 		}
 	})
 
@@ -105,8 +104,7 @@ formats:
 		t.Errorf("Error during config loading: %s", err)
 	}
 	t.Run("TestFormatsInitBadYAML", func(t *testing.T) {
-		_, err := initLogFormats(config)
-		if err == nil {
+		if err := initLogFormats(config); err == nil {
 			t.Errorf("InitLogFormats() should have failed")
 		}
 	})
@@ -125,8 +123,7 @@ formats:
 		t.Errorf("Error during config loading: %s", err)
 	}
 	t.Run("TestFormatsInitBadPattern", func(t *testing.T) {
-		_, err := initLogFormats(config)
-		if err == nil {
+		if err := initLogFormats(config); err == nil {
 			t.Errorf("InitLogFormats() should have failed")
 		}
 	})
@@ -297,12 +294,12 @@ formats:
 		if err := config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
 			t.Errorf("Error during config loading: %s", err)
 		}
-		formats, err := initLogFormats(config)
-		if err != nil {
+
+		if err := initLogFormats(config); err != nil {
 			t.Errorf("InitLogFormats() failed with this error: %s", err)
 		}
 		t.Run(testname, func(t *testing.T) {
-			colored := formats[0].highlight(tt.plain)
+			colored := LogFormats[0].highlight(tt.plain)
 			if colored != tt.colored {
 				t.Errorf("got %s, want %s", colored, tt.colored)
 			}

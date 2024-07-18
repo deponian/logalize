@@ -16,41 +16,42 @@ type WordGroup struct {
 	Style      string   `koanf:"style"`
 }
 
-type Words struct {
+type WordGroups struct {
 	Good       WordGroup
 	Bad        WordGroup
 	Other      []WordGroup
 	Lemmatizer *golem.Lemmatizer
 }
 
-// InitWords returns global list of words collected
-// from *koanf.Koanf configuration
-func initWords(config *koanf.Koanf, lemmatizer *golem.Lemmatizer) (Words, error) {
-	var words Words
+var Words WordGroups
 
+// InitWords initializes global list of words collected
+// from *koanf.Koanf configuration
+func initWords(config *koanf.Koanf, lemmatizer *golem.Lemmatizer) error {
+	Words = WordGroups{}
 	for _, wordGroupName := range config.MapKeys("words") {
 		var wordGroup WordGroup
 		wordGroup.Name = wordGroupName
 		if err := config.Unmarshal("words."+wordGroupName, &wordGroup); err != nil {
-			return Words{}, err
+			return err
 		}
 		switch wordGroupName {
 		case "good":
-			words.Good = wordGroup
+			Words.Good = wordGroup
 		case "bad":
-			words.Bad = wordGroup
+			Words.Bad = wordGroup
 		default:
-			words.Other = append(words.Other, wordGroup)
+			Words.Other = append(Words.Other, wordGroup)
 		}
 	}
 
-	words.Lemmatizer = lemmatizer
+	Words.Lemmatizer = lemmatizer
 
-	return words, nil
+	return nil
 }
 
 // highlightWord colors single word in a string
-func (words *Words) highlightWord(word string) string {
+func (words WordGroups) highlightWord(word string) string {
 	allWordGroups := append(words.Other, words.Good, words.Bad)
 	for _, wordGroup := range allWordGroups {
 		lemma := words.Lemmatizer.Lemma(word)
@@ -68,7 +69,7 @@ func (words *Words) highlightWord(word string) string {
 // highlightNegated colors a phrase with negated word in a string
 // if the word is good, then color the whole phrase as bad and vice versa
 // if the word is neither good nor bad, then don't color the phrase
-func (words *Words) highlightNegatedWord(phrase, negator, word string) string {
+func (words WordGroups) highlightNegatedWord(phrase, negator, word string) string {
 	lemma := words.Lemmatizer.Lemma(word)
 	// good
 	if slices.Contains(words.Good.List, lemma) ||
@@ -95,7 +96,7 @@ func (words *Words) highlightNegatedWord(phrase, negator, word string) string {
 }
 
 // highlight colors all words in a string
-func (words *Words) highlight(str string) string {
+func (words WordGroups) highlight(str string) string {
 	if str == "" {
 		return str
 	}

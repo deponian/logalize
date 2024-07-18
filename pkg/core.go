@@ -10,18 +10,15 @@ import (
 )
 
 func Run(reader io.Reader, writer io.StringWriter, config *koanf.Koanf, builtins embed.FS, lemmatizer *golem.Lemmatizer) error {
-	patterns, err := initPatterns(config)
-	if err != nil {
+	if err := initPatterns(config); err != nil {
 		return err
 	}
 
-	words, err := initWords(config, lemmatizer)
-	if err != nil {
+	if err := initWords(config, lemmatizer); err != nil {
 		return err
 	}
 
-	logFormats, err := initLogFormats(config)
-	if err != nil {
+	if err := initLogFormats(config); err != nil {
 		return err
 	}
 
@@ -30,7 +27,7 @@ func Run(reader io.Reader, writer io.StringWriter, config *koanf.Koanf, builtins
 		line := scanner.Text()
 		// try one of the log formats
 		formatDetected := false
-		for _, logFormat := range logFormats {
+		for _, logFormat := range LogFormats {
 			if logFormat.Regexp.MatchString(line) {
 				_, err := writer.WriteString(logFormat.highlight(line) + "\n")
 				if err != nil {
@@ -42,7 +39,7 @@ func Run(reader io.Reader, writer io.StringWriter, config *koanf.Koanf, builtins
 		}
 		// highlight patterns and words if log format wasn't detected
 		if !formatDetected {
-			_, err := writer.WriteString(highlightPatternsAndWords(line, patterns, words) + "\n")
+			_, err := writer.WriteString(Patterns.highlight(line, true) + "\n")
 			if err != nil {
 				return err
 			}
