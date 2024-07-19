@@ -1,6 +1,7 @@
 package logalize
 
 import (
+	"fmt"
 	"slices"
 	"strings"
 
@@ -35,6 +36,11 @@ func initWords(config *koanf.Koanf, lemmatizer *golem.Lemmatizer) error {
 		if err := config.Unmarshal("words."+wordGroupName, &wordGroup); err != nil {
 			return err
 		}
+
+		if err := wordGroup.check(); err != nil {
+			return err
+		}
+
 		switch wordGroupName {
 		case "good":
 			Words.Good = wordGroup
@@ -46,6 +52,31 @@ func initWords(config *koanf.Koanf, lemmatizer *golem.Lemmatizer) error {
 	}
 
 	Words.Lemmatizer = lemmatizer
+
+	return nil
+}
+
+func (wg WordGroup) check() error {
+	// check foreground
+	if !colorRegexp.MatchString(wg.Foreground) {
+		return fmt.Errorf(
+			"[word group: %s] foreground color %s doesn't match %s pattern",
+			wg.Name, wg.Foreground, colorRegexp)
+	}
+
+	// check background
+	if !colorRegexp.MatchString(wg.Background) {
+		return fmt.Errorf(
+			"[word group: %s] background color %s doesn't match %s pattern",
+			wg.Name, wg.Background, colorRegexp)
+	}
+
+	// check style
+	if !styleRegexp.MatchString(wg.Style) {
+		return fmt.Errorf(
+			"[word group: %s] style %s doesn't match %s pattern",
+			wg.Name, wg.Style, styleRegexp)
+	}
 
 	return nil
 }

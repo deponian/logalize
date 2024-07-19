@@ -92,6 +92,23 @@ patterns:
 			t.Errorf("InitPatterns() should have failed")
 		}
 	})
+
+	configDataBadStyle := `
+patterns:
+  string:
+    pattern: (.*)
+    style: words
+`
+	config = koanf.New(".")
+	configRaw = []byte(configDataBadStyle)
+	if err := config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
+		t.Errorf("Error during config loading: %s", err)
+	}
+	t.Run("TestPatternsInitBadPattern", func(t *testing.T) {
+		if err := initPatterns(config); err == nil {
+			t.Errorf("InitPatterns() should have failed")
+		}
+	})
 }
 
 func TestHighlightPatternsAndWords(t *testing.T) {

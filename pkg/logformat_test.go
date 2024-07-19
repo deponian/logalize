@@ -149,6 +149,9 @@ func TestLogFormatCheckCapGroups(t *testing.T) {
 					{`(\d+:)`, "#0f0f0f", "1", "overline", CapGroupList{}, nil},
 					{`(\d+:)`, "37", "#ff0000", "crossout", CapGroupList{}, nil},
 					{`(\d+:)`, "214", "15", "reverse", CapGroupList{}, nil},
+					{`(\d+:)`, "#0f0f0f", "#ff0000", "patterns", CapGroupList{}, nil},
+					{`(\d+:)`, "#0f0f0f", "#ff0000", "words", CapGroupList{}, nil},
+					{`(\d+:)`, "#0f0f0f", "#ff0000", "patterns-and-words", CapGroupList{}, nil},
 				}, nil,
 			},
 		},
@@ -201,7 +204,7 @@ func TestLogFormatCheckCapGroups(t *testing.T) {
 			},
 		},
 		{
-			fmt.Sprintf(`[log format: testStyleErr1] [capture group: (\d+)] style NotAStyle doesn't match %s pattern`, styleRegexp),
+			fmt.Sprintf(`[log format: testStyleErr1] [capture group: (\d+)] style NotAStyle doesn't match %s pattern`, styleRegexpLogFormat),
 			LogFormat{
 				"testStyleErr1", CapGroupList{
 					{`(\d+)`, "", "", "NotAStyle", CapGroupList{}, nil},

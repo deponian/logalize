@@ -121,7 +121,7 @@ func (cg *CapGroup) highlight(str string) string {
 }
 
 // check checks one capture group's fields match corresponding patterns
-func (cg *CapGroup) check() error {
+func (cg *CapGroup) check(isLogFormat bool) error {
 	// check pattern
 	if cg.Pattern == "" {
 		return fmt.Errorf("empty patterns are not allowed")
@@ -147,23 +147,31 @@ func (cg *CapGroup) check() error {
 	}
 
 	// check style
-	if !styleRegexp.MatchString(cg.Style) {
-		return fmt.Errorf(
-			"[capture group: %s] style %s doesn't match %s pattern",
-			cg.Pattern, cg.Style, styleRegexp)
+	if isLogFormat {
+		if !styleRegexpLogFormat.MatchString(cg.Style) {
+			return fmt.Errorf(
+				"[capture group: %s] style %s doesn't match %s pattern",
+				cg.Pattern, cg.Style, styleRegexpLogFormat)
+		}
+	} else {
+		if !styleRegexp.MatchString(cg.Style) {
+			return fmt.Errorf(
+				"[capture group: %s] style %s doesn't match %s pattern",
+				cg.Pattern, cg.Style, styleRegexp)
+		}
 	}
 
 	// check alternatives
 	if len(cg.Alternatives) > 0 {
-		return cg.Alternatives.check()
+		return cg.Alternatives.check(isLogFormat)
 	}
 	return nil
 }
 
 // check checks that capture groups' fields match corresponding patterns
-func (cgl *CapGroupList) check() error {
+func (cgl *CapGroupList) check(isLogFormat bool) error {
 	for _, cg := range *cgl {
-		if err := cg.check(); err != nil {
+		if err := cg.check(isLogFormat); err != nil {
 			return err
 		}
 	}
@@ -172,14 +180,14 @@ func (cgl *CapGroupList) check() error {
 
 // checkCapGroups checks that all capture groups' fields match corresponding patterns
 func (lf *LogFormat) checkCapGroups() error {
-	if err := lf.CapGroups.check(); err != nil {
+	if err := lf.CapGroups.check(true); err != nil {
 		return fmt.Errorf("[log format: %s] %s", lf.Name, err)
 	}
 	return nil
 }
 
 // buildRegexp builds full regexp string from the list of capture groups
-func (lf *LogFormat) buildRegexp() (formatRegexp *regexp.Regexp) {
+func (lf *LogFormat) buildRegexp() *regexp.Regexp {
 	var format string
 	for i, cg := range lf.CapGroups {
 		// add name for the capture group

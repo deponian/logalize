@@ -215,7 +215,10 @@ words:
 		output := bytes.Buffer{}
 
 		t.Run(testname, func(t *testing.T) {
-			Run(input, &output, config, builtins, lemmatizer)
+			err := Run(input, &output, config, builtins, lemmatizer)
+			if err != nil {
+				t.Errorf("Run() failed with this error: %s", err)
+			}
 
 			if output.String() != tt.colored {
 				t.Errorf("got %v, want %v", output.String(), tt.colored)

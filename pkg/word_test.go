@@ -1,6 +1,7 @@
 package logalize
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/aaaton/golem/v4"
@@ -81,11 +82,73 @@ words:
 	if err := config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
 		t.Errorf("Error during config loading: %s", err)
 	}
-	t.Run("TestWordsInitBad", func(t *testing.T) {
+	t.Run("TestWordsInitBadYAML", func(t *testing.T) {
 		if err := initWords(config, lemmatizer); err == nil {
 			t.Errorf("InitWords() should have failed")
 		}
 	})
+
+	configDataBadStyle := `
+words:
+  good:
+    fg: "#52fa8a"
+    style: patterns
+    list:
+      - "true"
+`
+	config = koanf.New(".")
+	configRaw = []byte(configDataBadStyle)
+	if err := config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
+		t.Errorf("Error during config loading: %s", err)
+	}
+	t.Run("TestWordsInitBadStyle", func(t *testing.T) {
+		if err := initWords(config, lemmatizer); err == nil {
+			t.Errorf("InitWords() should have failed")
+		}
+	})
+}
+
+func TestWordsCheck(t *testing.T) {
+	tests := []struct {
+		err string
+		wg  WordGroup
+	}{
+		{
+			"%!s(<nil>)",
+			WordGroup{"testNoErr", []string{"test"}, "#ff0000", "#00ff00", "bold"},
+		},
+		{
+			fmt.Sprintf(`[word group: testForegroundErr] foreground color #ff00xd doesn't match %s pattern`, colorRegexp),
+			WordGroup{"testForegroundErr", []string{"test"}, "#ff00xd", "", ""},
+		},
+		{
+			fmt.Sprintf(`[word group: testBackgroundErr] background color hello doesn't match %s pattern`, colorRegexp),
+			WordGroup{"testBackgroundErr", []string{"test"}, "", "hello", ""},
+		},
+		{
+			fmt.Sprintf(`[word group: testStyleErr1] style words doesn't match %s pattern`, styleRegexp),
+			WordGroup{"testStyleErr1", []string{"test"}, "", "", "words"},
+		},
+		{
+			fmt.Sprintf(`[word group: testStyleErr2] style patterns doesn't match %s pattern`, styleRegexp),
+			WordGroup{"testStyleErr2", []string{"test"}, "", "", "patterns"},
+		},
+		{
+			fmt.Sprintf(`[word group: testStyleErr3] style patterns-and-words doesn't match %s pattern`, styleRegexp),
+			WordGroup{"testStyleErr3", []string{"test"}, "", "", "patterns-and-words"},
+		},
+	}
+
+	colorProfile = termenv.TrueColor
+
+	for _, tt := range tests {
+		testname := tt.wg.Name
+		t.Run(testname, func(t *testing.T) {
+			if err := fmt.Sprintf("%s", tt.wg.check()); err != tt.err {
+				t.Errorf("got %s, want %s", err, tt.err)
+			}
+		})
+	}
 }
 
 func TestWordsHighlightWord(t *testing.T) {

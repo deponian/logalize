@@ -34,7 +34,7 @@ func initPatterns(config *koanf.Koanf) error {
 
 	for _, pattern := range Patterns {
 		// validate patterns' capture groups
-		if err := pattern.CapGroup.check(); err != nil {
+		if err := pattern.CapGroup.check(false); err != nil {
 			return fmt.Errorf("[pattern: %s] %s", pattern.Name, err)
 		}
 
