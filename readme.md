@@ -136,8 +136,13 @@ formats:
       # or a number between 0 and 255 for ANSI colors
       fg: "#00ff00"
       bg: "#0000ff"
-      # available styles are bold, faint, italic,
-      # underline, overline, crossout, reverse
+      # available regular styles:
+      #  bold, faint, italic, underline,
+      #  overline, crossout, reverse
+      # there are also three special styles (log formats only):
+      #  patterns - use highlighting from "patterns" section (see below)
+      #  words - use highlighting from "words" section (see below)
+      #  patterns-and-words - use highlighting from "patterns" and "words" sections
       style: bold
       # alternatives are useful when you have general regular expression
       # but you want different colors for some specific subset of cases
