@@ -46,7 +46,7 @@ It's fast and extensible alternative to ccze and colorize.`,
 			}
 
 			// run the app
-			err = logalize.Run(os.Stdin, os.Stdout, config, builtins, lemmatizer)
+			err = logalize.Run(os.Stdin, os.Stdout, config, lemmatizer)
 			if err != nil {
 				log.Fatal(err)
 			}

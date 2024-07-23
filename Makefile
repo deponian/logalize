@@ -70,7 +70,9 @@ audit:
 ## test: run all tests
 .PHONY: test
 test:
-	cp -r .testdata pkg/builtins
+	rm -rf pkg/builtins
+	mkdir pkg/builtins
+	cp -r .testdata/* pkg/builtins
 	go test -race -coverprofile=coverage.out ./pkg
 	rm -rf pkg/builtins
 

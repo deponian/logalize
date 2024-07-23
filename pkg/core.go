@@ -2,14 +2,13 @@ package logalize
 
 import (
 	"bufio"
-	"embed"
 	"io"
 
 	"github.com/aaaton/golem/v4"
 	"github.com/knadh/koanf/v2"
 )
 
-func Run(reader io.Reader, writer io.StringWriter, config *koanf.Koanf, builtins embed.FS, lemmatizer *golem.Lemmatizer) error {
+func Run(reader io.Reader, writer io.StringWriter, config *koanf.Koanf, lemmatizer *golem.Lemmatizer) error {
 	if err := initPatterns(config); err != nil {
 		return err
 	}

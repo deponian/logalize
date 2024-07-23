@@ -215,7 +215,7 @@ words:
 		output := bytes.Buffer{}
 
 		t.Run(testname, func(t *testing.T) {
-			err := Run(input, &output, config, builtins, lemmatizer)
+			err := Run(input, &output, config, lemmatizer)
 			if err != nil {
 				t.Errorf("Run() failed with this error: %s", err)
 			}
@@ -255,7 +255,7 @@ formats:
 		t.Errorf("Error during config loading: %s", err)
 	}
 	t.Run("TestRunBadFormats", func(t *testing.T) {
-		err := Run(input, &output, config, builtins, lemmatizer)
+		err := Run(input, &output, config, lemmatizer)
 		if err.Error() != `[log format: test] capture group pattern bad doesn't match ^\(.+\)$ pattern` {
 			t.Errorf("Run() should have failed with *errors.errorString, got: [%T] %s", err, err)
 		}
@@ -274,7 +274,7 @@ patterns:
 		t.Errorf("Error during config loading: %s", err)
 	}
 	t.Run("TestRunBadPatterns", func(t *testing.T) {
-		err := Run(input, &output, config, builtins, lemmatizer)
+		err := Run(input, &output, config, lemmatizer)
 		if err.Error() != "'' expected a map, got 'int'" {
 			t.Errorf("Run() should have failed with *errors.errorString, got: [%T] %s", err, err)
 		}
@@ -293,7 +293,7 @@ words:
 		t.Errorf("Error during config loading: %s", err)
 	}
 	t.Run("TestRunBadWords", func(t *testing.T) {
-		err := Run(input, &output, config, builtins, lemmatizer)
+		err := Run(input, &output, config, lemmatizer)
 		if err.Error() != "'' expected a map, got 'string'" {
 			t.Errorf("Run() should have failed with *errors.errorString, got: [%T] %s", err, err)
 		}
@@ -345,7 +345,7 @@ formats:
 
 	input := strings.NewReader("test")
 	t.Run("TestRunBadWriterNotLogFormat", func(t *testing.T) {
-		err := Run(input, file, config, builtins, lemmatizer)
+		err := Run(input, file, config, lemmatizer)
 		if _, ok := err.(*fs.PathError); !ok {
 			t.Errorf("Run() should have failed with *fs.PathError, got: [%T] %s", err, err)
 		}
@@ -353,7 +353,7 @@ formats:
 
 	input = strings.NewReader(`127.0.0.1 "testing"`)
 	t.Run("TestRunBadWriterLogFormat", func(t *testing.T) {
-		err := Run(input, file, config, builtins, lemmatizer)
+		err := Run(input, file, config, lemmatizer)
 		if _, ok := err.(*fs.PathError); !ok {
 			t.Errorf("Run() should have failed with *fs.PathError, got: [%T] %s", err, err)
 		}

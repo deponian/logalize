@@ -17,6 +17,7 @@ import (
 )
 
 //go:embed builtins/logformats/good.yaml
+//go:embed builtins/patterns/good.yaml
 //go:embed builtins/words/good.yaml
 var builtinsAllGood embed.FS
 
@@ -177,7 +178,7 @@ words:
 		output := bytes.Buffer{}
 
 		t.Run(testname, func(t *testing.T) {
-			Run(input, &output, config, builtinsAllGood, lemmatizer)
+			Run(input, &output, config, lemmatizer)
 
 			if output.String() != tt.colored {
 				t.Errorf("got %v, want %v", output.String(), tt.colored)
@@ -186,18 +187,14 @@ words:
 	}
 }
 
-//go:embed builtins/logformats/good.yaml
-var builtinsLogformatsGood embed.FS
-
-//go:embed builtins/words/good.yaml
-var builtinsWordsGood embed.FS
-
 //go:embed builtins/logformats/bad.yaml
 var builtinsLogformatsBad embed.FS
 
-//go:embed builtins/logformats/good.yaml
 //go:embed builtins/words/bad.yaml
 var builtinsWordsBad embed.FS
+
+//go:embed builtins/patterns/bad.yaml
+var builtinsPatternsBad embed.FS
 
 func TestConfigLoadBuiltinBad(t *testing.T) {
 	colorProfile = termenv.TrueColor
@@ -206,20 +203,6 @@ func TestConfigLoadBuiltinBad(t *testing.T) {
 		ConfigPath: "",
 		NoBuiltins: false,
 	}
-
-	t.Run("TestConfigLoadBuiltinLogformatsDoesntExist", func(t *testing.T) {
-		_, err := InitConfig(options, builtinsLogformatsGood)
-		if _, ok := err.(*fs.PathError); !ok {
-			t.Errorf("InitConfig() should have failed with *fs.PathError, got: [%T] %s", err, err)
-		}
-	})
-
-	t.Run("TestConfigLoadBuiltinWordsDoesntExist", func(t *testing.T) {
-		_, err := InitConfig(options, builtinsWordsGood)
-		if _, ok := err.(*fs.PathError); !ok {
-			t.Errorf("InitConfig() should have failed with *fs.PathError, got: [%T] %s", err, err)
-		}
-	})
 
 	t.Run("TestConfigLoadBuiltinLogformatsBadYAML", func(t *testing.T) {
 		_, err := InitConfig(options, builtinsLogformatsBad)
@@ -230,6 +213,13 @@ func TestConfigLoadBuiltinBad(t *testing.T) {
 
 	t.Run("TestConfigLoadBuiltinWordsBadYAML", func(t *testing.T) {
 		_, err := InitConfig(options, builtinsWordsBad)
+		if err.Error() != "yaml: line 2: mapping values are not allowed in this context" {
+			t.Errorf("InitConfig() should have failed with *errors.errorString, got: [%T] %s", err, err)
+		}
+	})
+
+	t.Run("TestConfigLoadBuiltinWordsBadYAML", func(t *testing.T) {
+		_, err := InitConfig(options, builtinsPatternsBad)
 		if err.Error() != "yaml: line 2: mapping values are not allowed in this context" {
 			t.Errorf("InitConfig() should have failed with *errors.errorString, got: [%T] %s", err, err)
 		}
@@ -395,7 +385,7 @@ words:
 		output := bytes.Buffer{}
 
 		t.Run(testname, func(t *testing.T) {
-			Run(input, &output, config, builtinsAllGood, lemmatizer)
+			Run(input, &output, config, lemmatizer)
 
 			if output.String() != tt.colored {
 				t.Errorf("got %v, want %v", output.String(), tt.colored)

@@ -2,6 +2,7 @@ package logalize
 
 import (
 	"embed"
+	"io/fs"
 	"os"
 
 	"github.com/knadh/koanf/parsers/yaml"
@@ -43,27 +44,29 @@ func InitConfig(opts Options, builtins embed.FS) (*koanf.Koanf, error) {
 }
 
 func loadBuiltinConfig(config *koanf.Koanf, builtins embed.FS) error {
-	builtinLogFormats, err := builtins.ReadDir("builtins/logformats")
-	if err != nil {
-		return err
-	}
-	for _, entry := range builtinLogFormats {
-		file, _ := builtins.ReadFile("builtins/logformats/" + entry.Name())
-		if err = config.Load(rawbytes.Provider(file), yaml.Parser()); err != nil {
-			return err
+	var loadFromDirRecursively func(entries []fs.DirEntry, path string) error
+	loadFromDirRecursively = func(entries []fs.DirEntry, path string) error {
+		for _, entry := range entries {
+			if entry.IsDir() {
+				dir, _ := builtins.ReadDir(path + entry.Name())
+				if err := loadFromDirRecursively(dir, path+entry.Name()+"/"); err != nil {
+					return err
+				}
+			} else {
+				file, _ := builtins.ReadFile(path + entry.Name())
+				if err := config.Load(rawbytes.Provider(file), yaml.Parser()); err != nil {
+					return err
+				}
+			}
 		}
+		return nil
 	}
 
-	builtinWords, err := builtins.ReadDir("builtins/words")
-	if err != nil {
+	builtinsDir, _ := builtins.ReadDir("builtins")
+	if err := loadFromDirRecursively(builtinsDir, "builtins/"); err != nil {
 		return err
 	}
-	for _, entry := range builtinWords {
-		file, _ := builtins.ReadFile("builtins/words/" + entry.Name())
-		if err = config.Load(rawbytes.Provider(file), yaml.Parser()); err != nil {
-			return err
-		}
-	}
+
 	return nil
 }
 
