@@ -3,8 +3,10 @@ package cmd
 import (
 	"embed"
 	"fmt"
+	"io/fs"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/aaaton/golem/v4"
 	"github.com/aaaton/golem/v4/dicts/en"
@@ -67,24 +69,28 @@ func Execute() {
 }
 
 func printBuiltins(builtins embed.FS) error {
-	builtinLogFormats, err := builtins.ReadDir("builtins/logformats")
-	if err != nil {
-		return err
-	}
-	for _, entry := range builtinLogFormats {
-		filename := entry.Name()
-		file, _ := builtins.ReadFile("builtins/logformats/" + filename)
-		fmt.Printf("---\n# [log-formats] %s\n%v", filename, string(file))
+	var printDirRecursively func(entries []fs.DirEntry, path string) error
+	printDirRecursively = func(entries []fs.DirEntry, path string) error {
+		for _, entry := range entries {
+			if entry.IsDir() {
+				dir, _ := builtins.ReadDir(path + entry.Name())
+				if err := printDirRecursively(dir, path+entry.Name()+"/"); err != nil {
+					return err
+				}
+			} else {
+				filename := entry.Name()
+				file, _ := builtins.ReadFile(path + filename)
+				group := strings.Split(path, "/")[1]
+				fmt.Printf("---\n# [%s] %s\n%v", group, filename, string(file))
+			}
+		}
+		return nil
 	}
 
-	builtinWords, err := builtins.ReadDir("builtins/words")
-	if err != nil {
+	builtinsDir, _ := builtins.ReadDir("builtins")
+	if err := printDirRecursively(builtinsDir, "builtins/"); err != nil {
 		return err
 	}
-	for _, entry := range builtinWords {
-		filename := entry.Name()
-		file, _ := builtins.ReadFile("builtins/words/" + filename)
-		fmt.Printf("---\n# [words] %s\n%v", filename, string(file))
-	}
+
 	return nil
 }
