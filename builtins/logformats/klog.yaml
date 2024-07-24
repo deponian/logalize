@@ -52,4 +52,4 @@ formats:
       fg: "#ff966c"
     # msg
     - pattern: (.*)
-      style: "words"
+      style: "patterns-and-words"
