@@ -4,7 +4,6 @@ words:
     style: bold
     list:
       - "active"
-      - "attempt"
       - "clean"
       - "complete"
       - "configure"

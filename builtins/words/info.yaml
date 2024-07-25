@@ -3,7 +3,8 @@ words:
     fg: "#1ba2f5"
     style: bold
     list:
-      - "info"
+      - "attempt"
       - "detected"
       - "ignore"
+      - "info"
       - "readonly"
