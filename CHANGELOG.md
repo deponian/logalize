@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.0] - 2024-07-25
+
+### Added
+
+- Add "--print-builtins" flag
+- Add "info" word group
+- Add "klog" log format
+- Add "patterns", "words" and "patterns-and-words" color styles
+- Add datetime patterns
+- Add MAC address and UUID patterns
+
+### Changed
+
+- Change cert-manager example log
+- Use global variables in init* functions instead of returning the value
+- Load built-in configs recursively
+
+### Fixed
+
+- Check lowercased words
+- Change colors for nginx-combined and nginx-ingress-controller logging formats
+- Change checking process for log formats and word groups
+- Rectify "print-builtins" after changes in d5fa7fd
+
 ## [0.1.2] - 2024-06-19
 
 ### Added
@@ -40,6 +64,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Print version as "version (commit) date"
 
+[0.2.0]: https://github.com/deponian/logalize/compare/v0.1.2..v0.2.0
 [0.1.2]: https://github.com/deponian/logalize/compare/v0.1.1..v0.1.2
 [0.1.1]: https://github.com/deponian/logalize/compare/v0.1.0..v0.1.1
 
