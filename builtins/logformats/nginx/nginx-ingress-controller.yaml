@@ -26,7 +26,6 @@ formats:
       fg: "#c3e88d"
     # $status
     - pattern: (\d\d\d )
-      fg: "#ffffff"
       alternatives:
         - pattern: (2\d\d )
           fg: "#00ff00"
@@ -72,7 +71,6 @@ formats:
       fg: "#ff757f"
     # $upstream_status
     - pattern: ((\d\d\d|-) )
-      fg: "#ffffff"
       alternatives:
         - pattern: (2\d\d )
           fg: "#00ff00"

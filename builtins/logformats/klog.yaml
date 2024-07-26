@@ -21,7 +21,6 @@ formats:
   klog:
     # Lmmdd
     - pattern: ([IWEF][0-9]{4} )
-      fg: "#ffffff"
       alternatives:
         - pattern: (I[0-9]{4} )
           fg: "#82aaff"

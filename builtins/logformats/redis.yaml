@@ -1,0 +1,57 @@
+# INFO:
+# Redis default log format
+#
+# SOURCE:
+# https://github.com/redis/redis/issues/12918#issuecomment-1880735488
+# https://github.com/redis/redis/issues/2545#issuecomment-97270522
+#
+# SCHEME:
+# PID:ROLE day month year hh:mm:ss.uuu log-level-char msg
+
+formats:
+  redis:
+    # PID
+    - pattern: (\d+)
+      fg: "#4fd6be"
+    # :
+    - pattern: (:)
+      fg: "#636da6"
+    # ROLE
+    - pattern: ([MSXC] )
+      alternatives:
+        - pattern: (M )
+          fg: "#ff757f"
+          style: bold
+        - pattern: (S )
+          fg: "#82aaff"
+          style: bold
+        - pattern: (X )
+          fg: "#ffc777"
+          style: bold
+        - pattern: (C )
+          fg: "#b8db87"
+          style: bold
+    # day month year
+    - pattern: (\d{1,2} [A-Za-z]+ \d{4} )
+      fg: "#c099ff"
+    # hh:mm:ss.uuu
+    - pattern: (\d{2}:\d{2}:\d{2}\.\d{3} )
+      fg: "#fca7ea"
+    # log-level-char
+    - pattern: ([#*-.] )
+      alternatives:
+        - pattern: (# )
+          fg: "#ffc777"
+          style: bold
+        - pattern: (\* )
+          fg: "#89ddff"
+          style: bold
+        - pattern: (- )
+          fg: "#82aaff"
+          style: bold
+        - pattern: (\. )
+          fg: "#b8db87"
+          style: bold
+    # msg
+    - pattern: (.*)
+      style: "patterns-and-words"
