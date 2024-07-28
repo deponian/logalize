@@ -20,35 +20,35 @@
 formats:
   klog:
     # Lmmdd
-    - pattern: ([IWEF][0-9]{4} )
+    - regexp: ([IWEF][0-9]{4} )
       alternatives:
-        - pattern: (I[0-9]{4} )
+        - regexp: (I[0-9]{4} )
           fg: "#82aaff"
           style: bold
-        - pattern: (W[0-9]{4} )
+        - regexp: (W[0-9]{4} )
           fg: "#ffc777"
           style: bold
-        - pattern: (E[0-9]{4} )
+        - regexp: (E[0-9]{4} )
           fg: "#ff757f"
           style: bold
-        - pattern: (F[0-9]{4} )
+        - regexp: (F[0-9]{4} )
           fg: "#c53b53"
           style: bold
     # hh:mm:ss.uuuuuu
-    - pattern: ([0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{6})
+    - regexp: ([0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{6})
       fg: "#4fd6be"
     # threadid
-    - pattern: ([[:space:]]+[0-9]+ )
+    - regexp: ([[:space:]]+[0-9]+ )
       fg: "#636da6"
     # file
-    - pattern: ([^:]+)
+    - regexp: ([^:]+)
       fg: "#89ddff"
     # line
-    - pattern: (:[0-9]+)
+    - regexp: (:[0-9]+)
       fg: "#636da6"
     # ]
-    - pattern: (] )
+    - regexp: (] )
       fg: "#ff966c"
     # msg
-    - pattern: (.*)
+    - regexp: (.*)
       style: "patterns-and-words"

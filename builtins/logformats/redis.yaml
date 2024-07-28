@@ -11,47 +11,47 @@
 formats:
   redis:
     # PID
-    - pattern: (\d+)
+    - regexp: (\d+)
       fg: "#4fd6be"
     # :
-    - pattern: (:)
+    - regexp: (:)
       fg: "#636da6"
     # ROLE
-    - pattern: ([MSXC] )
+    - regexp: ([MSXC] )
       alternatives:
-        - pattern: (M )
+        - regexp: (M )
           fg: "#ff757f"
           style: bold
-        - pattern: (S )
+        - regexp: (S )
           fg: "#82aaff"
           style: bold
-        - pattern: (X )
+        - regexp: (X )
           fg: "#ffc777"
           style: bold
-        - pattern: (C )
+        - regexp: (C )
           fg: "#b8db87"
           style: bold
     # day month year
-    - pattern: (\d{1,2} [A-Za-z]+ \d{4} )
+    - regexp: (\d{1,2} [A-Za-z]+ \d{4} )
       fg: "#c099ff"
     # hh:mm:ss.uuu
-    - pattern: (\d{2}:\d{2}:\d{2}\.\d{3} )
+    - regexp: (\d{2}:\d{2}:\d{2}\.\d{3} )
       fg: "#fca7ea"
     # log-level-char
-    - pattern: ([#*-.] )
+    - regexp: ([#*-.] )
       alternatives:
-        - pattern: (# )
+        - regexp: (# )
           fg: "#ffc777"
           style: bold
-        - pattern: (\* )
+        - regexp: (\* )
           fg: "#89ddff"
           style: bold
-        - pattern: (- )
+        - regexp: (- )
           fg: "#82aaff"
           style: bold
-        - pattern: (\. )
+        - regexp: (\. )
           fg: "#b8db87"
           style: bold
     # msg
-    - pattern: (.*)
+    - regexp: (.*)
       style: "patterns-and-words"

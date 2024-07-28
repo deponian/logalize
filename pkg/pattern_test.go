@@ -1,11 +1,12 @@
 package logalize
 
 import (
+	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/aaaton/golem/v4"
 	"github.com/aaaton/golem/v4/dicts/en"
-	"github.com/google/go-cmp/cmp"
 	"github.com/knadh/koanf/parsers/yaml"
 	"github.com/knadh/koanf/providers/rawbytes"
 	"github.com/knadh/koanf/v2"
@@ -17,23 +18,63 @@ func TestPatternsInit(t *testing.T) {
 patterns:
   string:
     priority: 500
-    pattern: ("[^"]+"|'[^']+')
+    regexp: ("[^"]+"|'[^']+')
     fg: "#00ff00"
 
   number:
-    pattern: (\d+)
+    regexp: (\d+)
     bg: "#00ffff"
+    style: bold
 
   ipv4-address:
-    pattern: (\d{1,3}(\.\d{1,3}){3})
-    fg: "#ff0000"
-    bg: "#ffff00"
-    style: bold
+    regexps:
+      - regexp: (\d\d\d(\.\d\d\d){3})
+        fg: "#ffc777"
+      - regexp: ((:\d{1,5})?)
+        fg: "#ff966c"
 `
 	correctPatterns := []Pattern{
-		{"string", 500, &CapGroup{`("[^"]+"|'[^']+')`, "#00ff00", "", "", nil, nil}},
-		{"ipv4-address", 0, &CapGroup{`(\d{1,3}(\.\d{1,3}){3})`, "#ff0000", "#ffff00", "bold", nil, nil}},
-		{"number", 0, &CapGroup{`(\d+)`, "", "#00ffff", "", nil, nil}},
+		{"string", 500, &CapGroupList{
+			[]CapGroup{
+				{
+					`("[^"]+"|'[^']+')`, "#00ff00", "", "", nil,
+					regexp.MustCompile(`("[^"]+"|'[^']+')`),
+				},
+			},
+			regexp.MustCompile(`(?P<capGroup0>"[^"]+"|'[^']+')`),
+		}},
+		{"ipv4-address", 0, &CapGroupList{
+			[]CapGroup{
+				{
+					`(\d\d\d(\.\d\d\d){3})`, "#ffc777", "", "", nil,
+					regexp.MustCompile(`(\d\d\d(\.\d\d\d){3})`),
+				},
+				{
+					`((:\d{1,5})?)`, "#ff966c", "", "", nil,
+					regexp.MustCompile(`((:\d{1,5})?)`),
+				},
+			},
+			regexp.MustCompile(`(?P<capGroup0>\d\d\d(\.\d\d\d){3})(?P<capGroup1>(:\d{1,5})?)`),
+		}},
+		{"number", 0, &CapGroupList{
+			[]CapGroup{
+				{
+					`(\d+)`, "", "#00ffff", "bold", nil,
+					regexp.MustCompile(`(\d+)`),
+				},
+			},
+			regexp.MustCompile(`(?P<capGroup0>\d+)`),
+		}},
+	}
+
+	comparePatterns := func(pattern1, pattern2 Pattern) error {
+		if pattern1.Name != pattern2.Name || pattern1.Priority != pattern2.Priority {
+			return fmt.Errorf("[pattern1: %s, pattern2: %s] names or priorities aren't equal", pattern1.Name, pattern2.Name)
+		}
+		if err := compareCapGroupLists(*pattern1.CapGroups, *pattern2.CapGroups); err != nil {
+			return err
+		}
+		return nil
 	}
 
 	colorProfile = termenv.TrueColor
@@ -47,47 +88,57 @@ patterns:
 		if err := initPatterns(config); err != nil {
 			t.Errorf("InitPatterns() failed with this error: %s", err)
 		}
+
 		for i, pattern := range Patterns {
-			pattern.CapGroup.Regexp = nil
-			if !cmp.Equal(pattern.Name, correctPatterns[i].Name) {
-				t.Errorf("got %v, want %v", pattern.Name, correctPatterns[i].Name)
-			}
-			if !cmp.Equal(pattern.Priority, correctPatterns[i].Priority) {
-				t.Errorf("got %v, want %v", pattern.Priority, correctPatterns[i].Priority)
-			}
-			if !cmp.Equal(*pattern.CapGroup, *correctPatterns[i].CapGroup) {
-				t.Errorf("got %v, want %v", *pattern.CapGroup, *correctPatterns[i].CapGroup)
+			if err := comparePatterns(pattern, correctPatterns[i]); err != nil {
+				t.Errorf("%s", err)
 			}
 		}
 	})
 
-	configDataBadYAML := `
+	configDataBadYAML1 := `
 patterns:
   string:priority: 100
 `
 	config = koanf.New(".")
-	configRaw = []byte(configDataBadYAML)
+	configRaw = []byte(configDataBadYAML1)
 	if err := config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
 		t.Errorf("Error during config loading: %s", err)
 	}
-	t.Run("TestPatternsInitBadYAML", func(t *testing.T) {
+	t.Run("TestPatternsInitBadYAML1", func(t *testing.T) {
 		if err := initPatterns(config); err == nil {
 			t.Errorf("InitPatterns() should have failed")
 		}
 	})
 
-	configDataBadPattern := `
+	configDataBadYAML2 := `
 patterns:
-  string:
-    priority: 100
-    pattern: .*
+  test:
+    regexps: 4
 `
 	config = koanf.New(".")
-	configRaw = []byte(configDataBadPattern)
+	configRaw = []byte(configDataBadYAML2)
 	if err := config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
 		t.Errorf("Error during config loading: %s", err)
 	}
-	t.Run("TestPatternsInitBadPattern", func(t *testing.T) {
+	t.Run("TestPatternsInitBadYAML2", func(t *testing.T) {
+		if err := initPatterns(config); err == nil {
+			t.Errorf("InitPatterns() should have failed")
+		}
+	})
+
+	configDataBadRegExp := `
+patterns:
+  string:
+    priority: 100
+    regexp: .*
+`
+	config = koanf.New(".")
+	configRaw = []byte(configDataBadRegExp)
+	if err := config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
+		t.Errorf("Error during config loading: %s", err)
+	}
+	t.Run("TestPatternsInitBadRegExp", func(t *testing.T) {
 		if err := initPatterns(config); err == nil {
 			t.Errorf("InitPatterns() should have failed")
 		}
@@ -96,15 +147,15 @@ patterns:
 	configDataBadStyle := `
 patterns:
   string:
-    pattern: (.*)
-    style: words
+    regexp: (.*)
+    style: hello
 `
 	config = koanf.New(".")
 	configRaw = []byte(configDataBadStyle)
 	if err := config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
 		t.Errorf("Error during config loading: %s", err)
 	}
-	t.Run("TestPatternsInitBadPattern", func(t *testing.T) {
+	t.Run("TestPatternsInitBadRegExp", func(t *testing.T) {
 		if err := initPatterns(config); err == nil {
 			t.Errorf("InitPatterns() should have failed")
 		}
@@ -116,37 +167,37 @@ func TestHighlightPatternsAndWords(t *testing.T) {
 patterns:
   string:
     priority: 500
-    pattern: ("[^"]+"|'[^']+')
+    regexp: ("[^"]+"|'[^']+')
     fg: "#00ff00"
 
   ipv4-address:
     priority: 400
-    pattern: (\d{1,3}(\.\d{1,3}){3})
+    regexp: (\d{1,3}(\.\d{1,3}){3})
     fg: "#ff0000"
     bg: "#ffff00"
     style: bold
 
   number:
-    pattern: (\d+)
+    regexp: (\d+)
     bg: "#005050"
 
   http-status-code:
     priority: 300
-    pattern: (\d\d\d)
+    regexp: (\d\d\d)
     fg: "#ffffff"
     alternatives:
-      - pattern: (1\d\d)
+      - regexp: (1\d\d)
         fg: "#505050"
-      - pattern: (2\d\d)
+      - regexp: (2\d\d)
         fg: "#00ff00"
         style: overline
-      - pattern: (3\d\d)
+      - regexp: (3\d\d)
         fg: "#00ffff"
         style: crossout
-      - pattern: (4\d\d)
+      - regexp: (4\d\d)
         fg: "#ff0000"
         style: reverse
-      - pattern: (5\d\d)
+      - regexp: (5\d\d)
         fg: "#ff00ff"
 
 words:

@@ -72,10 +72,10 @@ func (wg WordGroup) check() error {
 	}
 
 	// check style
-	if !styleRegexp.MatchString(wg.Style) {
+	if !nonRecursiveStyleRegexp.MatchString(wg.Style) {
 		return fmt.Errorf(
 			"[word group: %s] style %s doesn't match %s pattern",
-			wg.Name, wg.Style, styleRegexp)
+			wg.Name, wg.Style, nonRecursiveStyleRegexp)
 	}
 
 	return nil

@@ -2,16 +2,15 @@ package logalize
 
 import (
 	"fmt"
-	"regexp"
 	"sort"
 
 	"github.com/knadh/koanf/v2"
 )
 
 type Pattern struct {
-	Name     string
-	Priority int
-	CapGroup *CapGroup
+	Name      string
+	Priority  int
+	CapGroups *CapGroupList
 }
 
 type PatternList []Pattern
@@ -26,28 +25,25 @@ func initPatterns(config *koanf.Koanf) error {
 		var pattern Pattern
 		pattern.Name = patternName
 		pattern.Priority = config.Int("patterns." + patternName + ".priority")
-		if err := config.Unmarshal("patterns."+patternName, &pattern.CapGroup); err != nil {
-			return err
+		pattern.CapGroups = &CapGroupList{}
+		if config.Exists("patterns." + patternName + ".regexps") {
+			if err := config.Unmarshal("patterns."+patternName+".regexps", &pattern.CapGroups.Groups); err != nil {
+				return err
+			}
+		} else {
+			if err := config.Unmarshal("patterns."+patternName, &pattern.CapGroups.Groups); err != nil {
+				return err
+			}
 		}
 		Patterns = append(Patterns, pattern)
 	}
 
 	for _, pattern := range Patterns {
-		// validate patterns' capture groups
-		if err := pattern.CapGroup.check(false); err != nil {
+		if err := pattern.CapGroups.init(false); err != nil {
 			return fmt.Errorf("[pattern: %s] %s", pattern.Name, err)
 		}
-
-		// build main regexp
-		pattern.CapGroup.Regexp = regexp.MustCompile(pattern.CapGroup.Pattern)
-
-		// build regexps for capture groups' alternatives
-		if len(pattern.CapGroup.Alternatives) > 0 {
-			for k, alt := range pattern.CapGroup.Alternatives {
-				pattern.CapGroup.Alternatives[k].Regexp = regexp.MustCompile(alt.Pattern)
-			}
-		}
 	}
+
 	// sort by priority
 	sort.Slice(Patterns, func(i, j int) bool {
 		iv, jv := Patterns[i], Patterns[j]
@@ -66,10 +62,10 @@ func (patterns PatternList) highlight(str string, highlightWords bool) string {
 
 	// patterns
 	for _, pattern := range patterns {
-		matches := pattern.CapGroup.Regexp.FindStringSubmatchIndex(str)
+		matches := pattern.CapGroups.FullRegExp.FindStringSubmatchIndex(str)
 		if matches != nil {
 			leftPart := patterns.highlight(str[0:matches[0]], highlightWords)
-			match := pattern.CapGroup.highlight(str[matches[0]:matches[1]])
+			match := pattern.CapGroups.highlight(str[matches[0]:matches[1]])
 			rightPart := patterns.highlight(str[matches[1]:], highlightWords)
 			return leftPart + match + rightPart
 		}

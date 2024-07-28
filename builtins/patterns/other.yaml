@@ -1,6 +1,5 @@
 patterns:
-  # 0.0.0.0
-  # 127.0.0.1:8080
+  # 0a99af43-0ad4-4237-b9cd-064966eb2803
   uuid:
-    pattern: ([[:xdigit:]]{8}-[[:xdigit:]]{4}-[[:xdigit:]]{4}-[[:xdigit:]]{4}-[[:xdigit:]]{12})
+    regexp: ([[:xdigit:]]{8}-[[:xdigit:]]{4}-[[:xdigit:]]{4}-[[:xdigit:]]{4}-[[:xdigit:]]{12})
     fg: "#86e1fc"

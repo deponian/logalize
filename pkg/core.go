@@ -27,7 +27,7 @@ func Run(reader io.Reader, writer io.StringWriter, config *koanf.Koanf, lemmatiz
 		// try one of the log formats
 		formatDetected := false
 		for _, logFormat := range LogFormats {
-			if logFormat.Regexp.MatchString(line) {
+			if logFormat.CapGroups.FullRegExp.MatchString(line) {
 				_, err := writer.WriteString(logFormat.highlight(line) + "\n")
 				if err != nil {
 					return err

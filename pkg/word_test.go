@@ -126,15 +126,15 @@ func TestWordsCheck(t *testing.T) {
 			WordGroup{"testBackgroundErr", []string{"test"}, "", "hello", ""},
 		},
 		{
-			fmt.Sprintf(`[word group: testStyleErr1] style words doesn't match %s pattern`, styleRegexp),
+			fmt.Sprintf(`[word group: testStyleErr1] style words doesn't match %s pattern`, nonRecursiveStyleRegexp),
 			WordGroup{"testStyleErr1", []string{"test"}, "", "", "words"},
 		},
 		{
-			fmt.Sprintf(`[word group: testStyleErr2] style patterns doesn't match %s pattern`, styleRegexp),
+			fmt.Sprintf(`[word group: testStyleErr2] style patterns doesn't match %s pattern`, nonRecursiveStyleRegexp),
 			WordGroup{"testStyleErr2", []string{"test"}, "", "", "patterns"},
 		},
 		{
-			fmt.Sprintf(`[word group: testStyleErr3] style patterns-and-words doesn't match %s pattern`, styleRegexp),
+			fmt.Sprintf(`[word group: testStyleErr3] style patterns-and-words doesn't match %s pattern`, nonRecursiveStyleRegexp),
 			WordGroup{"testStyleErr3", []string{"test"}, "", "", "patterns-and-words"},
 		},
 	}

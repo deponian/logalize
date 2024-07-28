@@ -2,31 +2,14 @@ package logalize
 
 import (
 	"fmt"
-	"regexp"
-	"strconv"
 
 	"github.com/knadh/koanf/v2"
-	"github.com/muesli/termenv"
 )
-
-// CapGroup represents one capture group in a config file
-type CapGroup struct {
-	Pattern      string       `koanf:"pattern"`
-	Foreground   string       `koanf:"fg"`
-	Background   string       `koanf:"bg"`
-	Style        string       `koanf:"style"`
-	Alternatives CapGroupList `koanf:"alternatives"`
-	Regexp       *regexp.Regexp
-}
-
-// CapGroupList represents a list of capture groups
-type CapGroupList []CapGroup
 
 // LogFormat represents a log format
 type LogFormat struct {
 	Name      string
-	CapGroups CapGroupList
-	Regexp    *regexp.Regexp
+	CapGroups *CapGroupList
 }
 
 // LogFormatList represents a list of log formats
@@ -41,167 +24,22 @@ func initLogFormats(config *koanf.Koanf) error {
 	for _, formatName := range config.MapKeys("formats") {
 		var logFormat LogFormat
 		logFormat.Name = formatName
-		if err := config.Unmarshal("formats."+formatName, &logFormat.CapGroups); err != nil {
+		logFormat.CapGroups = &CapGroupList{}
+		if err := config.Unmarshal("formats."+formatName, &logFormat.CapGroups.Groups); err != nil {
 			return err
 		}
 		LogFormats = append(LogFormats, logFormat)
 	}
 
-	for i, format := range LogFormats {
-		// check that all patterns are valid regular expressions
-		if err := format.checkCapGroups(); err != nil {
-			return err
-		}
-
-		// build regexp for whole log format line
-		LogFormats[i].Regexp = format.buildRegexp()
-
-		// build regexps for capture groups' alternatives
-		for _, cg := range format.CapGroups {
-			if len(cg.Alternatives) > 0 {
-				for k, alt := range cg.Alternatives {
-					cg.Alternatives[k].Regexp = regexp.MustCompile(alt.Pattern)
-				}
-			}
+	for _, format := range LogFormats {
+		if err := format.CapGroups.init(true); err != nil {
+			return fmt.Errorf("[log format: %s] %s", format.Name, err)
 		}
 	}
 
 	return nil
-}
-
-// highlight colorizes string and applies a style
-func highlight(str, fg, bg, style string) string {
-	if style == "patterns-and-words" {
-		return Patterns.highlight(str, true)
-	}
-	if style == "patterns" {
-		return Patterns.highlight(str, false)
-	}
-	if style == "words" {
-		return Words.highlight(str)
-	}
-
-	coloredStr := termenv.String(str)
-	if fg != "" {
-		coloredStr = coloredStr.Foreground(colorProfile.Color(fg))
-	}
-	if bg != "" {
-		coloredStr = coloredStr.Background(colorProfile.Color(bg))
-	}
-	switch style {
-	case "bold":
-		coloredStr = coloredStr.Bold()
-	case "faint":
-		coloredStr = coloredStr.Faint()
-	case "italic":
-		coloredStr = coloredStr.Italic()
-	case "underline":
-		coloredStr = coloredStr.Underline()
-	case "overline":
-		coloredStr = coloredStr.Overline()
-	case "crossout":
-		coloredStr = coloredStr.CrossOut()
-	case "reverse":
-		coloredStr = coloredStr.Reverse()
-	}
-	return coloredStr.String()
-}
-
-// highlight colorizes string and applies a style
-func (cg *CapGroup) highlight(str string) string {
-	if len(cg.Alternatives) > 0 {
-		for _, alt := range cg.Alternatives {
-			if alt.Regexp.MatchString(str) {
-				return highlight(str, alt.Foreground, alt.Background, alt.Style)
-			}
-		}
-	}
-
-	return highlight(str, cg.Foreground, cg.Background, cg.Style)
-}
-
-// check checks one capture group's fields match corresponding patterns
-func (cg *CapGroup) check(isLogFormat bool) error {
-	// check pattern
-	if cg.Pattern == "" {
-		return fmt.Errorf("empty patterns are not allowed")
-	}
-	if !capGroupRegexp.MatchString(cg.Pattern) {
-		return fmt.Errorf(
-			"capture group pattern %s doesn't match %s pattern",
-			cg.Pattern, capGroupRegexp)
-	}
-
-	// check foreground
-	if !colorRegexp.MatchString(cg.Foreground) {
-		return fmt.Errorf(
-			"[capture group: %s] foreground color %s doesn't match %s pattern",
-			cg.Pattern, cg.Foreground, colorRegexp)
-	}
-
-	// check background
-	if !colorRegexp.MatchString(cg.Background) {
-		return fmt.Errorf(
-			"[capture group: %s] background color %s doesn't match %s pattern",
-			cg.Pattern, cg.Background, colorRegexp)
-	}
-
-	// check style
-	if isLogFormat {
-		if !styleRegexpLogFormat.MatchString(cg.Style) {
-			return fmt.Errorf(
-				"[capture group: %s] style %s doesn't match %s pattern",
-				cg.Pattern, cg.Style, styleRegexpLogFormat)
-		}
-	} else {
-		if !styleRegexp.MatchString(cg.Style) {
-			return fmt.Errorf(
-				"[capture group: %s] style %s doesn't match %s pattern",
-				cg.Pattern, cg.Style, styleRegexp)
-		}
-	}
-
-	// check alternatives
-	if len(cg.Alternatives) > 0 {
-		return cg.Alternatives.check(isLogFormat)
-	}
-	return nil
-}
-
-// check checks that capture groups' fields match corresponding patterns
-func (cgl *CapGroupList) check(isLogFormat bool) error {
-	for _, cg := range *cgl {
-		if err := cg.check(isLogFormat); err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-// checkCapGroups checks that all capture groups' fields match corresponding patterns
-func (lf *LogFormat) checkCapGroups() error {
-	if err := lf.CapGroups.check(true); err != nil {
-		return fmt.Errorf("[log format: %s] %s", lf.Name, err)
-	}
-	return nil
-}
-
-// buildRegexp builds full regexp string from the list of capture groups
-func (lf *LogFormat) buildRegexp() *regexp.Regexp {
-	var format string
-	for i, cg := range lf.CapGroups {
-		// add name for the capture group
-		format += fmt.Sprintf("(?P<capGroup%d>", i) + cg.Pattern[1:]
-	}
-	format = "^" + format + "$"
-	return regexp.MustCompile(format)
 }
 
 func (lf *LogFormat) highlight(str string) (coloredStr string) {
-	matches := lf.Regexp.FindStringSubmatch(str)
-	for i, cg := range lf.CapGroups {
-		match := matches[lf.Regexp.SubexpIndex("capGroup"+strconv.Itoa(i))]
-		coloredStr += cg.highlight(match)
-	}
-	return coloredStr
+	return lf.CapGroups.highlight(str)
 }

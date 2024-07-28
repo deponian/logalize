@@ -92,21 +92,21 @@ Configuration example:
 ```yaml
 formats:
   kuvaq:
-    - pattern: (\d{1,3}(\.\d{1,3}){3} )
+    - regexp: (\d{1,3}(\.\d{1,3}){3} )
       fg: "#f5ce42"
-    - pattern: (- )
+    - regexp: (- )
       bg: "#807e7a"
       style: bold
-    - pattern: ("[^"]+" )
+    - regexp: ("[^"]+" )
       fg: "#9ddb56"
       bg: "#f5ce42"
-    - pattern: (\d\d\d)
+    - regexp: (\d\d\d)
       fg: "#ffffff"
       alternatives:
-        - pattern: (2\d\d)
+        - regexp: (2\d\d)
           fg: "#00ff00"
           style: bold
-        - pattern: (3\d\d)
+        - regexp: (3\d\d)
           fg: "#00ffff"
           style: bold
 ```
@@ -120,7 +120,7 @@ But not these:
 - `Upper ascension station 127.0.0.1 - "menetekel" 777`
 - `127.0.0.1 - "menetekel" 777000`
 
-For an overview of the pattern syntax, see the [regexp/syntax](https://pkg.go.dev/regexp/syntax) package.
+For an overview of regular expression syntax, see the [regexp/syntax](https://pkg.go.dev/regexp/syntax) package.
 
 Full log format example using all available fields:
 
@@ -128,10 +128,12 @@ Full log format example using all available fields:
 formats:
   # name of a log format
   elysium:
-    # pattern must begin with an opening parenthesis `(`
-    # and it must end with a closing parenthesis `)`
-    # pattern can't be empty `()`
-    - pattern: (\d\d\d )
+    # regexp must begin with an opening parenthesis `(`
+    # and it must end with a paired closing parenthesis `)`
+    # regexp can't be empty `()`
+    # that is, your regexp must be within one large capture group
+    # and contain a valid regular expression
+    - regexp: (\d\d\d )
       # color can be a hex value like #ff0000
       # or a number between 0 and 255 for ANSI colors
       fg: "#00ff00"
@@ -139,7 +141,7 @@ formats:
       # available regular styles:
       #  bold, faint, italic, underline,
       #  overline, crossout, reverse
-      # there are also three special styles (log formats only):
+      # there are also three special styles:
       #  patterns - use highlighting from "patterns" section (see below)
       #  words - use highlighting from "words" section (see below)
       #  patterns-and-words - use highlighting from "patterns" and "words" sections
@@ -149,23 +151,23 @@ formats:
       # within this regular expression
       # a common example is HTTP status code
       alternatives:
-        # every pattern here has the same "fg", "bg" and "style" fields
+        # every regexp here has the same "fg", "bg" and "style" fields
         # but no "alternatives" field
-        - pattern: (2\d\d )
+        - regexp: (2\d\d )
           fg: "#00ff00"
           bg: "#0000ff"
           style: bold
-        - pattern: (4\d\d )
+        - regexp: (4\d\d )
           fg: "#ff0000"
           bg: "#0000ff"
           style: underline
-    # each next pattern is added to the previous one
-    # and together they form a complete pattern for the whole string
-    - pattern: (--- )
+    # each next regexp is added to the previous one
+    # and together they form a complete regexp for the whole string
+    - regexp: (--- )
       # . . . . .
-    - pattern: ([[:xdigit:]]{32})
+    - regexp: ([[:xdigit:]]{32})
       # . . . . .
-    # full pattern for this whole example is:
+    # full regexp for this whole example is:
     # ^(\d\d\d )(--- )([[:xdigit:]]{32})$
 ```
 
@@ -177,31 +179,100 @@ Configuration example:
 
 ```yaml
 patterns:
+  # simple patterns
   string:
     priority: 500
-    pattern: ("[^"]+"|'[^']+')
+    regexp: ("[^"]+"|'[^']+')
     fg: "#00ff00"
 
   number:
-    pattern: (\d+)
+    regexp: (\d+)
     bg: "#00ffff"
     style: bold
 
   http-status-code:
-    pattern: (\d\d\d)
+    regexp: (\d\d\d)
     fg: "#ffffff"
     alternatives:
-      - pattern: (2\d\d)
+      - regexp: (2\d\d)
         fg: "#00ff00"
-      - pattern: (3\d\d)
+      - regexp: (3\d\d)
         fg: "#00ffff"
-      - pattern: (4\d\d)
+      - regexp: (4\d\d)
         fg: "#ff0000"
-      - pattern: (5\d\d)
+      - regexp: (5\d\d)
         fg: "#ff00ff"
+
+  # complex pattern
+  ipv4-address-with-port:
+    regexps:
+      - regexp: (\d{1,3}(\.\d{1,3}){3})
+        fg: "#ffc777"
+      - regexp: ((:\d{1,5})?)
+        fg: "#ff966c"
+
 ```
 
-`patterns` are standard regular expressions. You can highlight any sequence of characters in a string that matches a regular expression. The same `fg`, `bg`, `style` and `alternatives` fields are used here, see more details above under [Log formats](#log-formats). The only new field here is `priority`. Patterns with higher priority will be painted earlier. Default priority is 0.
+`patterns` are standard regular expressions. You can highlight any sequence of characters in a string that matches a regular expression. It may consist of several parts (see `ipv4-address-with-port` above). This is convenient if you want different parts of a pattern to have different colors or styles. Think of these complex patterns as little log formats that can be found in any part of a string.
+
+Patterns have priority. Ones with higher priority will be painted earlier. Default priority is 0.
+
+Full pattern example using all available fields:
+
+```yaml
+patterns:
+  # simple pattern (when you use only "regexp" field)
+  # name of a pattern
+  ipv4-address:
+    # the same fields are used here as in log formats (see above)
+    priority: 10
+    regexp: (\d{1,3}(\.\d{1,3}){3})
+    fg: "#00ff00"
+    bg: "#0000ff"
+    style: bold
+    alternatives:
+      - regexp: (1\d{1,2}(\.\d{1,3}){3})
+        fg: "#00ff00"
+        bg: "#0000ff"
+        style: bold
+      - regexp: (2\d{1,2}(\.\d{1,3}){3})
+        fg: "#ff0000"
+        bg: "#0000ff"
+        style: underline
+
+  # complex pattern (when you you "regexps" field)
+  # the same fields are used here as in log formats (see above)
+  # complex pattern are formed from all regexps in the "regexps" list
+  # e.g. pattern below will be rendered as (\d{1,3}(\.\d{1,3}){3})((:\d{1,5})?)
+  # the main difference from a simple pattern is that you can control
+  # the style of the individual parts of the pattern
+  ipv4-address-with-port:
+    regexps:
+      - regexp: (\d{1,3}(\.\d{1,3}){3})
+        fg: "#ffc777"
+        bg: "#0000ff"
+        style: bold
+      - regexp: ((:\d{1,5})?)
+        fg: "#ff966c"
+        bg: "#00ffff"
+        style: underline
+
+  # complex patterns are mainly used when you want to build a pattern
+  # that builds on other patterns. for example, you want to make a highlighter
+  # for the "logfmt" format. an example of "logfmt" log line:
+  # ts=2024-02-16T23:00:02.953Z caller=db.go:1619 level=info component=tsdb msg="Deleting..."
+  # you can't use log formats (see above) because the structure of "logfmt" is impermanent
+  # in such a case, you can describe the base "logfmt" element (xxx=xxx) and look for other
+  # existing patterns (date, time, IP address, etc.) on the right side of the equals sign
+  logfmt:
+    regexps:
+      - regexp: ( [^=]+)
+        fg: "#ff0000"
+      - regexp: (=)
+        fg: "#00ff00"
+      - regexp: ([^ ]+)
+        style: patterns-and-words
+```
 
 ### Words
 

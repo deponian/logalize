@@ -10,41 +10,41 @@
 formats:
   nginx-combined:
     # $remote_addr
-    - pattern: (\d{1,3}(\.\d{1,3}){3} )
+    - regexp: (\d{1,3}(\.\d{1,3}){3} )
       fg: "#ffc777"
     # -
-    - pattern: (- )
+    - regexp: (- )
       fg: "#828bb8"
     # $remote_user
-    - pattern: ([^ ]+ )
+    - regexp: ([^ ]+ )
       fg: "#4fd6be"
     # [$time_local]
-    - pattern: (\[.+\] )
+    - regexp: (\[.+\] )
       fg: "#c099ff"
     # "$request"
-    - pattern: ("[^"]+" )
+    - regexp: ("[^"]+" )
       fg: "#c3e88d"
     # $status
-    - pattern: (\d\d\d )
+    - regexp: (\d\d\d )
       alternatives:
-        - pattern: (2\d\d )
+        - regexp: (2\d\d )
           fg: "#00ff00"
           style: bold
-        - pattern: (3\d\d )
+        - regexp: (3\d\d )
           fg: "#00ffff"
           style: bold
-        - pattern: (4\d\d )
+        - regexp: (4\d\d )
           fg: "#ff0000"
           style: bold
-        - pattern: (5\d\d )
+        - regexp: (5\d\d )
           fg: "#ff00ff"
           style: bold
     # $body_bytes_sent
-    - pattern: ([\d]+ )
+    - regexp: ([\d]+ )
       fg: "#636da6"
     # "$http_referer"
-    - pattern: ("[^"]+" )
+    - regexp: ("[^"]+" )
       fg: "#fca7ea"
     # "$http_user_agent"
-    - pattern: ("[^"]+")
+    - regexp: ("[^"]+")
       fg: "#82aaff"

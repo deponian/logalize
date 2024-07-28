@@ -2,72 +2,72 @@
 #   # $remote_addr - $remote_user [$time_local] "$request" $status $body_bytes_sent "$http_referer" "$http_user_agent"
 #   nginx-combined:
 #     # $remote_addr
-#     - pattern: (\d{1,3}(\.\d{1,3}){3} )
+#     - regexp: (\d{1,3}(\.\d{1,3}){3} )
 #       fg: "#f5ce42"
 #     # -
-#     - pattern: (- )
+#     - regexp: (- )
 #       fg: "#807e7a"
 #     # $remote_user
-#     - pattern: ([^ ]+ )
+#     - regexp: ([^ ]+ )
 #       fg: "#764a9e"
 #     # [$time_local]
-#     - pattern: (\[.+\] )
+#     - regexp: (\[.+\] )
 #       fg: "#148dd9"
 #     # "$request"
-#     - pattern: ("[^"]+" )
+#     - regexp: ("[^"]+" )
 #       fg: "#9ddb56"
 #     # $status
-#     - pattern: (\d\d\d )
+#     - regexp: (\d\d\d )
 #       fg: "#ffffff"
 #       alternatives:
-#         - pattern: (2\d\d )
+#         - regexp: (2\d\d )
 #           fg: "#00ff00"
 #           style: bold
-#         - pattern: (3\d\d )
+#         - regexp: (3\d\d )
 #           fg: "#00ffff"
 #           style: bold
-#         - pattern: (4\d\d )
+#         - regexp: (4\d\d )
 #           fg: "#ff0000"
 #           style: bold
-#         - pattern: (5\d\d )
+#         - regexp: (5\d\d )
 #           fg: "#ff00ff"
 #           style: bold
 #     # $body_bytes_sent
-#     - pattern: ([\d]+ )
+#     - regexp: ([\d]+ )
 #       fg: "#7d7d7d"
 #     # "$http_referer"
-#     - pattern: ("[^"]+" )
+#     - regexp: ("[^"]+" )
 #       fg: "#3ae1f0"
 #     # "$http_user_agent"
-#     - pattern: ("[^"]+")
+#     - regexp: ("[^"]+")
 #       fg: "#aa7dd1"
 
 # patterns:
 #   string:
 #     priority: 500
-#     pattern: ("[^"]+"|'[^']+')
+#     regexp: ("[^"]+"|'[^']+')
 #     fg: "#00ff00"
 
 #   number:
-#     pattern: (\d+)
+#     regexp: (\d+)
 #     fg: "#00ffff"
 #     style: bold
 
 #   http-status-code:
-#     pattern: (\d\d\d)
+#     regexp: (\d\d\d)
 #     fg: "#ffffff"
 #     alternatives:
-#       - pattern: (2\d\d)
+#       - regexp: (2\d\d)
 #         fg: "#00ff00"
-#       - pattern: (3\d\d)
+#       - regexp: (3\d\d)
 #         fg: "#00ffff"
-#       - pattern: (4\d\d)
+#       - regexp: (4\d\d)
 #         fg: "#ff0000"
-#       - pattern: (5\d\d)
+#       - regexp: (5\d\d)
 #         fg: "#ff00ff"
 
 #   ipv4-address:
-#     pattern: (\d{1,3}(\.\d{1,3}){3})
+#     regexp: (\d{1,3}(\.\d{1,3}){3})
 #     fg: "#ff0000"
 #     bg: "#ffff00"
 

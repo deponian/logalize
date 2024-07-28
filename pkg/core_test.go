@@ -21,79 +21,79 @@ func TestRunGood(t *testing.T) {
 	configData := `
 formats:
   menetekel:
-    - pattern: (\d{1,3}(\.\d{1,3}){3} )
+    - regexp: (\d{1,3}(\.\d{1,3}){3} )
       fg: "#f5ce42"
-    - pattern: ([^ ]+ )
+    - regexp: ([^ ]+ )
       bg: "#764a9e"
-    - pattern: (\[.+\] )
+    - regexp: (\[.+\] )
       style: bold
-    - pattern: ("[^"]+")
+    - regexp: ("[^"]+")
       fg: "#9daf99"
       bg: "#76fb99"
       style: underline
 
   portafisco-patterns:
-    - pattern: (\d{1} - )
+    - regexp: (\d{1} - )
       fg: "#f5ce42"
-    - pattern: (.*)
+    - regexp: (.*)
       style: patterns
 
   portafisco-words:
-    - pattern: (\d{2} - )
+    - regexp: (\d{2} - )
       fg: "#f5ce42"
-    - pattern: (.*)
+    - regexp: (.*)
       style: words
 
   portafisco-patterns-and-words:
-    - pattern: (\d{3} - )
+    - regexp: (\d{3} - )
       fg: "#f5ce42"
-    - pattern: (.*)
+    - regexp: (.*)
       style: patterns-and-words
 
   portafisco-combined:
-    - pattern: (\d{4} - )
+    - regexp: (\d{4} - )
       fg: "#f5ce42"
-    - pattern: (".*" )
+    - regexp: (".*" )
       style: patterns
-    - pattern: (".*" )
+    - regexp: (".*" )
       style: words
-    - pattern: («.*»)
+    - regexp: («.*»)
       style: patterns-and-words
 
 patterns:
   string:
     priority: 500
-    pattern: ("[^"]+"|'[^']+')
+    regexp: ("[^"]+"|'[^']+')
     fg: "#00ff00"
 
   ipv4-address:
     priority: 400
-    pattern: (\d{1,3}(\.\d{1,3}){3})
+    regexp: (\d{1,3}(\.\d{1,3}){3})
     fg: "#ff0000"
     bg: "#ffff00"
     style: bold
 
   number:
-    pattern: (\d+)
+    regexp: (\d+)
     bg: "#005050"
 
   http-status-code:
     priority: 300
-    pattern: (\d\d\d)
+    regexp: (\d\d\d)
     fg: "#ffffff"
     alternatives:
-      - pattern: (1\d\d)
+      - regexp: (1\d\d)
         fg: "#505050"
-      - pattern: (2\d\d)
+      - regexp: (2\d\d)
         fg: "#00ff00"
         style: overline
-      - pattern: (3\d\d)
+      - regexp: (3\d\d)
         fg: "#00ffff"
         style: crossout
-      - pattern: (4\d\d)
+      - regexp: (4\d\d)
         fg: "#ff0000"
         style: reverse
-      - pattern: (5\d\d)
+      - regexp: (5\d\d)
         fg: "#ff00ff"
 
 words:
@@ -244,7 +244,7 @@ func TestRunBadInit(t *testing.T) {
 	configDataBadFormats := `
 formats:
   test:
-    pattern: bad
+    regexp: bad
 `
 	config, err := InitConfig(options, builtins)
 	if err != nil {
@@ -256,12 +256,12 @@ formats:
 	}
 	t.Run("TestRunBadFormats", func(t *testing.T) {
 		err := Run(input, &output, config, lemmatizer)
-		if err.Error() != `[log format: test] capture group pattern bad doesn't match ^\(.+\)$ pattern` {
+		if err.Error() != `[log format: test] [capture group: bad] regexp bad must start with ( and end with )` {
 			t.Errorf("Run() should have failed with *errors.errorString, got: [%T] %s", err, err)
 		}
 	})
 
-	configDataBadPatterns := `
+	configDataBadRegExps := `
 patterns:
   string:priority: 100
 `
@@ -269,13 +269,13 @@ patterns:
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
-	configRaw = []byte(configDataBadPatterns)
+	configRaw = []byte(configDataBadRegExps)
 	if err := config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
 		t.Errorf("Error during config loading: %s", err)
 	}
-	t.Run("TestRunBadPatterns", func(t *testing.T) {
+	t.Run("TestRunBadRegExps", func(t *testing.T) {
 		err := Run(input, &output, config, lemmatizer)
-		if err.Error() != "'' expected a map, got 'int'" {
+		if err.Error() != "1 error(s) decoding:\n\n* '[0]' expected a map, got 'int'" {
 			t.Errorf("Run() should have failed with *errors.errorString, got: [%T] %s", err, err)
 		}
 	})
@@ -314,9 +314,9 @@ func TestRunBadWriter(t *testing.T) {
 	configData := `
 formats:
   test:
-    - pattern: (\d{1,3}(\.\d{1,3}){3} )
+    - regexp: (\d{1,3}(\.\d{1,3}){3} )
       fg: "#f5ce42"
-    - pattern: ("[^"]+")
+    - regexp: ("[^"]+")
       fg: "#9daf99"
       bg: "#76fb99"
       style: underline

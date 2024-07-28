@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"embed"
 	"io/fs"
-	"log"
 	"os"
 	"strings"
 	"testing"
@@ -26,13 +25,13 @@ func TestConfigLoadBuiltinGood(t *testing.T) {
 	configData := `
 formats:
   menetekel:
-    - pattern: (\d{1,3}(\.\d{1,3}){3} )
+    - regexp: (\d{1,3}(\.\d{1,3}){3} )
       fg: "#f5ce42"
-    - pattern: ([^ ]+ )
+    - regexp: ([^ ]+ )
       bg: "#764a9e"
-    - pattern: (\[.+\] )
+    - regexp: (\[.+\] )
       style: bold
-    - pattern: ("[^"]+")
+    - regexp: ("[^"]+")
       fg: "#9daf99"
       bg: "#76fb99"
       style: underline
@@ -40,37 +39,37 @@ formats:
 patterns:
   string:
     priority: 500
-    pattern: ("[^"]+"|'[^']+')
+    regexp: ("[^"]+"|'[^']+')
     fg: "#00ff00"
 
   ipv4-address:
     priority: 400
-    pattern: (\d{1,3}(\.\d{1,3}){3})
+    regexp: (\d{1,3}(\.\d{1,3}){3})
     fg: "#ff0000"
     bg: "#ffff00"
     style: bold
 
   number:
-    pattern: (\d+)
+    regexp: (\d+)
     bg: "#005050"
 
   http-status-code:
     priority: 300
-    pattern: (\d\d\d)
+    regexp: (\d\d\d)
     fg: "#ffffff"
     alternatives:
-      - pattern: (1\d\d)
+      - regexp: (1\d\d)
         fg: "#505050"
-      - pattern: (2\d\d)
+      - regexp: (2\d\d)
         fg: "#00ff00"
         style: overline
-      - pattern: (3\d\d)
+      - regexp: (3\d\d)
         fg: "#00ffff"
         style: crossout
-      - pattern: (4\d\d)
+      - regexp: (4\d\d)
         fg: "#ff0000"
         style: reverse
-      - pattern: (5\d\d)
+      - regexp: (5\d\d)
         fg: "#ff00ff"
 
 words:
@@ -231,13 +230,13 @@ func TestConfigLoadUserDefinedGood(t *testing.T) {
 	configData := `
 formats:
   menetekel:
-    - pattern: (\d{1,3}(\.\d{1,3}){3} )
+    - regexp: (\d{1,3}(\.\d{1,3}){3} )
       fg: "#f5ce42"
-    - pattern: ([^ ]+ )
+    - regexp: ([^ ]+ )
       bg: "#764a9e"
-    - pattern: (\[.+\] )
+    - regexp: (\[.+\] )
       style: bold
-    - pattern: ("[^"]+")
+    - regexp: ("[^"]+")
       fg: "#9daf99"
       bg: "#76fb99"
       style: underline
@@ -245,37 +244,37 @@ formats:
 patterns:
   string:
     priority: 500
-    pattern: ("[^"]+"|'[^']+')
+    regexp: ("[^"]+"|'[^']+')
     fg: "#00ff00"
 
   ipv4-address:
     priority: 400
-    pattern: (\d{1,3}(\.\d{1,3}){3})
+    regexp: (\d{1,3}(\.\d{1,3}){3})
     fg: "#ff0000"
     bg: "#ffff00"
     style: bold
 
   number:
-    pattern: (\d+)
+    regexp: (\d+)
     bg: "#005050"
 
   http-status-code:
     priority: 300
-    pattern: (\d\d\d)
+    regexp: (\d\d\d)
     fg: "#ffffff"
     alternatives:
-      - pattern: (1\d\d)
+      - regexp: (1\d\d)
         fg: "#505050"
-      - pattern: (2\d\d)
+      - regexp: (2\d\d)
         fg: "#00ff00"
         style: overline
-      - pattern: (3\d\d)
+      - regexp: (3\d\d)
         fg: "#00ffff"
         style: crossout
-      - pattern: (4\d\d)
+      - regexp: (4\d\d)
         fg: "#ff0000"
         style: reverse
-      - pattern: (5\d\d)
+      - regexp: (5\d\d)
         fg: "#ff00ff"
 
 words:
@@ -400,7 +399,7 @@ func TestConfigLoadUserDefinedBad(t *testing.T) {
 	configDataBadYAML := `
 formats:
   test:
-  pattern: bad:
+  regexp: bad:
 `
 
 	userConfig := t.TempDir() + "/userConfig.yaml"
@@ -459,12 +458,12 @@ func TestConfigLoadDefault(t *testing.T) {
 	configDataBadYAML := `
 formats:
   test:
-  pattern: bad:
+  regexp: bad:
 `
 
 	wd, err := os.Getwd()
 	if err != nil {
-		log.Println(err)
+		t.Errorf("os.Getwd() failed with this error: %s", err)
 	}
 	defaultConfig := wd + "/.logalize.yaml"
 	configRaw := []byte(configDataBadYAML)
