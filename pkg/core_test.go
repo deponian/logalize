@@ -275,8 +275,8 @@ patterns:
 	}
 	t.Run("TestRunBadRegExps", func(t *testing.T) {
 		err := Run(input, &output, config, lemmatizer)
-		if err.Error() != "1 error(s) decoding:\n\n* '[0]' expected a map, got 'int'" {
-			t.Errorf("Run() should have failed with *errors.errorString, got: [%T] %s", err, err)
+		if err.Error() != "decoding failed due to the following error(s):\n\n'[0]' expected a map, got 'int'" {
+			t.Errorf("Run() should have failed with *fmt.wrapError, got: [%T] %s", err, err)
 		}
 	})
 
