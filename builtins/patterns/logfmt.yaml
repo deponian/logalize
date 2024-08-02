@@ -1,0 +1,22 @@
+patterns:
+  # xxxxx=xxxxxxx
+  logfmt-general:
+    priority: 1
+    regexps:
+      - regexp: ((^|[\t ]+)[^=\t ]+)
+        fg: "#9aadec"
+      - regexp: (=)
+        fg: "#636da6"
+      - regexp: ([^\s]+)
+        style: patterns-and-words
+
+  # xxxxx="xxxxxxx"
+  logfmt-string:
+    priority: 2
+    regexps:
+      - regexp: ((^|[\t ]+)[^=\t ]+)
+        fg: "#9aadec"
+      - regexp: (=)
+        fg: "#636da6"
+      - regexp: (".+?[^\\]")
+        style: patterns-and-words
