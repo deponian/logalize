@@ -47,7 +47,7 @@ formats:
     - regexp: (:[0-9]+)
       fg: "#636da6"
     # ]
-    - regexp: (] )
+    - regexp: (\] )
       fg: "#ff966c"
     # msg
     - regexp: (.*)

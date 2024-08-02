@@ -10,7 +10,7 @@
 formats:
   nginx-ingress-controller:
     # $remote_addr
-    - regexp: (\d{1,3}(\.\d{1,3}){3} )
+    - regexp: (\d{1,3}(?:\.\d{1,3}){3} )
       fg: "#ffc777"
     # -
     - regexp: (- )
@@ -61,16 +61,16 @@ formats:
     - regexp: (\[.*\] )
       fg: "#636da6"
     # $upstream_addr
-    - regexp: ((\d{1,3}(\.\d{1,3}){3}:\d+|-) )
+    - regexp: ((?:\d{1,3}(\.\d{1,3}){3}:\d+|-) )
       fg: "#ffc777"
     # $upstream_response_length
-    - regexp: ((\d+|-) )
+    - regexp: ((?:\d+|-) )
       fg: "#c099ff"
     # $upstream_response_time
-    - regexp: (([\d\.]+|-) )
+    - regexp: ((?:[\d\.]+|-) )
       fg: "#ff757f"
     # $upstream_status
-    - regexp: ((\d\d\d|-) )
+    - regexp: ((?:\d\d\d|-) )
       alternatives:
         - regexp: (2\d\d )
           fg: "#00ff00"

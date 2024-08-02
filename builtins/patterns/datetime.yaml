@@ -14,7 +14,7 @@ patterns:
   # 23:42:12.034123
   time:
     priority: -1
-    regexp: (\d{2}:\d{2}:\d{2}(\.\d{1,6})?)
+    regexp: (\d{2}:\d{2}:\d{2}(?:\.\d+)?)
     fg: "#fca7ea"
 
   # 1999-07-10
@@ -36,7 +36,7 @@ patterns:
   # 27/August/2023
   date-2:
     priority: -1
-    regexp: (\d{1,2}[\t /-](Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec|January|February|March|April|May|June|July|August|September|October|November|December)([\t /-]\d{4})?)
+    regexp: (\d{1,2}[\t /-](?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec|January|February|March|April|May|June|July|August|September|October|November|December)(?:[\t /-]\d{4})?)
     fg: "#c099ff"
 
   # Jan 27
@@ -49,14 +49,14 @@ patterns:
   # August/27/2023
   date-3:
     priority: -1
-    regexp: ((Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec|January|February|March|April|May|June|July|August|September|October|November|December)[\t /-]\d{1,2}([\t ]\d{4})?)
+    regexp: ((?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec|January|February|March|April|May|June|July|August|September|October|November|December)[\t /-]\d{1,2}(?:[\t ]\d{4})?)
     fg: "#c099ff"
 
   # Mon 17
   # Sunday 3
   date-4:
     priority: -1
-    regexp: ((Mon|Tue|Wed|Thu|Fri|Sat|Sun|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday)[\t ]\d{1,2})
+    regexp: ((?:Mon|Tue|Wed|Thu|Fri|Sat|Sun|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday)[\t ]\d{1,2})
     fg: "#c099ff"
 
   # 5s

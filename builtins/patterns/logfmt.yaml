@@ -3,7 +3,7 @@ patterns:
   logfmt-general:
     priority: 1
     regexps:
-      - regexp: ((^|[\t ]+)[^=\t ]+)
+      - regexp: ((?:^|[\t ]+)[^=\t ]+)
         fg: "#9aadec"
       - regexp: (=)
         fg: "#636da6"
@@ -14,7 +14,7 @@ patterns:
   logfmt-string:
     priority: 2
     regexps:
-      - regexp: ((^|[\t ]+)[^=\t ]+)
+      - regexp: ((?:^|[\t ]+)[^=\t ]+)
         fg: "#9aadec"
       - regexp: (=)
         fg: "#636da6"
