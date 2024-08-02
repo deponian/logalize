@@ -36,7 +36,7 @@ func (cgl *CapGroupList) init(entireLineRegExp bool) error {
 		var format string
 		for i, cg := range cgl.Groups {
 			// add name for the capture group
-			format += fmt.Sprintf("(?P<capGroup%d>", i) + cg.RegExpStr[1:]
+			format += fmt.Sprintf("(?P<capGroup%d>(?:%s))", i, cg.RegExpStr[1:len(cg.RegExpStr)-1])
 		}
 		if entireLineRegExp {
 			format = "^" + format + "$"

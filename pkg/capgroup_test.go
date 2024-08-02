@@ -98,7 +98,7 @@ func TestCapGroupsListInit(t *testing.T) {
 				nil,
 			},
 		},
-		regexp.MustCompile(`^(?P<capGroup0>\d{1,3}(\.\d{1,3}){3} )(?P<capGroup1>[^ ]+ )(?P<capGroup2>\[.+\] )(?P<capGroup3>"[^"]+")(?P<capGroup4>\d\d\d)$`),
+		regexp.MustCompile(`^(?P<capGroup0>(?:\d{1,3}(\.\d{1,3}){3} ))(?P<capGroup1>(?:[^ ]+ ))(?P<capGroup2>(?:\[.+\] ))(?P<capGroup3>(?:"[^"]+"))(?P<capGroup4>(?:\d\d\d))$`),
 	}
 
 	patternCapGroupList := &CapGroupList{
@@ -112,7 +112,7 @@ func TestCapGroupsListInit(t *testing.T) {
 		[]CapGroup{
 			{`(\d{1,3}(\.\d{1,3}){3})`, "", "", "", nil, nil},
 		},
-		regexp.MustCompile(`(?P<capGroup0>\d{1,3}(\.\d{1,3}){3})`),
+		regexp.MustCompile(`(?P<capGroup0>(?:\d{1,3}(\.\d{1,3}){3}))`),
 	}
 
 	t.Run("TestCapGroupsListInit", func(t *testing.T) {
@@ -237,7 +237,7 @@ func TestCapGroupsListCheck(t *testing.T) {
 			"error parsing regexp: unexpected ): `\\d+)(\\d+`\nCheck that the \"regexp\" starts with an opening bracket ( and ends with a paired closing bracket )\nThat is, your \"regexp\" must be within one large capture group and contain a valid regular expression",
 			CapGroupList{
 				[]CapGroup{
-					{`(\d+)(\d+)`, "", "", "", []CapGroup{{"", "", "", "", nil, nil}}, nil},
+					{`(\d+)(\d+)`, "", "", "", nil, nil},
 				},
 				nil,
 			},

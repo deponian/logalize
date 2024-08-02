@@ -59,7 +59,7 @@ formats:
 				regexp.MustCompile(`(\d\d\d)`),
 			},
 		},
-		regexp.MustCompile(`^(?P<capGroup0>\d{1,3}(\.\d{1,3}){3} )(?P<capGroup1>[^ ]+ )(?P<capGroup2>\[.+\] )(?P<capGroup3>"[^"]+")(?P<capGroup4>\d\d\d)$`),
+		regexp.MustCompile(`^(?P<capGroup0>(?:\d{1,3}(\.\d{1,3}){3} ))(?P<capGroup1>(?:[^ ]+ ))(?P<capGroup2>(?:\[.+\] ))(?P<capGroup3>(?:"[^"]+"))(?P<capGroup4>(?:\d\d\d))$`),
 	}
 
 	colorProfile = termenv.TrueColor

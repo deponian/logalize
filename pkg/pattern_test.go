@@ -41,7 +41,7 @@ patterns:
 					regexp.MustCompile(`("[^"]+"|'[^']+')`),
 				},
 			},
-			regexp.MustCompile(`(?P<capGroup0>"[^"]+"|'[^']+')`),
+			regexp.MustCompile(`(?P<capGroup0>(?:"[^"]+"|'[^']+'))`),
 		}},
 		{"ipv4-address", 0, &CapGroupList{
 			[]CapGroup{
@@ -54,7 +54,7 @@ patterns:
 					regexp.MustCompile(`((:\d{1,5})?)`),
 				},
 			},
-			regexp.MustCompile(`(?P<capGroup0>\d\d\d(\.\d\d\d){3})(?P<capGroup1>(:\d{1,5})?)`),
+			regexp.MustCompile(`(?P<capGroup0>(?:\d\d\d(\.\d\d\d){3}))(?P<capGroup1>(?:(:\d{1,5})?))`),
 		}},
 		{"number", 0, &CapGroupList{
 			[]CapGroup{
@@ -63,7 +63,7 @@ patterns:
 					regexp.MustCompile(`(\d+)`),
 				},
 			},
-			regexp.MustCompile(`(?P<capGroup0>\d+)`),
+			regexp.MustCompile(`(?P<capGroup0>(?:\d+))`),
 		}},
 	}
 
