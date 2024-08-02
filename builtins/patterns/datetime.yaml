@@ -58,3 +58,13 @@ patterns:
     priority: -1
     regexp: ((Mon|Tue|Wed|Thu|Fri|Sat|Sun|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday)[\t ]\d{1,2})
     fg: "#c099ff"
+
+  # 5s
+  # 7.5h
+  # 75.984854ms
+  duration:
+    regexps:
+      - regexp: (\d+(?:\.\d+))
+        fg: "#4fd6be"
+      - regexp: (ms|s|m|h|d)
+        fg: "#41a6b5"
