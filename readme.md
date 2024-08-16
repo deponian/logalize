@@ -274,6 +274,8 @@ patterns:
         style: patterns-and-words
 ```
 
+You can find built-in `patterns` [here](builtins/patterns). If you want to customize them or turn them off completely, overwrite the corresponding values in your `logalize.yaml`.
+
 ### Words
 
 Configuration example:
