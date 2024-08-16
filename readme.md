@@ -240,7 +240,7 @@ patterns:
         bg: "#0000ff"
         style: underline
 
-  # complex pattern (when you you "regexps" field)
+  # complex pattern (when you use "regexps" field)
   # the same fields are used here as in log formats (see above)
   # complex pattern are formed from all regexps in the "regexps" list
   # e.g. pattern below will be rendered as (\d{1,3}(\.\d{1,3}){3})((:\d{1,5})?)

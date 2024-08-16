@@ -22,12 +22,12 @@ func Init(builtins embed.FS, version, commit, date string) {
 	LogalizeCmd = &cobra.Command{
 		Use:   "logalize",
 		Short: "fast and extensible log colorizer",
-		Long: `Logalize is log colorizer.
+		Long: `Logalize is a log colorizer.
 It's fast and extensible alternative to ccze and colorize.`,
 		Version: fmt.Sprintf("%s (%s) %s", version, commit, date),
 		Args:    cobra.NoArgs,
 		Run: func(cmd *cobra.Command, args []string) {
-			// print build-in log formats and words and exit
+			// print built-in log formats and words and exit
 			if options.PrintBuiltins {
 				err := printBuiltins(builtins)
 				if err != nil {
