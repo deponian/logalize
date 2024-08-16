@@ -12,7 +12,7 @@ formats:
   redis:
     # PID
     - regexp: (\d+)
-      fg: "#4fd6be"
+      fg: "#9aadec"
     # :
     - regexp: (:)
       fg: "#636da6"
