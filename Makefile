@@ -71,8 +71,10 @@ audit:
 .PHONY: test
 test:
 	rm -rf pkg/builtins
-	mkdir pkg/builtins
-	cp -r .testdata/* pkg/builtins
+	mkdir -p pkg/builtins/bad
+	mkdir -p pkg/builtins/good
+	cp -r .testdata/bad/* pkg/builtins/bad
+	cp -r builtins/* pkg/builtins/good
 	go test -race -coverprofile=coverage.out ./pkg
 	rm -rf pkg/builtins
 
