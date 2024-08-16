@@ -68,7 +68,8 @@ patterns:
   duration:
     priority: -1
     regexps:
+      - regexp: (^|[^a-zA-Z0-9])
       - regexp: (\d+(?:\.\d+)?)
         fg: "#4fd6be"
-      - regexp: (ms|s|m|h|d)
+      - regexp: (µs|ms|s|m|h|d)
         fg: "#41a6b5"
