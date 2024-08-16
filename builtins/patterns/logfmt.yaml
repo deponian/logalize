@@ -18,5 +18,9 @@ patterns:
         fg: "#9aadec"
       - regexp: (=)
         fg: "#636da6"
-      - regexp: (".+?[^\\]")
+      - regexp: (")
+        fg: "#9aadec"
+      - regexp: (.+?[^\\])
         style: patterns-and-words
+      - regexp: (")
+        fg: "#9aadec"
