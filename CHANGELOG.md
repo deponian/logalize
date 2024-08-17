@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2024-08-17
+
+### Added
+
+- Add complex patterns (`regexps` key)
+- Add "redis" log format
+- Add "logfmt" pattern
+- Add "duration" pattern
+- Add -L, -P, -W, -N, -l, -p, -w, -n flags; -b flag replaced old -p flag
+
+### Changed
+
+- Tune the colors of built-in log formats and patterns
+- Use non-capturing groups for built-in logformats and patterns
+- Colorize quotation marks in "logfmt-string" pattern
+- Update modules and go to v1.22.5
+- Add :port to "ipv6-address" pattern
+- Update git-cliff configuration
+
+### Fixed
+
+- Improve datetime and network patterns
+- Don't detect duration-like sequences inside words
+
 ## [0.2.0] - 2024-07-25
 
 ### Added
@@ -64,6 +88,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Print version as "version (commit) date"
 
+[0.3.0]: https://github.com/deponian/logalize/compare/v0.2.0..v0.3.0
 [0.2.0]: https://github.com/deponian/logalize/compare/v0.1.2..v0.2.0
 [0.1.2]: https://github.com/deponian/logalize/compare/v0.1.1..v0.1.2
 [0.1.1]: https://github.com/deponian/logalize/compare/v0.1.0..v0.1.1
