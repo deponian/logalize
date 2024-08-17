@@ -10,8 +10,6 @@ import (
 
 	"github.com/aaaton/golem/v4"
 	"github.com/aaaton/golem/v4/dicts/en"
-	"github.com/knadh/koanf/parsers/yaml"
-	"github.com/knadh/koanf/providers/rawbytes"
 	"github.com/muesli/termenv"
 )
 
@@ -20,7 +18,6 @@ var builtinsAllGood embed.FS
 
 func TestConfigLoadBuiltinGood(t *testing.T) {
 	colorProfile = termenv.TrueColor
-	configData := ``
 
 	tests := []struct {
 		plain   string
@@ -335,18 +332,578 @@ func TestConfigLoadBuiltinGood(t *testing.T) {
 		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
 	}
 
+	options := Options{}
+
+	config, err := InitConfig(options, builtinsAllGood)
+	if err != nil {
+		t.Errorf("InitConfig() failed with this error: %s", err)
+	}
+
+	for _, tt := range tests {
+		testname := tt.plain
+		input := strings.NewReader(tt.plain)
+		output := bytes.Buffer{}
+
+		t.Run(testname, func(t *testing.T) {
+			err := Run(input, &output, config, lemmatizer)
+			if err != nil {
+				t.Errorf("Run() failed with this error: %s", err)
+			}
+
+			result := strings.TrimSuffix(output.String(), "\n")
+
+			if result != tt.colored {
+				t.Errorf("got %v, want %v", result, tt.colored)
+			}
+		})
+	}
+}
+
+func TestConfigLoadBuiltinFlagNoBuiltins(t *testing.T) {
+	colorProfile = termenv.TrueColor
+
+	tests := []struct {
+		plain   string
+		colored string
+	}{
+		// log formats
+		{
+			`4018569:C 17 Feb 2024 00:39:12.557 * Parent agreed to stop sending diffs. Finalizing AOF...`,
+			"4018569:C 17 Feb 2024 00:39:12.557 * Parent agreed to stop sending diffs. Finalizing AOF...",
+		},
+
+		// patterns
+		{`12.34.56.78`, "12.34.56.78"},
+
+		// words
+		{"true", "true"},
+
+		// patterns and words
+		{
+			`true bad fail 7.7.7.7 01:37:59.743 75.984854ms`,
+			"true bad fail 7.7.7.7 01:37:59.743 75.984854ms",
+		},
+	}
+
+	lemmatizer, err := golem.New(en.New())
+	if err != nil {
+		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
+	}
+
 	options := Options{
-		ConfigPath: "",
-		NoBuiltins: false,
+		NoBuiltinLogFormats: false,
+		NoBuiltinPatterns:   false,
+		NoBuiltinWords:      false,
+		NoBuiltins:          true,
 	}
 
 	config, err := InitConfig(options, builtinsAllGood)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
-	configRaw := []byte(configData)
-	if err := config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
-		t.Errorf("Error during config loading: %s", err)
+
+	for _, tt := range tests {
+		testname := tt.plain
+		input := strings.NewReader(tt.plain)
+		output := bytes.Buffer{}
+
+		t.Run(testname, func(t *testing.T) {
+			err := Run(input, &output, config, lemmatizer)
+			if err != nil {
+				t.Errorf("Run() failed with this error: %s", err)
+			}
+
+			result := strings.TrimSuffix(output.String(), "\n")
+
+			if result != tt.colored {
+				t.Errorf("got %v, want %v", result, tt.colored)
+			}
+		})
+	}
+}
+
+func TestConfigLoadBuiltinFlagNoBuiltinLogFormats(t *testing.T) {
+	colorProfile = termenv.TrueColor
+
+	tests := []struct {
+		plain   string
+		colored string
+	}{
+		// log formats
+		{
+			`4018569:C 17 Feb 2024 00:39:12.557 * Parent agreed to stop sending diffs. Finalizing AOF...`,
+			"4018569:C \x1b[38;2;192;153;255m17 Feb 2024\x1b[0m \x1b[38;2;252;167;234m00:39:12.557\x1b[0m * Parent agreed to \x1b[38;2;240;108;97;1mstop\x1b[0m sending diffs. Finalizing AOF...",
+		},
+
+		// patterns
+		{`12.34.56.78`, "\x1b[38;2;118;211;255m12.34.56.78\x1b[0m\x1b[38;2;13;185;215m\x1b[0m"},
+
+		// words
+		{"true", "\x1b[38;2;81;250;138;1mtrue\x1b[0m"},
+
+		// patterns and words
+		{
+			`true bad fail 7.7.7.7 01:37:59.743 75.984854ms`,
+			"\x1b[38;2;81;250;138;1mtrue\x1b[0m bad \x1b[38;2;240;108;97;1mfail\x1b[0m \x1b[38;2;118;211;255m7.7.7.7\x1b[0m\x1b[38;2;13;185;215m\x1b[0m \x1b[38;2;252;167;234m01:37:59.743\x1b[0m \x1b[38;2;79;214;190m75.984854\x1b[0m\x1b[38;2;65;166;181mms\x1b[0m",
+		},
+	}
+
+	lemmatizer, err := golem.New(en.New())
+	if err != nil {
+		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
+	}
+
+	options := Options{
+		NoBuiltinLogFormats: true,
+		NoBuiltinPatterns:   false,
+		NoBuiltinWords:      false,
+		NoBuiltins:          false,
+	}
+
+	config, err := InitConfig(options, builtinsAllGood)
+	if err != nil {
+		t.Errorf("InitConfig() failed with this error: %s", err)
+	}
+
+	for _, tt := range tests {
+		testname := tt.plain
+		input := strings.NewReader(tt.plain)
+		output := bytes.Buffer{}
+
+		t.Run(testname, func(t *testing.T) {
+			err := Run(input, &output, config, lemmatizer)
+			if err != nil {
+				t.Errorf("Run() failed with this error: %s", err)
+			}
+
+			result := strings.TrimSuffix(output.String(), "\n")
+
+			if result != tt.colored {
+				t.Errorf("got %v, want %v", result, tt.colored)
+			}
+		})
+	}
+}
+
+func TestConfigLoadBuiltinFlagNoBuiltinPatterns(t *testing.T) {
+	colorProfile = termenv.TrueColor
+
+	tests := []struct {
+		plain   string
+		colored string
+	}{
+		// log formats
+		{
+			`4018569:C 17 Feb 2024 00:39:12.557 * Parent agreed to stop sending diffs. Finalizing AOF...`,
+			"\x1b[38;2;154;173;236m4018569\x1b[0m\x1b[38;2;99;109;166m:\x1b[0m\x1b[38;2;184;219;135;1mC \x1b[0m\x1b[38;2;192;153;255m17 Feb 2024 \x1b[0m\x1b[38;2;252;167;234m00:39:12.557 \x1b[0m\x1b[38;2;137;221;255;1m* \x1b[0mParent agreed to \x1b[38;2;240;108;97;1mstop\x1b[0m sending diffs. Finalizing AOF...",
+		},
+
+		// patterns
+		{`12.34.56.78`, "12.34.56.78"},
+
+		// words
+		{"true", "\x1b[38;2;81;250;138;1mtrue\x1b[0m"},
+
+		// patterns and words
+		{
+			`true bad fail 7.7.7.7 01:37:59.743 75.984854ms`,
+			"\x1b[38;2;81;250;138;1mtrue\x1b[0m bad \x1b[38;2;240;108;97;1mfail\x1b[0m 7.7.7.7 01:37:59.743 75.984854ms",
+		},
+	}
+
+	lemmatizer, err := golem.New(en.New())
+	if err != nil {
+		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
+	}
+
+	options := Options{
+		NoBuiltinLogFormats: false,
+		NoBuiltinPatterns:   true,
+		NoBuiltinWords:      false,
+		NoBuiltins:          false,
+	}
+
+	config, err := InitConfig(options, builtinsAllGood)
+	if err != nil {
+		t.Errorf("InitConfig() failed with this error: %s", err)
+	}
+
+	for _, tt := range tests {
+		testname := tt.plain
+		input := strings.NewReader(tt.plain)
+		output := bytes.Buffer{}
+
+		t.Run(testname, func(t *testing.T) {
+			err := Run(input, &output, config, lemmatizer)
+			if err != nil {
+				t.Errorf("Run() failed with this error: %s", err)
+			}
+
+			result := strings.TrimSuffix(output.String(), "\n")
+
+			if result != tt.colored {
+				t.Errorf("got %v, want %v", result, tt.colored)
+			}
+		})
+	}
+}
+
+func TestConfigLoadBuiltinFlagNoBuiltinWords(t *testing.T) {
+	colorProfile = termenv.TrueColor
+
+	tests := []struct {
+		plain   string
+		colored string
+	}{
+		// log formats
+		{
+			`4018569:C 17 Feb 2024 00:39:12.557 * Parent agreed to stop sending diffs. Finalizing AOF...`,
+			"\x1b[38;2;154;173;236m4018569\x1b[0m\x1b[38;2;99;109;166m:\x1b[0m\x1b[38;2;184;219;135;1mC \x1b[0m\x1b[38;2;192;153;255m17 Feb 2024 \x1b[0m\x1b[38;2;252;167;234m00:39:12.557 \x1b[0m\x1b[38;2;137;221;255;1m* \x1b[0mParent agreed to stop sending diffs. Finalizing AOF...",
+		},
+
+		// patterns
+		{`12.34.56.78`, "\x1b[38;2;118;211;255m12.34.56.78\x1b[0m\x1b[38;2;13;185;215m\x1b[0m"},
+
+		// words
+		{"true", "true"},
+
+		// patterns and words
+		{
+			`true bad fail 7.7.7.7 01:37:59.743 75.984854ms`,
+			"true bad fail \x1b[38;2;118;211;255m7.7.7.7\x1b[0m\x1b[38;2;13;185;215m\x1b[0m \x1b[38;2;252;167;234m01:37:59.743\x1b[0m \x1b[38;2;79;214;190m75.984854\x1b[0m\x1b[38;2;65;166;181mms\x1b[0m",
+		},
+	}
+
+	lemmatizer, err := golem.New(en.New())
+	if err != nil {
+		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
+	}
+
+	options := Options{
+		NoBuiltinLogFormats: false,
+		NoBuiltinPatterns:   false,
+		NoBuiltinWords:      true,
+		NoBuiltins:          false,
+	}
+
+	config, err := InitConfig(options, builtinsAllGood)
+	if err != nil {
+		t.Errorf("InitConfig() failed with this error: %s", err)
+	}
+
+	for _, tt := range tests {
+		testname := tt.plain
+		input := strings.NewReader(tt.plain)
+		output := bytes.Buffer{}
+
+		t.Run(testname, func(t *testing.T) {
+			err := Run(input, &output, config, lemmatizer)
+			if err != nil {
+				t.Errorf("Run() failed with this error: %s", err)
+			}
+
+			result := strings.TrimSuffix(output.String(), "\n")
+
+			if result != tt.colored {
+				t.Errorf("got %v, want %v", result, tt.colored)
+			}
+		})
+	}
+}
+
+func TestConfigLoadBuiltinFlagNoBuiltinPatternsAndWords(t *testing.T) {
+	colorProfile = termenv.TrueColor
+
+	tests := []struct {
+		plain   string
+		colored string
+	}{
+		// log formats
+		{
+			`4018569:C 17 Feb 2024 00:39:12.557 * Parent agreed to stop sending diffs. Finalizing AOF...`,
+			"\x1b[38;2;154;173;236m4018569\x1b[0m\x1b[38;2;99;109;166m:\x1b[0m\x1b[38;2;184;219;135;1mC \x1b[0m\x1b[38;2;192;153;255m17 Feb 2024 \x1b[0m\x1b[38;2;252;167;234m00:39:12.557 \x1b[0m\x1b[38;2;137;221;255;1m* \x1b[0mParent agreed to stop sending diffs. Finalizing AOF...",
+		},
+
+		// patterns
+		{`12.34.56.78`, "12.34.56.78"},
+
+		// words
+		{"true", "true"},
+
+		// patterns and words
+		{
+			`true bad fail 7.7.7.7 01:37:59.743 75.984854ms`,
+			"true bad fail 7.7.7.7 01:37:59.743 75.984854ms",
+		},
+	}
+
+	lemmatizer, err := golem.New(en.New())
+	if err != nil {
+		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
+	}
+
+	options := Options{
+		NoBuiltinLogFormats: false,
+		NoBuiltinPatterns:   true,
+		NoBuiltinWords:      true,
+		NoBuiltins:          false,
+	}
+
+	config, err := InitConfig(options, builtinsAllGood)
+	if err != nil {
+		t.Errorf("InitConfig() failed with this error: %s", err)
+	}
+
+	for _, tt := range tests {
+		testname := tt.plain
+		input := strings.NewReader(tt.plain)
+		output := bytes.Buffer{}
+
+		t.Run(testname, func(t *testing.T) {
+			err := Run(input, &output, config, lemmatizer)
+			if err != nil {
+				t.Errorf("Run() failed with this error: %s", err)
+			}
+
+			result := strings.TrimSuffix(output.String(), "\n")
+
+			if result != tt.colored {
+				t.Errorf("got %v, want %v", result, tt.colored)
+			}
+		})
+	}
+}
+
+func TestConfigLoadBuiltinFlagDryRun(t *testing.T) {
+	colorProfile = termenv.TrueColor
+
+	tests := []struct {
+		plain   string
+		colored string
+	}{
+		// log formats
+		{
+			`4018569:C 17 Feb 2024 00:39:12.557 * Parent agreed to stop sending diffs. Finalizing AOF...`,
+			"4018569:C 17 Feb 2024 00:39:12.557 * Parent agreed to stop sending diffs. Finalizing AOF...",
+		},
+
+		// patterns
+		{`12.34.56.78`, "12.34.56.78"},
+
+		// words
+		{"true", "true"},
+
+		// patterns and words
+		{
+			`true bad fail 7.7.7.7 01:37:59.743 75.984854ms`,
+			"true bad fail 7.7.7.7 01:37:59.743 75.984854ms",
+		},
+	}
+
+	lemmatizer, err := golem.New(en.New())
+	if err != nil {
+		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
+	}
+
+	options := Options{
+		HighlightOnlyLogFormats: false,
+		HighlightOnlyPatterns:   false,
+		HighlightOnlyWords:      false,
+		DryRun:                  true,
+	}
+
+	config, err := InitConfig(options, builtinsAllGood)
+	if err != nil {
+		t.Errorf("InitConfig() failed with this error: %s", err)
+	}
+
+	for _, tt := range tests {
+		testname := tt.plain
+		input := strings.NewReader(tt.plain)
+		output := bytes.Buffer{}
+
+		t.Run(testname, func(t *testing.T) {
+			err := Run(input, &output, config, lemmatizer)
+			if err != nil {
+				t.Errorf("Run() failed with this error: %s", err)
+			}
+
+			result := strings.TrimSuffix(output.String(), "\n")
+
+			if result != tt.colored {
+				t.Errorf("got %v, want %v", result, tt.colored)
+			}
+		})
+	}
+}
+
+func TestConfigLoadBuiltinFlagHighlightOnlyLogFormats(t *testing.T) {
+	colorProfile = termenv.TrueColor
+
+	tests := []struct {
+		plain   string
+		colored string
+	}{
+		// log formats
+		{
+			`4018569:C 17 Feb 2024 00:39:12.557 * Parent agreed to stop sending diffs. Finalizing AOF...`,
+			"\x1b[38;2;154;173;236m4018569\x1b[0m\x1b[38;2;99;109;166m:\x1b[0m\x1b[38;2;184;219;135;1mC \x1b[0m\x1b[38;2;192;153;255m17 Feb 2024 \x1b[0m\x1b[38;2;252;167;234m00:39:12.557 \x1b[0m\x1b[38;2;137;221;255;1m* \x1b[0mParent agreed to stop sending diffs. Finalizing AOF...",
+		},
+
+		// patterns
+		{`12.34.56.78`, "12.34.56.78"},
+
+		// words
+		{"true", "true"},
+
+		// patterns and words
+		{
+			`true bad fail 7.7.7.7 01:37:59.743 75.984854ms`,
+			"true bad fail 7.7.7.7 01:37:59.743 75.984854ms",
+		},
+	}
+
+	lemmatizer, err := golem.New(en.New())
+	if err != nil {
+		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
+	}
+
+	options := Options{
+		HighlightOnlyLogFormats: true,
+		HighlightOnlyPatterns:   false,
+		HighlightOnlyWords:      false,
+		DryRun:                  false,
+	}
+
+	config, err := InitConfig(options, builtinsAllGood)
+	if err != nil {
+		t.Errorf("InitConfig() failed with this error: %s", err)
+	}
+
+	for _, tt := range tests {
+		testname := tt.plain
+		input := strings.NewReader(tt.plain)
+		output := bytes.Buffer{}
+
+		t.Run(testname, func(t *testing.T) {
+			err := Run(input, &output, config, lemmatizer)
+			if err != nil {
+				t.Errorf("Run() failed with this error: %s", err)
+			}
+
+			result := strings.TrimSuffix(output.String(), "\n")
+
+			if result != tt.colored {
+				t.Errorf("got %v, want %v", result, tt.colored)
+			}
+		})
+	}
+}
+
+func TestConfigLoadBuiltinFlagHighlightOnlyPatterns(t *testing.T) {
+	colorProfile = termenv.TrueColor
+
+	tests := []struct {
+		plain   string
+		colored string
+	}{
+		// log formats
+		{
+			`4018569:C 17 Feb 2024 00:39:12.557 * Parent agreed to stop sending diffs. Finalizing AOF...`,
+			"4018569:C \x1b[38;2;192;153;255m17 Feb 2024\x1b[0m \x1b[38;2;252;167;234m00:39:12.557\x1b[0m * Parent agreed to stop sending diffs. Finalizing AOF...",
+		},
+
+		// patterns
+		{`12.34.56.78`, "\x1b[38;2;118;211;255m12.34.56.78\x1b[0m\x1b[38;2;13;185;215m\x1b[0m"},
+
+		// words
+		{"true", "true"},
+
+		// patterns and words
+		{
+			`true bad fail 7.7.7.7 01:37:59.743 75.984854ms`,
+			"true bad fail \x1b[38;2;118;211;255m7.7.7.7\x1b[0m\x1b[38;2;13;185;215m\x1b[0m \x1b[38;2;252;167;234m01:37:59.743\x1b[0m \x1b[38;2;79;214;190m75.984854\x1b[0m\x1b[38;2;65;166;181mms\x1b[0m",
+		},
+	}
+
+	lemmatizer, err := golem.New(en.New())
+	if err != nil {
+		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
+	}
+
+	options := Options{
+		HighlightOnlyLogFormats: false,
+		HighlightOnlyPatterns:   true,
+		HighlightOnlyWords:      false,
+		DryRun:                  false,
+	}
+
+	config, err := InitConfig(options, builtinsAllGood)
+	if err != nil {
+		t.Errorf("InitConfig() failed with this error: %s", err)
+	}
+
+	for _, tt := range tests {
+		testname := tt.plain
+		input := strings.NewReader(tt.plain)
+		output := bytes.Buffer{}
+
+		t.Run(testname, func(t *testing.T) {
+			err := Run(input, &output, config, lemmatizer)
+			if err != nil {
+				t.Errorf("Run() failed with this error: %s", err)
+			}
+
+			result := strings.TrimSuffix(output.String(), "\n")
+
+			if result != tt.colored {
+				t.Errorf("got %v, want %v", result, tt.colored)
+			}
+		})
+	}
+}
+
+func TestConfigLoadBuiltinFlagHighlightOnlyWords(t *testing.T) {
+	colorProfile = termenv.TrueColor
+
+	tests := []struct {
+		plain   string
+		colored string
+	}{
+		// log formats
+		{
+			`4018569:C 17 Feb 2024 00:39:12.557 * Parent agreed to stop sending diffs. Finalizing AOF...`,
+			"4018569:C 17 Feb 2024 00:39:12.557 * Parent agreed to \x1b[38;2;240;108;97;1mstop\x1b[0m sending diffs. Finalizing AOF...",
+		},
+
+		// patterns
+		{`12.34.56.78`, "12.34.56.78"},
+
+		// words
+		{"true", "\x1b[38;2;81;250;138;1mtrue\x1b[0m"},
+
+		// patterns and words
+		{
+			`true bad fail 7.7.7.7 01:37:59.743 75.984854ms`,
+			"\x1b[38;2;81;250;138;1mtrue\x1b[0m bad \x1b[38;2;240;108;97;1mfail\x1b[0m 7.7.7.7 01:37:59.743 75.984854ms",
+		},
+	}
+
+	lemmatizer, err := golem.New(en.New())
+	if err != nil {
+		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
+	}
+
+	options := Options{
+		HighlightOnlyLogFormats: false,
+		HighlightOnlyPatterns:   false,
+		HighlightOnlyWords:      true,
+		DryRun:                  false,
+	}
+
+	config, err := InitConfig(options, builtinsAllGood)
+	if err != nil {
+		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
 
 	for _, tt := range tests {
@@ -381,10 +938,7 @@ var builtinsPatternsBad embed.FS
 func TestConfigLoadBuiltinBad(t *testing.T) {
 	colorProfile = termenv.TrueColor
 
-	options := Options{
-		ConfigPath: "",
-		NoBuiltins: false,
-	}
+	options := Options{}
 
 	t.Run("TestConfigLoadBuiltinLogformatsBadYAML", func(t *testing.T) {
 		_, err := InitConfig(options, builtinsLogformatsBad)

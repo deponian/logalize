@@ -57,8 +57,18 @@ It's fast and extensible alternative to ccze and colorize.`,
 	}
 
 	LogalizeCmd.Flags().StringVarP(&options.ConfigPath, "config", "c", "", "path to configuration file")
-	LogalizeCmd.Flags().BoolVarP(&options.NoBuiltins, "no-builtins", "n", false, "disable built-in log formats and words")
-	LogalizeCmd.Flags().BoolVarP(&options.PrintBuiltins, "print-builtins", "p", false, "print built-in log formats and words")
+
+	LogalizeCmd.Flags().BoolVarP(&options.PrintBuiltins, "print-builtins", "b", false, "print built-in log formats, patterns and words")
+
+	LogalizeCmd.Flags().BoolVarP(&options.NoBuiltins, "no-builtins", "N", false, "disable built-in log formats, patterns and words highlighting")
+	LogalizeCmd.Flags().BoolVarP(&options.NoBuiltinLogFormats, "no-builtin-logformats", "L", false, "disable built-in log formats highlighting")
+	LogalizeCmd.Flags().BoolVarP(&options.NoBuiltinPatterns, "no-builtin-patterns", "P", false, "disable built-in patterns highlighting")
+	LogalizeCmd.Flags().BoolVarP(&options.NoBuiltinWords, "no-builtin-words", "W", false, "disable built-in words highlighting")
+
+	LogalizeCmd.Flags().BoolVarP(&options.DryRun, "dry-run", "n", false, "disable any colorization")
+	LogalizeCmd.Flags().BoolVarP(&options.HighlightOnlyLogFormats, "only-logformats", "l", false, "highlight only log formats (can be combined with -p and -w)")
+	LogalizeCmd.Flags().BoolVarP(&options.HighlightOnlyPatterns, "only-patterns", "p", false, "highlight only patterns (can be combined with -l and -w)")
+	LogalizeCmd.Flags().BoolVarP(&options.HighlightOnlyWords, "only-words", "w", false, "highlight only words (can be combined with -l and -p)")
 }
 
 func Execute() {
