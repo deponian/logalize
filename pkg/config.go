@@ -1,7 +1,6 @@
 package logalize
 
 import (
-	"embed"
 	"io/fs"
 	"os"
 
@@ -30,7 +29,7 @@ type Options struct {
 
 var Opts Options
 
-func InitConfig(opts Options, builtins embed.FS) (*koanf.Koanf, error) {
+func InitConfig(opts Options, builtins fs.FS) (*koanf.Koanf, error) {
 	config := koanf.New(".")
 
 	// set options
@@ -76,17 +75,17 @@ func InitConfig(opts Options, builtins embed.FS) (*koanf.Koanf, error) {
 	return config, nil
 }
 
-func loadBuiltinConfig(config *koanf.Koanf, builtins embed.FS) error {
+func loadBuiltinConfig(config *koanf.Koanf, builtins fs.FS) error {
 	var loadFromDirRecursively func(entries []fs.DirEntry, path string) error
 	loadFromDirRecursively = func(entries []fs.DirEntry, path string) error {
 		for _, entry := range entries {
 			if entry.IsDir() {
-				dir, _ := builtins.ReadDir(path + entry.Name())
+				dir, _ := fs.ReadDir(builtins, path+entry.Name())
 				if err := loadFromDirRecursively(dir, path+entry.Name()+"/"); err != nil {
 					return err
 				}
 			} else {
-				file, _ := builtins.ReadFile(path + entry.Name())
+				file, _ := fs.ReadFile(builtins, path+entry.Name())
 				if err := config.Load(rawbytes.Provider(file), yaml.Parser()); err != nil {
 					return err
 				}
@@ -95,7 +94,7 @@ func loadBuiltinConfig(config *koanf.Koanf, builtins embed.FS) error {
 		return nil
 	}
 
-	builtinsDir, _ := builtins.ReadDir("builtins")
+	builtinsDir, _ := fs.ReadDir(builtins, "builtins")
 	if err := loadFromDirRecursively(builtinsDir, "builtins/"); err != nil {
 		return err
 	}

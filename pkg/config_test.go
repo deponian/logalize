@@ -7,13 +7,14 @@ import (
 	"os"
 	"strings"
 	"testing"
+	"testing/fstest"
 
 	"github.com/aaaton/golem/v4"
 	"github.com/aaaton/golem/v4/dicts/en"
 	"github.com/muesli/termenv"
 )
 
-//go:embed builtins/good/*
+//go:embed builtins/*
 var builtinsAllGood embed.FS
 
 func TestConfigLoadBuiltinGood(t *testing.T) {
@@ -926,19 +927,16 @@ func TestConfigLoadBuiltinFlagHighlightOnlyWords(t *testing.T) {
 	}
 }
 
-//go:embed builtins/bad/logformats.yaml
-var builtinsLogformatsBad embed.FS
-
-//go:embed builtins/bad/words.yaml
-var builtinsWordsBad embed.FS
-
-//go:embed builtins/bad/patterns.yaml
-var builtinsPatternsBad embed.FS
-
 func TestConfigLoadBuiltinBad(t *testing.T) {
 	colorProfile = termenv.TrueColor
 
 	options := Options{}
+
+	builtinsLogformatsBad := fstest.MapFS{
+		"builtins/logformats/bad.yaml": {
+			Data: []byte("formats:\n  test:\n  regexp: bad:\n"),
+		},
+	}
 
 	t.Run("TestConfigLoadBuiltinLogformatsBadYAML", func(t *testing.T) {
 		_, err := InitConfig(options, builtinsLogformatsBad)
@@ -947,15 +945,27 @@ func TestConfigLoadBuiltinBad(t *testing.T) {
 		}
 	})
 
+	builtinsPatternsBad := fstest.MapFS{
+		"builtins/patterns/bad.yaml": {
+			Data: []byte("patterns:\n  bad: bad:\n"),
+		},
+	}
+
 	t.Run("TestConfigLoadBuiltinWordsBadYAML", func(t *testing.T) {
-		_, err := InitConfig(options, builtinsWordsBad)
+		_, err := InitConfig(options, builtinsPatternsBad)
 		if err.Error() != "yaml: line 2: mapping values are not allowed in this context" {
 			t.Errorf("InitConfig() should have failed with *errors.errorString, got: [%T] %s", err, err)
 		}
 	})
 
+	builtinsWordsBad := fstest.MapFS{
+		"builtins/words/bad.yaml": {
+			Data: []byte("words:\n  bad: bad:\n"),
+		},
+	}
+
 	t.Run("TestConfigLoadBuiltinWordsBadYAML", func(t *testing.T) {
-		_, err := InitConfig(options, builtinsPatternsBad)
+		_, err := InitConfig(options, builtinsWordsBad)
 		if err.Error() != "yaml: line 2: mapping values are not allowed in this context" {
 			t.Errorf("InitConfig() should have failed with *errors.errorString, got: [%T] %s", err, err)
 		}
