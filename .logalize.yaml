@@ -1,85 +1,156 @@
 # formats:
-#   # $remote_addr - $remote_user [$time_local] "$request" $status $body_bytes_sent "$http_referer" "$http_user_agent"
 #   nginx-combined:
-#     # $remote_addr
-#     - regexp: (\d{1,3}(\.\d{1,3}){3} )
-#       fg: "#f5ce42"
-#     # -
+#     - regexp: (\d{1,3}(?:\.\d{1,3}){3} )
+#       name: remote-addr
 #     - regexp: (- )
-#       fg: "#807e7a"
-#     # $remote_user
+#       name: dash
 #     - regexp: ([^ ]+ )
-#       fg: "#764a9e"
-#     # [$time_local]
+#       name: remote-user
 #     - regexp: (\[.+\] )
-#       fg: "#148dd9"
-#     # "$request"
+#       name: time-local
 #     - regexp: ("[^"]+" )
-#       fg: "#9ddb56"
-#     # $status
+#       name: request
 #     - regexp: (\d\d\d )
-#       fg: "#ffffff"
+#       name: status
 #       alternatives:
 #         - regexp: (2\d\d )
-#           fg: "#00ff00"
-#           style: bold
+#           name: 2xx
 #         - regexp: (3\d\d )
-#           fg: "#00ffff"
-#           style: bold
+#           name: 3xx
 #         - regexp: (4\d\d )
-#           fg: "#ff0000"
-#           style: bold
+#           name: 4xx
 #         - regexp: (5\d\d )
-#           fg: "#ff00ff"
-#           style: bold
-#     # $body_bytes_sent
+#           name: 5xx
 #     - regexp: ([\d]+ )
-#       fg: "#7d7d7d"
-#     # "$http_referer"
+#       name: body-bytes-sent
 #     - regexp: ("[^"]+" )
-#       fg: "#3ae1f0"
-#     # "$http_user_agent"
+#       name: http-referer
 #     - regexp: ("[^"]+")
-#       fg: "#aa7dd1"
+#       name: http-user-agent
 
 # patterns:
 #   string:
 #     priority: 500
 #     regexp: ("[^"]+"|'[^']+')
-#     fg: "#00ff00"
 
 #   number:
 #     regexp: (\d+)
-#     fg: "#00ffff"
-#     style: bold
-
-#   http-status-code:
-#     regexp: (\d\d\d)
-#     fg: "#ffffff"
-#     alternatives:
-#       - regexp: (2\d\d)
-#         fg: "#00ff00"
-#       - regexp: (3\d\d)
-#         fg: "#00ffff"
-#       - regexp: (4\d\d)
-#         fg: "#ff0000"
-#       - regexp: (5\d\d)
-#         fg: "#ff00ff"
 
 #   ipv4-address:
 #     regexp: (\d{1,3}(\.\d{1,3}){3})
-#     fg: "#ff0000"
-#     bg: "#ffff00"
+
+#   http-status:
+#     regexp: (\d\d\d)
+#     alternatives:
+#       - regexp: (2\d\d)
+#         name: 2xx
+#       - regexp: (3\d\d)
+#         name: 3xx
+#       - regexp: (4\d\d)
+#         name: 4xx
+#       - regexp: (5\d\d)
+#         name: 5xx
+
+#   http-status-code:
+#     priority: 100
+#     regexps:
+#       - regexp: (code:)
+#         name: code
+#       - regexp: ( \d\d\d)
+#         name: status
+#         alternatives:
+#           - regexp: ( 2\d\d)
+#             name: 2xx
+#           - regexp: ( 3\d\d)
+#             name: 3xx
+#           - regexp: ( 4\d\d)
+#             name: 4xx
+#           - regexp: ( 5\d\d)
+#             name: 5xx
 
 # words:
 #   warning:
-#     fg: "#fcba03"
-#     style: bold
-#     list:
-#       - "ignore"
-#       - "miss"
-#       - "readonly"
-#       - "reload"
-#       - "skip"
-#       - "warn"
-#       - "restart"
+#     - "ignore"
+#     - "miss"
+#     - "readonly"
+#     - "reload"
+#     - "skip"
+#     - "warn"
+#     - "restart"
+
+# themes:
+#   utopia:
+#     formats:
+#       nginx-combined:
+#         remote-addr:
+#           fg: "#ffc777"
+#         dash:
+#           fg: "#828bb8"
+#         remote-user:
+#           fg: "#4fd6be"
+#         time-local:
+#           fg: "#c099ff"
+#         request:
+#           fg: "#c3e88d"
+#         status:
+#           2xx:
+#             fg: "#00ff00"
+#             style: bold
+#           3xx:
+#             fg: "#00ffff"
+#             style: bold
+#           4xx:
+#             fg: "#ff0000"
+#             style: bold
+#           5xx:
+#             fg: "#ff00ff"
+#             style: bold
+#         body-bytes-sent:
+#           fg: "#636da6"
+#         http-referer:
+#           fg: "#fca7ea"
+#         http-user-agent:
+#           fg: "#82aaff"
+
+#     patterns:
+#       string:
+#         fg: "#00ff00"
+
+#       number:
+#         bg: "#00ffff"
+#         style: bold
+
+#       ipv4-address:
+#         fg: "#ffc777"
+
+#       http-status:
+#         default:
+#           fg: "#ffffff"
+#         2xx:
+#           fg: "#00ff00"
+#         3xx:
+#           fg: "#00ffff"
+#         4xx:
+#           fg: "#ff0000"
+#         5xx:
+#           fg: "#ff00ff"
+
+#       http-status-code:
+#         code:
+#           fg: "#ffffff"
+#         status:
+#           default:
+#             fg: "#ffffff"
+#           2xx:
+#             fg: "#00ff00"
+#           3xx:
+#             fg: "#00ffff"
+#           4xx:
+#             fg: "#ff0000"
+#           5xx:
+#             fg: "#ff00ff"
+
+#     words:
+#       warning:
+#         fg: "#fcba03"
+#         style: bold

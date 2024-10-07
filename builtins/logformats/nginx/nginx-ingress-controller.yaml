@@ -11,79 +11,73 @@ formats:
   nginx-ingress-controller:
     # $remote_addr
     - regexp: (\d{1,3}(?:\.\d{1,3}){3} )
-      fg: "#ffc777"
+      name: remote-addr
     # -
     - regexp: (- )
-      fg: "#828bb8"
+      name: dash
     # $remote_user
     - regexp: ([^ ]+ )
-      fg: "#4fd6be"
+      name: remote-user
     # [$time_local]
     - regexp: (\[.+\] )
-      fg: "#c099ff"
+      name: time-local
     # "$request"
     - regexp: ("[^"]+" )
-      fg: "#c3e88d"
+      name: request
     # $status
     - regexp: (\d\d\d )
+      name: status
       alternatives:
         - regexp: (2\d\d )
-          fg: "#00ff00"
-          style: bold
+          name: 2xx
         - regexp: (3\d\d )
-          fg: "#00ffff"
-          style: bold
+          name: 3xx
         - regexp: (4\d\d )
-          fg: "#ff0000"
-          style: bold
+          name: 4xx
         - regexp: (5\d\d )
-          fg: "#ff00ff"
-          style: bold
+          name: 5xx
     # $body_bytes_sent
     - regexp: ([\d]+ )
-      fg: "#636da6"
+      name: body-bytes-sent
     # "$http_referer"
     - regexp: ("[^"]+" )
-      fg: "#fca7ea"
+      name: http-referer
     # "$http_user_agent"
     - regexp: ("[^"]+" )
-      fg: "#82aaff"
+      name: http-user-agent
     # $request_length
     - regexp: (\d+ )
-      fg: "#41a6b5"
+      name: request-length
     # $request_time
     - regexp: ([\d\.]+ )
-      fg: "#c3e88d"
+      name: request-time
     # [$proxy_upstream_name]
     - regexp: (\[.*\] )
-      fg: "#65bcff"
+      name: proxy-upstream-name
     # [$proxy_alternative_upstream_name]
     - regexp: (\[.*\] )
-      fg: "#636da6"
+      name: proxy-alternative-upstream-name
     # $upstream_addr
     - regexp: ((?:\d{1,3}(\.\d{1,3}){3}:\d+|-) )
-      fg: "#ffc777"
+      name: upstream-addr
     # $upstream_response_length
     - regexp: ((?:\d+|-) )
-      fg: "#c099ff"
+      name: upstream-response-length
     # $upstream_response_time
     - regexp: ((?:[\d\.]+|-) )
-      fg: "#ff757f"
+      name: upstream-response-time
     # $upstream_status
     - regexp: ((?:\d\d\d|-) )
+      name: upstream-status
       alternatives:
         - regexp: (2\d\d )
-          fg: "#00ff00"
-          style: bold
+          name: 2xx
         - regexp: (3\d\d )
-          fg: "#00ffff"
-          style: bold
+          name: 3xx
         - regexp: (4\d\d )
-          fg: "#ff0000"
-          style: bold
+          name: 4xx
         - regexp: (5\d\d )
-          fg: "#ff00ff"
-          style: bold
+          name: 5xx
     # $req_id
     - regexp: ([[:xdigit:]]{32})
-      fg: "#636da6"
+      name: req-id

@@ -78,12 +78,12 @@ Configuration
 Logalize looks for configuration files in these places:
 - `/etc/logalize/logalize.yaml`
 - `~/.config/logalize/logalize.yaml`
-- `.logalize.yaml`
+- `.logalize.yaml` in current directory
 - path from `-c/--config` option
 
 If more than one configuration file is found, they are merged. The lower the file in the list, the higher its priority.
 
-A configuration file can contain three top-level keys: `formats`, `patterns` and `words`.
+A configuration file can contain four top-level keys: `formats`, `patterns`, `words` and `themes`. In the first three you define what you want to catch, and in the last you describe how you want to colorize it.
 
 ### Log formats
 
@@ -93,22 +93,22 @@ Configuration example:
 formats:
   kuvaq:
     - regexp: (\d{1,3}(\.\d{1,3}){3} )
-      fg: "#f5ce42"
+      name: ip-address
     - regexp: (- )
-      bg: "#807e7a"
-      style: bold
+      name: dash
     - regexp: ("[^"]+" )
-      fg: "#9ddb56"
-      bg: "#f5ce42"
+      name: string
     - regexp: (\d\d\d)
-      fg: "#ffffff"
+      name: http-status-code
       alternatives:
         - regexp: (2\d\d)
-          fg: "#00ff00"
-          style: bold
+          name: 2xx
         - regexp: (3\d\d)
-          fg: "#00ffff"
-          style: bold
+          name: 3xx
+        - regexp: (4\d\d)
+          name: 4xx
+        - regexp: (5\d\d)
+          name: 5xx
 ```
 
 `formats` describe complete log formats. A line must match a format completely to be colored. For example, the full regular expression for the "kuvaq" format above is `^(\d{1,3}(\.\d{1,3}){3} )(- )("[^"]+" )(\d\d\d)$`. Only lines below will match this format:
@@ -131,36 +131,24 @@ formats:
     # regexp must begin with an opening parenthesis `(`
     # and it must end with a paired closing parenthesis `)`
     # regexp can't be empty `()`
-    # that is, your regexp must be within one large capture group
+    # that is, your regexp must be within one capture group
     # and contain a valid regular expression
     - regexp: (\d\d\d )
-      # color can be a hex value like #ff0000
-      # or a number between 0 and 255 for ANSI colors
-      fg: "#00ff00"
-      bg: "#0000ff"
-      # available regular styles:
-      #  bold, faint, italic, underline,
-      #  overline, crossout, reverse
-      # there are also three special styles:
-      #  patterns - use highlighting from "patterns" section (see below)
-      #  words - use highlighting from "words" section (see below)
-      #  patterns-and-words - use highlighting from "patterns" and "words" sections
-      style: bold
+      # name of a capture group
+      # it will be used to assign colors and style
+      # later in "themes" (see below)
+      name: capture-group-name
       # alternatives are useful when you have general regular expression
       # but you want different colors for some specific subset of cases
       # within this regular expression
       # a common example is HTTP status code
       alternatives:
-        # every regexp here has the same "fg", "bg" and "style" fields
+        # every regexp here has the same "name" field
         # but no "alternatives" field
         - regexp: (2\d\d )
-          fg: "#00ff00"
-          bg: "#0000ff"
-          style: bold
+          name: 2xx
         - regexp: (4\d\d )
-          fg: "#ff0000"
-          bg: "#0000ff"
-          style: underline
+          name: 4xx
     # each next regexp is added to the previous one
     # and together they form a complete regexp for the whole string
     - regexp: (--- )
@@ -183,33 +171,17 @@ patterns:
   string:
     priority: 500
     regexp: ("[^"]+"|'[^']+')
-    fg: "#00ff00"
 
   number:
     regexp: (\d+)
-    bg: "#00ffff"
-    style: bold
-
-  http-status-code:
-    regexp: (\d\d\d)
-    fg: "#ffffff"
-    alternatives:
-      - regexp: (2\d\d)
-        fg: "#00ff00"
-      - regexp: (3\d\d)
-        fg: "#00ffff"
-      - regexp: (4\d\d)
-        fg: "#ff0000"
-      - regexp: (5\d\d)
-        fg: "#ff00ff"
 
   # complex pattern
   ipv4-address-with-port:
     regexps:
       - regexp: (\d{1,3}(\.\d{1,3}){3})
-        fg: "#ffc777"
+        name: address
       - regexp: ((:\d{1,5})?)
-        fg: "#ff966c"
+        name: port
 
 ```
 
@@ -223,22 +195,21 @@ Full pattern example using all available fields:
 patterns:
   # simple pattern (when you use only "regexp" field)
   # name of a pattern
-  ipv4-address:
-    # the same fields are used here as in log formats (see above)
+  http-status-code:
+    # patterns with higher priority will be painted earlier
+    # default priority is 0
     priority: 10
-    regexp: (\d{1,3}(\.\d{1,3}){3})
-    fg: "#00ff00"
-    bg: "#0000ff"
-    style: bold
+    # the same fields are used here as in log formats (see above)
+    regexp: (\d\d\d)
     alternatives:
-      - regexp: (1\d{1,2}(\.\d{1,3}){3})
-        fg: "#00ff00"
-        bg: "#0000ff"
-        style: bold
-      - regexp: (2\d{1,2}(\.\d{1,3}){3})
-        fg: "#ff0000"
-        bg: "#0000ff"
-        style: underline
+      - regexp: (2\d\d)
+        name: 2xx
+      - regexp: (3\d\d)
+        name: 3xx
+      - regexp: (4\d\d)
+        name: 4xx
+      - regexp: (5\d\d)
+        name: 5xx
 
   # complex pattern (when you use "regexps" field)
   # the same fields are used here as in log formats (see above)
@@ -249,29 +220,26 @@ patterns:
   ipv4-address-with-port:
     regexps:
       - regexp: (\d{1,3}(\.\d{1,3}){3})
-        fg: "#ffc777"
-        bg: "#0000ff"
-        style: bold
+        name: address
       - regexp: ((:\d{1,5})?)
-        fg: "#ff966c"
-        bg: "#00ffff"
-        style: underline
+        name: port
 
   # complex patterns are mainly used when you want to build a pattern
   # that builds on other patterns. for example, you want to make a highlighter
   # for the "logfmt" format. an example of "logfmt" log line:
   # ts=2024-02-16T23:00:02.953Z caller=db.go:1619 level=info component=tsdb msg="Deleting..."
-  # you can't use log formats (see above) because the structure of "logfmt" is impermanent
+  # you can't use log formats (see above) because the structure of "logfmt" is variable
   # in such a case, you can describe the base "logfmt" element (xxx=xxx) and look for other
   # existing patterns (date, time, IP address, etc.) on the right side of the equals sign
+  # (see how to accomplish this below in the "themes" section)
   logfmt:
     regexps:
       - regexp: ( [^=]+)
-        fg: "#ff0000"
+        name: key
       - regexp: (=)
-        fg: "#00ff00"
+        name: equal-sign
       - regexp: ([^ ]+)
-        style: patterns-and-words
+        name: value
 ```
 
 You can find built-in `patterns` [here](builtins/patterns). If you want to customize them or turn them off completely, overwrite the corresponding values in your `logalize.yaml`.
@@ -283,49 +251,131 @@ Configuration example:
 ```yaml
 words:
   good:
-    fg: "#52fa8a"
-    style: bold
-    list:
-      - "complete"
-      - "enable"
-      - "online"
-      - "succeed"
-      - "success"
-      - "successful"
-      - "successfully"
-      - "true"
-      - "valid"
+    - "complete"
+    - "enable"
+    - "online"
+    - "succeed"
+    - "success"
+    - "successful"
+    - "successfully"
+    - "true"
+    - "valid"
 
   bad:
-    bg: "#f06c62"
-    style: underline
-    list:
-      - "block"
-      - "critical"
-      - "deny"
-      - "disable"
-      - "error"
-      - "fail"
-      - "false"
-      - "fatal"
-      - "invalid"
+    - "block"
+    - "critical"
+    - "deny"
+    - "disable"
+    - "error"
+    - "fail"
+    - "false"
+    - "fatal"
+    - "invalid"
 
   your-word-group:
-    bg: "#0b78f1"
-    list:
-      - "lonzo"
-      - "gizmo"
-      - "lotek"
-      - "toni"
+    - "lonzo"
+    - "gizmo"
+    - "lotek"
+    - "toni"
 ```
 
-`words` are just lists of words that will be colored using values from `fg`, `bg` and `style` fields (see more details about these fields above under [Log formats](#log-formats)). `words` could have been implemented using patterns, if it weren't for one feature.
+`words` are just lists of words that will be colored according to your theme (see below). `words` could have been implemented using patterns, if it weren't for one feature.
 
 Words from these lists are used not only literally, but also as [lemmas](https://en.wikipedia.org/wiki/Lemma_(morphology)). It means that by listing the word "complete", you will also highlight the words "completes", "completed" and "completing" in any line. Similarly, if you add the word "sing" to a list, the words "sang" and "sung" will also be highlighted. It works only for the English language.
 
 There are two special word groups: `good` and `bad`. The negation of a word from `good` group will be colored using values from `bad` group and vice versa. For example, if `good` group has the word "complete" then "not completed", "wasn't completed", "cannot be completed" and other negative forms will be colored using values from `bad` word group.
 
 You can find built-in `words` [here](builtins/words). If you want to customize them or turn them off completely, overwrite the corresponding values in your `logalize.yaml`.
+
+### Themes
+
+Configuration example:
+
+```yaml
+themes:
+  # name of a theme
+  utopia:
+    formats:
+      kuvaq:
+        ip-address:
+          fg: "#f5ce42"
+        dash:
+          bg: "#807e7a"
+          style: bold
+        string:
+          fg: "#9ddb56"
+          bg: "#f5ce42"
+        http-status-code:
+          default:
+            fg: "#ffffff"
+          2xx:
+            fg: "#00ff00"
+            style: bold
+          3xx:
+            fg: "#00ffff"
+            style: bold
+          4xx:
+            fg: "#ff0000"
+            style: bold
+          5xx:
+            fg: "#ff00ff"
+            style: bold
+
+    patterns:
+      string:
+        fg: "#00ff00"
+
+      number:
+        bg: "#00ffff"
+        style: bold
+
+      http-status-code:
+        default:
+          fg: "#ffffff"
+        2xx:
+          fg: "#00ff00"
+        3xx:
+          fg: "#00ffff"
+        4xx:
+          fg: "#ff0000"
+        5xx:
+          fg: "#ff00ff"
+
+      ipv4-address-with-port:
+        address:
+          fg: "#ffc777"
+        port:
+          fg: "#ff966c"
+
+      logfmt:
+        key:
+          fg: "#ff0000"
+        equal-sign:
+          fg: "#00ff00"
+        value:
+          style: patterns-and-words
+
+    words:
+      good:
+        fg: "#52fa8a"
+        style: bold
+
+      bad:
+        fg: "#f06c62"
+        style: bold
+
+      your-word-group:
+        bg: "#0b78f1"
+```
+
+`themes` is the place where you apply colors and style to log formats, patterns and word groups you defined earlier. Every capture group can be colorized using `fg`, `bg` and `style` fields.
+
+`fg` and `bg` are foreground and background colors correspondingly. They can be a hex value like `#ff0000` or a number between 0 and 255 for ANSI colors.
+
+`style` field can be set to one of 7 regular styles: `bold`, `faint`, `italic`, `underline`, `overline`, `crossout` and `reverse`. There are also three special styles:
+- `patterns` - use highlighting from `patterns` section (see above)
+- `words` - use highlighting from `words` section (see above)
+- `patterns-and-words` - use highlighting from `patterns` and `words` sections
 
 Acknowledgements
 ----------------

@@ -10,10 +10,11 @@ import (
 
 // CapGroup represents one capture group in a config file
 type CapGroup struct {
-	RegExpStr    string     `koanf:"regexp"`
-	Foreground   string     `koanf:"fg"`
-	Background   string     `koanf:"bg"`
-	Style        string     `koanf:"style"`
+	Name         string `koanf:"name"`
+	RegExpStr    string `koanf:"regexp"`
+	Foreground   string
+	Background   string
+	Style        string
 	Alternatives []CapGroup `koanf:"alternatives"`
 	RegExp       *regexp.Regexp
 }
@@ -25,7 +26,7 @@ type CapGroupList struct {
 	FullRegExp *regexp.Regexp
 }
 
-func (cgl *CapGroupList) init(entireLineRegExp bool) error {
+func (cgl *CapGroupList) init(isLogFormat bool) error {
 	for _, group := range cgl.Groups {
 		// check that all regexps are valid regular expressions
 		if err := group.check(); err != nil {
@@ -38,7 +39,7 @@ func (cgl *CapGroupList) init(entireLineRegExp bool) error {
 			// add name for the capture group
 			format += fmt.Sprintf("(?P<capGroup%d>(?:%s))", i, cg.RegExpStr[1:len(cg.RegExpStr)-1])
 		}
-		if entireLineRegExp {
+		if isLogFormat {
 			format = "^" + format + "$"
 		}
 		cgl.FullRegExp = regexp.MustCompile(format)

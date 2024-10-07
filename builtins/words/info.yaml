@@ -1,10 +1,7 @@
 words:
   info:
-    fg: "#1ba2f5"
-    style: bold
-    list:
-      - "attempt"
-      - "detected"
-      - "ignore"
-      - "info"
-      - "readonly"
+    - "attempt"
+    - "detected"
+    - "ignore"
+    - "info"
+    - "readonly"

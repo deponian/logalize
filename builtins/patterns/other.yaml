@@ -2,4 +2,3 @@ patterns:
   # 0a99af43-0ad4-4237-b9cd-064966eb2803
   uuid:
     regexp: ([[:xdigit:]]{8}-[[:xdigit:]]{4}-[[:xdigit:]]{4}-[[:xdigit:]]{4}-[[:xdigit:]]{12})
-    fg: "#86e1fc"

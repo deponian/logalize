@@ -1,10 +1,7 @@
 words:
   warning:
-    fg: "#fcba03"
-    style: bold
-    list:
-      - "miss"
-      - "reload"
-      - "restart"
-      - "skip"
-      - "warn"
+    - "miss"
+    - "reload"
+    - "restart"
+    - "skip"
+    - "warn"

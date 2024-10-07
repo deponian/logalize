@@ -14,6 +14,8 @@ import (
 type Options struct {
 	ConfigPath string // path to configuration file
 
+	Theme string // the name of the theme to be used
+
 	PrintBuiltins bool // print built-in log formats and words
 
 	NoBuiltinLogFormats bool // disable built-in log formats
@@ -29,7 +31,9 @@ type Options struct {
 
 var Opts Options
 
-func InitConfig(opts Options, builtins fs.FS) (*koanf.Koanf, error) {
+var Config *koanf.Koanf
+
+func InitConfig(opts Options, builtins fs.FS) error {
 	config := koanf.New(".")
 
 	// set options
@@ -37,24 +41,26 @@ func InitConfig(opts Options, builtins fs.FS) (*koanf.Koanf, error) {
 
 	// load built-in configuration
 	if err := loadBuiltinConfig(config, builtins); err != nil {
-		return nil, err
+		return err
 	}
 
 	// read configuration from default paths
 	if err := loadDefaultConfig(config); err != nil {
-		return nil, err
+		return err
 	}
 
 	// read configuration from user defined path
-	if err := loadUserDefinedConfig(config, opts.ConfigPath); err != nil {
-		return nil, err
+	if err := loadUserDefinedConfig(config, Opts.ConfigPath); err != nil {
+		return err
 	}
 
 	// keep in the config only things we want to colorize
 	if Opts.HighlightOnlyLogFormats || Opts.HighlightOnlyPatterns || Opts.HighlightOnlyWords {
 		configBackup := config.Copy()
 
-		config.Delete("")
+		config.Delete("formats")
+		config.Delete("patterns")
+		config.Delete("words")
 
 		if Opts.HighlightOnlyLogFormats {
 			config.MergeAt(configBackup.Cut("formats"), "formats")
@@ -72,7 +78,9 @@ func InitConfig(opts Options, builtins fs.FS) (*koanf.Koanf, error) {
 		config.Delete("")
 	}
 
-	return config, nil
+	Config = config
+
+	return nil
 }
 
 func loadBuiltinConfig(config *koanf.Koanf, builtins fs.FS) error {
@@ -94,8 +102,15 @@ func loadBuiltinConfig(config *koanf.Koanf, builtins fs.FS) error {
 		return nil
 	}
 
+	// read main configuration file
 	builtinsDir, _ := fs.ReadDir(builtins, "builtins")
 	if err := loadFromDirRecursively(builtinsDir, "builtins/"); err != nil {
+		return err
+	}
+
+	// read theme files
+	themesDir, _ := fs.ReadDir(builtins, "themes")
+	if err := loadFromDirRecursively(themesDir, "themes/"); err != nil {
 		return err
 	}
 
@@ -112,7 +127,9 @@ func loadBuiltinConfig(config *koanf.Koanf, builtins fs.FS) error {
 	}
 
 	if Opts.NoBuiltins {
-		config.Delete("")
+		config.Delete("formats")
+		config.Delete("patterns")
+		config.Delete("words")
 	}
 
 	return nil

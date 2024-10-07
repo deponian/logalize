@@ -1,6 +1,7 @@
 package logalize
 
 import (
+	"embed"
 	"fmt"
 	"testing"
 
@@ -9,7 +10,6 @@ import (
 	"github.com/google/go-cmp/cmp"
 	"github.com/knadh/koanf/parsers/yaml"
 	"github.com/knadh/koanf/providers/rawbytes"
-	"github.com/knadh/koanf/v2"
 	"github.com/muesli/termenv"
 )
 
@@ -17,27 +17,31 @@ func TestWordsInit(t *testing.T) {
 	configDataGood := `
 words:
   good:
-    fg: "#52fa8a"
-    style: bold
-    list:
-      - "true"
+    - "true"
   bad:
-    bg: "#f06c62"
-    list:
-      - "fail"
-      - "fatal"
+    - "fail"
+    - "fatal"
   friends:
-    fg: "#f834b2"
-    style: underline
-    list:
-      - "toni"
-      - "wenzel"
+    - "toni"
+    - "wenzel"
   foes:
-    fg: "#120fbb"
-    style: underline
-    list:
-      - "argus"
-      - "cletus"
+    - "argus"
+    - "cletus"
+
+themes:
+  test:
+    words:
+      good:
+        fg: "#52fa8a"
+        style: bold
+      bad:
+        bg: "#f06c62"
+      friends:
+        fg: "#f834b2"
+        style: underline
+      foes:
+        fg: "#120fbb"
+        style: underline
 `
 	goodGroup := WordGroup{"good", []string{"true"}, "#52fa8a", "", "bold"}
 	badGroup := WordGroup{"bad", []string{"fail", "fatal"}, "", "#f06c62", ""}
@@ -53,13 +57,24 @@ words:
 		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
 	}
 
-	config := koanf.New(".")
+	var builtins embed.FS
+	options := Options{
+		ConfigPath: "",
+		NoBuiltins: true,
+		Theme:      "test",
+	}
+
+	err = InitConfig(options, builtins)
+	if err != nil {
+		t.Errorf("InitConfig() failed with this error: %s", err)
+	}
 	configRaw := []byte(configDataGood)
-	if err := config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
+	if err := Config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
 		t.Errorf("Error during config loading: %s", err)
 	}
+
 	t.Run("TestWordsInitGood", func(t *testing.T) {
-		if err := initWords(config, lemmatizer); err != nil {
+		if err := initWords(lemmatizer); err != nil {
 			t.Errorf("InitWords() failed with this error: %s", err)
 		}
 		if !cmp.Equal(Words.Good, goodGroup) {
@@ -75,15 +90,20 @@ words:
 
 	configDataBadYAML := `
 words:
-  good:err: bad
+  bad:
+    - []
 `
-	config = koanf.New(".")
+	err = InitConfig(options, builtins)
+	if err != nil {
+		t.Errorf("InitConfig() failed with this error: %s", err)
+	}
 	configRaw = []byte(configDataBadYAML)
-	if err := config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
+	if err := Config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
 		t.Errorf("Error during config loading: %s", err)
 	}
 	t.Run("TestWordsInitBadYAML", func(t *testing.T) {
-		if err := initWords(config, lemmatizer); err == nil {
+		if err := initWords(lemmatizer); err == nil {
+			fmt.Println(Words)
 			t.Errorf("InitWords() should have failed")
 		}
 	})
@@ -91,18 +111,25 @@ words:
 	configDataBadStyle := `
 words:
   good:
-    fg: "#52fa8a"
-    style: patterns
-    list:
-      - "true"
+    - "true"
+
+themes:
+  test:
+    words:
+      good:
+        fg: "#52fa8a"
+        style: patterns
 `
-	config = koanf.New(".")
+	err = InitConfig(options, builtins)
+	if err != nil {
+		t.Errorf("InitConfig() failed with this error: %s", err)
+	}
 	configRaw = []byte(configDataBadStyle)
-	if err := config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
+	if err := Config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
 		t.Errorf("Error during config loading: %s", err)
 	}
 	t.Run("TestWordsInitBadStyle", func(t *testing.T) {
-		if err := initWords(config, lemmatizer); err == nil {
+		if err := initWords(lemmatizer); err == nil {
 			t.Errorf("InitWords() should have failed")
 		}
 	})
@@ -155,28 +182,32 @@ func TestWordsHighlightWord(t *testing.T) {
 	configData := `
 words:
   good:
-    fg: "#52fa8a"
-    style: bold
-    list:
-      - "true"
+    - "true"
   bad:
-    bg: "#f06c62"
-    style: underline
-    list:
-      - "fail"
-      - "fatal"
+    - "fail"
+    - "fatal"
   friends:
-    fg: "#f834b2"
-    style: faint
-    list:
-      - "toni"
-      - "wenzel"
+    - "toni"
+    - "wenzel"
   foes:
-    fg: "#120fbb"
-    style: italic
-    list:
-      - "argus"
-      - "cletus"
+    - "argus"
+    - "cletus"
+
+themes:
+  test:
+    words:
+      good:
+        fg: "#52fa8a"
+        style: bold
+      bad:
+        bg: "#f06c62"
+        style: underline
+      friends:
+        fg: "#f834b2"
+        style: faint
+      foes:
+        fg: "#120fbb"
+        style: italic
 `
 	tests := []struct {
 		plain   string
@@ -198,16 +229,30 @@ words:
 		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
 	}
 
+	var builtins embed.FS
+	options := Options{
+		ConfigPath: "",
+		NoBuiltins: true,
+		Theme:      "test",
+	}
+
 	for _, tt := range tests {
 		testname := tt.plain
-		config := koanf.New(".")
+
+		err = InitConfig(options, builtins)
+		if err != nil {
+			t.Errorf("InitConfig() failed with this error: %s", err)
+		}
+
 		configRaw := []byte(configData)
-		if err := config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
+		if err := Config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
 			t.Errorf("Error during config loading: %s", err)
 		}
-		if err := initWords(config, lemmatizer); err != nil {
+
+		if err := initWords(lemmatizer); err != nil {
 			t.Errorf("InitWords() failed with this error: %s", err)
 		}
+
 		t.Run(testname, func(t *testing.T) {
 			colored := Words.highlightWord(tt.plain)
 			if colored != tt.colored {
@@ -221,28 +266,32 @@ func TestWordsHighlightNegatedWord(t *testing.T) {
 	configData := `
 words:
   good:
-    fg: "#52fa8a"
-    style: bold
-    list:
-      - "true"
-      - "complete"
+    - "true"
+    - "complete"
   bad:
-    bg: "#f06c62"
-    list:
-      - "false"
-      - "fail"
+    - "false"
+    - "fail"
   friends:
-    fg: "#f834b2"
-    style: underline
-    list:
-      - "toni"
-      - "wenzel"
+    - "toni"
+    - "wenzel"
   foes:
-    fg: "#120fbb"
-    style: underline
-    list:
-      - "argus"
-      - "cletus"
+    - "argus"
+    - "cletus"
+
+themes:
+  test:
+    words:
+      good:
+        fg: "#52fa8a"
+        style: bold
+      bad:
+        bg: "#f06c62"
+      friends:
+        fg: "#f834b2"
+        style: underline
+      foes:
+        fg: "#120fbb"
+        style: underline
 `
 	tests := []struct {
 		plain   string
@@ -285,16 +334,30 @@ words:
 		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
 	}
 
+	var builtins embed.FS
+	options := Options{
+		ConfigPath: "",
+		NoBuiltins: true,
+		Theme:      "test",
+	}
+
 	for _, tt := range tests {
 		testname := tt.plain
-		config := koanf.New(".")
+
+		err = InitConfig(options, builtins)
+		if err != nil {
+			t.Errorf("InitConfig() failed with this error: %s", err)
+		}
+
 		configRaw := []byte(configData)
-		if err := config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
+		if err := Config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
 			t.Errorf("Error during config loading: %s", err)
 		}
-		if err := initWords(config, lemmatizer); err != nil {
+
+		if err := initWords(lemmatizer); err != nil {
 			t.Errorf("InitWords() failed with this error: %s", err)
 		}
+
 		t.Run(testname, func(t *testing.T) {
 			m := negatedWordRegexp.FindStringSubmatchIndex(tt.plain)
 			colored := Words.highlightNegatedWord(tt.plain[m[0]:m[1]], tt.plain[m[2]:m[3]], tt.plain[m[4]:m[5]])
@@ -309,28 +372,32 @@ func TestWordsHighlight(t *testing.T) {
 	configData := `
 words:
   good:
-    fg: "#52fa8a"
-    style: bold
-    list:
-      - "true"
-      - "complete"
+    - "true"
+    - "complete"
   bad:
-    bg: "#f06c62"
-    list:
-      - "false"
-      - "fail"
+    - "false"
+    - "fail"
   friends:
-    fg: "#f834b2"
-    style: underline
-    list:
-      - "toni"
-      - "wenzel"
+    - "toni"
+    - "wenzel"
   foes:
-    fg: "#120fbb"
-    style: underline
-    list:
-      - "argus"
-      - "cletus"
+    - "argus"
+    - "cletus"
+
+themes:
+  test:
+    words:
+      good:
+        fg: "#52fa8a"
+        style: bold
+      bad:
+        bg: "#f06c62"
+      friends:
+        fg: "#f834b2"
+        style: underline
+      foes:
+        fg: "#120fbb"
+        style: underline
 `
 	tests := []struct {
 		plain   string
@@ -379,16 +446,30 @@ words:
 		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
 	}
 
+	var builtins embed.FS
+	options := Options{
+		ConfigPath: "",
+		NoBuiltins: true,
+		Theme:      "test",
+	}
+
 	for _, tt := range tests {
 		testname := tt.plain
-		config := koanf.New(".")
+
+		err = InitConfig(options, builtins)
+		if err != nil {
+			t.Errorf("InitConfig() failed with this error: %s", err)
+		}
+
 		configRaw := []byte(configData)
-		if err := config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
+		if err := Config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
 			t.Errorf("Error during config loading: %s", err)
 		}
-		if err := initWords(config, lemmatizer); err != nil {
+
+		if err := initWords(lemmatizer); err != nil {
 			t.Errorf("InitWords() failed with this error: %s", err)
 		}
+
 		t.Run(testname, func(t *testing.T) {
 			colored := Words.highlight(tt.plain)
 			if colored != tt.colored {

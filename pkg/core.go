@@ -5,19 +5,18 @@ import (
 	"io"
 
 	"github.com/aaaton/golem/v4"
-	"github.com/knadh/koanf/v2"
 )
 
-func Run(reader io.Reader, writer io.StringWriter, config *koanf.Koanf, lemmatizer *golem.Lemmatizer) error {
-	if err := initPatterns(config); err != nil {
+func Run(reader io.Reader, writer io.StringWriter, lemmatizer *golem.Lemmatizer) error {
+	if err := initPatterns(); err != nil {
 		return err
 	}
 
-	if err := initWords(config, lemmatizer); err != nil {
+	if err := initWords(lemmatizer); err != nil {
 		return err
 	}
 
-	if err := initLogFormats(config); err != nil {
+	if err := initLogFormats(); err != nil {
 		return err
 	}
 

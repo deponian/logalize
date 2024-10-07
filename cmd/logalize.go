@@ -42,13 +42,13 @@ It's fast and extensible alternative to ccze and colorize.`,
 			if err != nil {
 				log.Fatal(err)
 			}
-			config, err := logalize.InitConfig(options, builtins)
+			err = logalize.InitConfig(options, builtins)
 			if err != nil {
 				log.Fatal(err)
 			}
 
 			// run the app
-			err = logalize.Run(os.Stdin, os.Stdout, config, lemmatizer)
+			err = logalize.Run(os.Stdin, os.Stdout, lemmatizer)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -57,6 +57,7 @@ It's fast and extensible alternative to ccze and colorize.`,
 	}
 
 	LogalizeCmd.Flags().StringVarP(&options.ConfigPath, "config", "c", "", "path to configuration file")
+	LogalizeCmd.Flags().StringVarP(&options.Theme, "theme", "t", "tokyonight", "name of the theme to be used")
 
 	LogalizeCmd.Flags().BoolVarP(&options.PrintBuiltins, "print-builtins", "b", false, "print built-in log formats, patterns and words")
 

@@ -15,6 +15,7 @@ import (
 )
 
 //go:embed builtins/*
+//go:embed themes/*
 var builtinsAllGood embed.FS
 
 func TestConfigLoadBuiltinGood(t *testing.T) {
@@ -335,9 +336,11 @@ func TestConfigLoadBuiltinGood(t *testing.T) {
 		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
 	}
 
-	options := Options{}
+	options := Options{
+		Theme: "tokyonight",
+	}
 
-	config, err := InitConfig(options, builtinsAllGood)
+	err = InitConfig(options, builtinsAllGood)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -348,7 +351,7 @@ func TestConfigLoadBuiltinGood(t *testing.T) {
 		output := bytes.Buffer{}
 
 		t.Run(testname, func(t *testing.T) {
-			err := Run(input, &output, config, lemmatizer)
+			err := Run(input, &output, lemmatizer)
 			if err != nil {
 				t.Errorf("Run() failed with this error: %s", err)
 			}
@@ -398,9 +401,10 @@ func TestConfigLoadBuiltinFlagNoBuiltins(t *testing.T) {
 		NoBuiltinPatterns:   false,
 		NoBuiltinWords:      false,
 		NoBuiltins:          true,
+		Theme:               "tokyonight",
 	}
 
-	config, err := InitConfig(options, builtinsAllGood)
+	err = InitConfig(options, builtinsAllGood)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -411,7 +415,7 @@ func TestConfigLoadBuiltinFlagNoBuiltins(t *testing.T) {
 		output := bytes.Buffer{}
 
 		t.Run(testname, func(t *testing.T) {
-			err := Run(input, &output, config, lemmatizer)
+			err := Run(input, &output, lemmatizer)
 			if err != nil {
 				t.Errorf("Run() failed with this error: %s", err)
 			}
@@ -461,9 +465,10 @@ func TestConfigLoadBuiltinFlagNoBuiltinLogFormats(t *testing.T) {
 		NoBuiltinPatterns:   false,
 		NoBuiltinWords:      false,
 		NoBuiltins:          false,
+		Theme:               "tokyonight",
 	}
 
-	config, err := InitConfig(options, builtinsAllGood)
+	err = InitConfig(options, builtinsAllGood)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -474,7 +479,7 @@ func TestConfigLoadBuiltinFlagNoBuiltinLogFormats(t *testing.T) {
 		output := bytes.Buffer{}
 
 		t.Run(testname, func(t *testing.T) {
-			err := Run(input, &output, config, lemmatizer)
+			err := Run(input, &output, lemmatizer)
 			if err != nil {
 				t.Errorf("Run() failed with this error: %s", err)
 			}
@@ -524,9 +529,10 @@ func TestConfigLoadBuiltinFlagNoBuiltinPatterns(t *testing.T) {
 		NoBuiltinPatterns:   true,
 		NoBuiltinWords:      false,
 		NoBuiltins:          false,
+		Theme:               "tokyonight",
 	}
 
-	config, err := InitConfig(options, builtinsAllGood)
+	err = InitConfig(options, builtinsAllGood)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -537,7 +543,7 @@ func TestConfigLoadBuiltinFlagNoBuiltinPatterns(t *testing.T) {
 		output := bytes.Buffer{}
 
 		t.Run(testname, func(t *testing.T) {
-			err := Run(input, &output, config, lemmatizer)
+			err := Run(input, &output, lemmatizer)
 			if err != nil {
 				t.Errorf("Run() failed with this error: %s", err)
 			}
@@ -587,9 +593,10 @@ func TestConfigLoadBuiltinFlagNoBuiltinWords(t *testing.T) {
 		NoBuiltinPatterns:   false,
 		NoBuiltinWords:      true,
 		NoBuiltins:          false,
+		Theme:               "tokyonight",
 	}
 
-	config, err := InitConfig(options, builtinsAllGood)
+	err = InitConfig(options, builtinsAllGood)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -600,7 +607,7 @@ func TestConfigLoadBuiltinFlagNoBuiltinWords(t *testing.T) {
 		output := bytes.Buffer{}
 
 		t.Run(testname, func(t *testing.T) {
-			err := Run(input, &output, config, lemmatizer)
+			err := Run(input, &output, lemmatizer)
 			if err != nil {
 				t.Errorf("Run() failed with this error: %s", err)
 			}
@@ -650,9 +657,10 @@ func TestConfigLoadBuiltinFlagNoBuiltinPatternsAndWords(t *testing.T) {
 		NoBuiltinPatterns:   true,
 		NoBuiltinWords:      true,
 		NoBuiltins:          false,
+		Theme:               "tokyonight",
 	}
 
-	config, err := InitConfig(options, builtinsAllGood)
+	err = InitConfig(options, builtinsAllGood)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -663,7 +671,7 @@ func TestConfigLoadBuiltinFlagNoBuiltinPatternsAndWords(t *testing.T) {
 		output := bytes.Buffer{}
 
 		t.Run(testname, func(t *testing.T) {
-			err := Run(input, &output, config, lemmatizer)
+			err := Run(input, &output, lemmatizer)
 			if err != nil {
 				t.Errorf("Run() failed with this error: %s", err)
 			}
@@ -713,9 +721,10 @@ func TestConfigLoadBuiltinFlagDryRun(t *testing.T) {
 		HighlightOnlyPatterns:   false,
 		HighlightOnlyWords:      false,
 		DryRun:                  true,
+		Theme:                   "tokyonight",
 	}
 
-	config, err := InitConfig(options, builtinsAllGood)
+	err = InitConfig(options, builtinsAllGood)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -726,7 +735,7 @@ func TestConfigLoadBuiltinFlagDryRun(t *testing.T) {
 		output := bytes.Buffer{}
 
 		t.Run(testname, func(t *testing.T) {
-			err := Run(input, &output, config, lemmatizer)
+			err := Run(input, &output, lemmatizer)
 			if err != nil {
 				t.Errorf("Run() failed with this error: %s", err)
 			}
@@ -776,9 +785,10 @@ func TestConfigLoadBuiltinFlagHighlightOnlyLogFormats(t *testing.T) {
 		HighlightOnlyPatterns:   false,
 		HighlightOnlyWords:      false,
 		DryRun:                  false,
+		Theme:                   "tokyonight",
 	}
 
-	config, err := InitConfig(options, builtinsAllGood)
+	err = InitConfig(options, builtinsAllGood)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -789,7 +799,7 @@ func TestConfigLoadBuiltinFlagHighlightOnlyLogFormats(t *testing.T) {
 		output := bytes.Buffer{}
 
 		t.Run(testname, func(t *testing.T) {
-			err := Run(input, &output, config, lemmatizer)
+			err := Run(input, &output, lemmatizer)
 			if err != nil {
 				t.Errorf("Run() failed with this error: %s", err)
 			}
@@ -839,9 +849,10 @@ func TestConfigLoadBuiltinFlagHighlightOnlyPatterns(t *testing.T) {
 		HighlightOnlyPatterns:   true,
 		HighlightOnlyWords:      false,
 		DryRun:                  false,
+		Theme:                   "tokyonight",
 	}
 
-	config, err := InitConfig(options, builtinsAllGood)
+	err = InitConfig(options, builtinsAllGood)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -852,7 +863,7 @@ func TestConfigLoadBuiltinFlagHighlightOnlyPatterns(t *testing.T) {
 		output := bytes.Buffer{}
 
 		t.Run(testname, func(t *testing.T) {
-			err := Run(input, &output, config, lemmatizer)
+			err := Run(input, &output, lemmatizer)
 			if err != nil {
 				t.Errorf("Run() failed with this error: %s", err)
 			}
@@ -902,9 +913,10 @@ func TestConfigLoadBuiltinFlagHighlightOnlyWords(t *testing.T) {
 		HighlightOnlyPatterns:   false,
 		HighlightOnlyWords:      true,
 		DryRun:                  false,
+		Theme:                   "tokyonight",
 	}
 
-	config, err := InitConfig(options, builtinsAllGood)
+	err = InitConfig(options, builtinsAllGood)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -915,7 +927,7 @@ func TestConfigLoadBuiltinFlagHighlightOnlyWords(t *testing.T) {
 		output := bytes.Buffer{}
 
 		t.Run(testname, func(t *testing.T) {
-			err := Run(input, &output, config, lemmatizer)
+			err := Run(input, &output, lemmatizer)
 			if err != nil {
 				t.Errorf("Run() failed with this error: %s", err)
 			}
@@ -932,7 +944,9 @@ func TestConfigLoadBuiltinFlagHighlightOnlyWords(t *testing.T) {
 func TestConfigLoadBuiltinBad(t *testing.T) {
 	colorProfile = termenv.TrueColor
 
-	options := Options{}
+	options := Options{
+		Theme: "tokyonight",
+	}
 
 	builtinsLogformatsBad := fstest.MapFS{
 		"builtins/logformats/bad.yaml": {
@@ -941,7 +955,7 @@ func TestConfigLoadBuiltinBad(t *testing.T) {
 	}
 
 	t.Run("TestConfigLoadBuiltinLogformatsBadYAML", func(t *testing.T) {
-		_, err := InitConfig(options, builtinsLogformatsBad)
+		err := InitConfig(options, builtinsLogformatsBad)
 		if err.Error() != "yaml: line 3: mapping values are not allowed in this context" {
 			t.Errorf("InitConfig() should have failed with *errors.errorString, got: [%T] %s", err, err)
 		}
@@ -953,8 +967,8 @@ func TestConfigLoadBuiltinBad(t *testing.T) {
 		},
 	}
 
-	t.Run("TestConfigLoadBuiltinWordsBadYAML", func(t *testing.T) {
-		_, err := InitConfig(options, builtinsPatternsBad)
+	t.Run("TestConfigLoadBuiltinPatternsBadYAML", func(t *testing.T) {
+		err := InitConfig(options, builtinsPatternsBad)
 		if err.Error() != "yaml: line 2: mapping values are not allowed in this context" {
 			t.Errorf("InitConfig() should have failed with *errors.errorString, got: [%T] %s", err, err)
 		}
@@ -967,7 +981,20 @@ func TestConfigLoadBuiltinBad(t *testing.T) {
 	}
 
 	t.Run("TestConfigLoadBuiltinWordsBadYAML", func(t *testing.T) {
-		_, err := InitConfig(options, builtinsWordsBad)
+		err := InitConfig(options, builtinsWordsBad)
+		if err.Error() != "yaml: line 2: mapping values are not allowed in this context" {
+			t.Errorf("InitConfig() should have failed with *errors.errorString, got: [%T] %s", err, err)
+		}
+	})
+
+	builtinsThemesBad := fstest.MapFS{
+		"themes/bad.yaml": {
+			Data: []byte("themes:\n  bad: bad:\n"),
+		},
+	}
+
+	t.Run("TestConfigLoadBuiltinThemesBadYAML", func(t *testing.T) {
+		err := InitConfig(options, builtinsThemesBad)
 		if err.Error() != "yaml: line 2: mapping values are not allowed in this context" {
 			t.Errorf("InitConfig() should have failed with *errors.errorString, got: [%T] %s", err, err)
 		}
@@ -980,65 +1007,100 @@ func TestConfigLoadUserDefinedGood(t *testing.T) {
 formats:
   menetekel:
     - regexp: (\d{1,3}(\.\d{1,3}){3} )
-      fg: "#f5ce42"
+      name: one
     - regexp: ([^ ]+ )
-      bg: "#764a9e"
+      name: two
     - regexp: (\[.+\] )
-      style: bold
+      name: three
     - regexp: ("[^"]+")
-      fg: "#9daf99"
-      bg: "#76fb99"
-      style: underline
+      name: four
 
 patterns:
   string:
     priority: 500
     regexp: ("[^"]+"|'[^']+')
-    fg: "#00ff00"
 
   ipv4-address:
     priority: 400
     regexp: (\d{1,3}(\.\d{1,3}){3})
-    fg: "#ff0000"
-    bg: "#ffff00"
-    style: bold
 
   number:
     regexp: (\d+)
-    bg: "#005050"
 
   http-status-code:
     priority: 300
     regexp: (\d\d\d)
-    fg: "#ffffff"
     alternatives:
       - regexp: (1\d\d)
-        fg: "#505050"
+        name: 1xx
       - regexp: (2\d\d)
-        fg: "#00ff00"
-        style: overline
+        name: 2xx
       - regexp: (3\d\d)
-        fg: "#00ffff"
-        style: crossout
+        name: 3xx
       - regexp: (4\d\d)
-        fg: "#ff0000"
-        style: reverse
+        name: 4xx
       - regexp: (5\d\d)
-        fg: "#ff00ff"
+        name: 5xx
 
 words:
   friends:
-    fg: "#f834b2"
-    style: underline
-    list:
-      - "toni"
-      - "wenzel"
+    - "toni"
+    - "wenzel"
   foes:
-    fg: "#120fbb"
-    style: underline
-    list:
-      - "argus"
-      - "cletus"
+    - "argus"
+    - "cletus"
+
+themes:
+  test:
+    formats:
+      menetekel:
+        one:
+          fg: "#f5ce42"
+        two:
+          bg: "#764a9e"
+        three:
+          style: bold
+        four:
+          fg: "#9daf99"
+          bg: "#76fb99"
+          style: underline
+
+    patterns:
+      string:
+        fg: "#00ff00"
+
+      ipv4-address:
+        fg: "#ff0000"
+        bg: "#ffff00"
+        style: bold
+
+      number:
+        bg: "#005050"
+
+      http-status-code:
+        default:
+          fg: "#ffffff"
+        1xx:
+          fg: "#505050"
+        2xx:
+          fg: "#00ff00"
+          style: overline
+        3xx:
+          fg: "#00ffff"
+          style: crossout
+        4xx:
+          fg: "#ff0000"
+          style: reverse
+        5xx:
+          fg: "#ff00ff"
+
+    words:
+      friends:
+        fg: "#f834b2"
+        style: underline
+      foes:
+        fg: "#120fbb"
+        style: underline
 `
 	tests := []struct {
 		plain   string
@@ -1102,9 +1164,10 @@ words:
 	options := Options{
 		ConfigPath: userConfig,
 		NoBuiltins: true,
+		Theme:      "test",
 	}
 
-	config, err := InitConfig(options, builtinsAllGood)
+	err = InitConfig(options, builtinsAllGood)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -1115,7 +1178,7 @@ words:
 		output := bytes.Buffer{}
 
 		t.Run(testname, func(t *testing.T) {
-			err := Run(input, &output, config, lemmatizer)
+			err := Run(input, &output, lemmatizer)
 			if err != nil {
 				t.Errorf("Run() failed with this error: %s", err)
 			}
@@ -1148,10 +1211,11 @@ formats:
 	options := Options{
 		ConfigPath: userConfig,
 		NoBuiltins: true,
+		Theme:      "tokyonight",
 	}
 
 	t.Run("TestConfigLoadUserDefinedBadYAML", func(t *testing.T) {
-		_, err := InitConfig(options, builtinsAllGood)
+		err := InitConfig(options, builtinsAllGood)
 		if err.Error() != "yaml: line 4: mapping values are not allowed in this context" {
 			t.Errorf("InitConfig() should have failed with *errors.errorString, got: [%T] %s", err, err)
 		}
@@ -1160,10 +1224,11 @@ formats:
 	options = Options{
 		ConfigPath: userConfig + "error",
 		NoBuiltins: true,
+		Theme:      "tokyonight",
 	}
 
 	t.Run("TestConfigLoadUserDefinedFileDoesntExist", func(t *testing.T) {
-		_, err := InitConfig(options, builtinsAllGood)
+		err := InitConfig(options, builtinsAllGood)
 		if _, ok := err.(*fs.PathError); !ok {
 			t.Errorf("InitConfig() should have failed with *fs.PathError, got: [%T] %s", err, err)
 		}
@@ -1179,10 +1244,11 @@ formats:
 	options = Options{
 		ConfigPath: userConfigReadOnly,
 		NoBuiltins: false,
+		Theme:      "tokyonight",
 	}
 
 	t.Run("TestConfigLoadUserDefinedReadOnly", func(t *testing.T) {
-		_, err := InitConfig(options, builtinsAllGood)
+		err := InitConfig(options, builtinsAllGood)
 		if _, ok := err.(*fs.PathError); !ok {
 			t.Errorf("InitConfig() should have failed with *fs.PathError, got: [%T] %s", err, err)
 		}
@@ -1228,10 +1294,11 @@ formats:
 	options := Options{
 		ConfigPath: "",
 		NoBuiltins: true,
+		Theme:      "tokyonight",
 	}
 
 	t.Run("TestConfigLoadDefaultBadYAML", func(t *testing.T) {
-		_, err := InitConfig(options, builtinsAllGood)
+		err := InitConfig(options, builtinsAllGood)
 		if err.Error() != "yaml: line 4: mapping values are not allowed in this context" {
 			t.Errorf("InitConfig() should have failed with *errors.errorString, got: [%T] %s", err, err)
 		}
@@ -1243,7 +1310,7 @@ formats:
 	}
 
 	t.Run("TestConfigLoadDefaultReadOnly", func(t *testing.T) {
-		_, err := InitConfig(options, builtinsAllGood)
+		err := InitConfig(options, builtinsAllGood)
 		if _, ok := err.(*fs.PathError); !ok {
 			t.Errorf("InitConfig() should have failed with *fs.PathError, got: [%T] %s", err, err)
 		}

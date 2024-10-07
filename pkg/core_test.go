@@ -22,104 +22,167 @@ func TestRunGood(t *testing.T) {
 formats:
   menetekel:
     - regexp: (\d{1,3}(\.\d{1,3}){3} )
-      fg: "#f5ce42"
+      name: one
     - regexp: ([^ ]+ )
-      bg: "#764a9e"
+      name: two
     - regexp: (\[.+\] )
-      style: bold
+      name: three
     - regexp: ("[^"]+")
-      fg: "#9daf99"
-      bg: "#76fb99"
-      style: underline
+      name: four
 
   portafisco-patterns:
     - regexp: (\d{1} - )
-      fg: "#f5ce42"
+      name: one
     - regexp: (.*)
-      style: patterns
+      name: two
 
   portafisco-words:
     - regexp: (\d{2} - )
-      fg: "#f5ce42"
+      name: one
     - regexp: (.*)
-      style: words
+      name: two
 
   portafisco-patterns-and-words:
     - regexp: (\d{3} - )
-      fg: "#f5ce42"
+      name: one
     - regexp: (.*)
-      style: patterns-and-words
+      name: two
 
   portafisco-combined:
     - regexp: (\d{4} - )
-      fg: "#f5ce42"
+      name: one
     - regexp: (".*" )
-      style: patterns
+      name: two
     - regexp: (".*" )
-      style: words
+      name: three
     - regexp: («.*»)
-      style: patterns-and-words
+      name: four
 
 patterns:
   string:
     priority: 500
     regexp: ("[^"]+"|'[^']+')
-    fg: "#00ff00"
 
   ipv4-address:
     priority: 400
     regexp: (\d{1,3}(\.\d{1,3}){3})
-    fg: "#ff0000"
-    bg: "#ffff00"
-    style: bold
 
   number:
     regexp: (\d+)
-    bg: "#005050"
 
   http-status-code:
     priority: 300
     regexp: (\d\d\d)
-    fg: "#ffffff"
     alternatives:
       - regexp: (1\d\d)
-        fg: "#505050"
+        name: 1xx
       - regexp: (2\d\d)
-        fg: "#00ff00"
-        style: overline
+        name: 2xx
       - regexp: (3\d\d)
-        fg: "#00ffff"
-        style: crossout
+        name: 3xx
       - regexp: (4\d\d)
-        fg: "#ff0000"
-        style: reverse
+        name: 4xx
       - regexp: (5\d\d)
-        fg: "#ff00ff"
+        name: 5xx
 
 words:
   good:
-    fg: "#52fa8a"
-    style: bold
-    list:
-      - "true"
-      - "complete"
+    - "true"
+    - "complete"
   bad:
-    bg: "#f06c62"
-    list:
-      - "false"
-      - "fail"
+    - "false"
+    - "fail"
   friends:
-    fg: "#f834b2"
-    style: underline
-    list:
-      - "toni"
-      - "wenzel"
+    - "toni"
+    - "wenzel"
   foes:
-    fg: "#120fbb"
-    style: underline
-    list:
-      - "argus"
-      - "cletus"
+    - "argus"
+    - "cletus"
+
+themes:
+  test:
+    formats:
+      menetekel:
+        one:
+          fg: "#f5ce42"
+        two:
+          bg: "#764a9e"
+        three:
+          style: bold
+        four:
+          fg: "#9daf99"
+          bg: "#76fb99"
+          style: underline
+
+      portafisco-patterns:
+        one:
+          fg: "#f5ce42"
+        two:
+          style: patterns
+
+      portafisco-words:
+        one:
+          fg: "#f5ce42"
+        two:
+          style: words
+
+      portafisco-patterns-and-words:
+        one:
+          fg: "#f5ce42"
+        two:
+          style: patterns-and-words
+
+      portafisco-combined:
+        one:
+          fg: "#f5ce42"
+        two:
+          style: patterns
+        three:
+          style: words
+        four:
+          style: patterns-and-words
+
+    patterns:
+      string:
+        fg: "#00ff00"
+
+      ipv4-address:
+        fg: "#ff0000"
+        bg: "#ffff00"
+        style: bold
+
+      number:
+        bg: "#005050"
+
+      http-status-code:
+        default:
+          fg: "#ffffff"
+        1xx:
+          fg: "#505050"
+        2xx:
+          fg: "#00ff00"
+          style: overline
+        3xx:
+          fg: "#00ffff"
+          style: crossout
+        4xx:
+          fg: "#ff0000"
+          style: reverse
+        5xx:
+          fg: "#ff00ff"
+
+    words:
+      good:
+        fg: "#52fa8a"
+        style: bold
+      bad:
+        bg: "#f06c62"
+      friends:
+        fg: "#f834b2"
+        style: underline
+      foes:
+        fg: "#120fbb"
+        style: underline
 `
 	tests := []struct {
 		plain   string
@@ -199,13 +262,14 @@ words:
 	options := Options{
 		ConfigPath: "",
 		NoBuiltins: true,
+		Theme:      "test",
 	}
-	config, err := InitConfig(options, builtins)
+	err = InitConfig(options, builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
 	configRaw := []byte(configData)
-	if err := config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
+	if err := Config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
 		t.Errorf("Error during config loading: %s", err)
 	}
 
@@ -215,7 +279,7 @@ words:
 		output := bytes.Buffer{}
 
 		t.Run(testname, func(t *testing.T) {
-			err := Run(input, &output, config, lemmatizer)
+			err := Run(input, &output, lemmatizer)
 			if err != nil {
 				t.Errorf("Run() failed with this error: %s", err)
 			}
@@ -246,16 +310,16 @@ formats:
   test:
     regexp: bad
 `
-	config, err := InitConfig(options, builtins)
+	err = InitConfig(options, builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
 	configRaw := []byte(configDataBadFormats)
-	if err := config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
+	if err := Config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
 		t.Errorf("Error during config loading: %s", err)
 	}
 	t.Run("TestRunBadFormats", func(t *testing.T) {
-		err := Run(input, &output, config, lemmatizer)
+		err := Run(input, &output, lemmatizer)
 		if err.Error() != `[log format: test] [capture group: bad] regexp bad must start with ( and end with )` {
 			t.Errorf("Run() should have failed with *errors.errorString, got: [%T] %s", err, err)
 		}
@@ -265,16 +329,16 @@ formats:
 patterns:
   string:priority: 100
 `
-	config, err = InitConfig(options, builtins)
+	err = InitConfig(options, builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
 	configRaw = []byte(configDataBadRegExps)
-	if err := config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
+	if err := Config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
 		t.Errorf("Error during config loading: %s", err)
 	}
 	t.Run("TestRunBadRegExps", func(t *testing.T) {
-		err := Run(input, &output, config, lemmatizer)
+		err := Run(input, &output, lemmatizer)
 		if err.Error() != "decoding failed due to the following error(s):\n\n'[0]' expected a map, got 'int'" {
 			t.Errorf("Run() should have failed with *fmt.wrapError, got: [%T] %s", err, err)
 		}
@@ -282,20 +346,21 @@ patterns:
 
 	configDataBadWords := `
 words:
-  good:err: bad
+  good:
+    - []
 `
-	config, err = InitConfig(options, builtins)
+	err = InitConfig(options, builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
 	configRaw = []byte(configDataBadWords)
-	if err := config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
+	if err := Config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
 		t.Errorf("Error during config loading: %s", err)
 	}
 	t.Run("TestRunBadWords", func(t *testing.T) {
-		err := Run(input, &output, config, lemmatizer)
-		if err.Error() != "'' expected a map, got 'string'" {
-			t.Errorf("Run() should have failed with *errors.errorString, got: [%T] %s", err, err)
+		err := Run(input, &output, lemmatizer)
+		if err == nil {
+			t.Errorf("Run() should have failed with an error")
 		}
 	})
 }
@@ -306,6 +371,7 @@ func TestRunBadWriter(t *testing.T) {
 	options := Options{
 		ConfigPath: "",
 		NoBuiltins: true,
+		Theme:      "test",
 	}
 	lemmatizer, err := golem.New(en.New())
 	if err != nil {
@@ -315,18 +381,27 @@ func TestRunBadWriter(t *testing.T) {
 formats:
   test:
     - regexp: (\d{1,3}(\.\d{1,3}){3} )
-      fg: "#f5ce42"
+      name: one
     - regexp: ("[^"]+")
-      fg: "#9daf99"
-      bg: "#76fb99"
-      style: underline
+      name: two
+
+themes:
+  test:
+    formats:
+      test:
+        one:
+          fg: "#f5ce42"
+        two:
+          fg: "#9daf99"
+          bg: "#76fb99"
+          style: underline
 `
-	config, err := InitConfig(options, builtins)
+	err = InitConfig(options, builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
 	configRaw := []byte(configData)
-	if err := config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
+	if err := Config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
 		t.Errorf("Error during config loading: %s", err)
 	}
 	filename := t.TempDir() + "/test.yaml"
@@ -345,7 +420,7 @@ formats:
 
 	input := strings.NewReader("test")
 	t.Run("TestRunBadWriterNotLogFormat", func(t *testing.T) {
-		err := Run(input, file, config, lemmatizer)
+		err := Run(input, file, lemmatizer)
 		if _, ok := err.(*fs.PathError); !ok {
 			t.Errorf("Run() should have failed with *fs.PathError, got: [%T] %s", err, err)
 		}
@@ -353,7 +428,7 @@ formats:
 
 	input = strings.NewReader(`127.0.0.1 "testing"`)
 	t.Run("TestRunBadWriterLogFormat", func(t *testing.T) {
-		err := Run(input, file, config, lemmatizer)
+		err := Run(input, file, lemmatizer)
 		if _, ok := err.(*fs.PathError); !ok {
 			t.Errorf("Run() should have failed with *fs.PathError, got: [%T] %s", err, err)
 		}

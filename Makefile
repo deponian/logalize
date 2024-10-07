@@ -71,7 +71,9 @@ audit:
 .PHONY: test
 test:
 	rm -rf pkg/builtins
+	rm -rf pkg/themes
 	cp -r builtins pkg/
+	cp -r themes pkg/
 	go test -race -coverprofile=coverage.out ./pkg
 	rm -rf pkg/builtins
 

@@ -4,21 +4,25 @@ patterns:
   # 2024-02-17T06:56:10.636960544+01:00
   rfc3339:
     regexps:
+      # 2024-02-17
       - regexp: ([1-9]\d{3}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1\d|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[1-9]\d(?:0[48]|[2468][048]|[13579][26])|(?:[2468][048]|[13579][26])00)-02-29)
-        fg: "#c099ff"
+        name: date
+      # T
       - regexp: (T|t)
-        fg: "#82aaff"
+        name: t-delimiter
+      # 06:56:10.636960544
       - regexp: ((?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d{1,9})?)
-        fg: "#fca7ea"
+        name: time
+      # Z
+      # +01:00
       - regexp: (Z|z|[+-][01]\d:[0-5]\d)
-        fg: "#82aaff"
+        name: offset
 
   # 23:42:12
   # 23:42:12.034123
   time:
     priority: -1
     regexp: (\d{2}:\d{2}:\d{2}(?:\.\d{1,9})?)
-    fg: "#fca7ea"
 
   # 1999-07-10
   # 1999/07/10
@@ -27,7 +31,6 @@ patterns:
   date-1:
     priority: -1
     regexp: (\d{4}[-/]\d{2}[-/]\d{2}|\d{2}[-/]\d{2}[-/]\d{4})
-    fg: "#c099ff"
 
   # 27 Jan
   # 27 January
@@ -40,7 +43,6 @@ patterns:
   date-2:
     priority: -1
     regexp: (\d{1,2}[\t /-](?:January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(?:[\t /-]\d{4})?)
-    fg: "#c099ff"
 
   # Jan 27
   # January 27
@@ -53,14 +55,12 @@ patterns:
   date-3:
     priority: -2
     regexp: ((?:January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[\t /-]\d{1,2}(?:[\t /-]\d{4})?)
-    fg: "#c099ff"
 
   # Mon 17
   # Sunday 3
   date-4:
     priority: -1
     regexp: ((?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|Mon|Tue|Wed|Thu|Fri|Sat|Sun)[\t ]\d{1,2})
-    fg: "#c099ff"
 
   # 5s
   # 7.5h
@@ -69,7 +69,9 @@ patterns:
     priority: -5
     regexps:
       - regexp: (^|[^a-zA-Z0-9])
+      # 7.5
       - regexp: (\d+(?:\.\d+)?)
-        fg: "#4fd6be"
+        name: number
+      # h
       - regexp: (µs|ms|s|m|h|d)
-        fg: "#41a6b5"
+        name: unit

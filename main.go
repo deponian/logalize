@@ -13,6 +13,7 @@ var (
 )
 
 //go:embed builtins/*
+//go:embed themes/*
 var builtins embed.FS
 
 func main() {

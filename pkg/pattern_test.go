@@ -1,6 +1,7 @@
 package logalize
 
 import (
+	"embed"
 	"fmt"
 	"regexp"
 	"testing"
@@ -9,7 +10,6 @@ import (
 	"github.com/aaaton/golem/v4/dicts/en"
 	"github.com/knadh/koanf/parsers/yaml"
 	"github.com/knadh/koanf/providers/rawbytes"
-	"github.com/knadh/koanf/v2"
 	"github.com/muesli/termenv"
 )
 
@@ -19,25 +19,38 @@ patterns:
   string:
     priority: 500
     regexp: ("[^"]+"|'[^']+')
-    fg: "#00ff00"
 
   number:
     regexp: (\d+)
-    bg: "#00ffff"
-    style: bold
 
   ipv4-address:
     regexps:
       - regexp: (\d\d\d(\.\d\d\d){3})
-        fg: "#ffc777"
+        name: one
       - regexp: ((:\d{1,5})?)
-        fg: "#ff966c"
+        name: two
+
+themes:
+  test:
+    patterns:
+      string:
+        fg: "#00ff00"
+
+      number:
+        bg: "#00ffff"
+        style: bold
+
+      ipv4-address:
+        one:
+          fg: "#ffc777"
+        two:
+          fg: "#ff966c"
 `
 	correctPatterns := []Pattern{
 		{"string", 500, &CapGroupList{
 			[]CapGroup{
 				{
-					`("[^"]+"|'[^']+')`, "#00ff00", "", "", nil,
+					"", `("[^"]+"|'[^']+')`, "#00ff00", "", "", nil,
 					regexp.MustCompile(`("[^"]+"|'[^']+')`),
 				},
 			},
@@ -46,11 +59,11 @@ patterns:
 		{"ipv4-address", 0, &CapGroupList{
 			[]CapGroup{
 				{
-					`(\d\d\d(\.\d\d\d){3})`, "#ffc777", "", "", nil,
+					"", `(\d\d\d(\.\d\d\d){3})`, "#ffc777", "", "", nil,
 					regexp.MustCompile(`(\d\d\d(\.\d\d\d){3})`),
 				},
 				{
-					`((:\d{1,5})?)`, "#ff966c", "", "", nil,
+					"", `((:\d{1,5})?)`, "#ff966c", "", "", nil,
 					regexp.MustCompile(`((:\d{1,5})?)`),
 				},
 			},
@@ -59,7 +72,7 @@ patterns:
 		{"number", 0, &CapGroupList{
 			[]CapGroup{
 				{
-					`(\d+)`, "", "#00ffff", "bold", nil,
+					"", `(\d+)`, "", "#00ffff", "bold", nil,
 					regexp.MustCompile(`(\d+)`),
 				},
 			},
@@ -79,13 +92,25 @@ patterns:
 
 	colorProfile = termenv.TrueColor
 
-	config := koanf.New(".")
+	var builtins embed.FS
+	options := Options{
+		ConfigPath: "",
+		NoBuiltins: true,
+		Theme:      "test",
+	}
+
+	err := InitConfig(options, builtins)
+	if err != nil {
+		t.Errorf("InitConfig() failed with this error: %s", err)
+	}
+
 	configRaw := []byte(configData)
-	if err := config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
+	if err := Config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
 		t.Errorf("Error during config loading: %s", err)
 	}
+
 	t.Run("TestPatternsInit", func(t *testing.T) {
-		if err := initPatterns(config); err != nil {
+		if err := initPatterns(); err != nil {
 			t.Errorf("InitPatterns() failed with this error: %s", err)
 		}
 
@@ -100,13 +125,18 @@ patterns:
 patterns:
   string:priority: 100
 `
-	config = koanf.New(".")
+	err = InitConfig(options, builtins)
+	if err != nil {
+		t.Errorf("InitConfig() failed with this error: %s", err)
+	}
+
 	configRaw = []byte(configDataBadYAML1)
-	if err := config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
+	if err := Config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
 		t.Errorf("Error during config loading: %s", err)
 	}
+
 	t.Run("TestPatternsInitBadYAML1", func(t *testing.T) {
-		if err := initPatterns(config); err == nil {
+		if err := initPatterns(); err == nil {
 			t.Errorf("InitPatterns() should have failed")
 		}
 	})
@@ -116,13 +146,18 @@ patterns:
   test:
     regexps: 4
 `
-	config = koanf.New(".")
+	err = InitConfig(options, builtins)
+	if err != nil {
+		t.Errorf("InitConfig() failed with this error: %s", err)
+	}
+
 	configRaw = []byte(configDataBadYAML2)
-	if err := config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
+	if err := Config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
 		t.Errorf("Error during config loading: %s", err)
 	}
+
 	t.Run("TestPatternsInitBadYAML2", func(t *testing.T) {
-		if err := initPatterns(config); err == nil {
+		if err := initPatterns(); err == nil {
 			t.Errorf("InitPatterns() should have failed")
 		}
 	})
@@ -133,13 +168,18 @@ patterns:
     priority: 100
     regexp: .*
 `
-	config = koanf.New(".")
+	err = InitConfig(options, builtins)
+	if err != nil {
+		t.Errorf("InitConfig() failed with this error: %s", err)
+	}
+
 	configRaw = []byte(configDataBadRegExp)
-	if err := config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
+	if err := Config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
 		t.Errorf("Error during config loading: %s", err)
 	}
+
 	t.Run("TestPatternsInitBadRegExp", func(t *testing.T) {
-		if err := initPatterns(config); err == nil {
+		if err := initPatterns(); err == nil {
 			t.Errorf("InitPatterns() should have failed")
 		}
 	})
@@ -148,15 +188,25 @@ patterns:
 patterns:
   string:
     regexp: (.*)
-    style: hello
+
+themes:
+  test:
+    patterns:
+      string:
+        style: hello
 `
-	config = koanf.New(".")
+	err = InitConfig(options, builtins)
+	if err != nil {
+		t.Errorf("InitConfig() failed with this error: %s", err)
+	}
+
 	configRaw = []byte(configDataBadStyle)
-	if err := config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
+	if err := Config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
 		t.Errorf("Error during config loading: %s", err)
 	}
+
 	t.Run("TestPatternsInitBadRegExp", func(t *testing.T) {
-		if err := initPatterns(config); err == nil {
+		if err := initPatterns(); err == nil {
 			t.Errorf("InitPatterns() should have failed")
 		}
 	})
@@ -168,50 +218,79 @@ patterns:
   string:
     priority: 500
     regexp: ("[^"]+"|'[^']+')
-    fg: "#00ff00"
 
   ipv4-address:
     priority: 400
     regexp: (\d{1,3}(\.\d{1,3}){3})
-    fg: "#ff0000"
-    bg: "#ffff00"
-    style: bold
 
   number:
     regexp: (\d+)
-    bg: "#005050"
 
-  http-status-code:
+  http-status:
     priority: 300
-    regexp: (\d\d\d)
-    fg: "#ffffff"
-    alternatives:
-      - regexp: (1\d\d)
-        fg: "#505050"
-      - regexp: (2\d\d)
-        fg: "#00ff00"
-        style: overline
-      - regexp: (3\d\d)
-        fg: "#00ffff"
-        style: crossout
-      - regexp: (4\d\d)
-        fg: "#ff0000"
-        style: reverse
-      - regexp: (5\d\d)
-        fg: "#ff00ff"
+    regexps:
+    - regexp: (status:)
+      name: status
+    - regexp: (\d\d\d)
+      name: code
+      alternatives:
+        - regexp: (1\d\d)
+          name: 1xx
+        - regexp: (2\d\d)
+          name: 2xx
+        - regexp: (3\d\d)
+          name: 3xx
+        - regexp: (4\d\d)
+          name: 4xx
+        - regexp: (5\d\d)
+          name: 5xx
 
 words:
   good:
-    fg: "#52fa8a"
-    style: bold
-    list:
-      - "true"
+    - "true"
   bad:
-    bg: "#f06c62"
-    style: underline
-    list:
-      - "fail"
-      - "fatal"
+    - "fail"
+    - "fatal"
+
+themes:
+  test:
+    patterns:
+      string:
+        fg: "#00ff00"
+
+      ipv4-address:
+        fg: "#ff0000"
+        bg: "#ffff00"
+        style: bold
+
+      number:
+        bg: "#005050"
+
+      http-status:
+        code:
+          default:
+            fg: "#ffffff"
+          1xx:
+            fg: "#505050"
+          2xx:
+            fg: "#00ff00"
+            style: overline
+          3xx:
+            fg: "#00ffff"
+            style: crossout
+          4xx:
+            fg: "#ff0000"
+            style: reverse
+          5xx:
+            fg: "#ff00ff"
+
+    words:
+      good:
+        fg: "#52fa8a"
+        style: bold
+      bad:
+        bg: "#f06c62"
+        style: underline
 `
 	tests := []struct {
 		plain   string
@@ -221,17 +300,17 @@ words:
 		{`"string"`, "\x1b[38;2;0;255;0m\"string\"\x1b[0m"},
 		{"42", "\x1b[48;2;0;80;80m42\x1b[0m"},
 		{"127.0.0.1", "\x1b[38;2;255;0;0;48;2;255;255;0;1m127.0.0.1\x1b[0m"},
-		{`"test": 127.7.7.7 hello 101`, "\x1b[38;2;0;255;0m\"test\"\x1b[0m: \x1b[38;2;255;0;0;48;2;255;255;0;1m127.7.7.7\x1b[0m hello \x1b[38;2;80;80;80m101\x1b[0m"},
+		{`"test": 127.7.7.7 hello 101`, "\x1b[38;2;0;255;0m\"test\"\x1b[0m: \x1b[38;2;255;0;0;48;2;255;255;0;1m127.7.7.7\x1b[0m hello \x1b[48;2;0;80;80m101\x1b[0m"},
 		{`true bad fail`, "\x1b[38;2;81;250;138;1mtrue\x1b[0m bad \x1b[48;2;240;108;97;4mfail\x1b[0m"},
 		{`"true"`, "\x1b[38;2;0;255;0m\"true\"\x1b[0m"},
 		{`"42"`, "\x1b[38;2;0;255;0m\"42\"\x1b[0m"},
 		{`"237.7.7.7"`, "\x1b[38;2;0;255;0m\"237.7.7.7\"\x1b[0m"},
-		{`status 103`, "status \x1b[38;2;80;80;80m103\x1b[0m"},
-		{`status 200`, "status \x1b[38;2;0;255;0;53m200\x1b[0m"},
-		{`status 302`, "status \x1b[38;2;0;255;255;9m302\x1b[0m"},
-		{`status 404`, "status \x1b[38;2;255;0;0;7m404\x1b[0m"},
-		{`status 503`, "status \x1b[38;2;255;0;255m503\x1b[0m"},
-		{`status 700`, "status \x1b[38;2;255;255;255m700\x1b[0m"},
+		{`status:103`, "status:\x1b[38;2;80;80;80m103\x1b[0m"},
+		{`status:200`, "status:\x1b[38;2;0;255;0;53m200\x1b[0m"},
+		{`status:302`, "status:\x1b[38;2;0;255;255;9m302\x1b[0m"},
+		{`status:404`, "status:\x1b[38;2;255;0;0;7m404\x1b[0m"},
+		{`status:503`, "status:\x1b[38;2;255;0;255m503\x1b[0m"},
+		{`status:700`, "status:\x1b[38;2;255;255;255m700\x1b[0m"},
 	}
 
 	lemmatizer, err := golem.New(en.New())
@@ -241,17 +320,30 @@ words:
 
 	colorProfile = termenv.TrueColor
 
+	var builtins embed.FS
+	options := Options{
+		ConfigPath: "",
+		NoBuiltins: true,
+		Theme:      "test",
+	}
+
 	for _, tt := range tests {
 		testname := tt.plain
-		config := koanf.New(".")
+
+		err := InitConfig(options, builtins)
+		if err != nil {
+			t.Errorf("InitConfig() failed with this error: %s", err)
+		}
+
 		configRaw := []byte(configDataGood)
-		if err := config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
+		if err := Config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
 			t.Errorf("Error during config loading: %s", err)
 		}
-		if err := initPatterns(config); err != nil {
+
+		if err := initPatterns(); err != nil {
 			t.Errorf("InitPatterns() failed with this error: %s", err)
 		}
-		if err := initWords(config, lemmatizer); err != nil {
+		if err := initWords(lemmatizer); err != nil {
 			t.Errorf("InitWords() failed with this error: %s", err)
 		}
 		t.Run(testname, func(t *testing.T) {

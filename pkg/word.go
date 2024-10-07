@@ -6,15 +6,14 @@ import (
 	"strings"
 
 	"github.com/aaaton/golem/v4"
-	"github.com/knadh/koanf/v2"
 )
 
 type WordGroup struct {
-	Name       string   `koanf:"name"`
-	List       []string `koanf:"list"`
-	Foreground string   `koanf:"fg"`
-	Background string   `koanf:"bg"`
-	Style      string   `koanf:"style"`
+	Name       string
+	List       []string
+	Foreground string
+	Background string
+	Style      string
 }
 
 type WordGroups struct {
@@ -28,12 +27,19 @@ var Words WordGroups
 
 // InitWords initializes global list of words collected
 // from *koanf.Koanf configuration
-func initWords(config *koanf.Koanf, lemmatizer *golem.Lemmatizer) error {
+func initWords(lemmatizer *golem.Lemmatizer) error {
 	Words = WordGroups{}
-	for _, wordGroupName := range config.MapKeys("words") {
+	for _, wordGroupName := range Config.MapKeys("words") {
 		var wordGroup WordGroup
+
 		wordGroup.Name = wordGroupName
-		if err := config.Unmarshal("words."+wordGroupName, &wordGroup); err != nil {
+
+		path := "themes." + Opts.Theme + ".words." + wordGroupName + "."
+		wordGroup.Foreground = Config.String(path + "fg")
+		wordGroup.Background = Config.String(path + "bg")
+		wordGroup.Style = Config.String(path + "style")
+
+		if err := Config.Unmarshal("words."+wordGroupName, &wordGroup.List); err != nil {
 			return err
 		}
 

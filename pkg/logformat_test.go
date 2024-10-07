@@ -1,12 +1,12 @@
 package logalize
 
 import (
+	"embed"
 	"regexp"
 	"testing"
 
 	"github.com/knadh/koanf/parsers/yaml"
 	"github.com/knadh/koanf/providers/rawbytes"
-	"github.com/knadh/koanf/v2"
 	"github.com/muesli/termenv"
 )
 
@@ -15,46 +15,72 @@ func TestLogFormatsInit(t *testing.T) {
 formats:
   test:
     - regexp: (\d{1,3}(\.\d{1,3}){3} )
-      fg: "#f5ce42"
+      name: one
     - regexp: ([^ ]+ )
-      bg: "#764a9e"
+      name: two
     - regexp: (\[.+\] )
-      style: bold
+      name: three
     - regexp: ("[^"]+")
-      fg: "#9daf99"
-      bg: "#76fb99"
-      style: underline
+      name: four
     - regexp: (\d\d\d)
+      name: five
       alternatives:
         - regexp: (1\d\d)
-          fg: "#505050"
+          name: 1
         - regexp: (2\d\d)
-          fg: "#00ff00"
-          style: overline
+          name: 2
         - regexp: (3\d\d)
-          fg: "#00ffff"
-          style: crossout
+          name: 3
         - regexp: (4\d\d)
-          fg: "#ff0000"
-          style: reverse
+          name: 4
         - regexp: (5\d\d)
-          fg: "#ff00ff"
+          name: 5
+
+themes:
+  test:
+    formats:
+      test:
+        one:
+          fg: "#f5ce42"
+        two:
+          bg: "#764a9e"
+        three:
+          style: bold
+        four:
+          fg: "#9daf99"
+          bg: "#76fb99"
+          style: underline
+        five:
+          1:
+            fg: "#505050"
+          2:
+            fg: "#00ff00"
+            style: overline
+          3:
+            fg: "#00ffff"
+            style: crossout
+          4:
+            fg: "#ff0000"
+            style: reverse
+          5:
+            fg: "#ff00ff"
 `
 
 	correctCapGroupList := CapGroupList{
 		[]CapGroup{
-			{`(\d{1,3}(\.\d{1,3}){3} )`, "#f5ce42", "", "", nil, regexp.MustCompile(`(\d{1,3}(\.\d{1,3}){3} )`)},
-			{`([^ ]+ )`, "", "#764a9e", "", nil, regexp.MustCompile(`([^ ]+ )`)},
-			{`(\[.+\] )`, "", "", "bold", nil, regexp.MustCompile(`(\[.+\] )`)},
-			{`("[^"]+")`, "#9daf99", "#76fb99", "underline", nil, regexp.MustCompile(`("[^"]+")`)},
+			{"one", `(\d{1,3}(\.\d{1,3}){3} )`, "#f5ce42", "", "", nil, regexp.MustCompile(`(\d{1,3}(\.\d{1,3}){3} )`)},
+			{"two", `([^ ]+ )`, "", "#764a9e", "", nil, regexp.MustCompile(`([^ ]+ )`)},
+			{"three", `(\[.+\] )`, "", "", "bold", nil, regexp.MustCompile(`(\[.+\] )`)},
+			{"four", `("[^"]+")`, "#9daf99", "#76fb99", "underline", nil, regexp.MustCompile(`("[^"]+")`)},
 			{
+				"five",
 				`(\d\d\d)`, "", "", "",
 				[]CapGroup{
-					{`(1\d\d)`, "#505050", "", "", nil, regexp.MustCompile(`(1\d\d)`)},
-					{`(2\d\d)`, "#00ff00", "", "overline", nil, regexp.MustCompile(`(2\d\d)`)},
-					{`(3\d\d)`, "#00ffff", "", "crossout", nil, regexp.MustCompile(`(3\d\d)`)},
-					{`(4\d\d)`, "#ff0000", "", "reverse", nil, regexp.MustCompile(`(4\d\d)`)},
-					{`(5\d\d)`, "#ff00ff", "", "", nil, regexp.MustCompile(`(5\d\d)`)},
+					{"1", `(1\d\d)`, "#505050", "", "", nil, regexp.MustCompile(`(1\d\d)`)},
+					{"2", `(2\d\d)`, "#00ff00", "", "overline", nil, regexp.MustCompile(`(2\d\d)`)},
+					{"3", `(3\d\d)`, "#00ffff", "", "crossout", nil, regexp.MustCompile(`(3\d\d)`)},
+					{"4", `(4\d\d)`, "#ff0000", "", "reverse", nil, regexp.MustCompile(`(4\d\d)`)},
+					{"5", `(5\d\d)`, "#ff00ff", "", "", nil, regexp.MustCompile(`(5\d\d)`)},
 				},
 				regexp.MustCompile(`(\d\d\d)`),
 			},
@@ -64,13 +90,24 @@ formats:
 
 	colorProfile = termenv.TrueColor
 
-	config := koanf.New(".")
+	var builtins embed.FS
+	options := Options{
+		ConfigPath: "",
+		NoBuiltins: true,
+		Theme:      "test",
+	}
+
+	err := InitConfig(options, builtins)
+	if err != nil {
+		t.Errorf("InitConfig() failed with this error: %s", err)
+	}
+
 	configRaw := []byte(configData)
-	if err := config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
+	if err := Config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
 		t.Errorf("Error during config loading: %s", err)
 	}
 	t.Run("TestFormatsInit", func(t *testing.T) {
-		if err := initLogFormats(config); err != nil {
+		if err := initLogFormats(); err != nil {
 			t.Errorf("InitLogFormats() failed with this error: %s", err)
 		}
 
@@ -84,13 +121,17 @@ formats:
   test:
   regexp: bad
 `
-	config = koanf.New(".")
+	err = InitConfig(options, builtins)
+	if err != nil {
+		t.Errorf("InitConfig() failed with this error: %s", err)
+	}
+
 	configRaw = []byte(configDataBadYAML)
-	if err := config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
+	if err := Config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
 		t.Errorf("Error during config loading: %s", err)
 	}
 	t.Run("TestFormatsInitBadYAML", func(t *testing.T) {
-		if err := initLogFormats(config); err == nil {
+		if err := initLogFormats(); err == nil {
 			t.Errorf("InitLogFormats() should have failed")
 		}
 	})
@@ -99,17 +140,30 @@ formats:
 formats:
   test:
     - regexp: 'd{1,3}(\.\d{1,3}){3}'
-      fg: "#f5ce42"
+      name: one
     - regexp: '[^ ]+'
-      bg: "#764a9e"
+      name: two
+
+themes:
+  test:
+    formats:
+      test:
+        one:
+          fg: "#f5ce42"
+        two:
+          bg: "#764a9e"
 `
-	config = koanf.New(".")
+	err = InitConfig(options, builtins)
+	if err != nil {
+		t.Errorf("InitConfig() failed with this error: %s", err)
+	}
+
 	configRaw = []byte(configDataBadRegExp)
-	if err := config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
+	if err := Config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
 		t.Errorf("Error during config loading: %s", err)
 	}
 	t.Run("TestFormatsInitBadRegExp", func(t *testing.T) {
-		if err := initLogFormats(config); err == nil {
+		if err := initLogFormats(); err == nil {
 			t.Errorf("InitLogFormats() should have failed")
 		}
 	})
@@ -120,15 +174,28 @@ func TestLogFormatHighlight(t *testing.T) {
 formats:
   test:
     - regexp: (\d{1,3}(\.\d{1,3}){3} )
-      fg: "#f5ce42"
+      name: one
     - regexp: ([^ ]+ )
-      bg: "#764a9e"
+      name: two
     - regexp: (\[.+\] )
-      style: bold
+      name: three
     - regexp: ("[^"]+")
-      fg: "#9daf99"
-      bg: "#76fb99"
-      style: underline
+      name: four
+
+themes:
+  test:
+    formats:
+      test:
+        one:
+          fg: "#f5ce42"
+        two:
+          bg: "#764a9e"
+        three:
+          style: bold
+        four:
+          fg: "#9daf99"
+          bg: "#76fb99"
+          style: underline
 `
 	tests := []struct {
 		plain   string
@@ -141,15 +208,27 @@ formats:
 
 	colorProfile = termenv.TrueColor
 
+	var builtins embed.FS
+	options := Options{
+		ConfigPath: "",
+		NoBuiltins: true,
+		Theme:      "test",
+	}
+
 	for _, tt := range tests {
 		testname := tt.plain
-		config := koanf.New(".")
+
+		err := InitConfig(options, builtins)
+		if err != nil {
+			t.Errorf("InitConfig() failed with this error: %s", err)
+		}
+
 		configRaw := []byte(configData)
-		if err := config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
+		if err := Config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
 			t.Errorf("Error during config loading: %s", err)
 		}
 
-		if err := initLogFormats(config); err != nil {
+		if err := initLogFormats(); err != nil {
 			t.Errorf("InitLogFormats() failed with this error: %s", err)
 		}
 		t.Run(testname, func(t *testing.T) {

@@ -12,46 +12,40 @@ formats:
   redis:
     # PID
     - regexp: (\d+)
-      fg: "#9aadec"
+      name: pid
     # :
     - regexp: (:)
-      fg: "#636da6"
+      name: colon
     # ROLE
     - regexp: ([MSXC] )
+      name: role
       alternatives:
         - regexp: (M )
-          fg: "#ff757f"
-          style: bold
+          name: master
         - regexp: (S )
-          fg: "#82aaff"
-          style: bold
+          name: replica
         - regexp: (X )
-          fg: "#ffc777"
-          style: bold
+          name: sentinel
         - regexp: (C )
-          fg: "#b8db87"
-          style: bold
+          name: rdb-aof-writing-child
     # day month year
     - regexp: (\d{1,2} [A-Za-z]+ \d{4} )
-      fg: "#c099ff"
+      name: date
     # hh:mm:ss.uuu
     - regexp: (\d{2}:\d{2}:\d{2}\.\d{3} )
-      fg: "#fca7ea"
+      name: time
     # log-level-char
     - regexp: ([#*-.] )
+      name: log-level
       alternatives:
         - regexp: (# )
-          fg: "#ffc777"
-          style: bold
+          name: warning
         - regexp: (\* )
-          fg: "#89ddff"
-          style: bold
+          name: notice
         - regexp: (- )
-          fg: "#82aaff"
-          style: bold
+          name: info
         - regexp: (\. )
-          fg: "#b8db87"
-          style: bold
+          name: debug
     # msg
     - regexp: (.*)
-      style: "patterns-and-words"
+      name: message

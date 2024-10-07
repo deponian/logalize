@@ -4,23 +4,23 @@ patterns:
     priority: 1
     regexps:
       - regexp: ((?:^|[\t ]+)[^=\t ]+)
-        fg: "#9aadec"
+        name: key
       - regexp: (=)
-        fg: "#636da6"
+        name: equal-sign
       - regexp: ([^\s]+)
-        style: patterns-and-words
+        name: value
 
   # xxxxx="xxxxxxx"
   logfmt-string:
     priority: 2
     regexps:
       - regexp: ((?:^|[\t ]+)[^=\t ]+)
-        fg: "#9aadec"
+        name: key
       - regexp: (=)
-        fg: "#636da6"
+        name: equal-sign
       - regexp: (")
-        fg: "#9aadec"
+        name: opening-quotation-mark
       - regexp: (.+?[^\\])
-        style: patterns-and-words
+        name: value
       - regexp: (")
-        fg: "#9aadec"
+        name: closing-quotation-mark

@@ -21,34 +21,31 @@ formats:
   klog:
     # Lmmdd
     - regexp: ([IWEF][0-9]{4} )
+      name: log-level
       alternatives:
         - regexp: (I[0-9]{4} )
-          fg: "#82aaff"
-          style: bold
+          name: info
         - regexp: (W[0-9]{4} )
-          fg: "#ffc777"
-          style: bold
+          name: warning
         - regexp: (E[0-9]{4} )
-          fg: "#ff757f"
-          style: bold
+          name: error
         - regexp: (F[0-9]{4} )
-          fg: "#c53b53"
-          style: bold
+          name: fatal
     # hh:mm:ss.uuuuuu
     - regexp: ([0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]{6})
-      fg: "#fca7ea"
+      name: time
     # threadid
     - regexp: ([[:space:]]+[0-9]+ )
-      fg: "#636da6"
+      name: thread-id
     # file
     - regexp: ([^:]+)
-      fg: "#89ddff"
+      name: filename
     # line
     - regexp: (:[0-9]+)
-      fg: "#636da6"
+      name: line-number
     # ]
     - regexp: (\] )
-      fg: "#ff966c"
+      name: bracket
     # msg
     - regexp: (.*)
-      style: "patterns-and-words"
+      name: message
