@@ -76,6 +76,7 @@ test:
 	cp -r themes pkg/
 	go test -race -coverprofile=coverage.out ./pkg
 	rm -rf pkg/builtins
+	rm -rf pkg/themes
 
 ## coverage-func: run all tests and display coverage with "-func"
 .PHONY: coverage-func

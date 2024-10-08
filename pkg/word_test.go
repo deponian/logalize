@@ -3,13 +3,12 @@ package logalize
 import (
 	"embed"
 	"fmt"
+	"os"
 	"testing"
 
 	"github.com/aaaton/golem/v4"
 	"github.com/aaaton/golem/v4/dicts/en"
 	"github.com/google/go-cmp/cmp"
-	"github.com/knadh/koanf/parsers/yaml"
-	"github.com/knadh/koanf/providers/rawbytes"
 	"github.com/muesli/termenv"
 )
 
@@ -58,8 +57,15 @@ themes:
 	}
 
 	var builtins embed.FS
+
+	testConfig := t.TempDir() + "/testConfig.yaml"
+	configRaw := []byte(configDataGood)
+	err = os.WriteFile(testConfig, configRaw, 0644)
+	if err != nil {
+		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
+	}
 	options := Options{
-		ConfigPath: "",
+		ConfigPath: testConfig,
 		NoBuiltins: true,
 		Theme:      "test",
 	}
@@ -67,10 +73,6 @@ themes:
 	err = InitConfig(options, builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
-	}
-	configRaw := []byte(configDataGood)
-	if err := Config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
-		t.Errorf("Error during config loading: %s", err)
 	}
 
 	t.Run("TestWordsInitGood", func(t *testing.T) {
@@ -92,15 +94,27 @@ themes:
 words:
   bad:
     - []
+themes:
+  test:
 `
+
+	testConfig = t.TempDir() + "/testConfig.yaml"
+	configRaw = []byte(configDataBadYAML)
+	err = os.WriteFile(testConfig, configRaw, 0644)
+	if err != nil {
+		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
+	}
+	options = Options{
+		ConfigPath: testConfig,
+		NoBuiltins: true,
+		Theme:      "test",
+	}
+
 	err = InitConfig(options, builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
-	configRaw = []byte(configDataBadYAML)
-	if err := Config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
-		t.Errorf("Error during config loading: %s", err)
-	}
+
 	t.Run("TestWordsInitBadYAML", func(t *testing.T) {
 		if err := initWords(lemmatizer); err == nil {
 			fmt.Println(Words)
@@ -120,14 +134,24 @@ themes:
         fg: "#52fa8a"
         style: patterns
 `
+
+	testConfig = t.TempDir() + "/testConfig.yaml"
+	configRaw = []byte(configDataBadStyle)
+	err = os.WriteFile(testConfig, configRaw, 0644)
+	if err != nil {
+		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
+	}
+	options = Options{
+		ConfigPath: testConfig,
+		NoBuiltins: true,
+		Theme:      "test",
+	}
+
 	err = InitConfig(options, builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
-	configRaw = []byte(configDataBadStyle)
-	if err := Config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
-		t.Errorf("Error during config loading: %s", err)
-	}
+
 	t.Run("TestWordsInitBadStyle", func(t *testing.T) {
 		if err := initWords(lemmatizer); err == nil {
 			t.Errorf("InitWords() should have failed")
@@ -230,8 +254,15 @@ themes:
 	}
 
 	var builtins embed.FS
+
+	testConfig := t.TempDir() + "/testConfig.yaml"
+	configRaw := []byte(configData)
+	err = os.WriteFile(testConfig, configRaw, 0644)
+	if err != nil {
+		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
+	}
 	options := Options{
-		ConfigPath: "",
+		ConfigPath: testConfig,
 		NoBuiltins: true,
 		Theme:      "test",
 	}
@@ -242,11 +273,6 @@ themes:
 		err = InitConfig(options, builtins)
 		if err != nil {
 			t.Errorf("InitConfig() failed with this error: %s", err)
-		}
-
-		configRaw := []byte(configData)
-		if err := Config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
-			t.Errorf("Error during config loading: %s", err)
 		}
 
 		if err := initWords(lemmatizer); err != nil {
@@ -335,8 +361,15 @@ themes:
 	}
 
 	var builtins embed.FS
+
+	testConfig := t.TempDir() + "/testConfig.yaml"
+	configRaw := []byte(configData)
+	err = os.WriteFile(testConfig, configRaw, 0644)
+	if err != nil {
+		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
+	}
 	options := Options{
-		ConfigPath: "",
+		ConfigPath: testConfig,
 		NoBuiltins: true,
 		Theme:      "test",
 	}
@@ -347,11 +380,6 @@ themes:
 		err = InitConfig(options, builtins)
 		if err != nil {
 			t.Errorf("InitConfig() failed with this error: %s", err)
-		}
-
-		configRaw := []byte(configData)
-		if err := Config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
-			t.Errorf("Error during config loading: %s", err)
 		}
 
 		if err := initWords(lemmatizer); err != nil {
@@ -447,8 +475,15 @@ themes:
 	}
 
 	var builtins embed.FS
+
+	testConfig := t.TempDir() + "/testConfig.yaml"
+	configRaw := []byte(configData)
+	err = os.WriteFile(testConfig, configRaw, 0644)
+	if err != nil {
+		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
+	}
 	options := Options{
-		ConfigPath: "",
+		ConfigPath: testConfig,
 		NoBuiltins: true,
 		Theme:      "test",
 	}
@@ -459,11 +494,6 @@ themes:
 		err = InitConfig(options, builtins)
 		if err != nil {
 			t.Errorf("InitConfig() failed with this error: %s", err)
-		}
-
-		configRaw := []byte(configData)
-		if err := Config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
-			t.Errorf("Error during config loading: %s", err)
 		}
 
 		if err := initWords(lemmatizer); err != nil {

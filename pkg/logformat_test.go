@@ -2,11 +2,10 @@ package logalize
 
 import (
 	"embed"
+	"os"
 	"regexp"
 	"testing"
 
-	"github.com/knadh/koanf/parsers/yaml"
-	"github.com/knadh/koanf/providers/rawbytes"
 	"github.com/muesli/termenv"
 )
 
@@ -91,21 +90,25 @@ themes:
 	colorProfile = termenv.TrueColor
 
 	var builtins embed.FS
+
+	testConfig := t.TempDir() + "/testConfig.yaml"
+	configRaw := []byte(configData)
+	err := os.WriteFile(testConfig, configRaw, 0644)
+	if err != nil {
+		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
+	}
+
 	options := Options{
-		ConfigPath: "",
+		ConfigPath: testConfig,
 		NoBuiltins: true,
 		Theme:      "test",
 	}
 
-	err := InitConfig(options, builtins)
+	err = InitConfig(options, builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
 
-	configRaw := []byte(configData)
-	if err := Config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
-		t.Errorf("Error during config loading: %s", err)
-	}
 	t.Run("TestFormatsInit", func(t *testing.T) {
 		if err := initLogFormats(); err != nil {
 			t.Errorf("InitLogFormats() failed with this error: %s", err)
@@ -120,16 +123,27 @@ themes:
 formats:
   test:
   regexp: bad
+themes:
+  test:
 `
+	testConfig = t.TempDir() + "/testConfig.yaml"
+	configRaw = []byte(configDataBadYAML)
+	err = os.WriteFile(testConfig, configRaw, 0644)
+	if err != nil {
+		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
+	}
+
+	options = Options{
+		ConfigPath: testConfig,
+		NoBuiltins: true,
+		Theme:      "test",
+	}
+
 	err = InitConfig(options, builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
 
-	configRaw = []byte(configDataBadYAML)
-	if err := Config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
-		t.Errorf("Error during config loading: %s", err)
-	}
 	t.Run("TestFormatsInitBadYAML", func(t *testing.T) {
 		if err := initLogFormats(); err == nil {
 			t.Errorf("InitLogFormats() should have failed")
@@ -153,15 +167,24 @@ themes:
         two:
           bg: "#764a9e"
 `
+	testConfig = t.TempDir() + "/testConfig.yaml"
+	configRaw = []byte(configDataBadRegExp)
+	err = os.WriteFile(testConfig, configRaw, 0644)
+	if err != nil {
+		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
+	}
+
+	options = Options{
+		ConfigPath: testConfig,
+		NoBuiltins: true,
+		Theme:      "test",
+	}
+
 	err = InitConfig(options, builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
 
-	configRaw = []byte(configDataBadRegExp)
-	if err := Config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
-		t.Errorf("Error during config loading: %s", err)
-	}
 	t.Run("TestFormatsInitBadRegExp", func(t *testing.T) {
 		if err := initLogFormats(); err == nil {
 			t.Errorf("InitLogFormats() should have failed")
@@ -209,8 +232,16 @@ themes:
 	colorProfile = termenv.TrueColor
 
 	var builtins embed.FS
+
+	testConfig := t.TempDir() + "/testConfig.yaml"
+	configRaw := []byte(configData)
+	err := os.WriteFile(testConfig, configRaw, 0644)
+	if err != nil {
+		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
+	}
+
 	options := Options{
-		ConfigPath: "",
+		ConfigPath: testConfig,
 		NoBuiltins: true,
 		Theme:      "test",
 	}
@@ -221,11 +252,6 @@ themes:
 		err := InitConfig(options, builtins)
 		if err != nil {
 			t.Errorf("InitConfig() failed with this error: %s", err)
-		}
-
-		configRaw := []byte(configData)
-		if err := Config.Load(rawbytes.Provider(configRaw), yaml.Parser()); err != nil {
-			t.Errorf("Error during config loading: %s", err)
 		}
 
 		if err := initLogFormats(); err != nil {
