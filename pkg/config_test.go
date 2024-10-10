@@ -1352,7 +1352,7 @@ themes:
 
 	t.Run("TestConfigThemeIsNotDefined", func(t *testing.T) {
 		err := InitConfig(optionsBad, builtins)
-		if err == nil || err.Error() != "Theme \"idontexist\" is not defined" {
+		if err == nil || err.Error() != "Theme \"idontexist\" is not defined. Use --list-themes/-T flag to see the list of all available themes" {
 			t.Errorf("InitConfig() should have failed with \"Theme \"idontexist\" is not defined\", got: [%T] %s", err, err)
 		}
 	})

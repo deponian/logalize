@@ -15,7 +15,8 @@ import (
 type Options struct {
 	ConfigPath string // path to configuration file
 
-	Theme string // the name of the theme to be used
+	Theme      string // the name of the theme to be used
+	ListThemes bool   // list all available themes
 
 	PrintBuiltins bool // print built-in log formats and words
 
@@ -57,7 +58,7 @@ func InitConfig(opts Options, builtins fs.FS) error {
 
 	// check theme availability
 	if !config.Exists("themes." + Opts.Theme) {
-		return fmt.Errorf("Theme \"%s\" is not defined", Opts.Theme)
+		return fmt.Errorf("Theme \"%s\" is not defined. Use --list-themes/-T flag to see the list of all available themes", Opts.Theme)
 	}
 
 	// keep in the config only things we want to colorize

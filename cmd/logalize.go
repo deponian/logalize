@@ -11,6 +11,7 @@ import (
 	"github.com/aaaton/golem/v4"
 	"github.com/aaaton/golem/v4/dicts/en"
 	logalize "github.com/deponian/logalize/pkg"
+	"github.com/knadh/koanf/v2"
 	"github.com/spf13/cobra"
 )
 
@@ -47,6 +48,12 @@ It's fast and extensible alternative to ccze and colorize.`,
 				log.Fatal(err)
 			}
 
+			// list themes
+			if options.ListThemes {
+				listThemes(logalize.Config)
+				os.Exit(0)
+			}
+
 			// run the app
 			err = logalize.Run(os.Stdin, os.Stdout, lemmatizer)
 			if err != nil {
@@ -58,6 +65,7 @@ It's fast and extensible alternative to ccze and colorize.`,
 
 	LogalizeCmd.Flags().StringVarP(&options.ConfigPath, "config", "c", "", "path to configuration file")
 	LogalizeCmd.Flags().StringVarP(&options.Theme, "theme", "t", "tokyonight", "name of the theme to be used")
+	LogalizeCmd.Flags().BoolVarP(&options.ListThemes, "list-themes", "T", false, "name of the theme to be used")
 
 	LogalizeCmd.Flags().BoolVarP(&options.PrintBuiltins, "print-builtins", "b", false, "print built-in log formats, patterns and words")
 
@@ -104,4 +112,17 @@ func printBuiltins(builtins embed.FS) error {
 	}
 
 	return nil
+}
+
+func listThemes(config *koanf.Koanf) {
+	themes := config.MapKeys("themes")
+	if len(themes) == 0 {
+		fmt.Println("There are no themes available")
+	} else {
+		fmt.Println("Available themes:")
+		for _, theme := range themes {
+			fmt.Printf("  - %s\n", theme)
+		}
+		fmt.Printf("\nUse one of these with --theme/-t flag\n")
+	}
 }
