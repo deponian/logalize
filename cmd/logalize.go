@@ -11,6 +11,7 @@ import (
 	"github.com/aaaton/golem/v4"
 	"github.com/aaaton/golem/v4/dicts/en"
 	logalize "github.com/deponian/logalize/pkg"
+	"github.com/goccy/go-yaml"
 	"github.com/knadh/koanf/v2"
 	"github.com/spf13/cobra"
 )
@@ -48,6 +49,12 @@ It's fast and extensible alternative to ccze and colorize.`,
 				log.Fatal(err)
 			}
 
+			// print config
+			if options.PrintConfig {
+				printConfig(logalize.Config)
+				os.Exit(0)
+			}
+
 			// list themes
 			if options.ListThemes {
 				listThemes(logalize.Config)
@@ -63,11 +70,12 @@ It's fast and extensible alternative to ccze and colorize.`,
 		DisableAutoGenTag: true,
 	}
 
-	LogalizeCmd.Flags().StringVarP(&options.ConfigPath, "config", "c", "", "path to configuration file")
+	LogalizeCmd.Flags().StringVarP(&options.ConfigPath, "config", "c", "", "path to user configuration file")
+	LogalizeCmd.Flags().BoolVarP(&options.PrintConfig, "print-config", "C", false, "print full configuration file")
 	LogalizeCmd.Flags().StringVarP(&options.Theme, "theme", "t", "tokyonight", "name of the theme to be used")
 	LogalizeCmd.Flags().BoolVarP(&options.ListThemes, "list-themes", "T", false, "name of the theme to be used")
 
-	LogalizeCmd.Flags().BoolVarP(&options.PrintBuiltins, "print-builtins", "b", false, "print built-in log formats, patterns and words")
+	LogalizeCmd.Flags().BoolVarP(&options.PrintBuiltins, "print-builtins", "b", false, "print built-in log formats, patterns and words as separate YAML files")
 
 	LogalizeCmd.Flags().BoolVarP(&options.NoBuiltins, "no-builtins", "N", false, "disable built-in log formats, patterns and words highlighting")
 	LogalizeCmd.Flags().BoolVarP(&options.NoBuiltinLogFormats, "no-builtin-logformats", "L", false, "disable built-in log formats highlighting")
@@ -125,4 +133,25 @@ func listThemes(config *koanf.Koanf) {
 		}
 		fmt.Printf("\nUse one of these with --theme/-t flag\n")
 	}
+}
+
+// custom YAML parser for koanf
+// to print the config indented by two spaces instead of four
+type YAML struct{}
+
+func (p *YAML) Unmarshal(b []byte) (map[string]interface{}, error) {
+	var out map[string]interface{}
+	if err := yaml.Unmarshal(b, &out); err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (p *YAML) Marshal(o map[string]interface{}) ([]byte, error) {
+	return yaml.MarshalWithOptions(o, yaml.Indent(2), yaml.IndentSequence(true))
+}
+
+func printConfig(config *koanf.Koanf) {
+	configBytes, _ := config.Marshal(&YAML{})
+	fmt.Print(string(configBytes))
 }

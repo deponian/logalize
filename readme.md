@@ -386,9 +386,10 @@ Thanks to [@ekivoka](https://github.com/ekivoka) for the help with choosing the 
 
 Thanks to the authors of these awesome libraries:
 
-- [cobra](https://github.com/spf13/cobra)
-- [golem](https://github.com/aaaton/golem)
-- [koanf](https://github.com/knadh/koanf)
-- [termenv](https://github.com/muesli/termenv)
+- [spf13/cobra](https://github.com/spf13/cobra)
+- [aaaton/golem](https://github.com/aaaton/golem)
+- [knadh/koanf](https://github.com/knadh/koanf)
+- [muesli/termenv](https://github.com/muesli/termenv)
+- [goccy/go-yaml](https://github.com/goccy/go-yaml)
 
 [^1]: I made that up

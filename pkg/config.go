@@ -13,7 +13,8 @@ import (
 
 // Options stores the values of command-line options
 type Options struct {
-	ConfigPath string // path to configuration file
+	ConfigPath  string // path to configuration file
+	PrintConfig bool   // print full (after all merges) configuration file
 
 	Theme      string // the name of the theme to be used
 	ListThemes bool   // list all available themes
