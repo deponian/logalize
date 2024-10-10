@@ -956,7 +956,7 @@ func TestConfigLoadBuiltinBad(t *testing.T) {
 
 	t.Run("TestConfigLoadBuiltinLogformatsBadYAML", func(t *testing.T) {
 		err := InitConfig(options, builtinsLogformatsBad)
-		if err.Error() != "yaml: line 3: mapping values are not allowed in this context" {
+		if err == nil || err.Error() != "yaml: line 3: mapping values are not allowed in this context" {
 			t.Errorf("InitConfig() should have failed with *errors.errorString, got: [%T] %s", err, err)
 		}
 	})
@@ -969,7 +969,7 @@ func TestConfigLoadBuiltinBad(t *testing.T) {
 
 	t.Run("TestConfigLoadBuiltinPatternsBadYAML", func(t *testing.T) {
 		err := InitConfig(options, builtinsPatternsBad)
-		if err.Error() != "yaml: line 2: mapping values are not allowed in this context" {
+		if err == nil || err.Error() != "yaml: line 2: mapping values are not allowed in this context" {
 			t.Errorf("InitConfig() should have failed with *errors.errorString, got: [%T] %s", err, err)
 		}
 	})
@@ -982,7 +982,7 @@ func TestConfigLoadBuiltinBad(t *testing.T) {
 
 	t.Run("TestConfigLoadBuiltinWordsBadYAML", func(t *testing.T) {
 		err := InitConfig(options, builtinsWordsBad)
-		if err.Error() != "yaml: line 2: mapping values are not allowed in this context" {
+		if err == nil || err.Error() != "yaml: line 2: mapping values are not allowed in this context" {
 			t.Errorf("InitConfig() should have failed with *errors.errorString, got: [%T] %s", err, err)
 		}
 	})
@@ -995,7 +995,7 @@ func TestConfigLoadBuiltinBad(t *testing.T) {
 
 	t.Run("TestConfigLoadBuiltinThemesBadYAML", func(t *testing.T) {
 		err := InitConfig(options, builtinsThemesBad)
-		if err.Error() != "yaml: line 2: mapping values are not allowed in this context" {
+		if err == nil || err.Error() != "yaml: line 2: mapping values are not allowed in this context" {
 			t.Errorf("InitConfig() should have failed with *errors.errorString, got: [%T] %s", err, err)
 		}
 	})
@@ -1216,7 +1216,7 @@ formats:
 
 	t.Run("TestConfigLoadUserDefinedBadYAML", func(t *testing.T) {
 		err := InitConfig(options, builtinsAllGood)
-		if err.Error() != "yaml: line 4: mapping values are not allowed in this context" {
+		if err == nil || err.Error() != "yaml: line 4: mapping values are not allowed in this context" {
 			t.Errorf("InitConfig() should have failed with *errors.errorString, got: [%T] %s", err, err)
 		}
 	})
@@ -1299,7 +1299,7 @@ formats:
 
 	t.Run("TestConfigLoadDefaultBadYAML", func(t *testing.T) {
 		err := InitConfig(options, builtinsAllGood)
-		if err.Error() != "yaml: line 4: mapping values are not allowed in this context" {
+		if err == nil || err.Error() != "yaml: line 4: mapping values are not allowed in this context" {
 			t.Errorf("InitConfig() should have failed with *errors.errorString, got: [%T] %s", err, err)
 		}
 	})
@@ -1313,6 +1313,47 @@ formats:
 		err := InitConfig(options, builtinsAllGood)
 		if _, ok := err.(*fs.PathError); !ok {
 			t.Errorf("InitConfig() should have failed with *fs.PathError, got: [%T] %s", err, err)
+		}
+	})
+}
+
+func TestConfigTheme(t *testing.T) {
+	colorProfile = termenv.TrueColor
+	var builtins embed.FS
+
+	configData := `
+themes:
+  test: {}
+`
+
+	testConfig := t.TempDir() + "/testConfig.yaml"
+	configRaw := []byte(configData)
+	err := os.WriteFile(testConfig, configRaw, 0644)
+	if err != nil {
+		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
+	}
+
+	optionsGood := Options{
+		ConfigPath: testConfig,
+		Theme:      "test",
+	}
+
+	optionsBad := Options{
+		ConfigPath: testConfig,
+		Theme:      "idontexist",
+	}
+
+	t.Run("TestConfigThemeIsDefined", func(t *testing.T) {
+		err := InitConfig(optionsGood, builtins)
+		if err != nil {
+			t.Errorf("InitConfig() failed with this error: %s", err)
+		}
+	})
+
+	t.Run("TestConfigThemeIsNotDefined", func(t *testing.T) {
+		err := InitConfig(optionsBad, builtins)
+		if err == nil || err.Error() != "Theme \"idontexist\" is not defined" {
+			t.Errorf("InitConfig() should have failed with \"Theme \"idontexist\" is not defined\", got: [%T] %s", err, err)
 		}
 	})
 }

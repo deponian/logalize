@@ -1,6 +1,7 @@
 package logalize
 
 import (
+	"fmt"
 	"io/fs"
 	"os"
 
@@ -52,6 +53,11 @@ func InitConfig(opts Options, builtins fs.FS) error {
 	// read configuration from user defined path
 	if err := loadUserDefinedConfig(config, Opts.ConfigPath); err != nil {
 		return err
+	}
+
+	// check theme availability
+	if !config.Exists("themes." + Opts.Theme) {
+		return fmt.Errorf("Theme \"%s\" is not defined", Opts.Theme)
 	}
 
 	// keep in the config only things we want to colorize

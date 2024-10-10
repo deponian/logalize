@@ -327,7 +327,7 @@ themes:
 	}
 	t.Run("TestRunBadFormats", func(t *testing.T) {
 		err := Run(input, &output, lemmatizer)
-		if err.Error() != `[log format: test] [capture group: bad] regexp bad must start with ( and end with )` {
+		if err == nil || err.Error() != `[log format: test] [capture group: bad] regexp bad must start with ( and end with )` {
 			t.Errorf("Run() should have failed with *errors.errorString, got: [%T] %s", err, err)
 		}
 	})
@@ -355,7 +355,7 @@ themes:
 	}
 	t.Run("TestRunBadRegExps", func(t *testing.T) {
 		err := Run(input, &output, lemmatizer)
-		if err.Error() != "decoding failed due to the following error(s):\n\n'[0]' expected a map, got 'int'" {
+		if err == nil || err.Error() != "decoding failed due to the following error(s):\n\n'[0]' expected a map, got 'int'" {
 			t.Errorf("Run() should have failed with *fmt.wrapError, got: [%T] %s", err, err)
 		}
 	})
