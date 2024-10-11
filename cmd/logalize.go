@@ -72,8 +72,8 @@ It's fast and extensible alternative to ccze and colorize.`,
 
 	LogalizeCmd.Flags().StringVarP(&options.ConfigPath, "config", "c", "", "path to user configuration file")
 	LogalizeCmd.Flags().BoolVarP(&options.PrintConfig, "print-config", "C", false, "print full configuration file")
-	LogalizeCmd.Flags().StringVarP(&options.Theme, "theme", "t", "tokyonight", "name of the theme to be used")
-	LogalizeCmd.Flags().BoolVarP(&options.ListThemes, "list-themes", "T", false, "name of the theme to be used")
+	LogalizeCmd.Flags().StringVarP(&options.Theme, "theme", "t", "tokyonight", "set the theme")
+	LogalizeCmd.Flags().BoolVarP(&options.ListThemes, "list-themes", "T", false, "display a list of all available themes")
 
 	LogalizeCmd.Flags().BoolVarP(&options.PrintBuiltins, "print-builtins", "b", false, "print built-in log formats, patterns and words as separate YAML files")
 
@@ -131,7 +131,7 @@ func listThemes(config *koanf.Koanf) {
 		for _, theme := range themes {
 			fmt.Printf("  - %s\n", theme)
 		}
-		fmt.Printf("\nUse one of these with --theme/-t flag\n")
+		fmt.Printf("\nUse one of these with -t/--theme flag\n")
 	}
 }
 

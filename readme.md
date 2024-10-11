@@ -111,14 +111,17 @@ formats:
           name: 5xx
 ```
 
-`formats` describe complete log formats. A line must match a format completely to be colored. For example, the full regular expression for the "kuvaq" format above is `^(\d{1,3}(\.\d{1,3}){3} )(- )("[^"]+" )(\d\d\d)$`. Only lines below will match this format:
-- `127.0.0.1 - "menetekel" 777`
-- `7.7.7.7 - "m" 000`
+`formats` describe complete log formats. A line must match a format completely to be colored. For example, the full regular expression for the "kuvaq" format above will look like this:\
+`^(\d{1,3}(\.\d{1,3}){3} )(- )("[^"]+" )(\d\d\d)$`
+
+Only lines below will match this format:
+- `127.0.0.1 - "menetekel" 200`
+- `7.7.7.7 - "m" 404`
 
 But not these:
-- `127.0.0.1 - "menetekel" 777 lower ascension station`
-- `Upper ascension station 127.0.0.1 - "menetekel" 777`
-- `127.0.0.1 - "menetekel" 777000`
+- `127.0.0.1 - "menetekel" 503 lower ascension station`
+- `Upper ascension station 127.0.0.1 - "menetekel" 403`
+- `127.0.0.1 - "menetekel" 404000`
 
 For an overview of regular expression syntax, see the [regexp/syntax](https://pkg.go.dev/regexp/syntax) package.
 
@@ -134,9 +137,9 @@ formats:
     # that is, your regexp must be within one capture group
     # and contain a valid regular expression
     - regexp: (\d\d\d )
-      # name of a capture group
+      # name of the capture group
       # it will be used to assign colors and style
-      # later in "themes" (see below)
+      # later in "themes" section (see below)
       name: capture-group-name
       # alternatives are useful when you have general regular expression
       # but you want different colors for some specific subset of cases
@@ -152,14 +155,14 @@ formats:
     # each next regexp is added to the previous one
     # and together they form a complete regexp for the whole string
     - regexp: (--- )
-      # . . . . .
+      name: dashes
     - regexp: ([[:xdigit:]]{32})
-      # . . . . .
+      name: hash
     # full regexp for this whole example is:
     # ^(\d\d\d )(--- )([[:xdigit:]]{32})$
 ```
 
-You can find built-in `formats` [here](builtins/logformats). If you want to customize them or turn them off completely, overwrite the corresponding values in your `logalize.yaml`.
+You can find built-in `formats` [here](builtins/logformats). If you want to customize them or turn them off completely, overwrite the corresponding values in your `logalize.yaml`. See [Customization](#customization) section below for more details.
 
 ### Patterns
 
@@ -167,7 +170,7 @@ Configuration example:
 
 ```yaml
 patterns:
-  # simple patterns
+  # simple patterns (one regexp)
   string:
     priority: 500
     regexp: ("[^"]+"|'[^']+')
@@ -175,7 +178,7 @@ patterns:
   number:
     regexp: (\d+)
 
-  # complex pattern
+  # complex pattern (built from a list of regexps)
   ipv4-address-with-port:
     regexps:
       - regexp: (\d{1,3}(\.\d{1,3}){3})
@@ -187,7 +190,7 @@ patterns:
 
 `patterns` are standard regular expressions. You can highlight any sequence of characters in a string that matches a regular expression. It may consist of several parts (see `ipv4-address-with-port` above). This is convenient if you want different parts of a pattern to have different colors or styles. Think of these complex patterns as little log formats that can be found in any part of a string.
 
-Patterns have priority. Ones with higher priority will be painted earlier. Default priority is 0.
+Patterns have priority. Ones with higher priority will be painted earlier. Default priority is 0. The priorities of the built-in patterns and log formats are between -100 and 100.
 
 Full pattern example using all available fields:
 
@@ -201,6 +204,7 @@ patterns:
     priority: 10
     # the same fields are used here as in log formats (see above)
     regexp: (\d\d\d)
+    # patterns can have alternatives just like in log formats
     alternatives:
       - regexp: (2\d\d)
         name: 2xx
@@ -227,8 +231,8 @@ patterns:
   # complex patterns are mainly used when you want to build a pattern
   # that builds on other patterns. for example, you want to make a highlighter
   # for the "logfmt" format. an example of "logfmt" log line:
-  # ts=2024-02-16T23:00:02.953Z caller=db.go:1619 level=info component=tsdb msg="Deleting..."
-  # you can't use log formats (see above) because the structure of "logfmt" is variable
+  # ts=2024-02-16T23:00:02.953Z caller=db.go:16 level=info component=tsdb msg="Deleting..."
+  # you can't use log formats (see above) because the structure of "logfmt" is variable.
   # in such a case, you can describe the base "logfmt" element (xxx=xxx) and look for other
   # existing patterns (date, time, IP address, etc.) on the right side of the equals sign
   # (see how to accomplish this below in the "themes" section)
@@ -242,7 +246,7 @@ patterns:
         name: value
 ```
 
-You can find built-in `patterns` [here](builtins/patterns). If you want to customize them or turn them off completely, overwrite the corresponding values in your `logalize.yaml`.
+You can find built-in `patterns` [here](builtins/patterns). If you want to customize them or turn them off completely, overwrite the corresponding values in your `logalize.yaml`. See [Customization](#customization) section below for more details.
 
 ### Words
 
@@ -285,7 +289,7 @@ Words from these lists are used not only literally, but also as [lemmas](https:/
 
 There are two special word groups: `good` and `bad`. The negation of a word from `good` group will be colored using values from `bad` group and vice versa. For example, if `good` group has the word "complete" then "not completed", "wasn't completed", "cannot be completed" and other negative forms will be colored using values from `bad` word group.
 
-You can find built-in `words` [here](builtins/words). If you want to customize them or turn them off completely, overwrite the corresponding values in your `logalize.yaml`.
+You can find built-in `words` [here](builtins/words). If you want to customize them or turn them off completely, overwrite the corresponding values in your `logalize.yaml`. See [Customization](#customization) section below for more details.
 
 ### Themes
 
@@ -320,6 +324,23 @@ themes:
           5xx:
             fg: "#ff00ff"
             style: bold
+
+      elysium:
+        capture-group-name:
+          default:
+            fg: "#ffffff"
+          2xx:
+            fg: "#00ff00"
+            style: bold
+          4xx:
+            fg: "#ff0000"
+            style: bold
+        dashes:
+          bg: "#807e7a"
+          style: bold
+        hash:
+          fg: "#9ddb56"
+          bg: "#f5ce42"
 
     patterns:
       string:
@@ -366,6 +387,15 @@ themes:
 
       your-word-group:
         bg: "#0b78f1"
+
+  # another theme
+  menetekel:
+    formats:
+      # . . .
+    patterns:
+      # . . .
+    words:
+      # . . .
 ```
 
 `themes` is the place where you apply colors and style to log formats, patterns and word groups you defined earlier. Every capture group can be colorized using `fg`, `bg` and `style` fields.
@@ -376,6 +406,58 @@ themes:
 - `patterns` - use highlighting from `patterns` section (see above)
 - `words` - use highlighting from `words` section (see above)
 - `patterns-and-words` - use highlighting from `patterns` and `words` sections
+
+You can get a list of all available themes with `-T/--list-themes` flag and set it with `-t/--theme` flag.
+
+Customization
+-------------
+
+#### I want to change one of the colors in one of the built-in themes
+
+1. Suppose you don't like the color of the "uuid" pattern in the "tokyonight" theme
+2. Just override it in your `logalize.yaml` like this:
+```yaml
+# . . .
+themes:
+  tokyonight:
+    patterns:
+      uuid:
+        fg: "#ff0000"
+        bg: "#00ff00"
+        style: bold
+# . . .
+```
+
+#### I want to define and use my own theme
+
+1. Get current configuration to use it as an example:
+```sh
+logalize --print-config > example.logalize.yaml
+```
+2. Copy one of the built-in themes from `example.logalize.yaml` to your `logalize.yaml`, rename it and change it the way you like it:
+```yaml
+# . . .
+themes:
+  your-theme-name:
+    formats:
+      # . . .
+    patterns:
+      # . . .
+    words:
+      # . . .
+```
+3. Set the theme:
+```sh
+cat logs | logalize --theme "your-theme-name"
+```
+
+#### I want to disable all builtins and use only data from my own `logalize.yaml`
+
+1. Define any log formats, patterns, word groups and themes in your `logalize.yaml`
+2. Run Logalize with all builtins disabled:
+```sh
+cat logs | logalize --no-builtins
+```
 
 Acknowledgements
 ----------------

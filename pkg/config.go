@@ -59,7 +59,7 @@ func InitConfig(opts Options, builtins fs.FS) error {
 
 	// check theme availability
 	if !config.Exists("themes." + Opts.Theme) {
-		return fmt.Errorf("Theme \"%s\" is not defined. Use --list-themes/-T flag to see the list of all available themes", Opts.Theme)
+		return fmt.Errorf("Theme \"%s\" is not defined. Use -T/--list-themes flag to see the list of all available themes", Opts.Theme)
 	}
 
 	// keep in the config only things we want to colorize
