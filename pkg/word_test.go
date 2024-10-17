@@ -117,7 +117,6 @@ themes:
 
 	t.Run("TestWordsInitBadYAML", func(t *testing.T) {
 		if err := initWords(lemmatizer); err == nil {
-			fmt.Println(Words)
 			t.Errorf("InitWords() should have failed")
 		}
 	})

@@ -1263,6 +1263,58 @@ formats:
   regexp: bad:
 `
 
+	tempDefaultConfig := t.TempDir() + "/tempDefaultConfig.yaml"
+	configRaw := []byte(configDataBadYAML)
+	err := os.WriteFile(tempDefaultConfig, configRaw, 0644)
+	if err != nil {
+		t.Errorf("Wasn't able to write test file to %s: %s", tempDefaultConfig, err)
+	}
+
+	t.Cleanup(func() {
+		err = os.Remove(tempDefaultConfig)
+		if err != nil {
+			t.Errorf("Wasn't able to delete %s: %s", tempDefaultConfig, err)
+		}
+	})
+
+	options := Options{
+		ConfigPath: "",
+		NoBuiltins: true,
+		Theme:      "tokyonight",
+	}
+
+	defaultConfigPaths = append(defaultConfigPaths, tempDefaultConfig)
+
+	t.Run("TestConfigLoadDefaultBadYAML", func(t *testing.T) {
+		err := InitConfig(options, builtinsAllGood)
+		if err == nil || err.Error() != "yaml: line 4: mapping values are not allowed in this context" {
+			t.Errorf("InitConfig() should have failed with *errors.errorString, got: [%T] %s", err, err)
+		}
+	})
+
+	err = os.Chmod(tempDefaultConfig, 0200)
+	if err != nil {
+		t.Errorf("Wasn't able to change mode of %s: %s", tempDefaultConfig, err)
+	}
+
+	t.Run("TestConfigLoadDefaultReadOnly", func(t *testing.T) {
+		err := InitConfig(options, builtinsAllGood)
+		if _, ok := err.(*fs.PathError); !ok {
+			t.Errorf("InitConfig() should have failed with *fs.PathError, got: [%T] %s", err, err)
+		}
+	})
+
+	defaultConfigPaths = defaultConfigPaths[:len(defaultConfigPaths)-1]
+}
+
+func TestConfigLoadDotLogalize(t *testing.T) {
+	colorProfile = termenv.TrueColor
+	configDataBadYAML := `
+formats:
+  test:
+  regexp: bad:
+`
+
 	wd, err := os.Getwd()
 	if err != nil {
 		t.Errorf("os.Getwd() failed with this error: %s", err)
@@ -1297,7 +1349,7 @@ formats:
 		Theme:      "tokyonight",
 	}
 
-	t.Run("TestConfigLoadDefaultBadYAML", func(t *testing.T) {
+	t.Run("TestConfigLoadDotLogalizeBadYAML", func(t *testing.T) {
 		err := InitConfig(options, builtinsAllGood)
 		if err == nil || err.Error() != "yaml: line 4: mapping values are not allowed in this context" {
 			t.Errorf("InitConfig() should have failed with *errors.errorString, got: [%T] %s", err, err)
@@ -1309,7 +1361,7 @@ formats:
 		t.Errorf("Wasn't able to change mode of %s: %s", defaultConfig, err)
 	}
 
-	t.Run("TestConfigLoadDefaultReadOnly", func(t *testing.T) {
+	t.Run("TestConfigLoadDotLogalizeReadOnly", func(t *testing.T) {
 		err := InitConfig(options, builtinsAllGood)
 		if _, ok := err.(*fs.PathError); !ok {
 			t.Errorf("InitConfig() should have failed with *fs.PathError, got: [%T] %s", err, err)

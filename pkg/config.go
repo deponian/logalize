@@ -48,12 +48,17 @@ func InitConfig(opts Options, builtins fs.FS) error {
 	}
 
 	// read configuration from default paths
-	if err := loadDefaultConfig(config); err != nil {
+	if err := loadConfig(config, defaultConfigPaths, true); err != nil {
 		return err
 	}
 
 	// read configuration from user defined path
-	if err := loadUserDefinedConfig(config, Opts.ConfigPath); err != nil {
+	if err := loadConfig(config, []string{Opts.ConfigPath}, false); err != nil {
+		return err
+	}
+
+	// read configuration from ./.logalize.yaml
+	if err := loadConfig(config, []string{"./.logalize.yaml"}, true); err != nil {
 		return err
 	}
 
@@ -143,38 +148,20 @@ func loadBuiltinConfig(config *koanf.Koanf, builtins fs.FS) error {
 	return nil
 }
 
-func loadDefaultConfig(config *koanf.Koanf) error {
-	defaultConfigPaths := [...]string{
-		"/etc/logalize/logalize.yaml",
-		"~/.config/logalize/logalize.yaml",
-		".logalize.yaml",
-	}
-	for _, path := range defaultConfigPaths {
+func loadConfig(config *koanf.Koanf, paths []string, ignoreNonExistent bool) error {
+	for _, path := range paths {
+		if path == "" {
+			continue
+		}
 		if ok, err := checkFileIsReadable(path); ok {
 			if err := config.Load(file.Provider(path), yaml.Parser()); err != nil {
 				return err
 			}
 			// ignore only errors about non-existent files
-		} else if !os.IsNotExist(err) {
+		} else if !(os.IsNotExist(err) && ignoreNonExistent) {
 			return err
 		}
 	}
-	return nil
-}
-
-func loadUserDefinedConfig(config *koanf.Koanf, path string) error {
-	if Opts.ConfigPath == "" {
-		return nil
-	}
-
-	if ok, err := checkFileIsReadable(path); ok {
-		if err := config.Load(file.Provider(path), yaml.Parser()); err != nil {
-			return err
-		}
-	} else {
-		return err
-	}
-
 	return nil
 }
 

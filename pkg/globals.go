@@ -1,6 +1,7 @@
 package logalize
 
 import (
+	"os"
 	"regexp"
 
 	"github.com/muesli/termenv"
@@ -36,3 +37,14 @@ var (
 
 // global color profile for all colorization
 var colorProfile = termenv.ColorProfile()
+
+// where to find default configuration files
+var defaultConfigPaths = getDefaultConfigPaths()
+
+func getDefaultConfigPaths() []string {
+	homeDir, _ := os.UserHomeDir()
+	return []string{
+		"/etc/logalize/logalize.yaml",
+		homeDir + "/.config/logalize/logalize.yaml",
+	}
+}
