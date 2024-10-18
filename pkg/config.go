@@ -11,36 +11,10 @@ import (
 	"github.com/knadh/koanf/v2"
 )
 
-// Options stores the values of command-line options
-type Options struct {
-	ConfigPath  string // path to configuration file
-	PrintConfig bool   // print full (after all merges) configuration file
-
-	Theme      string // the name of the theme to be used
-	ListThemes bool   // list all available themes
-
-	PrintBuiltins bool // print built-in log formats and words
-
-	NoBuiltinLogFormats bool // disable built-in log formats
-	NoBuiltinPatterns   bool // disable built-in patterns
-	NoBuiltinWords      bool // disable built-in words
-	NoBuiltins          bool // disable built-in log formats, patterns and words
-
-	HighlightOnlyLogFormats bool // highlight only log formats
-	HighlightOnlyPatterns   bool // highlight only patterns
-	HighlightOnlyWords      bool // highlight only words
-	DryRun                  bool // highlight nothing
-}
-
-var Opts Options
-
 var Config *koanf.Koanf
 
-func InitConfig(opts Options, builtins fs.FS) error {
+func InitConfig(builtins fs.FS) error {
 	config := koanf.New(".")
-
-	// set options
-	Opts = opts
 
 	// load built-in configuration
 	if err := loadBuiltinConfig(config, builtins); err != nil {

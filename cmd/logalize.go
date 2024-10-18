@@ -19,7 +19,7 @@ import (
 var LogalizeCmd *cobra.Command
 
 func Init(builtins embed.FS, version, commit, date string) {
-	options := logalize.Options{}
+	options := logalize.Settings{}
 
 	LogalizeCmd = &cobra.Command{
 		Use:   "logalize",
@@ -44,7 +44,11 @@ It's fast and extensible alternative to ccze and colorize.`,
 			if err != nil {
 				log.Fatal(err)
 			}
-			err = logalize.InitConfig(options, builtins)
+			err = logalize.InitSettings(LogalizeCmd.Flags())
+			if err != nil {
+				log.Fatal(err)
+			}
+			err = logalize.InitConfig(builtins)
 			if err != nil {
 				log.Fatal(err)
 			}

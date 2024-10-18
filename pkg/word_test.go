@@ -64,13 +64,13 @@ themes:
 	if err != nil {
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}
-	options := Options{
+	Opts = Settings{
 		ConfigPath: testConfig,
 		NoBuiltins: true,
 		Theme:      "test",
 	}
 
-	err = InitConfig(options, builtins)
+	err = InitConfig(builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -104,13 +104,13 @@ themes:
 	if err != nil {
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}
-	options = Options{
+	Opts = Settings{
 		ConfigPath: testConfig,
 		NoBuiltins: true,
 		Theme:      "test",
 	}
 
-	err = InitConfig(options, builtins)
+	err = InitConfig(builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -140,13 +140,13 @@ themes:
 	if err != nil {
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}
-	options = Options{
+	Opts = Settings{
 		ConfigPath: testConfig,
 		NoBuiltins: true,
 		Theme:      "test",
 	}
 
-	err = InitConfig(options, builtins)
+	err = InitConfig(builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -260,7 +260,7 @@ themes:
 	if err != nil {
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}
-	options := Options{
+	Opts = Settings{
 		ConfigPath: testConfig,
 		NoBuiltins: true,
 		Theme:      "test",
@@ -269,7 +269,7 @@ themes:
 	for _, tt := range tests {
 		testname := tt.plain
 
-		err = InitConfig(options, builtins)
+		err = InitConfig(builtins)
 		if err != nil {
 			t.Errorf("InitConfig() failed with this error: %s", err)
 		}
@@ -367,7 +367,7 @@ themes:
 	if err != nil {
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}
-	options := Options{
+	Opts = Settings{
 		ConfigPath: testConfig,
 		NoBuiltins: true,
 		Theme:      "test",
@@ -376,7 +376,7 @@ themes:
 	for _, tt := range tests {
 		testname := tt.plain
 
-		err = InitConfig(options, builtins)
+		err = InitConfig(builtins)
 		if err != nil {
 			t.Errorf("InitConfig() failed with this error: %s", err)
 		}
@@ -481,7 +481,7 @@ themes:
 	if err != nil {
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}
-	options := Options{
+	Opts = Settings{
 		ConfigPath: testConfig,
 		NoBuiltins: true,
 		Theme:      "test",
@@ -490,7 +490,7 @@ themes:
 	for _, tt := range tests {
 		testname := tt.plain
 
-		err = InitConfig(options, builtins)
+		err = InitConfig(builtins)
 		if err != nil {
 			t.Errorf("InitConfig() failed with this error: %s", err)
 		}
