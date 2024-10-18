@@ -98,7 +98,7 @@ themes:
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}
 
-	options := Options{
+	options := Settings{
 		ConfigPath: testConfig,
 		NoBuiltins: true,
 		Theme:      "test",
@@ -133,7 +133,7 @@ themes:
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}
 
-	options = Options{
+	options = Settings{
 		ConfigPath: testConfig,
 		NoBuiltins: true,
 		Theme:      "test",
@@ -174,7 +174,7 @@ themes:
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}
 
-	options = Options{
+	options = Settings{
 		ConfigPath: testConfig,
 		NoBuiltins: true,
 		Theme:      "test",
@@ -240,7 +240,7 @@ themes:
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}
 
-	options := Options{
+	options := Settings{
 		ConfigPath: testConfig,
 		NoBuiltins: true,
 		Theme:      "test",

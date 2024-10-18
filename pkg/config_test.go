@@ -336,7 +336,7 @@ func TestConfigLoadBuiltinGood(t *testing.T) {
 		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
 	}
 
-	options := Options{
+	options := Settings{
 		Theme: "tokyonight",
 	}
 
@@ -396,7 +396,7 @@ func TestConfigLoadBuiltinFlagNoBuiltins(t *testing.T) {
 		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
 	}
 
-	options := Options{
+	options := Settings{
 		NoBuiltinLogFormats: false,
 		NoBuiltinPatterns:   false,
 		NoBuiltinWords:      false,
@@ -460,7 +460,7 @@ func TestConfigLoadBuiltinFlagNoBuiltinLogFormats(t *testing.T) {
 		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
 	}
 
-	options := Options{
+	options := Settings{
 		NoBuiltinLogFormats: true,
 		NoBuiltinPatterns:   false,
 		NoBuiltinWords:      false,
@@ -524,7 +524,7 @@ func TestConfigLoadBuiltinFlagNoBuiltinPatterns(t *testing.T) {
 		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
 	}
 
-	options := Options{
+	options := Settings{
 		NoBuiltinLogFormats: false,
 		NoBuiltinPatterns:   true,
 		NoBuiltinWords:      false,
@@ -588,7 +588,7 @@ func TestConfigLoadBuiltinFlagNoBuiltinWords(t *testing.T) {
 		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
 	}
 
-	options := Options{
+	options := Settings{
 		NoBuiltinLogFormats: false,
 		NoBuiltinPatterns:   false,
 		NoBuiltinWords:      true,
@@ -652,7 +652,7 @@ func TestConfigLoadBuiltinFlagNoBuiltinPatternsAndWords(t *testing.T) {
 		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
 	}
 
-	options := Options{
+	options := Settings{
 		NoBuiltinLogFormats: false,
 		NoBuiltinPatterns:   true,
 		NoBuiltinWords:      true,
@@ -716,7 +716,7 @@ func TestConfigLoadBuiltinFlagDryRun(t *testing.T) {
 		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
 	}
 
-	options := Options{
+	options := Settings{
 		HighlightOnlyLogFormats: false,
 		HighlightOnlyPatterns:   false,
 		HighlightOnlyWords:      false,
@@ -780,7 +780,7 @@ func TestConfigLoadBuiltinFlagHighlightOnlyLogFormats(t *testing.T) {
 		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
 	}
 
-	options := Options{
+	options := Settings{
 		HighlightOnlyLogFormats: true,
 		HighlightOnlyPatterns:   false,
 		HighlightOnlyWords:      false,
@@ -844,7 +844,7 @@ func TestConfigLoadBuiltinFlagHighlightOnlyPatterns(t *testing.T) {
 		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
 	}
 
-	options := Options{
+	options := Settings{
 		HighlightOnlyLogFormats: false,
 		HighlightOnlyPatterns:   true,
 		HighlightOnlyWords:      false,
@@ -908,7 +908,7 @@ func TestConfigLoadBuiltinFlagHighlightOnlyWords(t *testing.T) {
 		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
 	}
 
-	options := Options{
+	options := Settings{
 		HighlightOnlyLogFormats: false,
 		HighlightOnlyPatterns:   false,
 		HighlightOnlyWords:      true,
@@ -944,7 +944,7 @@ func TestConfigLoadBuiltinFlagHighlightOnlyWords(t *testing.T) {
 func TestConfigLoadBuiltinBad(t *testing.T) {
 	colorProfile = termenv.TrueColor
 
-	options := Options{
+	options := Settings{
 		Theme: "tokyonight",
 	}
 
@@ -1161,7 +1161,7 @@ themes:
 		t.Errorf("Wasn't able to write test file to %s: %s", userConfig, err)
 	}
 
-	options := Options{
+	options := Settings{
 		ConfigPath: userConfig,
 		NoBuiltins: true,
 		Theme:      "test",
@@ -1208,7 +1208,7 @@ formats:
 		t.Errorf("Wasn't able to write test file to %s: %s", userConfig, err)
 	}
 
-	options := Options{
+	options := Settings{
 		ConfigPath: userConfig,
 		NoBuiltins: true,
 		Theme:      "tokyonight",
@@ -1221,7 +1221,7 @@ formats:
 		}
 	})
 
-	options = Options{
+	options = Settings{
 		ConfigPath: userConfig + "error",
 		NoBuiltins: true,
 		Theme:      "tokyonight",
@@ -1241,7 +1241,7 @@ formats:
 		t.Errorf("Wasn't able to write test file to %s: %s", userConfig, err)
 	}
 
-	options = Options{
+	options = Settings{
 		ConfigPath: userConfigReadOnly,
 		NoBuiltins: false,
 		Theme:      "tokyonight",
@@ -1277,7 +1277,7 @@ formats:
 		}
 	})
 
-	options := Options{
+	options := Settings{
 		ConfigPath: "",
 		NoBuiltins: true,
 		Theme:      "tokyonight",
@@ -1343,7 +1343,7 @@ formats:
 		}
 	})
 
-	options := Options{
+	options := Settings{
 		ConfigPath: "",
 		NoBuiltins: true,
 		Theme:      "tokyonight",
@@ -1385,12 +1385,12 @@ themes:
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}
 
-	optionsGood := Options{
+	optionsGood := Settings{
 		ConfigPath: testConfig,
 		Theme:      "test",
 	}
 
-	optionsBad := Options{
+	optionsBad := Settings{
 		ConfigPath: testConfig,
 		Theme:      "idontexist",
 	}
