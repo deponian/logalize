@@ -1319,27 +1319,27 @@ formats:
 	if err != nil {
 		t.Errorf("os.Getwd() failed with this error: %s", err)
 	}
-	defaultConfig := wd + "/.logalize.yaml"
+	dotConfig := wd + "/.logalize.yaml"
 	configRaw := []byte(configDataBadYAML)
-	if ok, err := checkFileIsReadable(defaultConfig); ok {
+	if ok, err := checkFileIsReadable(dotConfig); ok {
 		if err != nil {
 			t.Errorf("checkFileIsReadable() failed with this error: %s", err)
 		}
-		err = os.Remove(defaultConfig)
+		err = os.Remove(dotConfig)
 		if err != nil {
-			t.Errorf("Wasn't able to delete %s: %s", defaultConfig, err)
+			t.Errorf("Wasn't able to delete %s: %s", dotConfig, err)
 		}
 	}
 
-	err = os.WriteFile(defaultConfig, configRaw, 0644)
+	err = os.WriteFile(dotConfig, configRaw, 0644)
 	if err != nil {
-		t.Errorf("Wasn't able to write test file to %s: %s", defaultConfig, err)
+		t.Errorf("Wasn't able to write test file to %s: %s", dotConfig, err)
 	}
 
 	t.Cleanup(func() {
-		err = os.Remove(defaultConfig)
+		err = os.Remove(dotConfig)
 		if err != nil {
-			t.Errorf("Wasn't able to delete %s: %s", defaultConfig, err)
+			t.Errorf("Wasn't able to delete %s: %s", dotConfig, err)
 		}
 	})
 
@@ -1356,9 +1356,9 @@ formats:
 		}
 	})
 
-	err = os.Chmod(defaultConfig, 0200)
+	err = os.Chmod(dotConfig, 0200)
 	if err != nil {
-		t.Errorf("Wasn't able to change mode of %s: %s", defaultConfig, err)
+		t.Errorf("Wasn't able to change mode of %s: %s", dotConfig, err)
 	}
 
 	t.Run("TestConfigLoadDotLogalizeReadOnly", func(t *testing.T) {
