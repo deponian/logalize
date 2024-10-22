@@ -78,12 +78,12 @@ Configuration
 Logalize looks for configuration files in these places:
 - `/etc/logalize/logalize.yaml`
 - `~/.config/logalize/logalize.yaml`
+- path from `-c/--config` flag
 - `.logalize.yaml` in current directory
-- path from `-c/--config` option
 
 If more than one configuration file is found, they are merged. The lower the file in the list, the higher its priority.
 
-A configuration file can contain four top-level keys: `formats`, `patterns`, `words` and `themes`. In the first three you define what you want to catch, and in the last you describe how you want to colorize it.
+A configuration file can contain five top-level keys: `formats`, `patterns`, `words`, `themes` and `settings`. In the first three you define what you want to catch and in `themes` you describe how you want to colorize it. `settings` is a way to set some options if you don't want to pass them as flags.
 
 ### Log formats
 
@@ -407,7 +407,27 @@ themes:
 - `words` - use highlighting from `words` section (see above)
 - `patterns-and-words` - use highlighting from `patterns` and `words` sections
 
-You can get a list of all available themes with `-T/--list-themes` flag and set it with `-t/--theme` flag.
+You can get a list of all available themes with `-T/--list-themes` flag and set it with `-t/--theme` flag or `theme` key in `settings` section (see below).
+
+### Settings
+
+Configuration example:
+
+```yaml
+settings:
+  theme: "utopia"
+
+  no-builtin-logformats: false
+  no-builtin-patterns: false
+  no-builtin-words: false
+  no-builtins: true
+
+  only-logformats: false
+  only-patterns: false
+  only-words: false
+```
+
+Here you can set some options that are equivalent to command line flags. `theme` is the same as `--theme` flag and so on. Only the flags from the example above are supported.
 
 Customization
 -------------
@@ -445,8 +465,17 @@ themes:
       # . . .
     words:
       # . . .
+# . . .
 ```
-3. Set the theme:
+3. Set the theme in your `logalize.yaml` in `settings` section:
+```yaml
+# . . .
+settings:
+  theme: your-theme-name
+  # . . .
+# . . .
+```
+4. ... or set the theme using `--theme` flag:
 ```sh
 cat logs | logalize --theme "your-theme-name"
 ```
@@ -454,9 +483,18 @@ cat logs | logalize --theme "your-theme-name"
 #### I want to disable all builtins and use only data from my own `logalize.yaml`
 
 1. Define any log formats, patterns, word groups and themes in your `logalize.yaml`
-2. Run Logalize with all builtins disabled:
+2. Disable builtins in `settings` section:
+```yaml
+# . . .
+settings:
+  # . . .
+  no-builtins: true
+  # . . .
+# . . .
+```
+3. ... or use `-N/--no-builtins` flag:
 ```sh
-cat logs | logalize --no-builtins
+cat logs | logalize -N
 ```
 
 Acknowledgements
