@@ -3,6 +3,7 @@ words:
     - "alarm"
     - "block"
     - "close"
+    - "crit"
     - "critical"
     - "deny"
     - "disable"
