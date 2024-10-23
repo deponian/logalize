@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.1] - 2024-10-23
+
+### Added
+
+- Add "crit" to the list of bad words
+
+### Changed
+
+- Tune colors in "tokyonight" theme
+- Switch to go v1.23.2 and update modules
+
+### Fixed
+
+- Bring back --dry-run and --config flags
+
 ## [0.4.0] - 2024-10-22
 
 ### Added
@@ -108,6 +123,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Print version as "version (commit) date"
 
+[0.4.1]: https://github.com/deponian/logalize/compare/v0.4.0..v0.4.1
 [0.4.0]: https://github.com/deponian/logalize/compare/v0.3.0..v0.4.0
 [0.3.0]: https://github.com/deponian/logalize/compare/v0.2.0..v0.3.0
 [0.2.0]: https://github.com/deponian/logalize/compare/v0.1.2..v0.2.0
