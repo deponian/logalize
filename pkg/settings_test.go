@@ -118,6 +118,8 @@ settings:
 	}
 
 	correctOpts := Settings{
+		ConfigPath: userConfig,
+
 		Theme: "tokyonight",
 
 		NoBuiltinLogFormats: true,
@@ -233,6 +235,7 @@ func TestSettingsFromFlags(t *testing.T) {
 	flags.BoolP("only-logformats", "f", false, "")
 	flags.BoolP("only-patterns", "g", false, "")
 	flags.BoolP("only-words", "h", false, "")
+	flags.BoolP("dry-run", "i", false, "")
 	args := []string{
 		"--theme",
 		"test",
@@ -243,6 +246,7 @@ func TestSettingsFromFlags(t *testing.T) {
 		"--only-logformats",
 		"--only-patterns",
 		"--only-words",
+		"--dry-run",
 	}
 	if err := flags.Parse(args); err != nil {
 		t.Errorf("flags.Parse() failed with an error: %s", err)
@@ -258,6 +262,7 @@ func TestSettingsFromFlags(t *testing.T) {
 		HighlightOnlyLogFormats: true,
 		HighlightOnlyPatterns:   true,
 		HighlightOnlyWords:      true,
+		DryRun:                  true,
 	}
 
 	t.Run("TestSettingsFromFlags", func(t *testing.T) {

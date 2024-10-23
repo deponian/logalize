@@ -190,7 +190,7 @@ patterns:
 
 `patterns` are standard regular expressions. You can highlight any sequence of characters in a string that matches a regular expression. It may consist of several parts (see `ipv4-address-with-port` above). This is convenient if you want different parts of a pattern to have different colors or styles. Think of these complex patterns as little log formats that can be found in any part of a string.
 
-Patterns have priority. Ones with higher priority will be painted earlier. Default priority is 0. The priorities of the built-in patterns and log formats are between -100 and 100.
+Patterns have priority. Ones with higher priority will be painted earlier. Default priority is 0. The priorities of the built-in patterns are between -100 and 100.
 
 Full pattern example using all available fields:
 

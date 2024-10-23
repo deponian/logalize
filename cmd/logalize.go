@@ -19,7 +19,9 @@ import (
 var LogalizeCmd *cobra.Command
 
 func Init(builtins embed.FS, version, commit, date string) {
-	options := logalize.Settings{}
+	var printBuiltinsFlag bool
+	var printConfigFlag bool
+	var listThemesFlag bool
 
 	LogalizeCmd = &cobra.Command{
 		Use:   "logalize",
@@ -30,7 +32,7 @@ It's fast and extensible alternative to ccze and colorize.`,
 		Args:    cobra.NoArgs,
 		Run: func(cmd *cobra.Command, args []string) {
 			// print built-in log formats and words and exit
-			if options.PrintBuiltins {
+			if printBuiltinsFlag {
 				err := printBuiltins(builtins)
 				if err != nil {
 					log.Fatal(err)
@@ -54,13 +56,13 @@ It's fast and extensible alternative to ccze and colorize.`,
 			}
 
 			// print config
-			if options.PrintConfig {
+			if printConfigFlag {
 				printConfig(logalize.Config)
 				os.Exit(0)
 			}
 
 			// list themes
-			if options.ListThemes {
+			if listThemesFlag {
 				listThemes(logalize.Config)
 				os.Exit(0)
 			}
@@ -74,22 +76,25 @@ It's fast and extensible alternative to ccze and colorize.`,
 		DisableAutoGenTag: true,
 	}
 
-	LogalizeCmd.Flags().StringVarP(&options.ConfigPath, "config", "c", "", "path to user configuration file")
-	LogalizeCmd.Flags().BoolVarP(&options.PrintConfig, "print-config", "C", false, "print full configuration file")
-	LogalizeCmd.Flags().StringVarP(&options.Theme, "theme", "t", "tokyonight", "set the theme")
-	LogalizeCmd.Flags().BoolVarP(&options.ListThemes, "list-themes", "T", false, "display a list of all available themes")
+	// these flags are used outside of the logalize package
+	LogalizeCmd.Flags().BoolVarP(&printConfigFlag, "print-config", "C", false, "print full configuration file")
+	LogalizeCmd.Flags().BoolVarP(&listThemesFlag, "list-themes", "T", false, "display a list of all available themes")
+	LogalizeCmd.Flags().BoolVarP(&printBuiltinsFlag, "print-builtins", "b", false, "print built-in log formats, patterns and words as separate YAML files")
 
-	LogalizeCmd.Flags().BoolVarP(&options.PrintBuiltins, "print-builtins", "b", false, "print built-in log formats, patterns and words as separate YAML files")
+	// these flags are used inside the logalize package
+	// they will be processed by InitSettings()
+	LogalizeCmd.Flags().StringP("config", "c", "", "path to user configuration file")
+	LogalizeCmd.Flags().StringP("theme", "t", "tokyonight", "set the theme")
 
-	LogalizeCmd.Flags().BoolVarP(&options.NoBuiltins, "no-builtins", "N", false, "disable built-in log formats, patterns and words highlighting")
-	LogalizeCmd.Flags().BoolVarP(&options.NoBuiltinLogFormats, "no-builtin-logformats", "L", false, "disable built-in log formats highlighting")
-	LogalizeCmd.Flags().BoolVarP(&options.NoBuiltinPatterns, "no-builtin-patterns", "P", false, "disable built-in patterns highlighting")
-	LogalizeCmd.Flags().BoolVarP(&options.NoBuiltinWords, "no-builtin-words", "W", false, "disable built-in words highlighting")
+	LogalizeCmd.Flags().BoolP("no-builtin-logformats", "L", false, "disable built-in log formats highlighting")
+	LogalizeCmd.Flags().BoolP("no-builtin-patterns", "P", false, "disable built-in patterns highlighting")
+	LogalizeCmd.Flags().BoolP("no-builtin-words", "W", false, "disable built-in words highlighting")
+	LogalizeCmd.Flags().BoolP("no-builtins", "N", false, "disable built-in log formats, patterns and words highlighting")
 
-	LogalizeCmd.Flags().BoolVarP(&options.DryRun, "dry-run", "n", false, "disable any colorization")
-	LogalizeCmd.Flags().BoolVarP(&options.HighlightOnlyLogFormats, "only-logformats", "l", false, "highlight only log formats (can be combined with -p and -w)")
-	LogalizeCmd.Flags().BoolVarP(&options.HighlightOnlyPatterns, "only-patterns", "p", false, "highlight only patterns (can be combined with -l and -w)")
-	LogalizeCmd.Flags().BoolVarP(&options.HighlightOnlyWords, "only-words", "w", false, "highlight only words (can be combined with -l and -p)")
+	LogalizeCmd.Flags().BoolP("only-logformats", "l", false, "highlight only log formats (can be combined with -p and -w)")
+	LogalizeCmd.Flags().BoolP("only-patterns", "p", false, "highlight only patterns (can be combined with -l and -w)")
+	LogalizeCmd.Flags().BoolP("only-words", "w", false, "highlight only words (can be combined with -l and -p)")
+	LogalizeCmd.Flags().BoolP("dry-run", "n", false, "disable any colorization")
 }
 
 func Execute() {

@@ -7,13 +7,9 @@ import (
 
 // Settings stores the values of command-line and config options
 type Settings struct {
-	ConfigPath  string // path to configuration file
-	PrintConfig bool   // print full (after all merges) configuration file
+	ConfigPath string // path to configuration file
 
-	Theme      string // the name of the theme to be used
-	ListThemes bool   // list all available themes
-
-	PrintBuiltins bool // print built-in log formats and words
+	Theme string // the name of the theme to be used
 
 	NoBuiltinLogFormats bool // disable built-in log formats
 	NoBuiltinPatterns   bool // disable built-in patterns
@@ -61,13 +57,9 @@ func InitSettings(flags *pflag.FlagSet) error {
 
 func getBuiltinSettings() Settings {
 	return Settings{
-		ConfigPath:  "",
-		PrintConfig: false,
+		ConfigPath: "",
 
-		Theme:      "tokyonight",
-		ListThemes: false,
-
-		PrintBuiltins: false,
+		Theme: "tokyonight",
 
 		NoBuiltinLogFormats: false,
 		NoBuiltinPatterns:   false,
@@ -85,6 +77,7 @@ func getSettingFromConfig(opts Settings, config *koanf.Koanf) Settings {
 	if config.Exists("settings.theme") {
 		opts.Theme = config.String("settings.theme")
 	}
+
 	if config.Exists("settings.no-builtin-logformats") {
 		opts.NoBuiltinLogFormats = config.Bool("settings.no-builtin-logformats")
 	}
@@ -97,6 +90,7 @@ func getSettingFromConfig(opts Settings, config *koanf.Koanf) Settings {
 	if config.Exists("settings.no-builtins") {
 		opts.NoBuiltins = config.Bool("settings.no-builtins")
 	}
+
 	if config.Exists("settings.only-logformats") {
 		opts.HighlightOnlyLogFormats = config.Bool("settings.only-logformats")
 	}
@@ -106,13 +100,19 @@ func getSettingFromConfig(opts Settings, config *koanf.Koanf) Settings {
 	if config.Exists("settings.only-words") {
 		opts.HighlightOnlyWords = config.Bool("settings.only-words")
 	}
+
 	return opts
 }
 
 func getSettingFromFlags(opts Settings, flags *pflag.FlagSet) Settings {
+	if flags.Changed("config") {
+		opts.ConfigPath, _ = flags.GetString("config")
+	}
+
 	if flags.Changed("theme") {
 		opts.Theme, _ = flags.GetString("theme")
 	}
+
 	if flags.Changed("no-builtin-logformats") {
 		opts.NoBuiltinLogFormats, _ = flags.GetBool("no-builtin-logformats")
 	}
@@ -125,6 +125,7 @@ func getSettingFromFlags(opts Settings, flags *pflag.FlagSet) Settings {
 	if flags.Changed("no-builtins") {
 		opts.NoBuiltins, _ = flags.GetBool("no-builtins")
 	}
+
 	if flags.Changed("only-logformats") {
 		opts.HighlightOnlyLogFormats, _ = flags.GetBool("only-logformats")
 	}
@@ -134,5 +135,9 @@ func getSettingFromFlags(opts Settings, flags *pflag.FlagSet) Settings {
 	if flags.Changed("only-words") {
 		opts.HighlightOnlyWords, _ = flags.GetBool("only-words")
 	}
+	if flags.Changed("dry-run") {
+		opts.DryRun, _ = flags.GetBool("dry-run")
+	}
+
 	return opts
 }
