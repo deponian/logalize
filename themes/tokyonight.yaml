@@ -1,5 +1,4 @@
 # For the most part, it's based on colors from https://github.com/folke/tokyonight.nvim
-
 themes:
   tokyonight:
     formats:
@@ -13,7 +12,7 @@ themes:
       # $remote_addr - $remote_user [$time_local] "$request" $status $body_bytes_sent "$http_referer" "$http_user_agent"
       nginx-combined:
         remote-addr:
-          fg: "#ffc777"
+          fg: "#eecc9f"
         dash:
           fg: "#828bb8"
         remote-user:
@@ -52,7 +51,7 @@ themes:
       # $remote_addr - $remote_user [$time_local] "$request" $status $body_bytes_sent "$http_referer" "$http_user_agent" $request_length $request_time [$proxy_upstream_name] [$proxy_alternative_upstream_name] $upstream_addr $upstream_response_length $upstream_response_time $upstream_status $req_id
       nginx-ingress-controller:
         remote-addr:
-          fg: "#ffc777"
+          fg: "#eecc9f"
         dash:
           fg: "#828bb8"
         remote-user:
@@ -89,11 +88,11 @@ themes:
         proxy-alternative-upstream-name:
           fg: "#636da6"
         upstream-addr:
-          fg: "#ffc777"
+          fg: "#eecc9f"
         upstream-response-length:
           fg: "#c099ff"
         upstream-response-time:
-          fg: "#ff757f"
+          fg: "#64c6d5"
         upstream-status:
           2xx:
             fg: "#00ff00"
