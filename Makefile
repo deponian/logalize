@@ -91,7 +91,7 @@ coverage-html: test
 ## changelog: generate new changelog
 .PHONY: changelog
 changelog:
-	git cliff -c .cliff.toml --bump > CHANGELOG.md
+	@git cliff -c .cliff.toml --bump -u -s header
 
 ## build: build the application
 .PHONY: build
