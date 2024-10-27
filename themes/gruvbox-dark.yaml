@@ -1,0 +1,345 @@
+# Source: https://github.com/morhetz/gruvbox
+themes:
+  gruvbox-dark:
+    formats:
+      # INFO:
+      # Nginx predefined "combined" format
+      #
+      # SOURCE:
+      # https://nginx.org/en/docs/http/ngx_http_log_module.html
+      #
+      # SCHEME:
+      # $remote_addr - $remote_user [$time_local] "$request" $status $body_bytes_sent "$http_referer" "$http_user_agent"
+      nginx-combined:
+        remote-addr:
+          fg: "#ebdbb2"
+        dash:
+          fg: "#83a598"
+        remote-user:
+          fg: "#83a598"
+        time-local:
+          fg: "#d3869b"
+        request:
+          fg: "#ebdbb2"
+        status:
+          2xx:
+            fg: "#98971a"
+            style: bold
+          3xx:
+            fg: "#458588"
+            style: bold
+          4xx:
+            fg: "#cc241d"
+            style: bold
+          5xx:
+            fg: "#d3869b"
+            style: bold
+        body-bytes-sent:
+          fg: "#458588"
+        http-referer:
+          fg: "#ebdbb2"
+        http-user-agent:
+          fg: "#83a598"
+
+      # INFO:
+      # Ingress Nginx default format
+      #
+      # SOURCE:
+      # https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/log-format/
+      #
+      # SCHEME:
+      # $remote_addr - $remote_user [$time_local] "$request" $status $body_bytes_sent "$http_referer" "$http_user_agent" $request_length $request_time [$proxy_upstream_name] [$proxy_alternative_upstream_name] $upstream_addr $upstream_response_length $upstream_response_time $upstream_status $req_id
+      nginx-ingress-controller:
+        remote-addr:
+          fg: "#ebdbb2"
+        dash:
+          fg: "#83a598"
+        remote-user:
+          fg: "#83a598"
+        time-local:
+          fg: "#d3869b"
+        request:
+          fg: "#ebdbb2"
+        status:
+          2xx:
+            fg: "#98971a"
+            style: bold
+          3xx:
+            fg: "#458588"
+            style: bold
+          4xx:
+            fg: "#cc241d"
+            style: bold
+          5xx:
+            fg: "#d3869b"
+            style: bold
+        body-bytes-sent:
+          fg: "#458588"
+        http-referer:
+          fg: "#ebdbb2"
+        http-user-agent:
+          fg: "#83a598"
+        request-length:
+          fg: "#458588"
+        request-time:
+          fg: "#ebdbb2"
+        proxy-upstream-name:
+          fg: "#83a598"
+        proxy-alternative-upstream-name:
+          fg: "#458588"
+        upstream-addr:
+          fg: "#ebdbb2"
+        upstream-response-length:
+          fg: "#d3869b"
+        upstream-response-time:
+          fg: "#83a598"
+        upstream-status:
+          2xx:
+            fg: "#98971a"
+            style: bold
+          3xx:
+            fg: "#458588"
+            style: bold
+          4xx:
+            fg: "#cc241d"
+            style: bold
+          5xx:
+            fg: "#d3869b"
+            style: bold
+        req-id:
+          fg: "#458588"
+
+      # INFO:
+      # klog format, useful for things like Cert Manager, Cluster Autoscaler and other Kubernetes-related logs
+      #
+      # SOURCE:
+      # https://github.com/kubernetes/klog/blob/9ad246211af1ed84621ee94a26fcce0038b69cd1/klog.go#L581-L597
+      #
+      # SCHEME:
+      # Lmmdd hh:mm:ss.uuuuuu threadid file:line] msg...
+      #
+      # where the fields are defined as follows:
+      # 	L                A single character, representing the log level (eg 'I' for INFO)
+      # 	mm               The month (zero padded; ie May is '05')
+      # 	dd               The day (zero padded)
+      # 	hh:mm:ss.uuuuuu  Time in hours, minutes and fractional seconds
+      # 	threadid         The space-padded thread ID as returned by GetTID()
+      # 	file             The file name
+      # 	line             The line number
+      # 	msg              The user-supplied message
+      klog:
+        log-level:
+          info:
+            fg: "#83a598"
+            style: bold
+          warning:
+            fg: "#fabd2f"
+            style: bold
+          error:
+            fg: "#d3869b"
+            style: bold
+          fatal:
+            fg: "#cc241d"
+            style: bold
+        time:
+          fg: "#ebdbb2"
+        thread-id:
+          fg: "#458588"
+        filename:
+          fg: "#83a598"
+        line-number:
+          fg: "#458588"
+        bracket:
+          fg: "#fabd2f"
+        message:
+          style: "patterns-and-words"
+
+      # INFO:
+      # Redis default log format
+      #
+      # SOURCE:
+      # https://github.com/redis/redis/issues/12918#issuecomment-1880735488
+      # https://github.com/redis/redis/issues/2545#issuecomment-97270522
+      #
+      # SCHEME:
+      # PID:ROLE day month year hh:mm:ss.uuu log-level-char msg
+      redis:
+        pid:
+          fg: "#83a598"
+        colon:
+          fg: "#458588"
+        role:
+          master:
+            fg: "#d3869b"
+            style: bold
+          replica:
+            fg: "#83a598"
+            style: bold
+          sentinel:
+            fg: "#fabd2f"
+            style: bold
+          rdb-aof-writing-child:
+            fg: "#8ec07c"
+            style: bold
+        date:
+          fg: "#d3869b"
+        time:
+          fg: "#ebdbb2"
+        log-level:
+          warning:
+            fg: "#fabd2f"
+            style: bold
+          notice:
+            fg: "#83a598"
+            style: bold
+          info:
+            fg: "#83a598"
+            style: bold
+          debug:
+            fg: "#8ec07c"
+            style: bold
+        message:
+          style: "patterns-and-words"
+
+    patterns:
+      # 2024-02-17T06:56:10Z
+      # 2024-02-17T06:56:10.636960544Z
+      # 2024-02-17T06:56:10.636960544+01:00
+      rfc3339:
+        # 2024-02-17
+        date:
+          fg: "#d3869b"
+        # T
+        t-delimiter:
+          fg: "#83a598"
+        # 06:56:10.636960544
+        time:
+          fg: "#ebdbb2"
+        # Z
+        # +01:00
+        offset:
+          fg: "#83a598"
+
+      # 23:42:12
+      # 23:42:12.034123
+      time:
+        fg: "#ebdbb2"
+
+      # 1999-07-10
+      # 1999/07/10
+      # 07-10-1999
+      # 07/10/1999
+      date-1:
+        fg: "#d3869b"
+
+      # 27 Jan
+      # 27 January
+      # 27 Jan 2023
+      # 27 August 2023
+      # 27-Jan-2023
+      # 27-August-2023
+      # 27/Jan/2023
+      # 27/August/2023
+      date-2:
+        fg: "#d3869b"
+
+      # Jan 27
+      # January 27
+      # Jan 27 2023
+      # August 27 2023
+      # Jan-27-2023
+      # August-27-2023
+      # Jan/27/2023
+      # August/27/2023
+      date-3:
+        fg: "#d3869b"
+
+      # Mon 17
+      # Sunday 3
+      date-4:
+        fg: "#d3869b"
+
+      # 5s
+      # 7.5h
+      # 75.984854ms
+      duration:
+        # 7.5
+        number:
+          fg: "#83a598"
+        # h
+        unit:
+          fg: "#458588"
+
+      # xxxxx=xxxxxxx
+      logfmt-general:
+        key:
+          fg: "#83a598"
+        equal-sign:
+          fg: "#458588"
+        value:
+          style: patterns-and-words
+
+      # xxxxx="xxxxxxx"
+      logfmt-string:
+        key:
+          fg: "#83a598"
+        equal-sign:
+          fg: "#458588"
+        opening-quotation-mark:
+          fg: "#83a598"
+        value:
+          style: patterns-and-words
+        closing-quotation-mark:
+          fg: "#83a598"
+
+      # 0.0.0.0
+      # 10.0.0.200/16
+      # 127.0.0.1:8080
+      ipv4-address:
+        # 10.0.0.200
+        address:
+          fg: "#83a598"
+        # /16
+        # :8080
+        mask-or-port:
+          fg: "#458588"
+
+      # 2001:db8:4006:812::200e
+      # [2001:db8:4006:812::200e]:8080
+      ipv6-address:
+        # [
+        opening-bracket:
+          fg: "#458588"
+        # 2001:db8:4006:812::200e
+        address:
+          fg: "#83a598"
+        # ]
+        closing-bracket:
+          fg: "#458588"
+        # :8080
+        port:
+          fg: "#458588"
+
+      # 3D:F2:C9:A6:B3:4F
+      # 3D-F2-C9-A6-B3-4F
+      mac-address:
+        fg: "#83a598"
+
+      # 0a99af43-0ad4-4237-b9cd-064966eb2803
+      uuid:
+        fg: "#83a598"
+
+    # see lists of the words themselves here: https://github.com/deponian/logalize/tree/main/builtins/words
+    words:
+      bad:
+        fg: "#fb4934"
+        style: bold
+      good:
+        fg: "#458588"
+        style: bold
+      info:
+        fg: "#458588"
+        style: bold
+      warning:
+        fg: "#fabd2f"
+        style: bold
