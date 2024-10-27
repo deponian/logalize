@@ -59,7 +59,7 @@ func getBuiltinSettings() Settings {
 	return Settings{
 		ConfigPath: "",
 
-		Theme: "tokyonight",
+		Theme: "tokyonight-dark",
 
 		NoBuiltinLogFormats: false,
 		NoBuiltinPatterns:   false,

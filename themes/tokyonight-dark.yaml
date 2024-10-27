@@ -1,6 +1,6 @@
-# For the most part, it's based on colors from https://github.com/folke/tokyonight.nvim
+# Source: https://github.com/folke/tokyonight.nvim
 themes:
-  tokyonight:
+  tokyonight-dark:
     formats:
       # INFO:
       # Nginx predefined "combined" format

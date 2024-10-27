@@ -337,7 +337,7 @@ func TestConfigLoadBuiltinGood(t *testing.T) {
 	}
 
 	Opts = Settings{
-		Theme: "tokyonight",
+		Theme: "tokyonight-dark",
 	}
 
 	err = InitConfig(builtinsAllGood)
@@ -402,7 +402,7 @@ func TestConfigLoadBuiltinFlagNoBuiltins(t *testing.T) {
 		NoBuiltinPatterns:   false,
 		NoBuiltinWords:      false,
 		NoBuiltins:          true,
-		Theme:               "tokyonight",
+		Theme:               "tokyonight-dark",
 	}
 
 	err = InitConfig(builtinsAllGood)
@@ -466,7 +466,7 @@ func TestConfigLoadBuiltinFlagNoBuiltinLogFormats(t *testing.T) {
 		NoBuiltinPatterns:   false,
 		NoBuiltinWords:      false,
 		NoBuiltins:          false,
-		Theme:               "tokyonight",
+		Theme:               "tokyonight-dark",
 	}
 
 	err = InitConfig(builtinsAllGood)
@@ -530,7 +530,7 @@ func TestConfigLoadBuiltinFlagNoBuiltinPatterns(t *testing.T) {
 		NoBuiltinPatterns:   true,
 		NoBuiltinWords:      false,
 		NoBuiltins:          false,
-		Theme:               "tokyonight",
+		Theme:               "tokyonight-dark",
 	}
 
 	err = InitConfig(builtinsAllGood)
@@ -594,7 +594,7 @@ func TestConfigLoadBuiltinFlagNoBuiltinWords(t *testing.T) {
 		NoBuiltinPatterns:   false,
 		NoBuiltinWords:      true,
 		NoBuiltins:          false,
-		Theme:               "tokyonight",
+		Theme:               "tokyonight-dark",
 	}
 
 	err = InitConfig(builtinsAllGood)
@@ -658,7 +658,7 @@ func TestConfigLoadBuiltinFlagNoBuiltinPatternsAndWords(t *testing.T) {
 		NoBuiltinPatterns:   true,
 		NoBuiltinWords:      true,
 		NoBuiltins:          false,
-		Theme:               "tokyonight",
+		Theme:               "tokyonight-dark",
 	}
 
 	err = InitConfig(builtinsAllGood)
@@ -722,7 +722,7 @@ func TestConfigLoadBuiltinFlagDryRun(t *testing.T) {
 		HighlightOnlyPatterns:   false,
 		HighlightOnlyWords:      false,
 		DryRun:                  true,
-		Theme:                   "tokyonight",
+		Theme:                   "tokyonight-dark",
 	}
 
 	err = InitConfig(builtinsAllGood)
@@ -786,7 +786,7 @@ func TestConfigLoadBuiltinFlagHighlightOnlyLogFormats(t *testing.T) {
 		HighlightOnlyPatterns:   false,
 		HighlightOnlyWords:      false,
 		DryRun:                  false,
-		Theme:                   "tokyonight",
+		Theme:                   "tokyonight-dark",
 	}
 
 	err = InitConfig(builtinsAllGood)
@@ -850,7 +850,7 @@ func TestConfigLoadBuiltinFlagHighlightOnlyPatterns(t *testing.T) {
 		HighlightOnlyPatterns:   true,
 		HighlightOnlyWords:      false,
 		DryRun:                  false,
-		Theme:                   "tokyonight",
+		Theme:                   "tokyonight-dark",
 	}
 
 	err = InitConfig(builtinsAllGood)
@@ -914,7 +914,7 @@ func TestConfigLoadBuiltinFlagHighlightOnlyWords(t *testing.T) {
 		HighlightOnlyPatterns:   false,
 		HighlightOnlyWords:      true,
 		DryRun:                  false,
-		Theme:                   "tokyonight",
+		Theme:                   "tokyonight-dark",
 	}
 
 	err = InitConfig(builtinsAllGood)
@@ -946,7 +946,7 @@ func TestConfigLoadBuiltinBad(t *testing.T) {
 	colorProfile = termenv.TrueColor
 
 	Opts = Settings{
-		Theme: "tokyonight",
+		Theme: "tokyonight-dark",
 	}
 
 	builtinsLogformatsBad := fstest.MapFS{
@@ -1212,7 +1212,7 @@ formats:
 	Opts = Settings{
 		ConfigPath: userConfig,
 		NoBuiltins: true,
-		Theme:      "tokyonight",
+		Theme:      "tokyonight-dark",
 	}
 
 	t.Run("TestConfigLoadUserDefinedBadYAML", func(t *testing.T) {
@@ -1225,7 +1225,7 @@ formats:
 	Opts = Settings{
 		ConfigPath: userConfig + "error",
 		NoBuiltins: true,
-		Theme:      "tokyonight",
+		Theme:      "tokyonight-dark",
 	}
 
 	t.Run("TestConfigLoadUserDefinedFileDoesntExist", func(t *testing.T) {
@@ -1245,7 +1245,7 @@ formats:
 	Opts = Settings{
 		ConfigPath: userConfigReadOnly,
 		NoBuiltins: false,
-		Theme:      "tokyonight",
+		Theme:      "tokyonight-dark",
 	}
 
 	t.Run("TestConfigLoadUserDefinedReadOnly", func(t *testing.T) {
@@ -1281,7 +1281,7 @@ formats:
 	Opts = Settings{
 		ConfigPath: "",
 		NoBuiltins: true,
-		Theme:      "tokyonight",
+		Theme:      "tokyonight-dark",
 	}
 
 	defaultConfigPaths = append(defaultConfigPaths, tempDefaultConfig)
@@ -1347,7 +1347,7 @@ formats:
 	Opts = Settings{
 		ConfigPath: "",
 		NoBuiltins: true,
-		Theme:      "tokyonight",
+		Theme:      "tokyonight-dark",
 	}
 
 	t.Run("TestConfigLoadDotLogalizeBadYAML", func(t *testing.T) {

@@ -84,7 +84,7 @@ It's fast and extensible alternative to ccze and colorize.`,
 	// these flags are used inside the logalize package
 	// they will be processed by InitSettings()
 	LogalizeCmd.Flags().StringP("config", "c", "", "path to user configuration file")
-	LogalizeCmd.Flags().StringP("theme", "t", "tokyonight", "set the theme")
+	LogalizeCmd.Flags().StringP("theme", "t", "tokyonight-dark", "set the theme")
 
 	LogalizeCmd.Flags().BoolP("no-builtin-logformats", "L", false, "disable built-in log formats highlighting")
 	LogalizeCmd.Flags().BoolP("no-builtin-patterns", "P", false, "disable built-in patterns highlighting")

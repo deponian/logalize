@@ -120,7 +120,7 @@ settings:
 	correctOpts := Settings{
 		ConfigPath: userConfig,
 
-		Theme: "tokyonight",
+		Theme: "tokyonight-dark",
 
 		NoBuiltinLogFormats: true,
 		NoBuiltinPatterns:   true,

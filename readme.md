@@ -434,12 +434,12 @@ Customization
 
 #### I want to change one of the colors in one of the built-in themes
 
-1. Suppose you don't like the color of the "uuid" pattern in the "tokyonight" theme
+1. Suppose you don't like the color of the "uuid" pattern in the "tokyonight-dark" theme
 2. Just override it in your `logalize.yaml` like this:
 ```yaml
 # . . .
 themes:
-  tokyonight:
+  tokyonight-dark:
     patterns:
       uuid:
         fg: "#ff0000"
