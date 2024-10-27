@@ -398,7 +398,7 @@ themes:
       # . . .
 ```
 
-`themes` is the place where you apply colors and style to log formats, patterns and word groups you defined earlier. Every capture group can be colorized using `fg`, `bg` and `style` fields.
+`themes` is the place where you apply colors and style to log formats, patterns and word groups you defined earlier (or to the built-in ones). Every capture group can be colorized using `fg`, `bg` and `style` fields.
 
 `fg` and `bg` are foreground and background colors correspondingly. They can be a hex value like `#ff0000` or a number between 0 and 255 for ANSI colors.
 
@@ -450,11 +450,8 @@ themes:
 
 #### I want to define and use my own theme
 
-1. Get current configuration to use it as an example:
-```sh
-logalize --print-config > example.logalize.yaml
-```
-2. Copy one of the built-in themes from `example.logalize.yaml` to your `logalize.yaml`, rename it and change it the way you like it:
+1. Use one of the existing themes as an example. Pick one [here](themes/)
+2. Copy it to your `logalize.yaml`, rename and change the way you like it:
 ```yaml
 # . . .
 themes:
@@ -467,7 +464,11 @@ themes:
       # . . .
 # . . .
 ```
-3. Set the theme in your `logalize.yaml` in `settings` section:
+3. Test it using logs from [testlogs](testlogs/) directory:
+```sh
+cat testlogs/* | logalize --theme your-theme-name
+```
+4. Set the theme in your `logalize.yaml` in `settings` section when it's ready:
 ```yaml
 # . . .
 settings:
@@ -475,10 +476,7 @@ settings:
   # . . .
 # . . .
 ```
-4. ... or set the theme using `--theme` flag:
-```sh
-cat logs | logalize --theme "your-theme-name"
-```
+5. If it's a well known theme and you think others might benefit from it, feel free to open a PR asking to add that theme as one of the built-in themes
 
 #### I want to disable all builtins and use only data from my own `logalize.yaml`
 
