@@ -55,6 +55,11 @@ yay -S logalize-bin
 yay -S logalize
 ```
 
+**macOS:**
+```sh
+brew install deponian/tap/logalize
+```
+
 Use `go install` if you already have `$GOPATH/bin` in your `$PATH`:
 
 ```sh
