@@ -36,7 +36,7 @@ var (
 )
 
 // global color profile for all colorization
-var colorProfile = termenv.EnvColorProfile()
+var colorProfile = termenv.NewOutput(os.Stdout, termenv.WithUnsafe()).EnvColorProfile()
 
 // where to find default configuration files
 var defaultConfigPaths = getDefaultConfigPaths()
