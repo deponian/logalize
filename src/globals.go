@@ -36,7 +36,7 @@ var (
 )
 
 // global color profile for all colorization
-var colorProfile = termenv.ColorProfile()
+var colorProfile = termenv.EnvColorProfile()
 
 // where to find default configuration files
 var defaultConfigPaths = getDefaultConfigPaths()
