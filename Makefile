@@ -56,27 +56,27 @@ help:
 ## tidy: format code and tidy modfile
 .PHONY: tidy
 tidy:
-	go fmt ./pkg
+	go fmt ./src
 	go mod tidy -v
 
 ## audit: run quality control checks
 .PHONY: audit
 audit:
 	go mod verify
-	go vet ./pkg
-	go run honnef.co/go/tools/cmd/staticcheck@latest -checks=all,-ST1000,-U1000 ./pkg
-	go run golang.org/x/vuln/cmd/govulncheck@latest ./pkg
+	go vet ./src
+	go run honnef.co/go/tools/cmd/staticcheck@latest -checks=all,-ST1000,-U1000 ./src
+	go run golang.org/x/vuln/cmd/govulncheck@latest ./src
 
 ## test: run all tests
 .PHONY: test
 test:
-	rm -rf pkg/builtins
-	rm -rf pkg/themes
-	cp -r builtins pkg/
-	cp -r themes pkg/
-	go test -race -coverprofile=coverage.out ./pkg
-	rm -rf pkg/builtins
-	rm -rf pkg/themes
+	rm -rf src/builtins
+	rm -rf src/themes
+	cp -r builtins src/
+	cp -r themes src/
+	go test -race -coverprofile=coverage.out ./src
+	rm -rf src/builtins
+	rm -rf src/themes
 
 ## coverage-func: run all tests and display coverage with "-func"
 .PHONY: coverage-func

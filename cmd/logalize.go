@@ -10,7 +10,7 @@ import (
 
 	"github.com/aaaton/golem/v4"
 	"github.com/aaaton/golem/v4/dicts/en"
-	logalize "github.com/deponian/logalize/pkg"
+	logalize "github.com/deponian/logalize/src"
 	"github.com/goccy/go-yaml"
 	"github.com/knadh/koanf/v2"
 	"github.com/spf13/cobra"
