@@ -1,3 +1,7 @@
+# This is an example configutaion file.
+# Values below are not the default setting.
+# If you want to get built-in defaults run "logalize --print-config"
+
 # settings:
 #   theme: "utopia"
 
