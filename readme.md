@@ -33,16 +33,19 @@ Installation
 Download DEB, RPM and Arch Linux packages or the binary for your architecture from [releases](https://github.com/deponian/logalize/releases/latest).
 
 **Ubuntu/Debian:**
+
 ```sh
 sudo dpkg -i logalize_X.X.X_linux_amd64.deb
 ```
 
 **Fedora/Red Hat Enterprise Linux/CentOS:**
+
 ```sh
 sudo rpm -i logalize_X.X.X_linux_amd64.rpm
 ```
 
 **Arch Linux/Manjaro:**
+
 ```sh
 sudo pacman -U logalize_X.X.X_linux_amd64.pkg.tar.zst
 ```
@@ -56,9 +59,12 @@ yay -S logalize
 ```
 
 **macOS:**
+
 ```sh
 brew install deponian/tap/logalize
 ```
+
+**OS agnostic:**
 
 Use `go install` if you already have `$GOPATH/bin` in your `$PATH`:
 
