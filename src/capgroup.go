@@ -15,8 +15,8 @@ type CapGroup struct {
 	Foreground   string
 	Background   string
 	Style        string
-	Alternatives []CapGroup `koanf:"alternatives"`
-	RegExp       *regexp.Regexp
+	Alternatives []CapGroup     `koanf:"alternatives"`
+	RegExp       *regexp.Regexp `koanf:"-"`
 }
 
 // CapGroupList represents a list of capture groups
@@ -32,24 +32,24 @@ func (cgl *CapGroupList) init(isLogFormat bool) error {
 		if err := group.check(); err != nil {
 			return err
 		}
+	}
 
-		// build regexp for whole list
-		var format string
-		for i, cg := range cgl.Groups {
-			// add name for the capture group
-			format += fmt.Sprintf("(?P<capGroup%d>(?:%s))", i, cg.RegExpStr[1:len(cg.RegExpStr)-1])
-		}
-		if isLogFormat {
-			format = "^" + format + "$"
-		}
-		cgl.FullRegExp = regexp.MustCompile(format)
+	// build regexp for the whole list
+	var format string
+	for i, cg := range cgl.Groups {
+		// add name for the capture group
+		format += fmt.Sprintf("(?P<capGroup%d>(?:%s))", i, cg.RegExpStr[1:len(cg.RegExpStr)-1])
+	}
+	if isLogFormat {
+		format = "^" + format + "$"
+	}
+	cgl.FullRegExp = regexp.MustCompile(format)
 
-		// build regexps for capture groups' alternatives
-		for _, cg := range cgl.Groups {
-			if len(cg.Alternatives) > 0 {
-				for i, alt := range cg.Alternatives {
-					cg.Alternatives[i].RegExp = regexp.MustCompile(alt.RegExpStr)
-				}
+	// build regexps for capture groups' alternatives
+	for _, cg := range cgl.Groups {
+		if len(cg.Alternatives) > 0 {
+			for i, alt := range cg.Alternatives {
+				cg.Alternatives[i].RegExp = regexp.MustCompile(alt.RegExpStr)
 			}
 		}
 	}

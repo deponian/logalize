@@ -49,8 +49,7 @@ themes:
 		{"string", 500, &CapGroupList{
 			[]CapGroup{
 				{
-					"", `("[^"]+"|'[^']+')`, "#00ff00", "", "", nil,
-					regexp.MustCompile(`("[^"]+"|'[^']+')`),
+					"", `("[^"]+"|'[^']+')`, "#00ff00", "", "", nil, nil,
 				},
 			},
 			regexp.MustCompile(`(?P<capGroup0>(?:"[^"]+"|'[^']+'))`),
@@ -58,12 +57,10 @@ themes:
 		{"ipv4-address", 0, &CapGroupList{
 			[]CapGroup{
 				{
-					"", `(\d\d\d(\.\d\d\d){3})`, "#ffc777", "", "", nil,
-					regexp.MustCompile(`(\d\d\d(\.\d\d\d){3})`),
+					"", `(\d\d\d(\.\d\d\d){3})`, "#ffc777", "", "", nil, nil,
 				},
 				{
-					"", `((:\d{1,5})?)`, "#ff966c", "", "", nil,
-					regexp.MustCompile(`((:\d{1,5})?)`),
+					"", `((:\d{1,5})?)`, "#ff966c", "", "", nil, nil,
 				},
 			},
 			regexp.MustCompile(`(?P<capGroup0>(?:\d\d\d(\.\d\d\d){3}))(?P<capGroup1>(?:(:\d{1,5})?))`),
@@ -71,8 +68,7 @@ themes:
 		{"number", 0, &CapGroupList{
 			[]CapGroup{
 				{
-					"", `(\d+)`, "", "#00ffff", "bold", nil,
-					regexp.MustCompile(`(\d+)`),
+					"", `(\d+)`, "", "#00ffff", "bold", nil, nil,
 				},
 			},
 			regexp.MustCompile(`(?P<capGroup0>(?:\d+))`),

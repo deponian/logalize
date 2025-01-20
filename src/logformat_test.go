@@ -67,10 +67,10 @@ themes:
 
 	correctCapGroupList := CapGroupList{
 		[]CapGroup{
-			{"one", `(\d{1,3}(\.\d{1,3}){3} )`, "#f5ce42", "", "", nil, regexp.MustCompile(`(\d{1,3}(\.\d{1,3}){3} )`)},
-			{"two", `([^ ]+ )`, "", "#764a9e", "", nil, regexp.MustCompile(`([^ ]+ )`)},
-			{"three", `(\[.+\] )`, "", "", "bold", nil, regexp.MustCompile(`(\[.+\] )`)},
-			{"four", `("[^"]+")`, "#9daf99", "#76fb99", "underline", nil, regexp.MustCompile(`("[^"]+")`)},
+			{"one", `(\d{1,3}(\.\d{1,3}){3} )`, "#f5ce42", "", "", nil, nil},
+			{"two", `([^ ]+ )`, "", "#764a9e", "", nil, nil},
+			{"three", `(\[.+\] )`, "", "", "bold", nil, nil},
+			{"four", `("[^"]+")`, "#9daf99", "#76fb99", "underline", nil, nil},
 			{
 				"five",
 				`(\d\d\d)`, "", "", "",
@@ -81,7 +81,7 @@ themes:
 					{"4", `(4\d\d)`, "#ff0000", "", "reverse", nil, regexp.MustCompile(`(4\d\d)`)},
 					{"5", `(5\d\d)`, "#ff00ff", "", "", nil, regexp.MustCompile(`(5\d\d)`)},
 				},
-				regexp.MustCompile(`(\d\d\d)`),
+				nil,
 			},
 		},
 		regexp.MustCompile(`^(?P<capGroup0>(?:\d{1,3}(\.\d{1,3}){3} ))(?P<capGroup1>(?:[^ ]+ ))(?P<capGroup2>(?:\[.+\] ))(?P<capGroup3>(?:"[^"]+"))(?P<capGroup4>(?:\d\d\d))$`),

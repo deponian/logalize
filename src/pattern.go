@@ -5,12 +5,14 @@ import (
 	"sort"
 )
 
+// Pattern represents a pattern
 type Pattern struct {
 	Name      string
 	Priority  int
 	CapGroups *CapGroupList
 }
 
+// PatternList represents a list of pattern
 type PatternList []Pattern
 
 var Patterns PatternList
@@ -20,6 +22,7 @@ var Patterns PatternList
 func initPatterns() error {
 	Patterns = PatternList{}
 
+	// collect list of patterns
 	for _, patternName := range Config.MapKeys("patterns") {
 		var pattern Pattern
 		pattern.Name = patternName
@@ -37,6 +40,7 @@ func initPatterns() error {
 		Patterns = append(Patterns, pattern)
 	}
 
+	// init patterns
 	for _, pattern := range Patterns {
 		// set colors and style from the theme
 		for i, cg := range pattern.CapGroups.Groups {
@@ -67,7 +71,7 @@ func initPatterns() error {
 			}
 		}
 
-		// init patterns
+		// init capture groups
 		if err := pattern.CapGroups.init(false); err != nil {
 			return fmt.Errorf("[pattern: %s] %s", pattern.Name, err)
 		}
@@ -82,7 +86,7 @@ func initPatterns() error {
 	return nil
 }
 
-// HighlightPatternsAndWords colorizes various patterns
+// highlight colorizes various patterns
 // like IP address, date, HTTP response code and (optionally) special words
 func (patterns PatternList) highlight(str string, highlightWords bool) string {
 	if str == "" {
