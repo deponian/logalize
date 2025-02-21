@@ -511,7 +511,9 @@ Acknowledgements
 
 Thanks to my brother [@emptysad](https://github.com/emptysad) for coming up with the name Logalize and for the logo idea.
 
-Thanks to [@ekivoka](https://github.com/ekivoka) for the help with choosing the design and testing the logo. 
+Thanks to [@ekivoka](https://github.com/ekivoka) for her help with choosing the design and testing the logo. 
+
+Thanks to [@antiflasher](https://github.com/antiflasher) and [@romashamin](https://github.com/romashamin) for their help with AVIF image conversion. 
 
 Thanks to the authors of these awesome libraries:
 
