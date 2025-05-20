@@ -34,7 +34,7 @@ builds:
 
 archives:
   - id: binary
-    format: binary
+    formats: binary
     files:
     - none*
     name_template: >-
@@ -47,7 +47,7 @@ archives:
       {{- else }}{{ .Arch }}{{ end }}
       {{- if .Arm }}v{{ .Arm }}{{ end }}
   - id: binary-tar-zst
-    format: tar.zst
+    formats: tar.zst
     name_template: >-
       {{ .ProjectName }}_
       {{- .Version }}_
@@ -59,7 +59,7 @@ archives:
       {{- if .Arm }}v{{ .Arm }}{{ end }}
     format_overrides:
       - goos: windows
-        format: zip
+        formats: zip
 
 checksum:
   name_template: '{{ .ProjectName }}_checksums.txt'
