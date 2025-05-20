@@ -1,6 +1,13 @@
 # Source: https://github.com/morhetz/gruvbox
 themes:
   gruvbox-dark:
+    # default color is used for anything that is not fall into a format, pattern or word
+    # if you don't specify a default color, the normal color of your terminal will be used
+    #default:
+    #  fg: "#ff0000"
+    #  bg: "#00ff00"
+    #  style: "bold"
+
     formats:
       # INFO:
       # Nginx predefined "combined" format

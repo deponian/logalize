@@ -106,8 +106,11 @@ func (patterns PatternList) highlight(str string, highlightWords bool) string {
 
 	// words
 	if highlightWords {
-		str = Words.highlight(str)
+		return Words.highlight(str)
+	} else {
+		// at this point we know that str doesn't contain any patterns and
+		// we don't want to highlight words, so we can apply default color here
+		defaultColor := Config.StringMap("themes." + Opts.Theme + ".default")
+		return highlight(str, defaultColor["fg"], defaultColor["bg"], defaultColor["style"])
 	}
-
-	return str
 }

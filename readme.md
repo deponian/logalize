@@ -310,6 +310,13 @@ Configuration example:
 themes:
   # name of a theme
   utopia:
+    # default color is used for anything that is not fall into a format, pattern or word
+    # if you don't specify a default color, the normal color of your terminal will be used
+    #default:
+    #  fg: "#ff0000"
+    #  bg: "#00ff00"
+    #  style: "bold"
+
     formats:
       kuvaq:
         ip-address:
@@ -456,6 +463,21 @@ themes:
         fg: "#ff0000"
         bg: "#00ff00"
         style: bold
+# . . .
+```
+
+#### I want to change color for everything that is not fall into a format, pattern or word (i.e., just plain text)
+
+1. Suppose you use the "tokyonight-dark" theme
+2. Just set default color in your `logalize.yaml` like this:
+```yaml
+# . . .
+themes:
+  tokyonight-dark:
+    default:
+      fg: "#ff0000"
+      bg: "#00ff00"
+      style: bold
 # . . .
 ```
 
