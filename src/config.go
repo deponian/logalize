@@ -60,11 +60,6 @@ func InitConfig(builtins fs.FS) error {
 		}
 	}
 
-	// clear config if we don't want to colorize anything
-	if Opts.DryRun {
-		config.Delete("")
-	}
-
 	Config = config
 
 	return nil

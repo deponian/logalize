@@ -19,7 +19,7 @@ type Settings struct {
 	HighlightOnlyLogFormats bool // highlight only log formats
 	HighlightOnlyPatterns   bool // highlight only patterns
 	HighlightOnlyWords      bool // highlight only words
-	DryRun                  bool // highlight nothing
+	DryRun                  bool // don't alter the input
 
 	NoANSIEscapeSequencesStripping bool // disable removing of ANSI escape sequences from the input
 }

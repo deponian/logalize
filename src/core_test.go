@@ -429,6 +429,7 @@ themes:
 	if err != nil {
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}
+
 	Opts = Settings{
 		ConfigPath: testConfig,
 		NoBuiltins: true,
@@ -461,6 +462,21 @@ themes:
 	})
 
 	input = strings.NewReader(`127.0.0.1 "testing"`)
+	t.Run("TestRunBadWriterLogFormat", func(t *testing.T) {
+		err := Run(input, file, lemmatizer)
+		if _, ok := err.(*fs.PathError); !ok {
+			t.Errorf("Run() should have failed with *fs.PathError, got: [%T] %s", err, err)
+		}
+	})
+
+	// test --dry-run flag
+	Opts = Settings{
+		ConfigPath: testConfig,
+		NoBuiltins: true,
+		Theme:      "test",
+		DryRun:     true,
+	}
+	input = strings.NewReader(`just plain text`)
 	t.Run("TestRunBadWriterLogFormat", func(t *testing.T) {
 		err := Run(input, file, lemmatizer)
 		if _, ok := err.(*fs.PathError); !ok {

@@ -23,10 +23,21 @@ func Run(reader io.Reader, writer io.StringWriter, lemmatizer *golem.Lemmatizer)
 	scanner := bufio.NewScanner(reader)
 	for scanner.Scan() {
 		line := scanner.Text()
+
+		// don't alter the input in any way if user set --dry-run flag
+		if Opts.DryRun {
+			_, err := writer.WriteString(line + "\n")
+			if err != nil {
+				return err
+			}
+			continue
+		}
+
 		// remove all ANSI escape sequences from the input by default
 		if !Opts.NoANSIEscapeSequencesStripping {
 			line = StripANSIEscapeSequences(line)
 		}
+
 		// try one of the log formats
 		formatDetected := false
 		for _, logFormat := range LogFormats {
@@ -39,6 +50,7 @@ func Run(reader io.Reader, writer io.StringWriter, lemmatizer *golem.Lemmatizer)
 				break
 			}
 		}
+
 		// highlight patterns and words if log format wasn't detected
 		if !formatDetected {
 			_, err := writer.WriteString(Patterns.highlight(line, true) + "\n")

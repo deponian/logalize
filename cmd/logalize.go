@@ -94,7 +94,7 @@ It's fast and extensible alternative to ccze and colorize.`,
 	LogalizeCmd.Flags().BoolP("only-logformats", "l", false, "highlight only log formats (can be combined with -p and -w)")
 	LogalizeCmd.Flags().BoolP("only-patterns", "p", false, "highlight only patterns (can be combined with -l and -w)")
 	LogalizeCmd.Flags().BoolP("only-words", "w", false, "highlight only words (can be combined with -l and -p)")
-	LogalizeCmd.Flags().BoolP("dry-run", "n", false, "disable any colorization")
+	LogalizeCmd.Flags().BoolP("dry-run", "n", false, "don't alter the input in any way")
 
 	LogalizeCmd.Flags().BoolP("no-ansi-escape-sequences-stripping", "s", false, "disable removing of ANSI escape sequences from the input")
 }
