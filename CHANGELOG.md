@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Strip ANSI escape sequences form the input by default
+
+### Added
+
 - Add -s/--no-ansi-escape-sequences-stripping flag to get pre v0.4.5 behavior
 
 ## [0.4.4] - 2025-05-20
@@ -163,7 +166,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Print version as "version (commit) date"
 
-[0.4.5]: https://github.com/deponian/logalize/compare/v0.4.5..v0.4.4
+[0.4.5]: https://github.com/deponian/logalize/compare/v0.4.4..v0.4.5
 [0.4.4]: https://github.com/deponian/logalize/compare/v0.4.3..v0.4.4
 [0.4.3]: https://github.com/deponian/logalize/compare/v0.4.2..v0.4.3
 [0.4.2]: https://github.com/deponian/logalize/compare/v0.4.1..v0.4.2
