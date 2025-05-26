@@ -24,6 +24,8 @@ settings:
   only-logformats: true
   only-patterns: true
   only-words: true
+
+  no-ansi-escape-sequences-stripping: false
 `
 	defaultConfig := t.TempDir() + "/tempDefaultConfig.yaml"
 	configRaw := []byte(configDataDefault)
@@ -50,6 +52,8 @@ settings:
   only-logformats: false
   #only-patterns: false
   #only-words: false
+
+  no-ansi-escape-sequences-stripping: true
 `
 	userConfig := t.TempDir() + "/userConfig.yaml"
 	configRaw = []byte(configDataUser)
@@ -76,6 +80,8 @@ settings:
   #only-logformats: false
   only-patterns: false
   only-words: false
+
+  no-ansi-escape-sequences-stripping: false
 `
 	wd, err := os.Getwd()
 	if err != nil {
@@ -107,9 +113,11 @@ settings:
 	flags.BoolP("only-patterns", "g", false, "")
 	flags.BoolP("only-words", "h", false, "")
 	flags.StringP("config", "i", "", "")
+	flags.BoolP("no-ansi-escape-sequences-stripping", "j", false, "")
 	args := []string{
 		"--no-builtins",
 		"--only-words",
+		"--no-ansi-escape-sequences-stripping",
 		"--config",
 		userConfig,
 	}
@@ -130,6 +138,8 @@ settings:
 		HighlightOnlyLogFormats: false,
 		HighlightOnlyPatterns:   false,
 		HighlightOnlyWords:      true,
+
+		NoANSIEscapeSequencesStripping: true,
 	}
 
 	defaultConfigPaths = append(defaultConfigPaths, defaultConfig)
@@ -196,6 +206,8 @@ settings:
   only-logformats: true
   only-patterns: true
   only-words: true
+
+  no-ansi-escape-sequences-stripping: true
 `
 	configRaw := []byte(configData)
 	config := koanf.New(".")
@@ -214,6 +226,8 @@ settings:
 		HighlightOnlyLogFormats: true,
 		HighlightOnlyPatterns:   true,
 		HighlightOnlyWords:      true,
+
+		NoANSIEscapeSequencesStripping: true,
 	}
 
 	t.Run("TestSettingsFromConfig", func(t *testing.T) {
@@ -236,6 +250,7 @@ func TestSettingsFromFlags(t *testing.T) {
 	flags.BoolP("only-patterns", "g", false, "")
 	flags.BoolP("only-words", "h", false, "")
 	flags.BoolP("dry-run", "i", false, "")
+	flags.BoolP("no-ansi-escape-sequences-stripping", "j", true, "")
 	args := []string{
 		"--theme",
 		"test",
@@ -247,6 +262,7 @@ func TestSettingsFromFlags(t *testing.T) {
 		"--only-patterns",
 		"--only-words",
 		"--dry-run",
+		"--no-ansi-escape-sequences-stripping",
 	}
 	if err := flags.Parse(args); err != nil {
 		t.Errorf("flags.Parse() failed with an error: %s", err)
@@ -263,6 +279,8 @@ func TestSettingsFromFlags(t *testing.T) {
 		HighlightOnlyPatterns:   true,
 		HighlightOnlyWords:      true,
 		DryRun:                  true,
+
+		NoANSIEscapeSequencesStripping: true,
 	}
 
 	t.Run("TestSettingsFromFlags", func(t *testing.T) {

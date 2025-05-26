@@ -13,6 +13,8 @@
 #   only-logformats: false
 #   only-patterns: false
 #   only-words: false
+#
+#   no-ansi-escape-sequences-stripping: false
 
 # formats:
 #   nginx-combined:

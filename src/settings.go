@@ -20,6 +20,8 @@ type Settings struct {
 	HighlightOnlyPatterns   bool // highlight only patterns
 	HighlightOnlyWords      bool // highlight only words
 	DryRun                  bool // highlight nothing
+
+	NoANSIEscapeSequencesStripping bool // disable removing of ANSI escape sequences from the input
 }
 
 var Opts Settings
@@ -70,6 +72,8 @@ func getBuiltinSettings() Settings {
 		HighlightOnlyPatterns:   false,
 		HighlightOnlyWords:      false,
 		DryRun:                  false,
+
+		NoANSIEscapeSequencesStripping: false,
 	}
 }
 
@@ -99,6 +103,10 @@ func getSettingFromConfig(opts Settings, config *koanf.Koanf) Settings {
 	}
 	if config.Exists("settings.only-words") {
 		opts.HighlightOnlyWords = config.Bool("settings.only-words")
+	}
+
+	if config.Exists("settings.no-ansi-escape-sequences-stripping") {
+		opts.NoANSIEscapeSequencesStripping = config.Bool("settings.no-ansi-escape-sequences-stripping")
 	}
 
 	return opts
@@ -137,6 +145,10 @@ func getSettingFromFlags(opts Settings, flags *pflag.FlagSet) Settings {
 	}
 	if flags.Changed("dry-run") {
 		opts.DryRun, _ = flags.GetBool("dry-run")
+	}
+
+	if flags.Changed("no-ansi-escape-sequences-stripping") {
+		opts.NoANSIEscapeSequencesStripping, _ = flags.GetBool("no-ansi-escape-sequences-stripping")
 	}
 
 	return opts

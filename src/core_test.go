@@ -250,6 +250,13 @@ themes:
 		{`true bad fail 7.7.7.7`, "\x1b[38;2;81;250;138;1mtrue\x1b[0m bad \x1b[48;2;240;108;97mfail\x1b[0m \x1b[38;2;255;0;0;48;2;255;255;0;1m7.7.7.7\x1b[0m\n"},
 		{`"true" and true`, "\x1b[38;2;0;255;0m\"true\"\x1b[0m and \x1b[38;2;81;250;138;1mtrue\x1b[0m\n"},
 		{`wenzel failed 127 times`, "\x1b[38;2;248;52;178;4mwenzel\x1b[0m \x1b[48;2;240;108;97mfailed\x1b[0m \x1b[38;2;80;80;80m127\x1b[0m times\n"},
+
+		// colored input (ANSI escape sequences should be successfully stripped)
+		{"127.0.0.1 - \x1b[0m\x1b[1m\x1b[31m[test]\x1b[0m \"testing\"", "\x1b[38;2;245;206;65m127.0.0.1 \x1b[0m\x1b[48;2;118;73;158m- \x1b[0m\x1b[1m[test] \x1b[0m\x1b[38;2;157;175;153;48;2;118;251;153;4m\"testing\"\x1b[0m\n"},
+		{"\x1b[0m\x1b[1m\x1b[31m\"string\"\x1b[0m", "\x1b[38;2;0;255;0m\"string\"\x1b[0m\n"},
+		{"\x1b[0m\x1b[1m\x1b[31mtrue\x1b[0m", "\x1b[38;2;81;250;138;1mtrue\x1b[0m\n"},
+		{"\x1b[0m\x1b[1m\x1b[31mfail\x1b[0m", "\x1b[48;2;240;108;97mfail\x1b[0m\n"},
+		{"true \x1b[0m\x1b[1m\x1b[31mbad\x1b[0m fail 7.7.7.7", "\x1b[38;2;81;250;138;1mtrue\x1b[0m bad \x1b[48;2;240;108;97mfail\x1b[0m \x1b[38;2;255;0;0;48;2;255;255;0;1m7.7.7.7\x1b[0m\n"},
 	}
 
 	lemmatizer, err := golem.New(en.New())
