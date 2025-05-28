@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.7] - 2025-05-28
+
+### Fixed
+
+- Strip ANSI escape sequences with ":"-separated colors (see https://github.com/deponian/logalize/issues/6)
+
 ## [0.4.6] - 2025-05-26
 
 ### Fixed
@@ -173,6 +179,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Print version as "version (commit) date"
 
+[0.4.7]: https://github.com/deponian/logalize/compare/v0.4.6..v0.4.7
 [0.4.6]: https://github.com/deponian/logalize/compare/v0.4.5..v0.4.6
 [0.4.5]: https://github.com/deponian/logalize/compare/v0.4.4..v0.4.5
 [0.4.4]: https://github.com/deponian/logalize/compare/v0.4.3..v0.4.4
