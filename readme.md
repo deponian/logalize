@@ -540,12 +540,13 @@ Thanks to [@ekivoka](https://github.com/ekivoka) for her help with choosing the 
 
 Thanks to [@antiflasher](https://github.com/antiflasher) and [@romashamin](https://github.com/romashamin) for their help with AVIF image conversion. 
 
-Thanks to the authors of these awesome libraries:
+Thanks to the authors of these awesome projects:
 
 - [spf13/cobra](https://github.com/spf13/cobra)
 - [aaaton/golem](https://github.com/aaaton/golem)
 - [knadh/koanf](https://github.com/knadh/koanf)
 - [muesli/termenv](https://github.com/muesli/termenv)
 - [goccy/go-yaml](https://github.com/goccy/go-yaml)
+- [chalk/ansi-regex](https://github.com/chalk/ansi-regex)
 
 [^1]: I made that up

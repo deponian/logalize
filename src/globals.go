@@ -50,7 +50,13 @@ func getDefaultConfigPaths() []string {
 }
 
 func StripANSIEscapeSequences(str string) string {
-	const ANSI = "[\u001B\u009B][[\\]()#;?]*(?:(?:(?:[a-zA-Z\\d]*(?:;[a-zA-Z\\d]*)*)?\u0007)|(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PRZcf-ntqry=><~]))"
+	// based on https://github.com/chalk/ansi-regex
+	// with the addition of ":"-separated colors like '\x1B[38:5:185mTEST\e[0m'
+	const ANSI = `[\x1B\x9B]` +
+		`[[\]()#;?]*` +
+		`(?:(?:(?:(?:;[-a-zA-Z\d\\/#&.:=?%@~_]+)*|[a-zA-Z\d]+(?:;[-a-zA-Z\d\\/#&.:=?%@~_]*)*)?(?:\x07|\x1B\x5C|\x9C))` +
+		`|` +
+		`(?:(?:\d{1,4}(?:[;:]\d{0,4})*)?[\dA-PR-TZcf-nq-uy=><~]))`
 
 	return regexp.MustCompile(ANSI).ReplaceAllString(str, "")
 }
