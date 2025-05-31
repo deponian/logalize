@@ -280,20 +280,8 @@ patterns:
         - regexp: (5\d\d)
           name: 5xx
 
-words:
-  good:
-    - "true"
-  bad:
-    - "fail"
-    - "fatal"
-
 themes:
   test:
-    default:
-      fg: "#ff0000"
-      bg: "#00ff00"
-      style: "bold"
-
     patterns:
       string:
         fg: "#00ff00"
@@ -323,25 +311,16 @@ themes:
             style: reverse
           5xx:
             fg: "#ff00ff"
-
-    words:
-      good:
-        fg: "#52fa8a"
-        style: bold
-      bad:
-        bg: "#f06c62"
-        style: underline
 `
 	tests := []struct {
 		plain   string
 		colored string
 	}{
-		{"hello", "\x1b[38;2;255;0;0;48;2;0;255;0;1mhello\x1b[0m"},
+		{"hello", "hello"},
 		{`"string"`, "\x1b[38;2;0;255;0m\"string\"\x1b[0m"},
 		{"42", "\x1b[48;2;0;80;80m42\x1b[0m"},
 		{"127.0.0.1", "\x1b[38;2;255;0;0;48;2;255;255;0;1m127.0.0.1\x1b[0m"},
-		{`"test": 127.7.7.7 hello 101`, "\x1b[38;2;0;255;0m\"test\"\x1b[0m\x1b[38;2;255;0;0;48;2;0;255;0;1m: \x1b[0m\x1b[38;2;255;0;0;48;2;255;255;0;1m127.7.7.7\x1b[0m\x1b[38;2;255;0;0;48;2;0;255;0;1m \x1b[0m\x1b[38;2;255;0;0;48;2;0;255;0;1mhello\x1b[0m\x1b[38;2;255;0;0;48;2;0;255;0;1m \x1b[0m\x1b[48;2;0;80;80m101\x1b[0m"},
-		{`true bad fail`, "\x1b[38;2;81;250;138;1mtrue\x1b[0m\x1b[38;2;255;0;0;48;2;0;255;0;1m \x1b[0m\x1b[38;2;255;0;0;48;2;0;255;0;1mbad\x1b[0m\x1b[38;2;255;0;0;48;2;0;255;0;1m \x1b[0m\x1b[48;2;240;108;97;4mfail\x1b[0m"},
+		{`"test": 127.7.7.7 hello 101`, "\x1b[38;2;0;255;0m\"test\"\x1b[0m: \x1b[38;2;255;0;0;48;2;255;255;0;1m127.7.7.7\x1b[0m hello \x1b[48;2;0;80;80m101\x1b[0m"},
 		{`"true"`, "\x1b[38;2;0;255;0m\"true\"\x1b[0m"},
 		{`"42"`, "\x1b[38;2;0;255;0m\"42\"\x1b[0m"},
 		{`"237.7.7.7"`, "\x1b[38;2;0;255;0m\"237.7.7.7\"\x1b[0m"},
@@ -389,7 +368,7 @@ themes:
 			t.Errorf("InitWords() failed with this error: %s", err)
 		}
 		t.Run(testname, func(t *testing.T) {
-			colored := Patterns.highlight(tt.plain, true)
+			colored := Patterns.highlight(tt.plain)
 			if colored != tt.colored {
 				t.Errorf("got %v, want %v", colored, tt.colored)
 			}

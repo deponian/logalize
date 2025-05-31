@@ -87,30 +87,31 @@ func initPatterns() error {
 }
 
 // highlight colorizes various patterns
-// like IP address, date, HTTP response code and (optionally) special words
-func (patterns PatternList) highlight(str string, highlightWords bool) string {
+// like IP address, date, HTTP response code, etc.
+func (patterns PatternList) highlight(str string) string {
 	if str == "" {
 		return str
 	}
 
-	// patterns
+	// skip already colored parts of the string
+	matches := sgrANSIEscapeSequenceRegexp.FindStringSubmatchIndex(str)
+	if matches != nil {
+		leftPart := patterns.highlight(str[0:matches[0]])
+		alreadyColored := str[matches[0]:matches[1]]
+		rightPart := patterns.highlight(str[matches[1]:])
+		return leftPart + alreadyColored + rightPart
+	}
+
+	// color patterns
 	for _, pattern := range patterns {
 		matches := pattern.CapGroups.FullRegExp.FindStringSubmatchIndex(str)
 		if matches != nil {
-			leftPart := patterns.highlight(str[0:matches[0]], highlightWords)
+			leftPart := patterns.highlight(str[0:matches[0]])
 			match := pattern.CapGroups.highlight(str[matches[0]:matches[1]])
-			rightPart := patterns.highlight(str[matches[1]:], highlightWords)
+			rightPart := patterns.highlight(str[matches[1]:])
 			return leftPart + match + rightPart
 		}
 	}
 
-	// words
-	if highlightWords {
-		return Words.highlight(str)
-	} else {
-		// at this point we know that str doesn't contain any patterns and
-		// we don't want to highlight words, so we can apply default color here
-		defaultColor := Config.StringMap("themes." + Opts.Theme + ".default")
-		return highlight(str, defaultColor["fg"], defaultColor["bg"], defaultColor["style"])
-	}
+	return str
 }

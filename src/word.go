@@ -95,14 +95,12 @@ func (words WordGroups) highlightWord(word string) string {
 		if slices.Contains(wordGroup.List, lemma) ||
 			slices.Contains(wordGroup.List, word) ||
 			slices.Contains(wordGroup.List, strings.ToLower(word)) {
-			return highlight(word, wordGroup.Foreground, wordGroup.Background, wordGroup.Style)
+			word = highlight(word, wordGroup.Foreground, wordGroup.Background, wordGroup.Style)
+			break
 		}
 	}
 
-	// the word isn't contained in any of word groups,
-	// so we can apply default color here
-	defaultColor := Config.StringMap("themes." + Opts.Theme + ".default")
-	return highlight(word, defaultColor["fg"], defaultColor["bg"], defaultColor["style"])
+	return word
 }
 
 // highlightNegated colors a phrase with negated word in a string
@@ -127,25 +125,26 @@ func (words WordGroups) highlightNegatedWord(phrase, negator, word string) strin
 		if slices.Contains(wordGroup.List, lemma) ||
 			slices.Contains(wordGroup.List, word) ||
 			slices.Contains(wordGroup.List, strings.ToLower(word)) {
-			// negator will be colored with default color
-			// because it doesn't have special meaning in this context
-			defaultColor := Config.StringMap("themes." + Opts.Theme + ".default")
-			coloredNegator := highlight(negator, defaultColor["fg"], defaultColor["bg"], defaultColor["style"])
-			coloredWord := highlight(word, wordGroup.Foreground, wordGroup.Background, wordGroup.Style)
-			return coloredNegator + " " + coloredWord
+			return negator + " " + highlight(word, wordGroup.Foreground, wordGroup.Background, wordGroup.Style)
 		}
 	}
 
-	// the phrase doesn't contain any known words,
-	// so we can apply default color here
-	defaultColor := Config.StringMap("themes." + Opts.Theme + ".default")
-	return highlight(phrase, defaultColor["fg"], defaultColor["bg"], defaultColor["style"])
+	return phrase
 }
 
 // highlight colors all words in a string
 func (words WordGroups) highlight(str string) string {
 	if str == "" {
 		return str
+	}
+
+	// skip already colored parts of the string
+	matches := sgrANSIEscapeSequenceRegexp.FindStringSubmatchIndex(str)
+	if matches != nil {
+		leftPart := words.highlight(str[0:matches[0]])
+		alreadyColored := str[matches[0]:matches[1]]
+		rightPart := words.highlight(str[matches[1]:])
+		return leftPart + alreadyColored + rightPart
 	}
 
 	for {
@@ -160,10 +159,7 @@ func (words WordGroups) highlight(str string) string {
 			rightPart := words.highlight(str[m[1]:])
 			return leftPart + match + rightPart
 		} else {
-			// at this point we know that str doesn't contain anything special to highlight,
-			// so it means we can apply default color here
-			defaultColor := Config.StringMap("themes." + Opts.Theme + ".default")
-			return highlight(str, defaultColor["fg"], defaultColor["bg"], defaultColor["style"])
+			return str
 		}
 	}
 }

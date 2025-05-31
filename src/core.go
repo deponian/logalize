@@ -70,7 +70,7 @@ func colorize(line string) string {
 
 	// remove all ANSI escape sequences from the input by default
 	if !Opts.NoANSIEscapeSequencesStripping {
-		line = StripANSIEscapeSequences(line)
+		line = allANSIEscapeSequencesRegexp.ReplaceAllString(line, "")
 	}
 
 	// try one of the log formats
@@ -80,6 +80,10 @@ func colorize(line string) string {
 		}
 	}
 
-	// highlight patterns and words if log format wasn't detected
-	return Patterns.highlight(line, true)
+	// if log format wasn't detected highlight patterns and words
+	// and then apply default color to the rest
+	line = Patterns.highlight(line)
+	line = Words.highlight(line)
+	line = applyDefaultColor(line)
+	return line
 }

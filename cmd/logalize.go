@@ -96,7 +96,7 @@ It's fast and extensible alternative to ccze and colorize.`,
 	LogalizeCmd.Flags().BoolP("only-words", "w", false, "highlight only words (can be combined with -l and -p)")
 	LogalizeCmd.Flags().BoolP("dry-run", "n", false, "don't alter the input in any way")
 
-	LogalizeCmd.Flags().BoolP("no-ansi-escape-sequences-stripping", "s", false, "disable removing of ANSI escape sequences from the input")
+	LogalizeCmd.Flags().BoolP("no-ansi-escape-sequences-stripping", "s", false, "disable removing of ANSI escape sequences (save input colors)")
 }
 
 func Execute() {

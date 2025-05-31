@@ -59,13 +59,20 @@ func (cgl *CapGroupList) init(isLogFormat bool) error {
 // highlight colorizes string and applies a style
 func highlight(str, fg, bg, style string) string {
 	if style == "patterns-and-words" {
-		return Patterns.highlight(str, true)
+		str = Patterns.highlight(str)
+		str = Words.highlight(str)
+		str = applyDefaultColor(str)
+		return str
 	}
 	if style == "patterns" {
-		return Patterns.highlight(str, false)
+		str = Patterns.highlight(str)
+		str = applyDefaultColor(str)
+		return str
 	}
 	if style == "words" {
-		return Words.highlight(str)
+		str = Words.highlight(str)
+		str = applyDefaultColor(str)
+		return str
 	}
 
 	coloredStr := termenv.String(str)
