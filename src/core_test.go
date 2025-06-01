@@ -187,76 +187,85 @@ themes:
 		colored string
 	}{
 		// log format
-		{`127.0.0.1 - [test] "testing"`, "\x1b[38;2;245;206;65m127.0.0.1 \x1b[0m\x1b[48;2;118;73;158m- \x1b[0m\x1b[1m[test] \x1b[0m\x1b[38;2;157;175;153;48;2;118;251;153;4m\"testing\"\x1b[0m\n"},
-		{`127.0.0.2 test [test hello] "testing again"`, "\x1b[38;2;245;206;65m127.0.0.2 \x1b[0m\x1b[48;2;118;73;158mtest \x1b[0m\x1b[1m[test hello] \x1b[0m\x1b[38;2;157;175;153;48;2;118;251;153;4m\"testing again\"\x1b[0m\n"},
-		{`127.0.0.3 ___ [.] "_"`, "\x1b[38;2;245;206;65m127.0.0.3 \x1b[0m\x1b[48;2;118;73;158m___ \x1b[0m\x1b[1m[.] \x1b[0m\x1b[38;2;157;175;153;48;2;118;251;153;4m\"_\"\x1b[0m\n"},
-		{`0 - hello bye`, "\x1b[38;2;245;206;65m0 - \x1b[0mhello bye\n"},
-		{`1 - 777 hello 1.1.1.1 true toni rufus`, "\x1b[38;2;245;206;65m1 - \x1b[0m\x1b[38;2;255;255;255m777\x1b[0m hello \x1b[38;2;255;0;0;48;2;255;255;0;1m1.1.1.1\x1b[0m true toni rufus\n"},
-		{`22 - 777 hello 1.1.1.1 true toni rufus`, "\x1b[38;2;245;206;65m22 - \x1b[0m777 hello 1.1.1.1 \x1b[38;2;81;250;138;1mtrue\x1b[0m \x1b[38;2;248;52;178;4mtoni\x1b[0m rufus\n"},
-		{`333 - 777 hello 1.1.1.1 true toni rufus`, "\x1b[38;2;245;206;65m333 - \x1b[0m\x1b[38;2;255;255;255m777\x1b[0m hello \x1b[38;2;255;0;0;48;2;255;255;0;1m1.1.1.1\x1b[0m \x1b[38;2;81;250;138;1mtrue\x1b[0m \x1b[38;2;248;52;178;4mtoni\x1b[0m rufus\n"},
-		{`4444 - "777 hello 1.1.1.1 true toni rufus" "777 hello 1.1.1.1 true toni rufus" «777 hello 1.1.1.1 true toni rufus»`, "\x1b[38;2;245;206;65m4444 - \x1b[0m\x1b[38;2;0;255;0m\"777 hello 1.1.1.1 true toni rufus\"\x1b[0m \"777 hello 1.1.1.1 \x1b[38;2;81;250;138;1mtrue\x1b[0m \x1b[38;2;248;52;178;4mtoni\x1b[0m rufus\" «\x1b[38;2;255;255;255m777\x1b[0m hello \x1b[38;2;255;0;0;48;2;255;255;0;1m1.1.1.1\x1b[0m \x1b[38;2;81;250;138;1mtrue\x1b[0m \x1b[38;2;248;52;178;4mtoni\x1b[0m rufus»\n"},
+		{`127.0.0.1 - [test] "testing"`, "\x1b[38;2;245;206;65m127.0.0.1 \x1b[0m\x1b[48;2;118;73;158m- \x1b[0m\x1b[1m[test] \x1b[0m\x1b[38;2;157;175;153;48;2;118;251;153;4m\"testing\"\x1b[0m"},
+		{`127.0.0.2 test [test hello] "testing again"`, "\x1b[38;2;245;206;65m127.0.0.2 \x1b[0m\x1b[48;2;118;73;158mtest \x1b[0m\x1b[1m[test hello] \x1b[0m\x1b[38;2;157;175;153;48;2;118;251;153;4m\"testing again\"\x1b[0m"},
+		{`127.0.0.3 ___ [.] "_"`, "\x1b[38;2;245;206;65m127.0.0.3 \x1b[0m\x1b[48;2;118;73;158m___ \x1b[0m\x1b[1m[.] \x1b[0m\x1b[38;2;157;175;153;48;2;118;251;153;4m\"_\"\x1b[0m"},
+		{`0 - hello bye`, "\x1b[38;2;245;206;65m0 - \x1b[0mhello bye"},
+		{`1 - 777 hello 1.1.1.1 true toni rufus`, "\x1b[38;2;245;206;65m1 - \x1b[0m\x1b[38;2;255;255;255m777\x1b[0m hello \x1b[38;2;255;0;0;48;2;255;255;0;1m1.1.1.1\x1b[0m true toni rufus"},
+		{`22 - 777 hello 1.1.1.1 true toni rufus`, "\x1b[38;2;245;206;65m22 - \x1b[0m777 hello 1.1.1.1 \x1b[38;2;81;250;138;1mtrue\x1b[0m \x1b[38;2;248;52;178;4mtoni\x1b[0m rufus"},
+		{`333 - 777 hello 1.1.1.1 true toni rufus`, "\x1b[38;2;245;206;65m333 - \x1b[0m\x1b[38;2;255;255;255m777\x1b[0m hello \x1b[38;2;255;0;0;48;2;255;255;0;1m1.1.1.1\x1b[0m \x1b[38;2;81;250;138;1mtrue\x1b[0m \x1b[38;2;248;52;178;4mtoni\x1b[0m rufus"},
+		{`4444 - "777 hello 1.1.1.1 true toni rufus" "777 hello 1.1.1.1 true toni rufus" «777 hello 1.1.1.1 true toni rufus»`, "\x1b[38;2;245;206;65m4444 - \x1b[0m\x1b[38;2;0;255;0m\"777 hello 1.1.1.1 true toni rufus\"\x1b[0m \"777 hello 1.1.1.1 \x1b[38;2;81;250;138;1mtrue\x1b[0m \x1b[38;2;248;52;178;4mtoni\x1b[0m rufus\" «\x1b[38;2;255;255;255m777\x1b[0m hello \x1b[38;2;255;0;0;48;2;255;255;0;1m1.1.1.1\x1b[0m \x1b[38;2;81;250;138;1mtrue\x1b[0m \x1b[38;2;248;52;178;4mtoni\x1b[0m rufus»"},
 
 		// pattern
-		{`"string"`, "\x1b[38;2;0;255;0m\"string\"\x1b[0m\n"},
-		{"42", "\x1b[48;2;0;80;80m42\x1b[0m\n"},
-		{"127.0.0.1", "\x1b[38;2;255;0;0;48;2;255;255;0;1m127.0.0.1\x1b[0m\n"},
-		{`"test": 127.7.7.7 hello 101`, "\x1b[38;2;0;255;0m\"test\"\x1b[0m: \x1b[38;2;255;0;0;48;2;255;255;0;1m127.7.7.7\x1b[0m hello \x1b[38;2;80;80;80m101\x1b[0m\n"},
-		{`"true"`, "\x1b[38;2;0;255;0m\"true\"\x1b[0m\n"},
-		{`"42"`, "\x1b[38;2;0;255;0m\"42\"\x1b[0m\n"},
-		{`"237.7.7.7"`, "\x1b[38;2;0;255;0m\"237.7.7.7\"\x1b[0m\n"},
-		{`status 103`, "status \x1b[38;2;80;80;80m103\x1b[0m\n"},
-		{`status 200`, "status \x1b[38;2;0;255;0;53m200\x1b[0m\n"},
-		{`status 302`, "status \x1b[38;2;0;255;255;9m302\x1b[0m\n"},
-		{`status 404`, "status \x1b[38;2;255;0;0;7m404\x1b[0m\n"},
-		{`status 503`, "status \x1b[38;2;255;0;255m503\x1b[0m\n"},
-		{`status 700`, "status \x1b[38;2;255;255;255m700\x1b[0m\n"},
+		{`"string"`, "\x1b[38;2;0;255;0m\"string\"\x1b[0m"},
+		{"42", "\x1b[48;2;0;80;80m42\x1b[0m"},
+		{"127.0.0.1", "\x1b[38;2;255;0;0;48;2;255;255;0;1m127.0.0.1\x1b[0m"},
+		{`"test": 127.7.7.7 hello 101`, "\x1b[38;2;0;255;0m\"test\"\x1b[0m: \x1b[38;2;255;0;0;48;2;255;255;0;1m127.7.7.7\x1b[0m hello \x1b[38;2;80;80;80m101\x1b[0m"},
+		{`"true"`, "\x1b[38;2;0;255;0m\"true\"\x1b[0m"},
+		{`"42"`, "\x1b[38;2;0;255;0m\"42\"\x1b[0m"},
+		{`"237.7.7.7"`, "\x1b[38;2;0;255;0m\"237.7.7.7\"\x1b[0m"},
+		{`status 103`, "status \x1b[38;2;80;80;80m103\x1b[0m"},
+		{`status 200`, "status \x1b[38;2;0;255;0;53m200\x1b[0m"},
+		{`status 302`, "status \x1b[38;2;0;255;255;9m302\x1b[0m"},
+		{`status 404`, "status \x1b[38;2;255;0;0;7m404\x1b[0m"},
+		{`status 503`, "status \x1b[38;2;255;0;255m503\x1b[0m"},
+		{`status 700`, "status \x1b[38;2;255;255;255m700\x1b[0m"},
 
 		// words
-		{"untrue", "untrue\n"},
-		{"true", "\x1b[38;2;81;250;138;1mtrue\x1b[0m\n"},
-		{"fail", "\x1b[48;2;240;108;97mfail\x1b[0m\n"},
-		{"failed", "\x1b[48;2;240;108;97mfailed\x1b[0m\n"},
-		{"wenzel", "\x1b[38;2;248;52;178;4mwenzel\x1b[0m\n"},
-		{"argus", "\x1b[38;2;18;15;187;4margus\x1b[0m\n"},
+		{"untrue", "untrue"},
+		{"true", "\x1b[38;2;81;250;138;1mtrue\x1b[0m"},
+		{"fail", "\x1b[48;2;240;108;97mfail\x1b[0m"},
+		{"failed", "\x1b[48;2;240;108;97mfailed\x1b[0m"},
+		{"wenzel", "\x1b[38;2;248;52;178;4mwenzel\x1b[0m"},
+		{"argus", "\x1b[38;2;18;15;187;4margus\x1b[0m"},
 
-		{"not true", "\x1b[48;2;240;108;97mnot true\x1b[0m\n"},
-		{"Not true", "\x1b[48;2;240;108;97mNot true\x1b[0m\n"},
-		{"wasn't true", "\x1b[48;2;240;108;97mwasn't true\x1b[0m\n"},
-		{"won't true", "\x1b[48;2;240;108;97mwon't true\x1b[0m\n"},
-		{"cannot complete", "\x1b[48;2;240;108;97mcannot complete\x1b[0m\n"},
-		{"won't be completed", "\x1b[48;2;240;108;97mwon't be completed\x1b[0m\n"},
-		{"cannot be completed", "\x1b[48;2;240;108;97mcannot be completed\x1b[0m\n"},
-		{"should not be completed", "\x1b[48;2;240;108;97mshould not be completed\x1b[0m\n"},
+		{"not true", "\x1b[48;2;240;108;97mnot true\x1b[0m"},
+		{"Not true", "\x1b[48;2;240;108;97mNot true\x1b[0m"},
+		{"wasn't true", "\x1b[48;2;240;108;97mwasn't true\x1b[0m"},
+		{"won't true", "\x1b[48;2;240;108;97mwon't true\x1b[0m"},
+		{"cannot complete", "\x1b[48;2;240;108;97mcannot complete\x1b[0m"},
+		{"won't be completed", "\x1b[48;2;240;108;97mwon't be completed\x1b[0m"},
+		{"cannot be completed", "\x1b[48;2;240;108;97mcannot be completed\x1b[0m"},
+		{"should not be completed", "\x1b[48;2;240;108;97mshould not be completed\x1b[0m"},
 
-		{"not false", "\x1b[38;2;81;250;138;1mnot false\x1b[0m\n"},
-		{"Not false", "\x1b[38;2;81;250;138;1mNot false\x1b[0m\n"},
-		{"wasn't false", "\x1b[38;2;81;250;138;1mwasn't false\x1b[0m\n"},
-		{"won't false", "\x1b[38;2;81;250;138;1mwon't false\x1b[0m\n"},
-		{"cannot fail", "\x1b[38;2;81;250;138;1mcannot fail\x1b[0m\n"},
-		{"won't be failed", "\x1b[38;2;81;250;138;1mwon't be failed\x1b[0m\n"},
-		{"cannot be failed", "\x1b[38;2;81;250;138;1mcannot be failed\x1b[0m\n"},
-		{"should not be failed", "\x1b[38;2;81;250;138;1mshould not be failed\x1b[0m\n"},
+		{"not false", "\x1b[38;2;81;250;138;1mnot false\x1b[0m"},
+		{"Not false", "\x1b[38;2;81;250;138;1mNot false\x1b[0m"},
+		{"wasn't false", "\x1b[38;2;81;250;138;1mwasn't false\x1b[0m"},
+		{"won't false", "\x1b[38;2;81;250;138;1mwon't false\x1b[0m"},
+		{"cannot fail", "\x1b[38;2;81;250;138;1mcannot fail\x1b[0m"},
+		{"won't be failed", "\x1b[38;2;81;250;138;1mwon't be failed\x1b[0m"},
+		{"cannot be failed", "\x1b[38;2;81;250;138;1mcannot be failed\x1b[0m"},
+		{"should not be failed", "\x1b[38;2;81;250;138;1mshould not be failed\x1b[0m"},
 
-		{"not toni", "not \x1b[38;2;248;52;178;4mtoni\x1b[0m\n"},
-		{"Not wenzel", "Not \x1b[38;2;248;52;178;4mwenzel\x1b[0m\n"},
-		{"wasn't argus", "wasn't \x1b[38;2;18;15;187;4margus\x1b[0m\n"},
-		{"won't cletus", "won't \x1b[38;2;18;15;187;4mcletus\x1b[0m\n"},
-		{"cannot toni", "cannot \x1b[38;2;248;52;178;4mtoni\x1b[0m\n"},
-		{"won't be wenzel", "won't be \x1b[38;2;248;52;178;4mwenzel\x1b[0m\n"},
-		{"cannot be argus", "cannot be \x1b[38;2;18;15;187;4margus\x1b[0m\n"},
-		{"should not be cletus", "should not be \x1b[38;2;18;15;187;4mcletus\x1b[0m\n"},
+		{"not toni", "not \x1b[38;2;248;52;178;4mtoni\x1b[0m"},
+		{"Not wenzel", "Not \x1b[38;2;248;52;178;4mwenzel\x1b[0m"},
+		{"wasn't argus", "wasn't \x1b[38;2;18;15;187;4margus\x1b[0m"},
+		{"won't cletus", "won't \x1b[38;2;18;15;187;4mcletus\x1b[0m"},
+		{"cannot toni", "cannot \x1b[38;2;248;52;178;4mtoni\x1b[0m"},
+		{"won't be wenzel", "won't be \x1b[38;2;248;52;178;4mwenzel\x1b[0m"},
+		{"cannot be argus", "cannot be \x1b[38;2;18;15;187;4margus\x1b[0m"},
+		{"should not be cletus", "should not be \x1b[38;2;18;15;187;4mcletus\x1b[0m"},
 
 		// patterns and words
-		{`true bad fail 7.7.7.7`, "\x1b[38;2;81;250;138;1mtrue\x1b[0m bad \x1b[48;2;240;108;97mfail\x1b[0m \x1b[38;2;255;0;0;48;2;255;255;0;1m7.7.7.7\x1b[0m\n"},
-		{`"true" and true`, "\x1b[38;2;0;255;0m\"true\"\x1b[0m and \x1b[38;2;81;250;138;1mtrue\x1b[0m\n"},
-		{`wenzel failed 127 times`, "\x1b[38;2;248;52;178;4mwenzel\x1b[0m \x1b[48;2;240;108;97mfailed\x1b[0m \x1b[38;2;80;80;80m127\x1b[0m times\n"},
+		{`true bad fail 7.7.7.7`, "\x1b[38;2;81;250;138;1mtrue\x1b[0m bad \x1b[48;2;240;108;97mfail\x1b[0m \x1b[38;2;255;0;0;48;2;255;255;0;1m7.7.7.7\x1b[0m"},
+		{`"true" and true`, "\x1b[38;2;0;255;0m\"true\"\x1b[0m and \x1b[38;2;81;250;138;1mtrue\x1b[0m"},
+		{`wenzel failed 127 times`, "\x1b[38;2;248;52;178;4mwenzel\x1b[0m \x1b[48;2;240;108;97mfailed\x1b[0m \x1b[38;2;80;80;80m127\x1b[0m times"},
 
 		// colored input (ANSI escape sequences should be successfully stripped)
-		{"127.0.0.1 - \x1b[0m\x1b[1m\x1b[31m[test]\x1b[0m \"testing\"", "\x1b[38;2;245;206;65m127.0.0.1 \x1b[0m\x1b[48;2;118;73;158m- \x1b[0m\x1b[1m[test] \x1b[0m\x1b[38;2;157;175;153;48;2;118;251;153;4m\"testing\"\x1b[0m\n"},
-		{"\x1b[0m\x1b[1m\x1b[31m\"string\"\x1b[0m", "\x1b[38;2;0;255;0m\"string\"\x1b[0m\n"},
-		{"\x1b[0m\x1b[1m\x1b[31mtrue\x1b[0m", "\x1b[38;2;81;250;138;1mtrue\x1b[0m\n"},
-		{"\x1b[0m\x1b[1m\x1b[31mfail\x1b[0m", "\x1b[48;2;240;108;97mfail\x1b[0m\n"},
-		{"true \x1b[0m\x1b[1m\x1b[31mbad\x1b[0m fail 7.7.7.7", "\x1b[38;2;81;250;138;1mtrue\x1b[0m bad \x1b[48;2;240;108;97mfail\x1b[0m \x1b[38;2;255;0;0;48;2;255;255;0;1m7.7.7.7\x1b[0m\n"},
+		{"127.0.0.1 - \x1b[0m\x1b[1m\x1b[31m[test]\x1b[0m \"testing\"", "\x1b[38;2;245;206;65m127.0.0.1 \x1b[0m\x1b[48;2;118;73;158m- \x1b[0m\x1b[1m[test] \x1b[0m\x1b[38;2;157;175;153;48;2;118;251;153;4m\"testing\"\x1b[0m"},
+		{"\x1b[0m\x1b[1m\x1b[31m\"string\"\x1b[0m", "\x1b[38;2;0;255;0m\"string\"\x1b[0m"},
+		{"\x1b[1;31mtrue\x1b[0m", "\x1b[38;2;81;250;138;1mtrue\x1b[0m"},
+		{"\x1b[3;32mfail\x1b[0m", "\x1b[48;2;240;108;97mfail\x1b[0m"},
+		{"\x1b[38:2:81:250:138mtrue\x1b[0m", "\x1b[38;2;81;250;138;1mtrue\x1b[0m"},
+		{"\x1b[38:5:100mfail\x1b[0m", "\x1b[48;2;240;108;97mfail\x1b[0m"},
+		{"true \x1b[0m\x1b[1m\x1b[31mbad\x1b[0m fail 7.7.7.7", "\x1b[38;2;81;250;138;1mtrue\x1b[0m bad \x1b[48;2;240;108;97mfail\x1b[0m \x1b[38;2;255;0;0;48;2;255;255;0;1m7.7.7.7\x1b[0m"},
+
+		// multiline input and carriage return
+		{"127.0.0.1 - [test] \"testing\"\nHello true false\n", "\x1b[38;2;245;206;65m127.0.0.1 \x1b[0m\x1b[48;2;118;73;158m- \x1b[0m\x1b[1m[test] \x1b[0m\x1b[38;2;157;175;153;48;2;118;251;153;4m\"testing\"\x1b[0m\nHello \x1b[38;2;81;250;138;1mtrue\x1b[0m \x1b[48;2;240;108;97mfalse\x1b[0m\n"},
+		{"wenzel failed\n127 times", "\x1b[38;2;248;52;178;4mwenzel\x1b[0m \x1b[48;2;240;108;97mfailed\x1b[0m\n\x1b[38;2;80;80;80m127\x1b[0m times"},
+		{"true\rfalse", "\x1b[38;2;81;250;138;1mtrue\x1b[0m\r\x1b[48;2;240;108;97mfalse\x1b[0m"},
+		{"\rtrue\rfalse", "\r\x1b[38;2;81;250;138;1mtrue\x1b[0m\r\x1b[48;2;240;108;97mfalse\x1b[0m"},
+		{"\nfalse\rtrue\n", "\n\x1b[48;2;240;108;97mfalse\x1b[0m\r\x1b[38;2;81;250;138;1mtrue\x1b[0m\n"},
 	}
 
 	lemmatizer, err := golem.New(en.New())
@@ -283,6 +292,63 @@ themes:
 
 	for _, tt := range tests {
 		testname := tt.plain
+		input := strings.NewReader(tt.plain)
+		output := bytes.Buffer{}
+
+		t.Run(testname, func(t *testing.T) {
+			err := Run(input, &output, lemmatizer)
+			if err != nil {
+				t.Errorf("Run() failed with this error: %s", err)
+			}
+
+			if output.String() != tt.colored {
+				t.Errorf("got %v, want %v", output.String(), tt.colored)
+			}
+		})
+	}
+
+	// test --dry-run flag
+	tests = []struct {
+		plain   string
+		colored string
+	}{
+		// log formats, patterns and words
+		{`127.0.0.1 - [test] "testing"`, `127.0.0.1 - [test] "testing"`},
+		{`4444 - "777 hello 1.1.1.1 true toni rufus" "777 hello 1.1.1.1 true toni rufus" «777 hello 1.1.1.1 true toni rufus»`, `4444 - "777 hello 1.1.1.1 true toni rufus" "777 hello 1.1.1.1 true toni rufus" «777 hello 1.1.1.1 true toni rufus»`},
+		{`"string"`, `"string"`},
+		{"42", "42"},
+		{"untrue", "untrue"},
+		{"true", "true"},
+
+		// colored input (ANSI escape sequences should be preserved)
+		{"127.0.0.1 - \x1b[0m\x1b[1m\x1b[31m[test]\x1b[0m \"testing\"", "127.0.0.1 - \x1b[0m\x1b[1m\x1b[31m[test]\x1b[0m \"testing\""},
+		{"\x1b[0m\x1b[1m\x1b[31m\"string\"\x1b[0m", "\x1b[0m\x1b[1m\x1b[31m\"string\"\x1b[0m"},
+		{"\x1b[1;31mtrue\x1b[0m", "\x1b[1;31mtrue\x1b[0m"},
+		{"\x1b[3;32mfail\x1b[0m", "\x1b[3;32mfail\x1b[0m"},
+		{"\x1b[38:2:81:250:138mtrue\x1b[0m", "\x1b[38:2:81:250:138mtrue\x1b[0m"},
+		{"\x1b[38:5:100mfail\x1b[0m", "\x1b[38:5:100mfail\x1b[0m"},
+		{"true \x1b[0m\x1b[1m\x1b[31mbad\x1b[0m fail 7.7.7.7", "true \x1b[0m\x1b[1m\x1b[31mbad\x1b[0m fail 7.7.7.7"},
+
+		// multiline input
+		{"127.0.0.1 - [test] \"testing\"\nHello true false\n", "127.0.0.1 - [test] \"testing\"\nHello true false\n"},
+		{"wenzel failed\n127 times", "wenzel failed\n127 times"},
+		{"true\rfalse", "true\rfalse"},
+		{"\rtrue\rfalse", "\rtrue\rfalse"},
+		{"\nfalse\rtrue\n", "\nfalse\rtrue\n"},
+	}
+	Opts = Settings{
+		ConfigPath: testConfig,
+		NoBuiltins: true,
+		Theme:      "test",
+		DryRun:     true,
+	}
+	err = InitConfig(builtins)
+	if err != nil {
+		t.Errorf("InitConfig() failed with this error: %s", err)
+	}
+
+	for _, tt := range tests {
+		testname := "DryRun" + tt.plain
 		input := strings.NewReader(tt.plain)
 		output := bytes.Buffer{}
 
@@ -468,17 +534,66 @@ themes:
 			t.Errorf("Run() should have failed with *fs.PathError, got: [%T] %s", err, err)
 		}
 	})
+}
 
-	// test --dry-run flag
+func TestRunBadReader(t *testing.T) {
+	colorProfile = termenv.TrueColor
+	var builtins embed.FS
+	lemmatizer, err := golem.New(en.New())
+	if err != nil {
+		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
+	}
+	configData := `
+formats:
+  test:
+    - regexp: (\d{1,3}(\.\d{1,3}){3} )
+      name: one
+    - regexp: ("[^"]+")
+      name: two
+
+themes:
+  test:
+    formats:
+      test:
+        one:
+          fg: "#f5ce42"
+        two:
+          fg: "#9daf99"
+          bg: "#76fb99"
+          style: underline
+`
+	testConfig := t.TempDir() + "/testConfig.yaml"
+	configRaw := []byte(configData)
+	err = os.WriteFile(testConfig, configRaw, 0644)
+	if err != nil {
+		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
+	}
+
 	Opts = Settings{
 		ConfigPath: testConfig,
 		NoBuiltins: true,
 		Theme:      "test",
-		DryRun:     true,
 	}
-	input = strings.NewReader(`just plain text`)
-	t.Run("TestRunBadWriterLogFormat", func(t *testing.T) {
-		err := Run(input, file, lemmatizer)
+	err = InitConfig(builtins)
+	if err != nil {
+		t.Errorf("InitConfig() failed with this error: %s", err)
+	}
+	filename := t.TempDir() + "/test.yaml"
+	file, err := os.Create(filename)
+	if err != nil {
+		t.Errorf("Wasn't able to create test %s: %s", filename, err)
+	}
+	err = file.Chmod(0444)
+	if err != nil {
+		t.Errorf("Wasn't able to change mode of %s: %s", filename, err)
+	}
+	err = file.Close()
+	if err != nil {
+		t.Errorf("Wasn't able to close %s: %s", filename, err)
+	}
+
+	t.Run("TestRunBadReader", func(t *testing.T) {
+		err := Run(file, os.Stderr, lemmatizer)
 		if _, ok := err.(*fs.PathError); !ok {
 			t.Errorf("Run() should have failed with *fs.PathError, got: [%T] %s", err, err)
 		}

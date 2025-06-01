@@ -150,15 +150,15 @@ func listThemes(config *koanf.Koanf) {
 // to print the config indented by two spaces instead of four
 type YAML struct{}
 
-func (p *YAML) Unmarshal(b []byte) (map[string]interface{}, error) {
-	var out map[string]interface{}
+func (p *YAML) Unmarshal(b []byte) (map[string]any, error) {
+	var out map[string]any
 	if err := yaml.Unmarshal(b, &out); err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (p *YAML) Marshal(o map[string]interface{}) ([]byte, error) {
+func (p *YAML) Marshal(o map[string]any) ([]byte, error) {
 	return yaml.MarshalWithOptions(o, yaml.Indent(2), yaml.IndentSequence(true))
 }
 
