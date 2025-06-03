@@ -96,6 +96,9 @@ func (words WordGroups) highlightWord(word string) string {
 			slices.Contains(wordGroup.List, word) ||
 			slices.Contains(wordGroup.List, strings.ToLower(word)) {
 			word = highlight(word, wordGroup.Foreground, wordGroup.Background, wordGroup.Style)
+			if Opts.Debug {
+				word = addDebugInfo(word, wordGroup)
+			}
 			break
 		}
 	}
@@ -112,20 +115,32 @@ func (words WordGroups) highlightNegatedWord(phrase, negator, word string) strin
 	if slices.Contains(words.Good.List, lemma) ||
 		slices.Contains(words.Good.List, word) ||
 		slices.Contains(words.Good.List, strings.ToLower(word)) {
-		return highlight(phrase, words.Bad.Foreground, words.Bad.Background, words.Bad.Style)
+		phrase = highlight(phrase, words.Bad.Foreground, words.Bad.Background, words.Bad.Style)
+		if Opts.Debug {
+			phrase = addDebugInfo(phrase, words.Good)
+		}
+		return phrase
 	}
 	// bad
 	if slices.Contains(words.Bad.List, lemma) ||
 		slices.Contains(words.Bad.List, word) ||
 		slices.Contains(words.Bad.List, strings.ToLower(word)) {
-		return highlight(phrase, words.Good.Foreground, words.Good.Background, words.Good.Style)
+		phrase = highlight(phrase, words.Good.Foreground, words.Good.Background, words.Good.Style)
+		if Opts.Debug {
+			phrase = addDebugInfo(phrase, words.Bad)
+		}
+		return phrase
 	}
 	// other
 	for _, wordGroup := range words.Other {
 		if slices.Contains(wordGroup.List, lemma) ||
 			slices.Contains(wordGroup.List, word) ||
 			slices.Contains(wordGroup.List, strings.ToLower(word)) {
-			return negator + " " + highlight(word, wordGroup.Foreground, wordGroup.Background, wordGroup.Style)
+			word = highlight(word, wordGroup.Foreground, wordGroup.Background, wordGroup.Style)
+			if Opts.Debug {
+				word = addDebugInfo(word, wordGroup)
+			}
+			return negator + " " + word
 		}
 	}
 

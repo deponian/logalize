@@ -109,6 +109,9 @@ func (patterns PatternList) highlight(str string) string {
 			leftPart := patterns.highlight(str[0:matches[0]])
 			match := pattern.CapGroups.highlight(str[matches[0]:matches[1]])
 			rightPart := patterns.highlight(str[matches[1]:])
+			if Opts.Debug {
+				match = addDebugInfo(match, pattern)
+			}
 			return leftPart + match + rightPart
 		}
 	}

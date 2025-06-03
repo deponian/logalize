@@ -242,15 +242,16 @@ settings:
 func TestSettingsFromFlags(t *testing.T) {
 	flags := pflag.NewFlagSet("test", pflag.PanicOnError)
 	flags.StringP("theme", "a", "", "")
-	flags.BoolP("no-builtin-logformats", "b", false, "")
-	flags.BoolP("no-builtin-patterns", "c", false, "")
-	flags.BoolP("no-builtin-words", "d", false, "")
-	flags.BoolP("no-builtins", "e", false, "")
-	flags.BoolP("only-logformats", "f", false, "")
-	flags.BoolP("only-patterns", "g", false, "")
-	flags.BoolP("only-words", "h", false, "")
-	flags.BoolP("dry-run", "i", false, "")
-	flags.BoolP("no-ansi-escape-sequences-stripping", "j", true, "")
+	flags.BoolP("debug", "b", false, "")
+	flags.BoolP("no-builtin-logformats", "c", false, "")
+	flags.BoolP("no-builtin-patterns", "d", false, "")
+	flags.BoolP("no-builtin-words", "e", false, "")
+	flags.BoolP("no-builtins", "f", false, "")
+	flags.BoolP("only-logformats", "g", false, "")
+	flags.BoolP("only-patterns", "h", false, "")
+	flags.BoolP("only-words", "i", false, "")
+	flags.BoolP("dry-run", "j", false, "")
+	flags.BoolP("no-ansi-escape-sequences-stripping", "k", true, "")
 	args := []string{
 		"--theme",
 		"test",
@@ -262,6 +263,7 @@ func TestSettingsFromFlags(t *testing.T) {
 		"--only-patterns",
 		"--only-words",
 		"--dry-run",
+		"--debug",
 		"--no-ansi-escape-sequences-stripping",
 	}
 	if err := flags.Parse(args); err != nil {
@@ -269,6 +271,8 @@ func TestSettingsFromFlags(t *testing.T) {
 	}
 	correctOpts := Settings{
 		Theme: "test",
+
+		Debug: true,
 
 		NoBuiltinLogFormats: true,
 		NoBuiltinPatterns:   true,

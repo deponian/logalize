@@ -1,6 +1,7 @@
 package logalize
 
 import (
+	"fmt"
 	"os"
 	"regexp"
 
@@ -88,4 +89,26 @@ func applyDefaultColor(str string) string {
 
 	defaultColor := Config.StringMap("themes." + Opts.Theme + ".default")
 	return highlight(str, defaultColor["fg"], defaultColor["bg"], defaultColor["style"])
+}
+
+func addDebugInfo(str string, kind any) string {
+	opening := ""
+	closing := ""
+
+	switch k := kind.(type) {
+	case LogFormat:
+		opening = fmt.Sprintf("[lf(%s)]", k.Name)
+		closing = fmt.Sprintf("[lf(/%s)]", k.Name)
+	case Pattern:
+		opening = fmt.Sprintf("[p(%s)]", k.Name)
+		closing = fmt.Sprintf("[p(/%s)]", k.Name)
+	case WordGroup:
+		opening = fmt.Sprintf("[w(%s)]", k.Name)
+		closing = fmt.Sprintf("[w(/%s)]", k.Name)
+	}
+
+	opening = highlight(opening, "", "", "reverse")
+	closing = highlight(closing, "", "", "reverse")
+
+	return opening + str + closing
 }

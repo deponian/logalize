@@ -11,6 +11,8 @@ type Settings struct {
 
 	Theme string // the name of the theme to be used
 
+	Debug bool // add debug info to the output
+
 	NoBuiltinLogFormats bool // disable built-in log formats
 	NoBuiltinPatterns   bool // disable built-in patterns
 	NoBuiltinWords      bool // disable built-in words
@@ -62,6 +64,8 @@ func getBuiltinSettings() Settings {
 		ConfigPath: "",
 
 		Theme: "tokyonight-dark",
+
+		Debug: false,
 
 		NoBuiltinLogFormats: false,
 		NoBuiltinPatterns:   false,
@@ -119,6 +123,10 @@ func getSettingFromFlags(opts Settings, flags *pflag.FlagSet) Settings {
 
 	if flags.Changed("theme") {
 		opts.Theme, _ = flags.GetString("theme")
+	}
+
+	if flags.Changed("debug") {
+		opts.Debug, _ = flags.GetBool("debug")
 	}
 
 	if flags.Changed("no-builtin-logformats") {

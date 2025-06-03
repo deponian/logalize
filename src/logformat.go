@@ -62,5 +62,9 @@ func initLogFormats() error {
 }
 
 func (lf *LogFormat) highlight(str string) (coloredStr string) {
-	return lf.CapGroups.highlight(str)
+	str = lf.CapGroups.highlight(str)
+	if Opts.Debug {
+		str = addDebugInfo(str, *lf)
+	}
+	return str
 }
