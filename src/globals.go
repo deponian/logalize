@@ -28,9 +28,7 @@ var (
 		`|[A-Za-z]+n't` +
 		`|[Cc]annot` +
 		// just plain "not something"
-		`| not` +
-		`|^not` +
-		`|^Not` +
+		`|[Nn]ot` +
 		`)` +
 		// negated word itself
 		` ([A-Za-z]+)`,
