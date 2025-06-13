@@ -80,7 +80,7 @@ Logalize reads one line from stdin at a time and then checks if it matches one o
 Simplified version of the main loop:
 1. Read a line from stdin
 2. Strip all [ANSI escape sequences](https://en.wikipedia.org/wiki/ANSI_escape_code) (see `settings` section below)
-3. If the entire line matches one of the `formats`, print colored line and go to step 1, otherwise go to step 3
+3. If the entire line matches one of the `formats`, print colored line and go to step 1, otherwise go to step 4
 4. Find and color all `patterns` in the line and go to step 4
 5. Find and color all `words`, print colored line and go to step 1
 
