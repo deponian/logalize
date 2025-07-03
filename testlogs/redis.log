@@ -1,3 +1,8 @@
+1:C 01 Feb 2024 19:41:07.224 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+1:C 01 Feb 2024 19:41:07.224 # Redis version=7.0.13, bits=64, commit=00000000, modified=0, pid=1, just started
+1:C 01 Feb 2024 19:41:07.224 # Configuration loaded
+1:M 01 Feb 2024 19:41:07.226 * monotonic clock: POSIX clock_gettime
+1:M 01 Feb 2024 19:41:07.228 * Running mode=standalone, port=6379.
 1:S 17 Feb 2024 00:39:12.500 * Starting automatic rewriting of AOF on 3886% growth
 1:S 17 Feb 2024 00:39:12.501 * Background append only file rewriting started by pid 4018569
 1:S 17 Feb 2024 00:39:12.556 * AOF rewrite child asks to stop sending diffs.
