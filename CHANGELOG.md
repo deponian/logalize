@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0] - 2025-07-12
+
+### Added
+
+- Add ability to save original colors of input data (see -s/--no-ansi-escape-sequences-stripping flag and https://github.com/deponian/logalize/issues/6)
+- Add debug output mode (see -d/--debug flag)
+
+### Fixed
+
+- Update regular expression for negated words
+
 ## [0.4.8] - 2025-06-01
 
 ### Fixed
@@ -185,6 +196,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Print version as "version (commit) date"
 
+[0.5.0]: https://github.com/deponian/logalize/compare/v0.4.8..v0.5.0
 [0.4.8]: https://github.com/deponian/logalize/compare/v0.4.7..v0.4.8
 [0.4.7]: https://github.com/deponian/logalize/compare/v0.4.6..v0.4.7
 [0.4.6]: https://github.com/deponian/logalize/compare/v0.4.5..v0.4.6
