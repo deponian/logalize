@@ -28,6 +28,8 @@ formats:
     - regexp: (\d\d\d )
       name: status
       alternatives:
+        - regexp: (1\d\d )
+          name: 1xx
         - regexp: (2\d\d )
           name: 2xx
         - regexp: (3\d\d )
@@ -70,6 +72,8 @@ formats:
     - regexp: ((?:\d\d\d|-) )
       name: upstream-status
       alternatives:
+        - regexp: (1\d\d )
+          name: 1xx
         - regexp: (2\d\d )
           name: 2xx
         - regexp: (3\d\d )
