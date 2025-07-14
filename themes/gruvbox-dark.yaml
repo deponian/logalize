@@ -29,6 +29,9 @@ themes:
         request:
           fg: "#ebdbb2"
         status:
+          1xx:
+            fg: "#83a598"
+            style: bold
           2xx:
             fg: "#98971a"
             style: bold
