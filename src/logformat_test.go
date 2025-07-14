@@ -489,8 +489,20 @@ func TestLogFormatRedis(t *testing.T) {
 		colored string
 	}{
 		{
-			`4018569:C 17 Feb 2024 00:39:12.557 * Parent agreed to stop sending diffs. Finalizing AOF...`,
-			"\x1b[38;2;154;173;236m4018569\x1b[0m\x1b[38;2;99;109;166m:\x1b[0m\x1b[38;2;184;219;135;1mC \x1b[0m\x1b[38;2;192;153;255m17 Feb 2024 \x1b[0m\x1b[38;2;252;167;234m00:39:12.557 \x1b[0m\x1b[38;2;137;221;255;1m* \x1b[0mParent agreed to \x1b[38;2;240;108;97;1mstop\x1b[0m sending diffs. Finalizing AOF...",
+			`1:M 01 Feb 2024 19:41:07.226 # monotonic clock: POSIX clock_gettime`,
+			"\x1b[38;2;154;173;236m1\x1b[0m\x1b[38;2;99;109;166m:\x1b[0m\x1b[38;2;255;117;127;1mM \x1b[0m\x1b[38;2;192;153;255m01 Feb 2024 \x1b[0m\x1b[38;2;252;167;234m19:41:07.226 \x1b[0m\x1b[38;2;255;199;119;1m# \x1b[0mmonotonic clock: POSIX clock_gettime",
+		},
+		{
+			`22:S 17 Feb 2024 00:39:12.500 * Starting automatic rewriting of AOF on 3886% growth`,
+			"\x1b[38;2;154;173;236m22\x1b[0m\x1b[38;2;99;109;166m:\x1b[0m\x1b[38;2;130;170;255;1mS \x1b[0m\x1b[38;2;192;153;255m17 Feb 2024 \x1b[0m\x1b[38;2;252;167;234m00:39:12.500 \x1b[0m\x1b[38;2;137;221;255;1m* \x1b[0m\x1b[38;2;81;250;138;1mStarting\x1b[0m automatic rewriting of AOF on 3886% growth",
+		},
+		{
+			`375:X 20 Jun 2025 13:27:11.773 - Sentinel ID is 2814dfe0610f4b8a99b4c6076693ed87d032af23`,
+			"\x1b[38;2;154;173;236m375\x1b[0m\x1b[38;2;99;109;166m:\x1b[0m\x1b[38;2;255;199;119;1mX \x1b[0m\x1b[38;2;192;153;255m20 Jun 2025 \x1b[0m\x1b[38;2;252;167;234m13:27:11.773 \x1b[0m\x1b[38;2;130;170;255;1m- \x1b[0mSentinel ID is \x1b[38;2;79;214;190m2814\x1b[0m\x1b[38;2;65;166;181md\x1b[0mfe0610f4b8a99b4c6076693ed87d032af23",
+		},
+		{
+			`8792:C 01 Feb 2024 19:41:07.224 . oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo`,
+			"\x1b[38;2;154;173;236m8792\x1b[0m\x1b[38;2;99;109;166m:\x1b[0m\x1b[38;2;184;219;135;1mC \x1b[0m\x1b[38;2;192;153;255m01 Feb 2024 \x1b[0m\x1b[38;2;252;167;234m19:41:07.224 \x1b[0m\x1b[38;2;184;219;135;1m. \x1b[0moO0OoO0OoO0Oo Redis is \x1b[38;2;81;250;138;1mstarting\x1b[0m oO0OoO0OoO0Oo",
 		},
 	}
 
