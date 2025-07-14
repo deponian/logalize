@@ -73,10 +73,8 @@ func TestConfigLoadBuiltinFlagNoBuiltins(t *testing.T) {
 				t.Errorf("Run() failed with this error: %s", err)
 			}
 
-			result := strings.TrimSuffix(output.String(), "\n")
-
-			if result != tt.colored {
-				t.Errorf("got %v, want %v", result, tt.colored)
+			if output.String() != tt.colored {
+				t.Errorf("got %v, want %v", output.String(), tt.colored)
 			}
 		})
 	}
@@ -137,10 +135,8 @@ func TestConfigLoadBuiltinFlagNoBuiltinLogFormats(t *testing.T) {
 				t.Errorf("Run() failed with this error: %s", err)
 			}
 
-			result := strings.TrimSuffix(output.String(), "\n")
-
-			if result != tt.colored {
-				t.Errorf("got %v, want %v", result, tt.colored)
+			if output.String() != tt.colored {
+				t.Errorf("got %v, want %v", output.String(), tt.colored)
 			}
 		})
 	}
@@ -201,10 +197,8 @@ func TestConfigLoadBuiltinFlagNoBuiltinPatterns(t *testing.T) {
 				t.Errorf("Run() failed with this error: %s", err)
 			}
 
-			result := strings.TrimSuffix(output.String(), "\n")
-
-			if result != tt.colored {
-				t.Errorf("got %v, want %v", result, tt.colored)
+			if output.String() != tt.colored {
+				t.Errorf("got %v, want %v", output.String(), tt.colored)
 			}
 		})
 	}
@@ -265,10 +259,8 @@ func TestConfigLoadBuiltinFlagNoBuiltinWords(t *testing.T) {
 				t.Errorf("Run() failed with this error: %s", err)
 			}
 
-			result := strings.TrimSuffix(output.String(), "\n")
-
-			if result != tt.colored {
-				t.Errorf("got %v, want %v", result, tt.colored)
+			if output.String() != tt.colored {
+				t.Errorf("got %v, want %v", output.String(), tt.colored)
 			}
 		})
 	}
@@ -329,10 +321,8 @@ func TestConfigLoadBuiltinFlagNoBuiltinPatternsAndWords(t *testing.T) {
 				t.Errorf("Run() failed with this error: %s", err)
 			}
 
-			result := strings.TrimSuffix(output.String(), "\n")
-
-			if result != tt.colored {
-				t.Errorf("got %v, want %v", result, tt.colored)
+			if output.String() != tt.colored {
+				t.Errorf("got %v, want %v", output.String(), tt.colored)
 			}
 		})
 	}
@@ -393,10 +383,8 @@ func TestConfigLoadBuiltinFlagDryRun(t *testing.T) {
 				t.Errorf("Run() failed with this error: %s", err)
 			}
 
-			result := strings.TrimSuffix(output.String(), "\n")
-
-			if result != tt.colored {
-				t.Errorf("got %v, want %v", result, tt.colored)
+			if output.String() != tt.colored {
+				t.Errorf("got %v, want %v", output.String(), tt.colored)
 			}
 		})
 	}
@@ -457,10 +445,8 @@ func TestConfigLoadBuiltinFlagHighlightOnlyLogFormats(t *testing.T) {
 				t.Errorf("Run() failed with this error: %s", err)
 			}
 
-			result := strings.TrimSuffix(output.String(), "\n")
-
-			if result != tt.colored {
-				t.Errorf("got %v, want %v", result, tt.colored)
+			if output.String() != tt.colored {
+				t.Errorf("got %v, want %v", output.String(), tt.colored)
 			}
 		})
 	}
@@ -521,10 +507,8 @@ func TestConfigLoadBuiltinFlagHighlightOnlyPatterns(t *testing.T) {
 				t.Errorf("Run() failed with this error: %s", err)
 			}
 
-			result := strings.TrimSuffix(output.String(), "\n")
-
-			if result != tt.colored {
-				t.Errorf("got %v, want %v", result, tt.colored)
+			if output.String() != tt.colored {
+				t.Errorf("got %v, want %v", output.String(), tt.colored)
 			}
 		})
 	}
@@ -585,10 +569,8 @@ func TestConfigLoadBuiltinFlagHighlightOnlyWords(t *testing.T) {
 				t.Errorf("Run() failed with this error: %s", err)
 			}
 
-			result := strings.TrimSuffix(output.String(), "\n")
-
-			if result != tt.colored {
-				t.Errorf("got %v, want %v", result, tt.colored)
+			if output.String() != tt.colored {
+				t.Errorf("got %v, want %v", output.String(), tt.colored)
 			}
 		})
 	}
@@ -836,10 +818,8 @@ themes:
 				t.Errorf("Run() failed with this error: %s", err)
 			}
 
-			result := strings.TrimSuffix(output.String(), "\n")
-
-			if result != tt.colored {
-				t.Errorf("got %v, want %v", result, tt.colored)
+			if output.String() != tt.colored {
+				t.Errorf("got %v, want %v", output.String(), tt.colored)
 			}
 		})
 	}

@@ -327,10 +327,8 @@ func TestLogFormatNginxCombined(t *testing.T) {
 				t.Errorf("Run() failed with this error: %s", err)
 			}
 
-			result := strings.TrimSuffix(output.String(), "\n")
-
-			if result != tt.colored {
-				t.Errorf("got %v, want %v", result, tt.colored)
+			if output.String() != tt.colored {
+				t.Errorf("got %v, want %v", output.String(), tt.colored)
 			}
 		})
 	}
@@ -411,10 +409,8 @@ func TestLogFormatNginxIngressController(t *testing.T) {
 				t.Errorf("Run() failed with this error: %s", err)
 			}
 
-			result := strings.TrimSuffix(output.String(), "\n")
-
-			if result != tt.colored {
-				t.Errorf("got %v, want %v", result, tt.colored)
+			if output.String() != tt.colored {
+				t.Errorf("got %v, want %v", output.String(), tt.colored)
 			}
 		})
 	}
@@ -471,10 +467,8 @@ func TestLogFormatKlog(t *testing.T) {
 				t.Errorf("Run() failed with this error: %s", err)
 			}
 
-			result := strings.TrimSuffix(output.String(), "\n")
-
-			if result != tt.colored {
-				t.Errorf("got %v, want %v", result, tt.colored)
+			if output.String() != tt.colored {
+				t.Errorf("got %v, want %v", output.String(), tt.colored)
 			}
 		})
 	}
@@ -531,10 +525,8 @@ func TestLogFormatRedis(t *testing.T) {
 				t.Errorf("Run() failed with this error: %s", err)
 			}
 
-			result := strings.TrimSuffix(output.String(), "\n")
-
-			if result != tt.colored {
-				t.Errorf("got %v, want %v", result, tt.colored)
+			if output.String() != tt.colored {
+				t.Errorf("got %v, want %v", output.String(), tt.colored)
 			}
 		})
 	}

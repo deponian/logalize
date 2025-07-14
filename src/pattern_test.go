@@ -439,10 +439,8 @@ func TestPatternsRFC3339(t *testing.T) {
 				t.Errorf("Run() failed with this error: %s", err)
 			}
 
-			result := strings.TrimSuffix(output.String(), "\n")
-
-			if result != tt.colored {
-				t.Errorf("got %v, want %v", result, tt.colored)
+			if output.String() != tt.colored {
+				t.Errorf("got %v, want %v", output.String(), tt.colored)
 			}
 		})
 	}
@@ -486,10 +484,8 @@ func TestPatternsTime(t *testing.T) {
 				t.Errorf("Run() failed with this error: %s", err)
 			}
 
-			result := strings.TrimSuffix(output.String(), "\n")
-
-			if result != tt.colored {
-				t.Errorf("got %v, want %v", result, tt.colored)
+			if output.String() != tt.colored {
+				t.Errorf("got %v, want %v", output.String(), tt.colored)
 			}
 		})
 	}
@@ -555,10 +551,8 @@ func TestPatternsDates(t *testing.T) {
 				t.Errorf("Run() failed with this error: %s", err)
 			}
 
-			result := strings.TrimSuffix(output.String(), "\n")
-
-			if result != tt.colored {
-				t.Errorf("got %v, want %v", result, tt.colored)
+			if output.String() != tt.colored {
+				t.Errorf("got %v, want %v", output.String(), tt.colored)
 			}
 		})
 	}
@@ -604,10 +598,8 @@ func TestPatternsDuration(t *testing.T) {
 				t.Errorf("Run() failed with this error: %s", err)
 			}
 
-			result := strings.TrimSuffix(output.String(), "\n")
-
-			if result != tt.colored {
-				t.Errorf("got %v, want %v", result, tt.colored)
+			if output.String() != tt.colored {
+				t.Errorf("got %v, want %v", output.String(), tt.colored)
 			}
 		})
 	}
@@ -650,10 +642,8 @@ func TestPatternsLogfmtGeneral(t *testing.T) {
 				t.Errorf("Run() failed with this error: %s", err)
 			}
 
-			result := strings.TrimSuffix(output.String(), "\n")
-
-			if result != tt.colored {
-				t.Errorf("got %v, want %v", result, tt.colored)
+			if output.String() != tt.colored {
+				t.Errorf("got %v, want %v", output.String(), tt.colored)
 			}
 		})
 	}
@@ -696,10 +686,8 @@ func TestPatternsLogfmtString(t *testing.T) {
 				t.Errorf("Run() failed with this error: %s", err)
 			}
 
-			result := strings.TrimSuffix(output.String(), "\n")
-
-			if result != tt.colored {
-				t.Errorf("got %v, want %v", result, tt.colored)
+			if output.String() != tt.colored {
+				t.Errorf("got %v, want %v", output.String(), tt.colored)
 			}
 		})
 	}
@@ -749,10 +737,8 @@ func TestPatternsIPv4(t *testing.T) {
 				t.Errorf("Run() failed with this error: %s", err)
 			}
 
-			result := strings.TrimSuffix(output.String(), "\n")
-
-			if result != tt.colored {
-				t.Errorf("got %v, want %v", result, tt.colored)
+			if output.String() != tt.colored {
+				t.Errorf("got %v, want %v", output.String(), tt.colored)
 			}
 		})
 	}
@@ -953,10 +939,8 @@ func TestPatternsIPv6(t *testing.T) {
 				t.Errorf("Run() failed with this error: %s", err)
 			}
 
-			result := strings.TrimSuffix(output.String(), "\n")
-
-			if result != tt.colored {
-				t.Errorf("got %v, want %v", result, tt.colored)
+			if output.String() != tt.colored {
+				t.Errorf("got %v, want %v", output.String(), tt.colored)
 			}
 		})
 	}
@@ -1001,10 +985,8 @@ func TestPatternsMACAddress(t *testing.T) {
 				t.Errorf("Run() failed with this error: %s", err)
 			}
 
-			result := strings.TrimSuffix(output.String(), "\n")
-
-			if result != tt.colored {
-				t.Errorf("got %v, want %v", result, tt.colored)
+			if output.String() != tt.colored {
+				t.Errorf("got %v, want %v", output.String(), tt.colored)
 			}
 		})
 	}
@@ -1046,10 +1028,8 @@ func TestPatternsUUID(t *testing.T) {
 				t.Errorf("Run() failed with this error: %s", err)
 			}
 
-			result := strings.TrimSuffix(output.String(), "\n")
-
-			if result != tt.colored {
-				t.Errorf("got %v, want %v", result, tt.colored)
+			if output.String() != tt.colored {
+				t.Errorf("got %v, want %v", output.String(), tt.colored)
 			}
 		})
 	}
