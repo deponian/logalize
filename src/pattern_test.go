@@ -1,10 +1,12 @@
 package logalize
 
 import (
+	"bytes"
 	"embed"
 	"fmt"
 	"os"
 	"regexp"
+	"strings"
 	"testing"
 
 	"github.com/aaaton/golem/v4"
@@ -371,6 +373,683 @@ themes:
 			colored := Patterns.highlight(tt.plain)
 			if colored != tt.colored {
 				t.Errorf("got %v, want %v", colored, tt.colored)
+			}
+		})
+	}
+}
+
+// Below are the tests for all built-in patterns
+
+// rfc3339
+func TestPatternsRFC3339(t *testing.T) {
+	colorProfile = termenv.TrueColor
+
+	tests := []struct {
+		plain   string
+		colored string
+	}{
+		{
+			`2024-02-17T06:56:10Z`,
+			"\x1b[38;2;192;153;255m2024-02-17\x1b[0m\x1b[38;2;130;170;255mT\x1b[0m\x1b[38;2;252;167;234m06:56:10\x1b[0m\x1b[38;2;130;170;255mZ\x1b[0m",
+		},
+		{
+			`2024-02-17T06:56:10+05:00`,
+			"\x1b[38;2;192;153;255m2024-02-17\x1b[0m\x1b[38;2;130;170;255mT\x1b[0m\x1b[38;2;252;167;234m06:56:10\x1b[0m\x1b[38;2;130;170;255m+05:00\x1b[0m",
+		},
+		{
+			`2024-02-17T06:56:10.636960544-01:00`,
+			"\x1b[38;2;192;153;255m2024-02-17\x1b[0m\x1b[38;2;130;170;255mT\x1b[0m\x1b[38;2;252;167;234m06:56:10.636960544\x1b[0m\x1b[38;2;130;170;255m-01:00\x1b[0m",
+		},
+		{
+			`2024-02-17t06:56:10z`,
+			"\x1b[38;2;192;153;255m2024-02-17\x1b[0m\x1b[38;2;130;170;255mt\x1b[0m\x1b[38;2;252;167;234m06:56:10\x1b[0m\x1b[38;2;130;170;255mz\x1b[0m",
+		},
+		{
+			`2024-02-17t06:56:10+05:00`,
+			"\x1b[38;2;192;153;255m2024-02-17\x1b[0m\x1b[38;2;130;170;255mt\x1b[0m\x1b[38;2;252;167;234m06:56:10\x1b[0m\x1b[38;2;130;170;255m+05:00\x1b[0m",
+		},
+		{
+			`2024-02-17t06:56:10.636960544-01:00`,
+			"\x1b[38;2;192;153;255m2024-02-17\x1b[0m\x1b[38;2;130;170;255mt\x1b[0m\x1b[38;2;252;167;234m06:56:10.636960544\x1b[0m\x1b[38;2;130;170;255m-01:00\x1b[0m",
+		},
+	}
+
+	lemmatizer, err := golem.New(en.New())
+	if err != nil {
+		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
+	}
+
+	Opts = Settings{
+		Theme: "tokyonight-dark",
+	}
+
+	err = InitConfig(builtins)
+	if err != nil {
+		t.Errorf("InitConfig() failed with this error: %s", err)
+	}
+
+	for _, tt := range tests {
+		testname := tt.plain
+		input := strings.NewReader(tt.plain)
+		output := bytes.Buffer{}
+
+		t.Run(testname, func(t *testing.T) {
+			err := Run(input, &output, lemmatizer)
+			if err != nil {
+				t.Errorf("Run() failed with this error: %s", err)
+			}
+
+			result := strings.TrimSuffix(output.String(), "\n")
+
+			if result != tt.colored {
+				t.Errorf("got %v, want %v", result, tt.colored)
+			}
+		})
+	}
+}
+
+// time
+func TestPatternsTime(t *testing.T) {
+	colorProfile = termenv.TrueColor
+
+	tests := []struct {
+		plain   string
+		colored string
+	}{
+		{`23:42:12`, "\x1b[38;2;252;167;234m23:42:12\x1b[0m"},
+		{`01:37:59.743`, "\x1b[38;2;252;167;234m01:37:59.743\x1b[0m"},
+		{`17:49:37.034123`, "\x1b[38;2;252;167;234m17:49:37.034123\x1b[0m"},
+	}
+
+	lemmatizer, err := golem.New(en.New())
+	if err != nil {
+		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
+	}
+
+	Opts = Settings{
+		Theme: "tokyonight-dark",
+	}
+
+	err = InitConfig(builtins)
+	if err != nil {
+		t.Errorf("InitConfig() failed with this error: %s", err)
+	}
+
+	for _, tt := range tests {
+		testname := tt.plain
+		input := strings.NewReader(tt.plain)
+		output := bytes.Buffer{}
+
+		t.Run(testname, func(t *testing.T) {
+			err := Run(input, &output, lemmatizer)
+			if err != nil {
+				t.Errorf("Run() failed with this error: %s", err)
+			}
+
+			result := strings.TrimSuffix(output.String(), "\n")
+
+			if result != tt.colored {
+				t.Errorf("got %v, want %v", result, tt.colored)
+			}
+		})
+	}
+}
+
+// date-1
+// date-2
+// date-3
+// date-4
+func TestPatternsDates(t *testing.T) {
+	colorProfile = termenv.TrueColor
+
+	tests := []struct {
+		plain   string
+		colored string
+	}{
+		{`1999-07-10`, "\x1b[38;2;192;153;255m1999-07-10\x1b[0m"},
+		{`1999/07/10`, "\x1b[38;2;192;153;255m1999/07/10\x1b[0m"},
+		{`07-10-1999`, "\x1b[38;2;192;153;255m07-10-1999\x1b[0m"},
+		{`07/10/1999`, "\x1b[38;2;192;153;255m07/10/1999\x1b[0m"},
+		{`27 Jan`, "\x1b[38;2;192;153;255m27 Jan\x1b[0m"},
+		{`27 January`, "\x1b[38;2;192;153;255m27 January\x1b[0m"},
+		{`27 Jan 2023`, "\x1b[38;2;192;153;255m27 Jan 2023\x1b[0m"},
+		{`27 August 2023`, "\x1b[38;2;192;153;255m27 August 2023\x1b[0m"},
+		{`27-Jan-2023`, "\x1b[38;2;192;153;255m27-Jan-2023\x1b[0m"},
+		{`27-August-2023`, "\x1b[38;2;192;153;255m27-August-2023\x1b[0m"},
+		{`27/Jan/2023`, "\x1b[38;2;192;153;255m27/Jan/2023\x1b[0m"},
+		{`27/August/2023`, "\x1b[38;2;192;153;255m27/August/2023\x1b[0m"},
+		{`Jan 27`, "\x1b[38;2;192;153;255mJan 27\x1b[0m"},
+		{`January 27`, "\x1b[38;2;192;153;255mJanuary 27\x1b[0m"},
+		{`Jan 27 2023`, "\x1b[38;2;192;153;255mJan 27 2023\x1b[0m"},
+		{`August 27 2023`, "\x1b[38;2;192;153;255mAugust 27 2023\x1b[0m"},
+		{`Jan-27-2023`, "\x1b[38;2;192;153;255mJan-27-2023\x1b[0m"},
+		{`August-27-2023`, "\x1b[38;2;192;153;255mAugust-27-2023\x1b[0m"},
+		{`Jan/27/2023`, "\x1b[38;2;192;153;255mJan/27/2023\x1b[0m"},
+		{`August/27/2023`, "\x1b[38;2;192;153;255mAugust/27/2023\x1b[0m"},
+		{`Mon 17`, "\x1b[38;2;192;153;255mMon 17\x1b[0m"},
+		{`Sunday 3`, "\x1b[38;2;192;153;255mSunday 3\x1b[0m"},
+	}
+
+	lemmatizer, err := golem.New(en.New())
+	if err != nil {
+		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
+	}
+
+	Opts = Settings{
+		Theme: "tokyonight-dark",
+	}
+
+	err = InitConfig(builtins)
+	if err != nil {
+		t.Errorf("InitConfig() failed with this error: %s", err)
+	}
+
+	for _, tt := range tests {
+		testname := tt.plain
+		input := strings.NewReader(tt.plain)
+		output := bytes.Buffer{}
+
+		t.Run(testname, func(t *testing.T) {
+			err := Run(input, &output, lemmatizer)
+			if err != nil {
+				t.Errorf("Run() failed with this error: %s", err)
+			}
+
+			result := strings.TrimSuffix(output.String(), "\n")
+
+			if result != tt.colored {
+				t.Errorf("got %v, want %v", result, tt.colored)
+			}
+		})
+	}
+}
+
+// duration
+func TestPatternsDuration(t *testing.T) {
+	colorProfile = termenv.TrueColor
+
+	tests := []struct {
+		plain   string
+		colored string
+	}{
+		{`75.984854ms`, "\x1b[38;2;79;214;190m75.984854\x1b[0m\x1b[38;2;65;166;181mms\x1b[0m"},
+		{`5s`, "\x1b[38;2;79;214;190m5\x1b[0m\x1b[38;2;65;166;181ms\x1b[0m"},
+		{`784m`, "\x1b[38;2;79;214;190m784\x1b[0m\x1b[38;2;65;166;181mm\x1b[0m"},
+		{`7.5h`, "\x1b[38;2;79;214;190m7.5\x1b[0m\x1b[38;2;65;166;181mh\x1b[0m"},
+		{`25d`, "\x1b[38;2;79;214;190m25\x1b[0m\x1b[38;2;65;166;181md\x1b[0m"},
+	}
+
+	lemmatizer, err := golem.New(en.New())
+	if err != nil {
+		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
+	}
+
+	Opts = Settings{
+		Theme: "tokyonight-dark",
+	}
+
+	err = InitConfig(builtins)
+	if err != nil {
+		t.Errorf("InitConfig() failed with this error: %s", err)
+	}
+
+	for _, tt := range tests {
+		testname := tt.plain
+		input := strings.NewReader(tt.plain)
+		output := bytes.Buffer{}
+
+		t.Run(testname, func(t *testing.T) {
+			err := Run(input, &output, lemmatizer)
+			if err != nil {
+				t.Errorf("Run() failed with this error: %s", err)
+			}
+
+			result := strings.TrimSuffix(output.String(), "\n")
+
+			if result != tt.colored {
+				t.Errorf("got %v, want %v", result, tt.colored)
+			}
+		})
+	}
+}
+
+// logfmt-general
+func TestPatternsLogfmtGeneral(t *testing.T) {
+	colorProfile = termenv.TrueColor
+
+	tests := []struct {
+		plain   string
+		colored string
+	}{
+		{`key=value`, "\x1b[38;2;154;173;236mkey\x1b[0m\x1b[38;2;99;109;166m=\x1b[0mvalue"},
+		{`key=5s`, "\x1b[38;2;154;173;236mkey\x1b[0m\x1b[38;2;99;109;166m=\x1b[0m\x1b[38;2;79;214;190m5\x1b[0m\x1b[38;2;65;166;181ms\x1b[0m"},
+	}
+
+	lemmatizer, err := golem.New(en.New())
+	if err != nil {
+		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
+	}
+
+	Opts = Settings{
+		Theme: "tokyonight-dark",
+	}
+
+	err = InitConfig(builtins)
+	if err != nil {
+		t.Errorf("InitConfig() failed with this error: %s", err)
+	}
+
+	for _, tt := range tests {
+		testname := tt.plain
+		input := strings.NewReader(tt.plain)
+		output := bytes.Buffer{}
+
+		t.Run(testname, func(t *testing.T) {
+			err := Run(input, &output, lemmatizer)
+			if err != nil {
+				t.Errorf("Run() failed with this error: %s", err)
+			}
+
+			result := strings.TrimSuffix(output.String(), "\n")
+
+			if result != tt.colored {
+				t.Errorf("got %v, want %v", result, tt.colored)
+			}
+		})
+	}
+}
+
+// logfmt-string
+func TestPatternsLogfmtString(t *testing.T) {
+	colorProfile = termenv.TrueColor
+
+	tests := []struct {
+		plain   string
+		colored string
+	}{
+		{`key="value"`, "\x1b[38;2;154;173;236mkey\x1b[0m\x1b[38;2;99;109;166m=\x1b[0m\x1b[38;2;154;173;236m\"\x1b[0mvalue\x1b[38;2;154;173;236m\"\x1b[0m"},
+		{`key="5s"`, "\x1b[38;2;154;173;236mkey\x1b[0m\x1b[38;2;99;109;166m=\x1b[0m\x1b[38;2;154;173;236m\"\x1b[0m\x1b[38;2;79;214;190m5\x1b[0m\x1b[38;2;65;166;181ms\x1b[0m\x1b[38;2;154;173;236m\"\x1b[0m"},
+	}
+
+	lemmatizer, err := golem.New(en.New())
+	if err != nil {
+		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
+	}
+
+	Opts = Settings{
+		Theme: "tokyonight-dark",
+	}
+
+	err = InitConfig(builtins)
+	if err != nil {
+		t.Errorf("InitConfig() failed with this error: %s", err)
+	}
+
+	for _, tt := range tests {
+		testname := tt.plain
+		input := strings.NewReader(tt.plain)
+		output := bytes.Buffer{}
+
+		t.Run(testname, func(t *testing.T) {
+			err := Run(input, &output, lemmatizer)
+			if err != nil {
+				t.Errorf("Run() failed with this error: %s", err)
+			}
+
+			result := strings.TrimSuffix(output.String(), "\n")
+
+			if result != tt.colored {
+				t.Errorf("got %v, want %v", result, tt.colored)
+			}
+		})
+	}
+}
+
+// ipv4-address
+func TestPatternsIPv4(t *testing.T) {
+	colorProfile = termenv.TrueColor
+
+	tests := []struct {
+		plain   string
+		colored string
+	}{
+		{`127.0.0.1`, "\x1b[38;2;118;211;255m127.0.0.1\x1b[0m\x1b[38;2;13;185;215m\x1b[0m"},
+		{`12.34.56.78`, "\x1b[38;2;118;211;255m12.34.56.78\x1b[0m\x1b[38;2;13;185;215m\x1b[0m"},
+		{`255.255.255.255`, "\x1b[38;2;118;211;255m255.255.255.255\x1b[0m\x1b[38;2;13;185;215m\x1b[0m"},
+		{`0.0.0.0`, "\x1b[38;2;118;211;255m0.0.0.0\x1b[0m\x1b[38;2;13;185;215m\x1b[0m"},
+		{`10.0.0.200/16`, "\x1b[38;2;118;211;255m10.0.0.200\x1b[0m\x1b[38;2;13;185;215m/16\x1b[0m"},
+		{`10.0.0.0/8`, "\x1b[38;2;118;211;255m10.0.0.0\x1b[0m\x1b[38;2;13;185;215m/8\x1b[0m"},
+		{`10.0.7.107:80`, "\x1b[38;2;118;211;255m10.0.7.107\x1b[0m\x1b[38;2;13;185;215m:80\x1b[0m"},
+		{`8.9.10.237:8080`, "\x1b[38;2;118;211;255m8.9.10.237\x1b[0m\x1b[38;2;13;185;215m:8080\x1b[0m"},
+		{`1.2.3.4:17846`, "\x1b[38;2;118;211;255m1.2.3.4\x1b[0m\x1b[38;2;13;185;215m:17846\x1b[0m"},
+	}
+
+	lemmatizer, err := golem.New(en.New())
+	if err != nil {
+		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
+	}
+
+	Opts = Settings{
+		Theme: "tokyonight-dark",
+	}
+
+	err = InitConfig(builtins)
+	if err != nil {
+		t.Errorf("InitConfig() failed with this error: %s", err)
+	}
+
+	for _, tt := range tests {
+		testname := tt.plain
+		input := strings.NewReader(tt.plain)
+		output := bytes.Buffer{}
+
+		t.Run(testname, func(t *testing.T) {
+			err := Run(input, &output, lemmatizer)
+			if err != nil {
+				t.Errorf("Run() failed with this error: %s", err)
+			}
+
+			result := strings.TrimSuffix(output.String(), "\n")
+
+			if result != tt.colored {
+				t.Errorf("got %v, want %v", result, tt.colored)
+			}
+		})
+	}
+}
+
+// ipv6-address
+func TestPatternsIPv6(t *testing.T) {
+	colorProfile = termenv.TrueColor
+
+	tests := []struct {
+		plain   string
+		colored string
+	}{
+		{
+			`2001:db8:4006:812::200e`,
+			"\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;118;211;255m2001:db8:4006:812::200e\x1b[0m\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;13;185;215m\x1b[0m",
+		},
+		{
+			`2001:0db8:0000:cd30:0000:0000:0000:0000`,
+			"\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;118;211;255m2001:0db8:0000:cd30:0000:0000:0000:0000\x1b[0m\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;13;185;215m\x1b[0m",
+		},
+		{
+			`2001:0db8::cd30:0:0:0:0`,
+			"\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;118;211;255m2001:0db8::cd30:0:0:0:0\x1b[0m\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;13;185;215m\x1b[0m",
+		},
+		{
+			`2001:0db8:0:cd30::`,
+			"\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;118;211;255m2001:0db8:0:cd30::\x1b[0m\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;13;185;215m\x1b[0m",
+		},
+		{
+			`ff02:0:0:0:0:1:ff00:0000`,
+			"\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;118;211;255mff02:0:0:0:0:1:ff00:0000\x1b[0m\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;13;185;215m\x1b[0m",
+		},
+		{
+			`ff02:0:0:0:0:1:ffff:ffff`,
+			"\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;118;211;255mff02:0:0:0:0:1:ffff:ffff\x1b[0m\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;13;185;215m\x1b[0m",
+		},
+		{
+			`2001:db8::1234:5678`,
+			"\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;118;211;255m2001:db8::1234:5678\x1b[0m\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;13;185;215m\x1b[0m",
+		},
+		{
+			`ff02:0:0:0:0:0:0:2`,
+			"\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;118;211;255mff02:0:0:0:0:0:0:2\x1b[0m\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;13;185;215m\x1b[0m",
+		},
+		{
+			`fdf8:f53b:82e4::53`,
+			"\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;118;211;255mfdf8:f53b:82e4::53\x1b[0m\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;13;185;215m\x1b[0m",
+		},
+		{
+			`fe80::200:5aee:feaa:20a2`,
+			"\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;118;211;255mfe80::200:5aee:feaa:20a2\x1b[0m\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;13;185;215m\x1b[0m",
+		},
+		{
+			`2001:0000:4136:e378:`,
+			"\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;118;211;255m2001:0000:4136:e378:\x1b[0m\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;13;185;215m\x1b[0m",
+		},
+		{
+			`8000:63bf:3fff:fdd2`,
+			"\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;118;211;255m8000:63bf:3fff:fdd2\x1b[0m\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;13;185;215m\x1b[0m",
+		},
+		{
+			`2001:db8::`,
+			"\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;118;211;255m2001:db8::\x1b[0m\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;13;185;215m\x1b[0m",
+		},
+		{
+			`::1234:5678`,
+			"\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;118;211;255m::1234:5678\x1b[0m\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;13;185;215m\x1b[0m",
+		},
+		{
+			`2000::`,
+			"\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;118;211;255m2000::\x1b[0m\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;13;185;215m\x1b[0m",
+		},
+		{
+			`2001:db8:a0b:12f0::1`,
+			"\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;118;211;255m2001:db8:a0b:12f0::1\x1b[0m\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;13;185;215m\x1b[0m",
+		},
+		{
+			`2001:4:112:cd:65a:753:0:a1`,
+			"\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;118;211;255m2001:4:112:cd:65a:753:0:a1\x1b[0m\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;13;185;215m\x1b[0m",
+		},
+		{
+			`2001:0002:6c::430`,
+			"\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;118;211;255m2001:0002:6c::430\x1b[0m\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;13;185;215m\x1b[0m",
+		},
+		{
+			`2001:5::`,
+			"\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;118;211;255m2001:5::\x1b[0m\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;13;185;215m\x1b[0m",
+		},
+		{
+			`fe08::7:8`,
+			"\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;118;211;255mfe08::7:8\x1b[0m\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;13;185;215m\x1b[0m",
+		},
+		{
+			`2002:cb0a:3cdd:1::1`,
+			"\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;118;211;255m2002:cb0a:3cdd:1::1\x1b[0m\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;13;185;215m\x1b[0m",
+		},
+		{
+			`2001:db8:8:4::2`,
+			"\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;118;211;255m2001:db8:8:4::2\x1b[0m\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;13;185;215m\x1b[0m",
+		},
+		{
+			`ff01:0:0:0:0:0:0:2`,
+			"\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;118;211;255mff01:0:0:0:0:0:0:2\x1b[0m\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;13;185;215m\x1b[0m",
+		},
+		{
+			`::ffff:0:0`,
+			"\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;118;211;255m::ffff:0:0\x1b[0m\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;13;185;215m\x1b[0m",
+		},
+		{
+			`2001:0000::`,
+			"\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;118;211;255m2001:0000::\x1b[0m\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;13;185;215m\x1b[0m",
+		},
+		{
+			`::ffff:192.0.2.47`,
+			"\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;118;211;255m::ffff:192.0.2.47\x1b[0m\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;13;185;215m\x1b[0m",
+		},
+		{
+			`::ffff:0.0.0.0`,
+			"\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;118;211;255m::ffff:0.0.0.0\x1b[0m\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;13;185;215m\x1b[0m",
+		},
+		{
+			`::ffff:255.255.255.255`,
+			"\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;118;211;255m::ffff:255.255.255.255\x1b[0m\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;13;185;215m\x1b[0m",
+		},
+		{
+			`::ffff:10.0.0.3`,
+			"\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;118;211;255m::ffff:10.0.0.3\x1b[0m\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;13;185;215m\x1b[0m",
+		},
+		{
+			`::192.168.0.1`,
+			"\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;118;211;255m::192.168.0.1\x1b[0m\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;13;185;215m\x1b[0m",
+		},
+		{
+			`::255.255.255.255`,
+			"\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;118;211;255m::255.255.255.255\x1b[0m\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;13;185;215m\x1b[0m",
+		},
+		{
+			`2001:db8:122:344::192.0.2.33`,
+			"\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;118;211;255m2001:db8:122:344::192.0.2.33\x1b[0m\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;13;185;215m\x1b[0m",
+		},
+		{
+			`0:0:0:0:0:0:13.1.68.3`,
+			"\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;118;211;255m0:0:0:0:0:0:13.1.68.3\x1b[0m\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;13;185;215m\x1b[0m",
+		},
+		{
+			`0:0:0:0:0:ffff:129.144.52.3`,
+			"\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;118;211;255m0:0:0:0:0:ffff:129.144.52.3\x1b[0m\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;13;185;215m\x1b[0m",
+		},
+		{
+			`::13.1.68.3`,
+			"\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;118;211;255m::13.1.68.3\x1b[0m\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;13;185;215m\x1b[0m",
+		},
+		{
+			`::ffff:129.144.52.38`,
+			"\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;118;211;255m::ffff:129.144.52.38\x1b[0m\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;13;185;215m\x1b[0m",
+		},
+		{
+			`59fb:0:0:0:0:1005:cc57:6571`,
+			"\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;118;211;255m59fb:0:0:0:0:1005:cc57:6571\x1b[0m\x1b[38;2;99;109;166m\x1b[0m\x1b[38;2;13;185;215m\x1b[0m",
+		},
+		{
+			`[2001:5::]:22`,
+			"\x1b[38;2;99;109;166m[\x1b[0m\x1b[38;2;118;211;255m2001:5::\x1b[0m\x1b[38;2;99;109;166m]\x1b[0m\x1b[38;2;13;185;215m:22\x1b[0m",
+		},
+		{
+			`[2001:db8:4006:812::200e]:8080`,
+			"\x1b[38;2;99;109;166m[\x1b[0m\x1b[38;2;118;211;255m2001:db8:4006:812::200e\x1b[0m\x1b[38;2;99;109;166m]\x1b[0m\x1b[38;2;13;185;215m:8080\x1b[0m",
+		},
+		{
+			`[ff02:0:0:0:0:1:ffff:ffff]:23456`,
+			"\x1b[38;2;99;109;166m[\x1b[0m\x1b[38;2;118;211;255mff02:0:0:0:0:1:ffff:ffff\x1b[0m\x1b[38;2;99;109;166m]\x1b[0m\x1b[38;2;13;185;215m:23456\x1b[0m",
+		},
+	}
+
+	lemmatizer, err := golem.New(en.New())
+	if err != nil {
+		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
+	}
+
+	Opts = Settings{
+		Theme: "tokyonight-dark",
+	}
+
+	err = InitConfig(builtins)
+	if err != nil {
+		t.Errorf("InitConfig() failed with this error: %s", err)
+	}
+
+	for _, tt := range tests {
+		testname := tt.plain
+		input := strings.NewReader(tt.plain)
+		output := bytes.Buffer{}
+
+		t.Run(testname, func(t *testing.T) {
+			err := Run(input, &output, lemmatizer)
+			if err != nil {
+				t.Errorf("Run() failed with this error: %s", err)
+			}
+
+			result := strings.TrimSuffix(output.String(), "\n")
+
+			if result != tt.colored {
+				t.Errorf("got %v, want %v", result, tt.colored)
+			}
+		})
+	}
+}
+
+// mac-address
+func TestPatternsMACAddress(t *testing.T) {
+	colorProfile = termenv.TrueColor
+
+	tests := []struct {
+		plain   string
+		colored string
+	}{
+		{`3D:F2:C9:A6:B3:4F`, "\x1b[38;2;79;214;190m3D:F2:C9:A6:B3:4F\x1b[0m"},
+		{`3D-F2-C9-A6-B3-4F`, "\x1b[38;2;79;214;190m3D-F2-C9-A6-B3-4F\x1b[0m"},
+		{`3d:f2:c9:a6:b3:4f`, "\x1b[38;2;79;214;190m3d:f2:c9:a6:b3:4f\x1b[0m"},
+		{`3d-f2-c9-a6-b3-4f`, "\x1b[38;2;79;214;190m3d-f2-c9-a6-b3-4f\x1b[0m"},
+	}
+
+	lemmatizer, err := golem.New(en.New())
+	if err != nil {
+		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
+	}
+
+	Opts = Settings{
+		Theme: "tokyonight-dark",
+	}
+
+	err = InitConfig(builtins)
+	if err != nil {
+		t.Errorf("InitConfig() failed with this error: %s", err)
+	}
+
+	for _, tt := range tests {
+		testname := tt.plain
+		input := strings.NewReader(tt.plain)
+		output := bytes.Buffer{}
+
+		t.Run(testname, func(t *testing.T) {
+			err := Run(input, &output, lemmatizer)
+			if err != nil {
+				t.Errorf("Run() failed with this error: %s", err)
+			}
+
+			result := strings.TrimSuffix(output.String(), "\n")
+
+			if result != tt.colored {
+				t.Errorf("got %v, want %v", result, tt.colored)
+			}
+		})
+	}
+}
+
+// uuid
+func TestPatternsUUID(t *testing.T) {
+	colorProfile = termenv.TrueColor
+
+	tests := []struct {
+		plain   string
+		colored string
+	}{
+		{`0a99af43-0ad4-4237-b9cd-064966eb2803`, "\x1b[38;2;134;225;252m0a99af43-0ad4-4237-b9cd-064966eb2803\x1b[0m"},
+	}
+
+	lemmatizer, err := golem.New(en.New())
+	if err != nil {
+		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
+	}
+
+	Opts = Settings{
+		Theme: "tokyonight-dark",
+	}
+
+	err = InitConfig(builtins)
+	if err != nil {
+		t.Errorf("InitConfig() failed with this error: %s", err)
+	}
+
+	for _, tt := range tests {
+		testname := tt.plain
+		input := strings.NewReader(tt.plain)
+		output := bytes.Buffer{}
+
+		t.Run(testname, func(t *testing.T) {
+			err := Run(input, &output, lemmatizer)
+			if err != nil {
+				t.Errorf("Run() failed with this error: %s", err)
+			}
+
+			result := strings.TrimSuffix(output.String(), "\n")
+
+			if result != tt.colored {
+				t.Errorf("got %v, want %v", result, tt.colored)
 			}
 		})
 	}
