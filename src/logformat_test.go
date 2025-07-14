@@ -429,8 +429,20 @@ func TestLogFormatKlog(t *testing.T) {
 		colored string
 	}{
 		{
-			`I0410 13:18:43.650599       1 controller.go:175] "starting healthz server" logger="cert-manager.controller" address="[::]:9403"`,
-			"\x1b[38;2;130;170;255;1mI0410 \x1b[0m\x1b[38;2;252;167;234m13:18:43.650599\x1b[0m\x1b[38;2;99;109;166m       1 \x1b[0m\x1b[38;2;137;221;255mcontroller.go\x1b[0m\x1b[38;2;99;109;166m:175\x1b[0m\x1b[38;2;255;150;108m] \x1b[0m\"\x1b[38;2;81;250;138;1mstarting\x1b[0m healthz server\"\x1b[38;2;154;173;236m logger\x1b[0m\x1b[38;2;99;109;166m=\x1b[0m\x1b[38;2;154;173;236m\"\x1b[0mcert-manager.controller\x1b[38;2;154;173;236m\"\x1b[0m\x1b[38;2;154;173;236m address\x1b[0m\x1b[38;2;99;109;166m=\x1b[0m\x1b[38;2;154;173;236m\"\x1b[0m\x1b[38;2;99;109;166m[\x1b[0m\x1b[38;2;118;211;255m::\x1b[0m\x1b[38;2;99;109;166m]\x1b[0m\x1b[38;2;13;185;215m:9403\x1b[0m\x1b[38;2;154;173;236m\"\x1b[0m",
+			`I0410 23:18:43.650599       1 controller.go:175] "starting healthz server" logger="cert-manager.controller" address="[::]:9403"`,
+			"\x1b[38;2;130;170;255;1mI0410 \x1b[0m\x1b[38;2;252;167;234m23:18:43.650599\x1b[0m\x1b[38;2;99;109;166m       1 \x1b[0m\x1b[38;2;137;221;255mcontroller.go\x1b[0m\x1b[38;2;99;109;166m:175\x1b[0m\x1b[38;2;255;150;108m] \x1b[0m\"\x1b[38;2;81;250;138;1mstarting\x1b[0m healthz server\"\x1b[38;2;154;173;236m logger\x1b[0m\x1b[38;2;99;109;166m=\x1b[0m\x1b[38;2;154;173;236m\"\x1b[0mcert-manager.controller\x1b[38;2;154;173;236m\"\x1b[0m\x1b[38;2;154;173;236m address\x1b[0m\x1b[38;2;99;109;166m=\x1b[0m\x1b[38;2;154;173;236m\"\x1b[0m\x1b[38;2;99;109;166m[\x1b[0m\x1b[38;2;118;211;255m::\x1b[0m\x1b[38;2;99;109;166m]\x1b[0m\x1b[38;2;13;185;215m:9403\x1b[0m\x1b[38;2;154;173;236m\"\x1b[0m",
+		},
+		{
+			`W0704 20:01:06.932182       1 warnings.go:70] annotation "kubernetes.io/ingress.class" is deprecated, please use 'spec.ingressClassName' instead`,
+			"\x1b[38;2;255;199;119;1mW0704 \x1b[0m\x1b[38;2;252;167;234m20:01:06.932182\x1b[0m\x1b[38;2;99;109;166m       1 \x1b[0m\x1b[38;2;137;221;255mwarnings.go\x1b[0m\x1b[38;2;99;109;166m:70\x1b[0m\x1b[38;2;255;150;108m] \x1b[0mannotation \"kubernetes.io/ingress.class\" is deprecated, please use 'spec.ingressClassName' instead",
+		},
+		{
+			`E0714 16:12:36.594249       1 controller.go:104] "Unhandled Error" err="ingress 'menetekel/main' in work queue no longer exists" logger="UnhandledError"`,
+			"\x1b[38;2;255;117;127;1mE0714 \x1b[0m\x1b[38;2;252;167;234m16:12:36.594249\x1b[0m\x1b[38;2;99;109;166m       1 \x1b[0m\x1b[38;2;137;221;255mcontroller.go\x1b[0m\x1b[38;2;99;109;166m:104\x1b[0m\x1b[38;2;255;150;108m] \x1b[0m\"Unhandled \x1b[38;2;240;108;97;1mError\x1b[0m\"\x1b[38;2;154;173;236m err\x1b[0m\x1b[38;2;99;109;166m=\x1b[0m\x1b[38;2;154;173;236m\"\x1b[0mingress 'menetekel/main' in work queue no longer exists\x1b[38;2;154;173;236m\"\x1b[0m\x1b[38;2;154;173;236m logger\x1b[0m\x1b[38;2;99;109;166m=\x1b[0m\x1b[38;2;154;173;236m\"\x1b[0mUnhandledError\x1b[38;2;154;173;236m\"\x1b[0m",
+		},
+		{
+			`F0123 00:12:34.567890       1 controller.go:4] "Fatal Error" err="fatal error"`,
+			"\x1b[38;2;197;59;83;1mF0123 \x1b[0m\x1b[38;2;252;167;234m00:12:34.567890\x1b[0m\x1b[38;2;99;109;166m       1 \x1b[0m\x1b[38;2;137;221;255mcontroller.go\x1b[0m\x1b[38;2;99;109;166m:4\x1b[0m\x1b[38;2;255;150;108m] \x1b[0m\"\x1b[38;2;240;108;97;1mFatal\x1b[0m \x1b[38;2;240;108;97;1mError\x1b[0m\"\x1b[38;2;154;173;236m err\x1b[0m\x1b[38;2;99;109;166m=\x1b[0m\x1b[38;2;154;173;236m\"\x1b[0m\x1b[38;2;240;108;97;1mfatal\x1b[0m \x1b[38;2;240;108;97;1merror\x1b[0m\x1b[38;2;154;173;236m\"\x1b[0m",
 		},
 	}
 
