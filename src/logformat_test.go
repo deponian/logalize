@@ -531,3 +531,79 @@ func TestLogFormatRedis(t *testing.T) {
 		})
 	}
 }
+
+// syslog-rfc3164
+func TestLogFormatSyslogRFC3164(t *testing.T) {
+	colorProfile = termenv.TrueColor
+
+	tests := []struct {
+		plain   string
+		colored string
+	}{
+		{
+			`Jul  3 08:27:19 menetekel systemd[1]: Condition check resulted in MD array scrubbing - continuation being skipped.`,
+			"\x1b[38;2;65;166;181m\x1b[0m\x1b[38;2;192;153;255mJul  3 \x1b[0m\x1b[38;2;252;167;234m08:27:19 \x1b[0m\x1b[38;2;137;221;255mmenetekel \x1b[0m\x1b[38;2;130;170;255msystemd\x1b[0m\x1b[38;2;238;204;159m[1]\x1b[0m\x1b[38;2;99;109;166m: \x1b[0mCondition check resulted in MD array scrubbing - continuation being \x1b[38;2;252;186;3;1mskipped\x1b[0m.",
+		},
+		{
+			`Jul  3 09:17:01 menetekel CRON[1185749]: (root) CMD (   cd / && run-parts --report /etc/cron.hourly)`,
+			"\x1b[38;2;65;166;181m\x1b[0m\x1b[38;2;192;153;255mJul  3 \x1b[0m\x1b[38;2;252;167;234m09:17:01 \x1b[0m\x1b[38;2;137;221;255mmenetekel \x1b[0m\x1b[38;2;130;170;255mCRON\x1b[0m\x1b[38;2;238;204;159m[1185749]\x1b[0m\x1b[38;2;99;109;166m: \x1b[0m(root) CMD (   cd / && run-parts --report /etc/cron.hourly)",
+		},
+		{
+			`Jul 13 10:17:02 menetekel CRON[1190762]: (root) CMD (   cd / && run-parts --report /etc/cron.hourly)`,
+			"\x1b[38;2;65;166;181m\x1b[0m\x1b[38;2;192;153;255mJul 13 \x1b[0m\x1b[38;2;252;167;234m10:17:02 \x1b[0m\x1b[38;2;137;221;255mmenetekel \x1b[0m\x1b[38;2;130;170;255mCRON\x1b[0m\x1b[38;2;238;204;159m[1190762]\x1b[0m\x1b[38;2;99;109;166m: \x1b[0m(root) CMD (   cd / && run-parts --report /etc/cron.hourly)",
+		},
+		{
+			`Jul 13 10:20:04 menetekel systemd[1]: Starting Certbot...`,
+			"\x1b[38;2;65;166;181m\x1b[0m\x1b[38;2;192;153;255mJul 13 \x1b[0m\x1b[38;2;252;167;234m10:20:04 \x1b[0m\x1b[38;2;137;221;255mmenetekel \x1b[0m\x1b[38;2;130;170;255msystemd\x1b[0m\x1b[38;2;238;204;159m[1]\x1b[0m\x1b[38;2;99;109;166m: \x1b[0m\x1b[38;2;81;250;138;1mStarting\x1b[0m Certbot...",
+		},
+		{
+			`Jul 13 10:17:02 menetekel CRON: (root) CMD (   cd / && run-parts --report /etc/cron.hourly)`,
+			"\x1b[38;2;65;166;181m\x1b[0m\x1b[38;2;192;153;255mJul 13 \x1b[0m\x1b[38;2;252;167;234m10:17:02 \x1b[0m\x1b[38;2;137;221;255mmenetekel \x1b[0m\x1b[38;2;130;170;255mCRON\x1b[0m\x1b[38;2;238;204;159m\x1b[0m\x1b[38;2;99;109;166m: \x1b[0m(root) CMD (   cd / && run-parts --report /etc/cron.hourly)",
+		},
+		{
+			`Jul 13 10:20:04 menetekel systemd: Starting Certbot...`,
+			"\x1b[38;2;65;166;181m\x1b[0m\x1b[38;2;192;153;255mJul 13 \x1b[0m\x1b[38;2;252;167;234m10:20:04 \x1b[0m\x1b[38;2;137;221;255mmenetekel \x1b[0m\x1b[38;2;130;170;255msystemd\x1b[0m\x1b[38;2;238;204;159m\x1b[0m\x1b[38;2;99;109;166m: \x1b[0m\x1b[38;2;81;250;138;1mStarting\x1b[0m Certbot...",
+		},
+		{
+			`<25>Jul 13 10:20:04 menetekel systemd[1]: certbot.service: Deactivated successfully.`,
+			"\x1b[38;2;65;166;181m<25>\x1b[0m\x1b[38;2;192;153;255mJul 13 \x1b[0m\x1b[38;2;252;167;234m10:20:04 \x1b[0m\x1b[38;2;137;221;255mmenetekel \x1b[0m\x1b[38;2;130;170;255msystemd\x1b[0m\x1b[38;2;238;204;159m[1]\x1b[0m\x1b[38;2;99;109;166m: \x1b[0mcertbot.service: Deactivated \x1b[38;2;81;250;138;1msuccessfully\x1b[0m.",
+		},
+		{
+			`<123>Jul 13 10:20:04 menetekel systemd[1]: Finished Certbot.`,
+			"\x1b[38;2;65;166;181m<123>\x1b[0m\x1b[38;2;192;153;255mJul 13 \x1b[0m\x1b[38;2;252;167;234m10:20:04 \x1b[0m\x1b[38;2;137;221;255mmenetekel \x1b[0m\x1b[38;2;130;170;255msystemd\x1b[0m\x1b[38;2;238;204;159m[1]\x1b[0m\x1b[38;2;99;109;166m: \x1b[0m\x1b[38;2;81;250;138;1mFinished\x1b[0m Certbot.",
+		},
+	}
+
+	lemmatizer, err := golem.New(en.New())
+	if err != nil {
+		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
+	}
+
+	Opts = Settings{
+		Theme: "tokyonight-dark",
+	}
+
+	err = InitConfig(builtins)
+	if err != nil {
+		t.Errorf("InitConfig() failed with this error: %s", err)
+	}
+
+	for _, tt := range tests {
+		testname := tt.plain
+		input := strings.NewReader(tt.plain)
+		output := bytes.Buffer{}
+
+		t.Run(testname, func(t *testing.T) {
+			err := Run(input, &output, lemmatizer)
+			if err != nil {
+				t.Errorf("Run() failed with this error: %s", err)
+			}
+
+			// fmt.Printf("{\n\t`%s`,\n\t%q,\n},\n", tt.plain, output.String())
+
+			if output.String() != tt.colored {
+				t.Errorf("got %v, want %v", output.String(), tt.colored)
+			}
+		})
+	}
+}

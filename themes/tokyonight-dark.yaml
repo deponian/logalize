@@ -217,6 +217,32 @@ themes:
         message:
           style: "patterns-and-words"
 
+      # INFO:
+      # Syslog (RFC 3164)
+      #
+      # SOURCE:
+      # https://www.rfc-editor.org/rfc/rfc3164.html
+      #
+      # SCHEME:
+      # <priority>Mmm dd hh:mm:ss hostname program[pid]: message
+      syslog-rfc3164:
+        priority:
+          fg: "#41a6b5"
+        date:
+          fg: "#c099ff"
+        time:
+          fg: "#fca7ea"
+        hostname:
+          fg: "#89ddff"
+        program:
+          fg: "#82aaff"
+        pid:
+          fg: "#eecc9f"
+        colon:
+          fg: "#636da6"
+        message:
+          style: "patterns-and-words"
+
     patterns:
       # 2024-02-17T06:56:10Z
       # 2024-02-17T06:56:10.636960544Z

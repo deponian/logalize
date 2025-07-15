@@ -1,0 +1,35 @@
+# INFO:
+# Syslog (RFC 3164)
+#
+# SOURCE:
+# https://www.rfc-editor.org/rfc/rfc3164.html
+#
+# SCHEME:
+# <priority>Mmm dd hh:mm:ss hostname program[pid]: message
+
+formats:
+  syslog-rfc3164:
+    # priority
+    - regexp: ((?:<\d{1,3}>)?)
+      name: priority
+    # date
+    - regexp: ((?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) (?:[[:space:]]\d|\d\d) )
+      name: date
+    # time
+    - regexp: (\d{2}:\d{2}:\d{2} )
+      name: time
+    # hostname
+    - regexp: ([^ ]+ )
+      name: hostname
+    # program
+    - regexp: ([^ \[\]]+)
+      name: program
+    # pid
+    - regexp: ((?:\[\d+\])?)
+      name: pid
+    # :
+    - regexp: (:[[:space:]])
+      name: colon
+    # message
+    - regexp: (.+)
+      name: message
