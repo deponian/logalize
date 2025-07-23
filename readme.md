@@ -90,7 +90,7 @@ Configuration
 Logalize looks for configuration files in these places:
 - `/etc/logalize/logalize.yaml`
 - `~/.config/logalize/logalize.yaml`
-- path from `-c/--config` flag
+- path(s) from `-c/--config` flag (can be repeated)
 - `.logalize.yaml` in current directory
 
 If more than one configuration file is found, they are merged. The lower the file in the list, the higher its priority.

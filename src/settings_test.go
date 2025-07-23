@@ -112,7 +112,7 @@ settings:
 	flags.BoolP("only-logformats", "f", false, "")
 	flags.BoolP("only-patterns", "g", false, "")
 	flags.BoolP("only-words", "h", false, "")
-	flags.StringP("config", "i", "", "")
+	flags.StringArrayP("config", "i", []string{}, "")
 	flags.BoolP("no-ansi-escape-sequences-stripping", "j", false, "")
 	args := []string{
 		"--no-builtins",
@@ -126,7 +126,7 @@ settings:
 	}
 
 	correctOpts := Settings{
-		ConfigPath: userConfig,
+		ConfigPaths: []string{userConfig},
 
 		Theme: "tokyonight-dark",
 

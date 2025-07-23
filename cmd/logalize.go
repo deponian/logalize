@@ -83,7 +83,7 @@ It's fast and extensible alternative to ccze and colorize.`,
 
 	// these flags are used inside the logalize package
 	// they will be processed by InitSettings()
-	LogalizeCmd.Flags().StringP("config", "c", "", "path to user configuration file")
+	LogalizeCmd.Flags().StringArrayP("config", "c", []string{}, "path to user configuration file (can be repeated)")
 	LogalizeCmd.Flags().StringP("theme", "t", "tokyonight-dark", "set the theme")
 
 	LogalizeCmd.Flags().BoolP("debug", "d", false, "add debug info to the output")

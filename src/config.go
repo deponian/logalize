@@ -27,7 +27,7 @@ func InitConfig(builtins fs.FS) error {
 	}
 
 	// read configuration from user defined path
-	if err := loadConfig(config, []string{Opts.ConfigPath}, false); err != nil {
+	if err := loadConfig(config, Opts.ConfigPaths, false); err != nil {
 		return err
 	}
 
@@ -119,9 +119,6 @@ func loadBuiltinConfig(config *koanf.Koanf, builtins fs.FS) error {
 
 func loadConfig(config *koanf.Koanf, paths []string, ignoreNonExistent bool) error {
 	for _, path := range paths {
-		if path == "" {
-			continue
-		}
 		if ok, err := checkFileIsReadable(path); ok {
 			if err := config.Load(file.Provider(path), yaml.Parser()); err != nil {
 				return err

@@ -638,7 +638,7 @@ func TestConfigLoadBuiltinBad(t *testing.T) {
 
 func TestConfigLoadUserDefinedGood(t *testing.T) {
 	colorProfile = termenv.TrueColor
-	configData := `
+	configData1 := `
 formats:
   menetekel:
     - regexp: (\d{1,3}(\.\d{1,3}){3} )
@@ -685,6 +685,23 @@ words:
     - "argus"
     - "cletus"
 
+themes:
+  # it will be overridden in the next config
+  test:
+    formats:
+      menetekel:
+        one:
+          fg: "#ff0000"
+        two:
+          bg: "#ff0000"
+        three:
+          style: bold
+        four:
+          fg: "#ff0000"
+          bg: "#ff0000"
+          style: underline
+`
+	configData2 := `
 themes:
   test:
     formats:
@@ -789,17 +806,24 @@ themes:
 		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
 	}
 
-	userConfig := t.TempDir() + "/userConfig.yaml"
-	configRaw := []byte(configData)
-	err = os.WriteFile(userConfig, configRaw, 0644)
+	userConfig1 := t.TempDir() + "/userConfig1.yaml"
+	configRaw := []byte(configData1)
+	err = os.WriteFile(userConfig1, configRaw, 0644)
 	if err != nil {
-		t.Errorf("Wasn't able to write test file to %s: %s", userConfig, err)
+		t.Errorf("Wasn't able to write test file to %s: %s", userConfig1, err)
+	}
+
+	userConfig2 := t.TempDir() + "/userConfig2.yaml"
+	configRaw = []byte(configData2)
+	err = os.WriteFile(userConfig2, configRaw, 0644)
+	if err != nil {
+		t.Errorf("Wasn't able to write test file to %s: %s", userConfig2, err)
 	}
 
 	Opts = Settings{
-		ConfigPath: userConfig,
-		NoBuiltins: true,
-		Theme:      "test",
+		ConfigPaths: []string{userConfig1, userConfig2},
+		NoBuiltins:  true,
+		Theme:       "test",
 	}
 
 	err = InitConfig(builtins)
@@ -842,9 +866,9 @@ formats:
 	}
 
 	Opts = Settings{
-		ConfigPath: userConfig,
-		NoBuiltins: true,
-		Theme:      "tokyonight-dark",
+		ConfigPaths: []string{userConfig},
+		NoBuiltins:  true,
+		Theme:       "tokyonight-dark",
 	}
 
 	t.Run("TestConfigLoadUserDefinedBadYAML", func(t *testing.T) {
@@ -855,9 +879,9 @@ formats:
 	})
 
 	Opts = Settings{
-		ConfigPath: userConfig + "error",
-		NoBuiltins: true,
-		Theme:      "tokyonight-dark",
+		ConfigPaths: []string{userConfig + "error"},
+		NoBuiltins:  true,
+		Theme:       "tokyonight-dark",
 	}
 
 	t.Run("TestConfigLoadUserDefinedFileDoesntExist", func(t *testing.T) {
@@ -875,9 +899,9 @@ formats:
 	}
 
 	Opts = Settings{
-		ConfigPath: userConfigReadOnly,
-		NoBuiltins: false,
-		Theme:      "tokyonight-dark",
+		ConfigPaths: []string{userConfigReadOnly},
+		NoBuiltins:  false,
+		Theme:       "tokyonight-dark",
 	}
 
 	t.Run("TestConfigLoadUserDefinedReadOnly", func(t *testing.T) {
@@ -911,9 +935,9 @@ formats:
 	})
 
 	Opts = Settings{
-		ConfigPath: "",
-		NoBuiltins: true,
-		Theme:      "tokyonight-dark",
+		ConfigPaths: []string{},
+		NoBuiltins:  true,
+		Theme:       "tokyonight-dark",
 	}
 
 	defaultConfigPaths = append(defaultConfigPaths, tempDefaultConfig)
@@ -977,9 +1001,9 @@ formats:
 	})
 
 	Opts = Settings{
-		ConfigPath: "",
-		NoBuiltins: true,
-		Theme:      "tokyonight-dark",
+		ConfigPaths: []string{},
+		NoBuiltins:  true,
+		Theme:       "tokyonight-dark",
 	}
 
 	t.Run("TestConfigLoadDotLogalizeBadYAML", func(t *testing.T) {
@@ -1020,8 +1044,8 @@ themes:
 
 	// good
 	Opts = Settings{
-		ConfigPath: testConfig,
-		Theme:      "test",
+		ConfigPaths: []string{testConfig},
+		Theme:       "test",
 	}
 
 	t.Run("TestConfigThemeIsDefined", func(t *testing.T) {
@@ -1033,8 +1057,8 @@ themes:
 
 	// bad
 	Opts = Settings{
-		ConfigPath: testConfig,
-		Theme:      "idontexist",
+		ConfigPaths: []string{testConfig},
+		Theme:       "idontexist",
 	}
 
 	t.Run("TestConfigThemeIsNotDefined", func(t *testing.T) {

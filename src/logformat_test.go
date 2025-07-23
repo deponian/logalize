@@ -103,9 +103,9 @@ themes:
 	}
 
 	Opts = Settings{
-		ConfigPath: testConfig,
-		NoBuiltins: true,
-		Theme:      "test",
+		ConfigPaths: []string{testConfig},
+		NoBuiltins:  true,
+		Theme:       "test",
 	}
 
 	err = InitConfig(builtins)
@@ -138,9 +138,9 @@ themes:
 	}
 
 	Opts = Settings{
-		ConfigPath: testConfig,
-		NoBuiltins: true,
-		Theme:      "test",
+		ConfigPaths: []string{testConfig},
+		NoBuiltins:  true,
+		Theme:       "test",
 	}
 
 	err = InitConfig(builtins)
@@ -179,9 +179,9 @@ themes:
 	}
 
 	Opts = Settings{
-		ConfigPath: testConfig,
-		NoBuiltins: true,
-		Theme:      "test",
+		ConfigPaths: []string{testConfig},
+		NoBuiltins:  true,
+		Theme:       "test",
 	}
 
 	err = InitConfig(builtins)
@@ -245,9 +245,9 @@ themes:
 	}
 
 	Opts = Settings{
-		ConfigPath: testConfig,
-		NoBuiltins: true,
-		Theme:      "test",
+		ConfigPaths: []string{testConfig},
+		NoBuiltins:  true,
+		Theme:       "test",
 	}
 
 	for _, tt := range tests {

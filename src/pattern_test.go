@@ -98,9 +98,9 @@ themes:
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}
 	Opts = Settings{
-		ConfigPath: testConfig,
-		NoBuiltins: true,
-		Theme:      "test",
+		ConfigPaths: []string{testConfig},
+		NoBuiltins:  true,
+		Theme:       "test",
 	}
 
 	err = InitConfig(builtins)
@@ -134,9 +134,9 @@ themes:
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}
 	Opts = Settings{
-		ConfigPath: testConfig,
-		NoBuiltins: true,
-		Theme:      "test",
+		ConfigPaths: []string{testConfig},
+		NoBuiltins:  true,
+		Theme:       "test",
 	}
 
 	err = InitConfig(builtins)
@@ -165,9 +165,9 @@ themes:
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}
 	Opts = Settings{
-		ConfigPath: testConfig,
-		NoBuiltins: true,
-		Theme:      "test",
+		ConfigPaths: []string{testConfig},
+		NoBuiltins:  true,
+		Theme:       "test",
 	}
 
 	err = InitConfig(builtins)
@@ -197,9 +197,9 @@ themes:
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}
 	Opts = Settings{
-		ConfigPath: testConfig,
-		NoBuiltins: true,
-		Theme:      "test",
+		ConfigPaths: []string{testConfig},
+		NoBuiltins:  true,
+		Theme:       "test",
 	}
 
 	err = InitConfig(builtins)
@@ -232,9 +232,9 @@ themes:
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}
 	Opts = Settings{
-		ConfigPath: testConfig,
-		NoBuiltins: true,
-		Theme:      "test",
+		ConfigPaths: []string{testConfig},
+		NoBuiltins:  true,
+		Theme:       "test",
 	}
 
 	err = InitConfig(builtins)
@@ -350,9 +350,9 @@ themes:
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}
 	Opts = Settings{
-		ConfigPath: testConfig,
-		NoBuiltins: true,
-		Theme:      "test",
+		ConfigPaths: []string{testConfig},
+		NoBuiltins:  true,
+		Theme:       "test",
 	}
 
 	for _, tt := range tests {

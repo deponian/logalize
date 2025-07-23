@@ -7,7 +7,7 @@ import (
 
 // Settings stores the values of command-line and config options
 type Settings struct {
-	ConfigPath string // path to configuration file
+	ConfigPaths []string // path(s) to configuration file(s)
 
 	Theme string // the name of the theme to be used
 
@@ -37,8 +37,8 @@ func InitSettings(flags *pflag.FlagSet) error {
 	}
 
 	// read settings from user defined path
-	userConfig, _ := flags.GetString("config")
-	if err := loadConfig(config, []string{userConfig}, false); err != nil {
+	userConfigs, _ := flags.GetStringArray("config")
+	if err := loadConfig(config, userConfigs, false); err != nil {
 		return err
 	}
 
@@ -61,7 +61,7 @@ func InitSettings(flags *pflag.FlagSet) error {
 
 func getBuiltinSettings() Settings {
 	return Settings{
-		ConfigPath: "",
+		ConfigPaths: []string{},
 
 		Theme: "tokyonight-dark",
 
@@ -118,7 +118,7 @@ func getSettingFromConfig(opts Settings, config *koanf.Koanf) Settings {
 
 func getSettingFromFlags(opts Settings, flags *pflag.FlagSet) Settings {
 	if flags.Changed("config") {
-		opts.ConfigPath, _ = flags.GetString("config")
+		opts.ConfigPaths, _ = flags.GetStringArray("config")
 	}
 
 	if flags.Changed("theme") {
