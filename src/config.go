@@ -26,13 +26,13 @@ func InitConfig(builtins fs.FS) error {
 		return err
 	}
 
-	// read configuration from user defined path
-	if err := loadConfig(config, Opts.ConfigPaths, false); err != nil {
+	// read configuration from ./.logalize.yaml
+	if err := loadConfig(config, []string{"./.logalize.yaml"}, true); err != nil {
 		return err
 	}
 
-	// read configuration from ./.logalize.yaml
-	if err := loadConfig(config, []string{"./.logalize.yaml"}, true); err != nil {
+	// read configuration from user defined path(s)
+	if err := loadConfig(config, Opts.ConfigPaths, false); err != nil {
 		return err
 	}
 

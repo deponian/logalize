@@ -41,34 +41,6 @@ settings:
 		}
 	})
 
-	// user config
-	configDataUser := `
-settings:
-  #no-builtin-logformats: false
-  no-builtin-patterns: true
-  #no-builtin-words: false
-  #no-builtins: false
-
-  only-logformats: false
-  #only-patterns: false
-  #only-words: false
-
-  no-ansi-escape-sequences-stripping: true
-`
-	userConfig := t.TempDir() + "/userConfig.yaml"
-	configRaw = []byte(configDataUser)
-	err = os.WriteFile(userConfig, configRaw, 0644)
-	if err != nil {
-		t.Errorf("Wasn't able to write test file to %s: %s", userConfig, err)
-	}
-
-	t.Cleanup(func() {
-		err = os.Remove(userConfig)
-		if err != nil {
-			t.Errorf("Wasn't able to delete %s: %s", userConfig, err)
-		}
-	})
-
 	// .logalize.yaml
 	configDataDot := `
 settings:
@@ -99,6 +71,34 @@ settings:
 		err = os.Remove(dotConfig)
 		if err != nil {
 			t.Errorf("Wasn't able to delete %s: %s", dotConfig, err)
+		}
+	})
+
+	// user config
+	configDataUser := `
+settings:
+  #no-builtin-logformats: false
+  no-builtin-patterns: true
+  #no-builtin-words: false
+  #no-builtins: false
+
+  only-logformats: false
+  #only-patterns: false
+  #only-words: false
+
+  no-ansi-escape-sequences-stripping: true
+`
+	userConfig := t.TempDir() + "/userConfig.yaml"
+	configRaw = []byte(configDataUser)
+	err = os.WriteFile(userConfig, configRaw, 0644)
+	if err != nil {
+		t.Errorf("Wasn't able to write test file to %s: %s", userConfig, err)
+	}
+
+	t.Cleanup(func() {
+		err = os.Remove(userConfig)
+		if err != nil {
+			t.Errorf("Wasn't able to delete %s: %s", userConfig, err)
 		}
 	})
 
@@ -154,21 +154,21 @@ settings:
 		}
 	})
 
-	err = os.Chmod(dotConfig, 0200)
+	err = os.Chmod(userConfig, 0200)
 	if err != nil {
-		t.Errorf("Wasn't able to change mode of %s: %s", dotConfig, err)
+		t.Errorf("Wasn't able to change mode of %s: %s", userConfig, err)
 	}
 
-	t.Run("TestSettingsFromInitBadDotConfig", func(t *testing.T) {
+	t.Run("TestSettingsFromInitBadUserConfig", func(t *testing.T) {
 		err := InitSettings(flags)
 		if _, ok := err.(*fs.PathError); !ok {
 			t.Errorf("InitSettings() should have failed with *fs.PathError, got: [%T] %s", err, err)
 		}
 	})
 
-	err = os.Chmod(userConfig, 0200)
+	err = os.Chmod(dotConfig, 0200)
 	if err != nil {
-		t.Errorf("Wasn't able to change mode of %s: %s", userConfig, err)
+		t.Errorf("Wasn't able to change mode of %s: %s", dotConfig, err)
 	}
 
 	t.Run("TestSettingsFromInitBadDotConfig", func(t *testing.T) {
@@ -183,7 +183,7 @@ settings:
 		t.Errorf("Wasn't able to change mode of %s: %s", defaultConfig, err)
 	}
 
-	t.Run("TestSettingsFromInitBadDotConfig", func(t *testing.T) {
+	t.Run("TestSettingsFromInitBadDefaultConfig", func(t *testing.T) {
 		err := InitSettings(flags)
 		if _, ok := err.(*fs.PathError); !ok {
 			t.Errorf("InitSettings() should have failed with *fs.PathError, got: [%T] %s", err, err)

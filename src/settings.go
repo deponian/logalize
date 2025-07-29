@@ -36,14 +36,14 @@ func InitSettings(flags *pflag.FlagSet) error {
 		return err
 	}
 
-	// read settings from user defined path
-	userConfigs, _ := flags.GetStringArray("config")
-	if err := loadConfig(config, userConfigs, false); err != nil {
+	// read settings from ./.logalize.yaml
+	if err := loadConfig(config, []string{"./.logalize.yaml"}, true); err != nil {
 		return err
 	}
 
-	// read settings from ./.logalize.yaml
-	if err := loadConfig(config, []string{"./.logalize.yaml"}, true); err != nil {
+	// read settings from user defined path(s)
+	userConfigs, _ := flags.GetStringArray("config")
+	if err := loadConfig(config, userConfigs, false); err != nil {
 		return err
 	}
 
