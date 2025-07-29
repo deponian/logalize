@@ -12,6 +12,7 @@
   <a href="https://goreportcard.com/report/github.com/deponian/logalize"><img src="https://goreportcard.com/badge/github.com/deponian/logalize" alt="Go Report Card"></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License"></a>
   <a href="https://github.com/deponian/logalize/releases/latest"><img src="https://img.shields.io/github/v/release/deponian/logalize" alt="Github Release"></a>
+  <a href="https://ko-fi.com/M4M41I8ECW"><img src="https://img.shields.io/badge/Buy_me_a_coffee-FF5E5B?logo=kofi&logoColor=white" alt="Ko-fi"></a>
 </p>
 
 Usage
