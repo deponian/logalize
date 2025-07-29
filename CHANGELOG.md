@@ -5,12 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.6.1] - 2025-07-29
+
+### Fixed
+
+- Change the order in which the configuration is read. Now `-c/--config` flag has the highest priority
+
 ## [0.6.0] - 2025-07-23
 
 ### Added
 
 - Add "syslog-rfc3164" log format
-- Add ability to repeat -c/--config flag
+- Add ability to repeat `-c/--config` flag
 
 ### Changed
 
@@ -21,8 +27,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Add ability to save original colors of input data (see -s/--no-ansi-escape-sequences-stripping flag and https://github.com/deponian/logalize/issues/6)
-- Add debug output mode (see -d/--debug flag)
+- Add ability to save original colors of input data (see `-s/--no-ansi-escape-sequences-stripping` flag and https://github.com/deponian/logalize/issues/6)
+- Add debug output mode (see `-d/--debug` flag)
 
 ### Fixed
 
@@ -32,7 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Properly handle \r in the input data (see https://github.com/deponian/logalize/issues/7)
+- Properly handle `\r` in the input data (see https://github.com/deponian/logalize/issues/7)
 
 ## [0.4.7] - 2025-05-28
 
@@ -44,7 +50,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Don't alter the input in any way when user set --dry-run flag
+- Don't alter the input in any way when user set `--dry-run` flag
 - Reflect changes from v0.4.5 in the man page
 
 ## [0.4.5] - 2025-05-26
@@ -55,7 +61,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Add -s/--no-ansi-escape-sequences-stripping flag to get pre v0.4.5 behavior
+- Add `-s/--no-ansi-escape-sequences-stripping` flag to get pre v0.4.5 behavior
 
 ## [0.4.4] - 2025-05-20
 
@@ -103,15 +109,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Bring back --dry-run and --config flags
+- Bring back `--dry-run` and `--config` flags
 
 ## [0.4.0] - 2024-10-22
 
 ### Added
 
 - (!) Add theme support (see the new configuration in README.md)
-- Add -T/--list-themes flag
-- Add -C/--print-config flag
+- Add `-T/--list-themes` flag
+- Add `-C/--print-config` flag
 - Add "failure" to the list of "bad" words
 - Add mask detection for IPv4 address pattern
 
@@ -123,7 +129,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Check theme availability during config initialization
-- Split default paths and .logalize.yaml in current directory
+- Split default paths and `.logalize.yaml` in current directory
 
 ## [0.3.0] - 2024-08-17
 
@@ -133,7 +139,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add "redis" log format
 - Add "logfmt" pattern
 - Add "duration" pattern
-- Add -L, -P, -W, -N, -l, -p, -w, -n flags; -b flag replaced old -p flag
+- Add `-L`, `-P`, `-W`, `-N`, `-l`, `-p`, `-w`, `-n` flags; `-b` flag replaced old `-p` flag
 
 ### Changed
 
@@ -141,7 +147,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Use non-capturing groups for built-in logformats and patterns
 - Colorize quotation marks in "logfmt-string" pattern
 - Update modules and go to v1.22.5
-- Add :port to "ipv6-address" pattern
+- Add `:port` to "ipv6-address" pattern
 - Update git-cliff configuration
 
 ### Fixed
@@ -153,7 +159,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Add "--print-builtins" flag
+- Add `--print-builtins` flag
 - Add "info" word group
 - Add "klog" log format
 - Add "patterns", "words" and "patterns-and-words" color styles
@@ -169,7 +175,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Check lowercased words
-- Change colors for nginx-combined and nginx-ingress-controller logging formats
+- Change colors for nginx-combined and nginx-ingress-controller log formats
 - Change checking process for log formats and word groups
 - Rectify "print-builtins" after changes in d5fa7fd
 
@@ -202,12 +208,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add git-cliff config
-- Add .logalize.yaml as configuration example
+- Add `.logalize.yaml` as configuration example
 
 ### Fixed
 
 - Print version as "version (commit) date"
 
+[0.6.1]: https://github.com/deponian/logalize/compare/v0.6.0..v0.6.1
 [0.6.0]: https://github.com/deponian/logalize/compare/v0.5.0..v0.6.0
 [0.5.0]: https://github.com/deponian/logalize/compare/v0.4.8..v0.5.0
 [0.4.8]: https://github.com/deponian/logalize/compare/v0.4.7..v0.4.8
