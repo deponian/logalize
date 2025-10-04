@@ -1,0 +1,68 @@
+version: "2"
+
+linters:
+  enable:
+    - bidichk
+    - copyloopvar
+    - dupl
+    - errcheck
+    - errname
+    - funlen
+    - gocheckcompilerdirectives
+    - gocognit
+    - goconst
+    - gocritic
+    - godoclint
+    - gosec
+    - govet
+    - ineffassign
+    - intrange
+    - iotamixing
+    - lll
+    - loggercheck
+    - makezero
+    - mnd
+    - nilerr
+    - nilnil
+    - nlreturn
+    - predeclared
+    - recvcheck
+    - revive
+    - sloglint
+    - staticcheck
+    - unused
+    - usetesting
+
+  settings:
+    copyloopvar:
+      check-alias: true
+
+    gocognit:
+      min-complexity: 20
+
+    godoclint:
+      default: all
+      options:
+        max-len:
+          length: 100
+
+    usetesting:
+      os-temp-dir: true
+
+  # exclusions:
+  #   generated: lax
+  #   presets:
+  #     - comments
+  #     - std-error-handling
+  #     - common-false-positives
+  #     - legacy
+  #
+  #   rules:
+  #     - path: _test\.go
+  #       linters:
+  #         - funlen
+  #         - errcheck
+  #         - dupl
+  #         - gocognit
+  #         - godoclint
+  #         - lll
