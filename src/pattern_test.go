@@ -93,7 +93,7 @@ themes:
 
 	testConfig := t.TempDir() + "/testConfig.yaml"
 	configRaw := []byte(configData)
-	err := os.WriteFile(testConfig, configRaw, 0644)
+	err := os.WriteFile(testConfig, configRaw, 0o644)
 	if err != nil {
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}
@@ -129,7 +129,7 @@ themes:
 
 	testConfig = t.TempDir() + "/testConfig.yaml"
 	configRaw = []byte(configDataBadYAML1)
-	err = os.WriteFile(testConfig, configRaw, 0644)
+	err = os.WriteFile(testConfig, configRaw, 0o644)
 	if err != nil {
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}
@@ -160,7 +160,7 @@ themes:
 
 	testConfig = t.TempDir() + "/testConfig.yaml"
 	configRaw = []byte(configDataBadYAML2)
-	err = os.WriteFile(testConfig, configRaw, 0644)
+	err = os.WriteFile(testConfig, configRaw, 0o644)
 	if err != nil {
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}
@@ -192,7 +192,7 @@ themes:
 
 	testConfig = t.TempDir() + "/testConfig.yaml"
 	configRaw = []byte(configDataBadRegExp)
-	err = os.WriteFile(testConfig, configRaw, 0644)
+	err = os.WriteFile(testConfig, configRaw, 0o644)
 	if err != nil {
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}
@@ -227,7 +227,7 @@ themes:
 
 	testConfig = t.TempDir() + "/testConfig.yaml"
 	configRaw = []byte(configDataBadStyle)
-	err = os.WriteFile(testConfig, configRaw, 0644)
+	err = os.WriteFile(testConfig, configRaw, 0o644)
 	if err != nil {
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}
@@ -345,7 +345,7 @@ themes:
 
 	testConfig := t.TempDir() + "/testConfig.yaml"
 	configRaw := []byte(configDataGood)
-	err = os.WriteFile(testConfig, configRaw, 0644)
+	err = os.WriteFile(testConfig, configRaw, 0o644)
 	if err != nil {
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}

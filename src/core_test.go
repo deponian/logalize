@@ -363,7 +363,7 @@ themes:
 
 	testConfig := t.TempDir() + "/testConfig.yaml"
 	configRaw := []byte(configData)
-	err = os.WriteFile(testConfig, configRaw, 0644)
+	err = os.WriteFile(testConfig, configRaw, 0o644)
 	if err != nil {
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}
@@ -875,7 +875,7 @@ themes:
 `
 	testConfig := t.TempDir() + "/testConfig.yaml"
 	configRaw := []byte(configDataBadFormats)
-	err = os.WriteFile(testConfig, configRaw, 0644)
+	err = os.WriteFile(testConfig, configRaw, 0o644)
 	if err != nil {
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}
@@ -903,7 +903,7 @@ themes:
 `
 	testConfig = t.TempDir() + "/testConfig.yaml"
 	configRaw = []byte(configDataBadRegExps)
-	err = os.WriteFile(testConfig, configRaw, 0644)
+	err = os.WriteFile(testConfig, configRaw, 0o644)
 	if err != nil {
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}
@@ -932,7 +932,7 @@ themes:
 `
 	testConfig = t.TempDir() + "/testConfig.yaml"
 	configRaw = []byte(configDataBadWords)
-	err = os.WriteFile(testConfig, configRaw, 0644)
+	err = os.WriteFile(testConfig, configRaw, 0o644)
 	if err != nil {
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}
@@ -981,7 +981,7 @@ themes:
 `
 	testConfig := t.TempDir() + "/testConfig.yaml"
 	configRaw := []byte(configData)
-	err = os.WriteFile(testConfig, configRaw, 0644)
+	err = os.WriteFile(testConfig, configRaw, 0o644)
 	if err != nil {
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}
@@ -1000,7 +1000,7 @@ themes:
 	if err != nil {
 		t.Errorf("Wasn't able to create test %s: %s", filename, err)
 	}
-	err = file.Chmod(0444)
+	err = file.Chmod(0o444)
 	if err != nil {
 		t.Errorf("Wasn't able to change mode of %s: %s", filename, err)
 	}
@@ -1054,7 +1054,7 @@ themes:
 `
 	testConfig := t.TempDir() + "/testConfig.yaml"
 	configRaw := []byte(configData)
-	err = os.WriteFile(testConfig, configRaw, 0644)
+	err = os.WriteFile(testConfig, configRaw, 0o644)
 	if err != nil {
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}
@@ -1073,7 +1073,7 @@ themes:
 	if err != nil {
 		t.Errorf("Wasn't able to create test %s: %s", filename, err)
 	}
-	err = file.Chmod(0444)
+	err = file.Chmod(0o444)
 	if err != nil {
 		t.Errorf("Wasn't able to change mode of %s: %s", filename, err)
 	}

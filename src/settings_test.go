@@ -29,7 +29,7 @@ settings:
 `
 	defaultConfig := t.TempDir() + "/tempDefaultConfig.yaml"
 	configRaw := []byte(configDataDefault)
-	err := os.WriteFile(defaultConfig, configRaw, 0644)
+	err := os.WriteFile(defaultConfig, configRaw, 0o644)
 	if err != nil {
 		t.Errorf("Wasn't able to write test file to %s: %s", defaultConfig, err)
 	}
@@ -62,7 +62,7 @@ settings:
 	dotConfig := wd + "/.logalize.yaml"
 
 	configRaw = []byte(configDataDot)
-	err = os.WriteFile(dotConfig, configRaw, 0644)
+	err = os.WriteFile(dotConfig, configRaw, 0o644)
 	if err != nil {
 		t.Errorf("Wasn't able to write test file to %s: %s", dotConfig, err)
 	}
@@ -90,7 +90,7 @@ settings:
 `
 	userConfig := t.TempDir() + "/userConfig.yaml"
 	configRaw = []byte(configDataUser)
-	err = os.WriteFile(userConfig, configRaw, 0644)
+	err = os.WriteFile(userConfig, configRaw, 0o644)
 	if err != nil {
 		t.Errorf("Wasn't able to write test file to %s: %s", userConfig, err)
 	}
@@ -154,7 +154,7 @@ settings:
 		}
 	})
 
-	err = os.Chmod(userConfig, 0200)
+	err = os.Chmod(userConfig, 0o200)
 	if err != nil {
 		t.Errorf("Wasn't able to change mode of %s: %s", userConfig, err)
 	}
@@ -166,7 +166,7 @@ settings:
 		}
 	})
 
-	err = os.Chmod(dotConfig, 0200)
+	err = os.Chmod(dotConfig, 0o200)
 	if err != nil {
 		t.Errorf("Wasn't able to change mode of %s: %s", dotConfig, err)
 	}
@@ -178,7 +178,7 @@ settings:
 		}
 	})
 
-	err = os.Chmod(defaultConfig, 0200)
+	err = os.Chmod(defaultConfig, 0o200)
 	if err != nil {
 		t.Errorf("Wasn't able to change mode of %s: %s", defaultConfig, err)
 	}

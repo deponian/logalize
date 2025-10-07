@@ -808,14 +808,14 @@ themes:
 
 	userConfig1 := t.TempDir() + "/userConfig1.yaml"
 	configRaw := []byte(configData1)
-	err = os.WriteFile(userConfig1, configRaw, 0644)
+	err = os.WriteFile(userConfig1, configRaw, 0o644)
 	if err != nil {
 		t.Errorf("Wasn't able to write test file to %s: %s", userConfig1, err)
 	}
 
 	userConfig2 := t.TempDir() + "/userConfig2.yaml"
 	configRaw = []byte(configData2)
-	err = os.WriteFile(userConfig2, configRaw, 0644)
+	err = os.WriteFile(userConfig2, configRaw, 0o644)
 	if err != nil {
 		t.Errorf("Wasn't able to write test file to %s: %s", userConfig2, err)
 	}
@@ -860,7 +860,7 @@ formats:
 
 	userConfig := t.TempDir() + "/userConfig.yaml"
 	configRaw := []byte(configDataBadYAML)
-	err := os.WriteFile(userConfig, configRaw, 0644)
+	err := os.WriteFile(userConfig, configRaw, 0o644)
 	if err != nil {
 		t.Errorf("Wasn't able to write test file to %s: %s", userConfig, err)
 	}
@@ -893,7 +893,7 @@ formats:
 
 	userConfigReadOnly := t.TempDir() + "/userConfigReadOnly.yaml"
 	configRaw = []byte(configDataBadYAML)
-	err = os.WriteFile(userConfigReadOnly, configRaw, 0200)
+	err = os.WriteFile(userConfigReadOnly, configRaw, 0o200)
 	if err != nil {
 		t.Errorf("Wasn't able to write test file to %s: %s", userConfig, err)
 	}
@@ -922,7 +922,7 @@ formats:
 
 	tempDefaultConfig := t.TempDir() + "/tempDefaultConfig.yaml"
 	configRaw := []byte(configDataBadYAML)
-	err := os.WriteFile(tempDefaultConfig, configRaw, 0644)
+	err := os.WriteFile(tempDefaultConfig, configRaw, 0o644)
 	if err != nil {
 		t.Errorf("Wasn't able to write test file to %s: %s", tempDefaultConfig, err)
 	}
@@ -949,7 +949,7 @@ formats:
 		}
 	})
 
-	err = os.Chmod(tempDefaultConfig, 0200)
+	err = os.Chmod(tempDefaultConfig, 0o200)
 	if err != nil {
 		t.Errorf("Wasn't able to change mode of %s: %s", tempDefaultConfig, err)
 	}
@@ -988,7 +988,7 @@ formats:
 		}
 	}
 
-	err = os.WriteFile(dotConfig, configRaw, 0644)
+	err = os.WriteFile(dotConfig, configRaw, 0o644)
 	if err != nil {
 		t.Errorf("Wasn't able to write test file to %s: %s", dotConfig, err)
 	}
@@ -1013,7 +1013,7 @@ formats:
 		}
 	})
 
-	err = os.Chmod(dotConfig, 0200)
+	err = os.Chmod(dotConfig, 0o200)
 	if err != nil {
 		t.Errorf("Wasn't able to change mode of %s: %s", dotConfig, err)
 	}
@@ -1037,7 +1037,7 @@ themes:
 
 	testConfig := t.TempDir() + "/testConfig.yaml"
 	configRaw := []byte(configData)
-	err := os.WriteFile(testConfig, configRaw, 0644)
+	err := os.WriteFile(testConfig, configRaw, 0o644)
 	if err != nil {
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}
