@@ -3,7 +3,7 @@ package main
 import (
 	"embed"
 
-	"github.com/deponian/logalize/cmd"
+	cmd "github.com/deponian/logalize/cmd/logalize"
 )
 
 var (

@@ -4,7 +4,7 @@ import (
 	"embed"
 	"os"
 
-	"github.com/deponian/logalize/cmd"
+	cmd "github.com/deponian/logalize/cmd/logalize"
 )
 
 func main() {

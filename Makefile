@@ -112,15 +112,15 @@ clean:
 .PHONY: completions
 completions:
 	mkdir -p $(build_compdir)
-	go run -C compgen ./compgen.go "bash" > $(build_compdir)/$(app).bash
-	go run -C compgen ./compgen.go "fish" > $(build_compdir)/$(app).fish
-	go run -C compgen ./compgen.go "zsh" > $(build_compdir)/$(app).zsh
+	go run cmd/compgen/main.go "bash" > $(build_compdir)/$(app).bash
+	go run cmd/compgen/main.go "fish" > $(build_compdir)/$(app).fish
+	go run cmd/compgen/main.go "zsh" > $(build_compdir)/$(app).zsh
 
 ## manpage: generate manpage
 .PHONY: manpage
 manpage:
 	mkdir -p $(build_mandir)
-	go run -C mangen ./mangen.go "$(VERSION)" | gzip -c -9 > $(build_mandir)/$(app).1.gz
+	go run ./cmd/mangen/main.go "$(VERSION)" | gzip -c -9 > $(build_mandir)/$(app).1.gz
 
 ## install: install the binary, manpage and completions (to /usr/local by default)
 .PHONY: install

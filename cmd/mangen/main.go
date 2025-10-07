@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/deponian/logalize/cmd"
+	cmd "github.com/deponian/logalize/cmd/logalize"
 	"github.com/muesli/mango"
 	mcobra "github.com/muesli/mango-cobra"
 	"github.com/muesli/roff"
