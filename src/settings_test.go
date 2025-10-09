@@ -145,7 +145,7 @@ settings:
 	defaultConfigPaths = append(defaultConfigPaths, defaultConfig)
 
 	t.Run("TestSettingsFromInitGood", func(t *testing.T) {
-		if err := InitSettings(flags); err != nil {
+		if err := BuildSettings(flags); err != nil {
 			t.Errorf("InitSettings() failed with an error: %s", err)
 		}
 
@@ -160,7 +160,7 @@ settings:
 	}
 
 	t.Run("TestSettingsFromInitBadUserConfig", func(t *testing.T) {
-		err := InitSettings(flags)
+		err := BuildSettings(flags)
 		if _, ok := err.(*fs.PathError); !ok {
 			t.Errorf("InitSettings() should have failed with *fs.PathError, got: [%T] %s", err, err)
 		}
@@ -172,7 +172,7 @@ settings:
 	}
 
 	t.Run("TestSettingsFromInitBadDotConfig", func(t *testing.T) {
-		err := InitSettings(flags)
+		err := BuildSettings(flags)
 		if _, ok := err.(*fs.PathError); !ok {
 			t.Errorf("InitSettings() should have failed with *fs.PathError, got: [%T] %s", err, err)
 		}
@@ -184,7 +184,7 @@ settings:
 	}
 
 	t.Run("TestSettingsFromInitBadDefaultConfig", func(t *testing.T) {
-		err := InitSettings(flags)
+		err := BuildSettings(flags)
 		if _, ok := err.(*fs.PathError); !ok {
 			t.Errorf("InitSettings() should have failed with *fs.PathError, got: [%T] %s", err, err)
 		}

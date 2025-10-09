@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"regexp"
 	"strconv"
-
-	"github.com/muesli/termenv"
 )
 
 // CapGroup represents one capture group in a config file
@@ -57,61 +55,16 @@ func (cgl *CapGroupList) init(isLogFormat bool) error {
 }
 
 // highlight colorizes string and applies a style
-func highlight(str, fg, bg, style string) string {
-	if style == "patterns-and-words" {
-		str = Patterns.highlight(str)
-		str = Words.highlight(str)
-		str = applyDefaultColor(str)
-		return str
-	}
-	if style == "patterns" {
-		str = Patterns.highlight(str)
-		str = applyDefaultColor(str)
-		return str
-	}
-	if style == "words" {
-		str = Words.highlight(str)
-		str = applyDefaultColor(str)
-		return str
-	}
-
-	coloredStr := termenv.String(str)
-	if fg != "" {
-		coloredStr = coloredStr.Foreground(colorProfile.Color(fg))
-	}
-	if bg != "" {
-		coloredStr = coloredStr.Background(colorProfile.Color(bg))
-	}
-	switch style {
-	case "bold":
-		coloredStr = coloredStr.Bold()
-	case "faint":
-		coloredStr = coloredStr.Faint()
-	case "italic":
-		coloredStr = coloredStr.Italic()
-	case "underline":
-		coloredStr = coloredStr.Underline()
-	case "overline":
-		coloredStr = coloredStr.Overline()
-	case "crossout":
-		coloredStr = coloredStr.CrossOut()
-	case "reverse":
-		coloredStr = coloredStr.Reverse()
-	}
-	return coloredStr.String()
-}
-
-// highlight colorizes string and applies a style
-func (cg *CapGroup) highlight(str string) string {
+func (cg *CapGroup) highlight(str string, h Highlighter) string {
 	if len(cg.Alternatives) > 0 {
 		for _, alt := range cg.Alternatives {
 			if alt.RegExp.MatchString(str) {
-				return highlight(str, alt.Foreground, alt.Background, alt.Style)
+				return h.highlight(str, alt.Foreground, alt.Background, alt.Style)
 			}
 		}
 	}
 
-	return highlight(str, cg.Foreground, cg.Background, cg.Style)
+	return h.highlight(str, cg.Foreground, cg.Background, cg.Style)
 }
 
 // check checks one capture group's fields match corresponding patterns
@@ -164,11 +117,11 @@ func (cg *CapGroup) check() error {
 	return nil
 }
 
-func (cgl *CapGroupList) highlight(str string) (coloredStr string) {
+func (cgl *CapGroupList) highlight(str string, h Highlighter) (coloredStr string) {
 	matches := cgl.FullRegExp.FindStringSubmatch(str)
 	for i, cg := range cgl.Groups {
 		match := matches[cgl.FullRegExp.SubexpIndex("capGroup"+strconv.Itoa(i))]
-		coloredStr += cg.highlight(match)
+		coloredStr += cg.highlight(match, h)
 	}
 	return coloredStr
 }

@@ -8,8 +8,6 @@ import (
 	"os"
 	"strings"
 
-	"github.com/aaaton/golem/v4"
-	"github.com/aaaton/golem/v4/dicts/en"
 	logalize "github.com/deponian/logalize/src"
 	"github.com/goccy/go-yaml"
 	"github.com/knadh/koanf/v2"
@@ -42,33 +40,29 @@ It's fast and extensible alternative to ccze and colorize.`,
 			}
 
 			// build config
-			lemmatizer, err := golem.New(en.New())
+			opts, err := logalize.BuildSettings(LogalizeCmd.Flags())
 			if err != nil {
 				log.Fatal(err)
 			}
-			err = logalize.InitSettings(LogalizeCmd.Flags())
-			if err != nil {
-				log.Fatal(err)
-			}
-			err = logalize.InitConfig(builtins)
+			config, err := logalize.BuildConfig(builtins, opts)
 			if err != nil {
 				log.Fatal(err)
 			}
 
 			// print config
 			if printConfigFlag {
-				printConfig(logalize.Config)
+				printConfig(config)
 				os.Exit(0)
 			}
 
 			// list themes
 			if listThemesFlag {
-				listThemes(logalize.Config)
+				listThemes(config)
 				os.Exit(0)
 			}
 
 			// run the app
-			err = logalize.Run(os.Stdin, os.Stdout, lemmatizer)
+			err = logalize.Run(os.Stdin, os.Stdout, opts, config)
 			if err != nil {
 				log.Fatal(err)
 			}

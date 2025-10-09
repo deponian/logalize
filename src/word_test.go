@@ -70,7 +70,7 @@ themes:
 		Theme:       "test",
 	}
 
-	err = InitConfig(builtins)
+	err = BuildConfig(builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -110,7 +110,7 @@ themes:
 		Theme:       "test",
 	}
 
-	err = InitConfig(builtins)
+	err = BuildConfig(builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -146,7 +146,7 @@ themes:
 		Theme:       "test",
 	}
 
-	err = InitConfig(builtins)
+	err = BuildConfig(builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -269,7 +269,7 @@ themes:
 	for _, tt := range tests {
 		testname := tt.plain
 
-		err = InitConfig(builtins)
+		err = BuildConfig(builtins)
 		if err != nil {
 			t.Errorf("InitConfig() failed with this error: %s", err)
 		}
@@ -376,7 +376,7 @@ themes:
 	for _, tt := range tests {
 		testname := tt.plain
 
-		err = InitConfig(builtins)
+		err = BuildConfig(builtins)
 		if err != nil {
 			t.Errorf("InitConfig() failed with this error: %s", err)
 		}
@@ -490,7 +490,7 @@ themes:
 	for _, tt := range tests {
 		testname := tt.plain
 
-		err = InitConfig(builtins)
+		err = BuildConfig(builtins)
 		if err != nil {
 			t.Errorf("InitConfig() failed with this error: %s", err)
 		}

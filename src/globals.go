@@ -1,7 +1,6 @@
 package logalize
 
 import (
-	"fmt"
 	"os"
 	"regexp"
 
@@ -71,44 +70,4 @@ func getDefaultConfigPaths() []string {
 		"/etc/logalize/logalize.yaml",
 		homeDir + "/.config/logalize/logalize.yaml",
 	}
-}
-
-func applyDefaultColor(str string) string {
-	if str == "" {
-		return str
-	}
-
-	// skip already colored parts of the string
-	matches := sgrANSIEscapeSequenceRegexp.FindStringSubmatchIndex(str)
-	if matches != nil {
-		leftPart := applyDefaultColor(str[0:matches[0]])
-		alreadyColored := str[matches[0]:matches[1]]
-		rightPart := applyDefaultColor(str[matches[1]:])
-		return leftPart + alreadyColored + rightPart
-	}
-
-	defaultColor := Config.StringMap("themes." + Opts.Theme + ".default")
-	return highlight(str, defaultColor["fg"], defaultColor["bg"], defaultColor["style"])
-}
-
-func addDebugInfo(str string, kind any) string {
-	opening := ""
-	closing := ""
-
-	switch k := kind.(type) {
-	case LogFormat:
-		opening = fmt.Sprintf("[lf(%s)]", k.Name)
-		closing = fmt.Sprintf("[lf(/%s)]", k.Name)
-	case Pattern:
-		opening = fmt.Sprintf("[p(%s)]", k.Name)
-		closing = fmt.Sprintf("[p(/%s)]", k.Name)
-	case WordGroup:
-		opening = fmt.Sprintf("[w(%s)]", k.Name)
-		closing = fmt.Sprintf("[w(/%s)]", k.Name)
-	}
-
-	opening = highlight(opening, "", "", "reverse")
-	closing = highlight(closing, "", "", "reverse")
-
-	return opening + str + closing
 }

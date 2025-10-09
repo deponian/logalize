@@ -2,6 +2,8 @@ package logalize
 
 import (
 	"fmt"
+
+	"github.com/knadh/koanf/v2"
 )
 
 // LogFormat represents a log format
@@ -13,58 +15,56 @@ type LogFormat struct {
 // LogFormatList represents a list of log formats
 type LogFormatList []LogFormat
 
-var LogFormats LogFormatList
-
 // InitLogFormats returns list of LogFormats collected
 // from *koanf.Koanf configuration
-func initLogFormats() error {
-	LogFormats = LogFormatList{}
-	for _, formatName := range Config.MapKeys("formats") {
+func initLogFormats(opts Settings, config *koanf.Koanf) (LogFormatList, error) {
+	var logFormats LogFormatList
+	for _, formatName := range config.MapKeys("formats") {
 		var logFormat LogFormat
 		logFormat.Name = formatName
 		logFormat.CapGroups = &CapGroupList{}
-		if err := Config.Unmarshal("formats."+formatName, &logFormat.CapGroups.Groups); err != nil {
-			return err
+		if err := config.Unmarshal("formats."+formatName, &logFormat.CapGroups.Groups); err != nil {
+			return nil, err
 		}
-		LogFormats = append(LogFormats, logFormat)
+		logFormats = append(logFormats, logFormat)
 	}
 
-	for _, format := range LogFormats {
+	for _, format := range logFormats {
 		// set colors and style from the theme
 		for i, cg := range format.CapGroups.Groups {
-			path := "themes." + Opts.Theme + ".formats." + format.Name + "." + cg.Name
+			path := "themes." + opts.Theme + ".formats." + format.Name + "." + cg.Name
 			cgReal := &format.CapGroups.Groups[i]
 
 			if len(cg.Alternatives) > 0 {
-				cgReal.Foreground = Config.String(path + ".default.fg")
-				cgReal.Background = Config.String(path + ".default.bg")
-				cgReal.Style = Config.String(path + ".default.style")
+				cgReal.Foreground = config.String(path + ".default.fg")
+				cgReal.Background = config.String(path + ".default.bg")
+				cgReal.Style = config.String(path + ".default.style")
 				for j, alt := range cg.Alternatives {
 					altReal := &format.CapGroups.Groups[i].Alternatives[j]
-					altReal.Foreground = Config.String(path + "." + alt.Name + ".fg")
-					altReal.Background = Config.String(path + "." + alt.Name + ".bg")
-					altReal.Style = Config.String(path + "." + alt.Name + ".style")
+					altReal.Foreground = config.String(path + "." + alt.Name + ".fg")
+					altReal.Background = config.String(path + "." + alt.Name + ".bg")
+					altReal.Style = config.String(path + "." + alt.Name + ".style")
 				}
 			} else {
-				cgReal.Foreground = Config.String(path + ".fg")
-				cgReal.Background = Config.String(path + ".bg")
-				cgReal.Style = Config.String(path + ".style")
+				cgReal.Foreground = config.String(path + ".fg")
+				cgReal.Background = config.String(path + ".bg")
+				cgReal.Style = config.String(path + ".style")
 			}
 		}
 
 		// init capgroups
 		if err := format.CapGroups.init(true); err != nil {
-			return fmt.Errorf("[log format: %s] %s", format.Name, err)
+			return nil, fmt.Errorf("[log format: %s] %s", format.Name, err)
 		}
 	}
 
-	return nil
+	return logFormats, nil
 }
 
-func (lf *LogFormat) highlight(str string) (coloredStr string) {
-	str = lf.CapGroups.highlight(str)
-	if Opts.Debug {
-		str = addDebugInfo(str, *lf)
+func (lf *LogFormat) highlight(str string, h Highlighter) (coloredStr string) {
+	str = lf.CapGroups.highlight(str, h)
+	if h.opts.Debug {
+		str = h.addDebugInfo(str, *lf)
 	}
 	return str
 }

@@ -103,7 +103,7 @@ themes:
 		Theme:       "test",
 	}
 
-	err = InitConfig(builtins)
+	err = BuildConfig(builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -139,7 +139,7 @@ themes:
 		Theme:       "test",
 	}
 
-	err = InitConfig(builtins)
+	err = BuildConfig(builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -170,7 +170,7 @@ themes:
 		Theme:       "test",
 	}
 
-	err = InitConfig(builtins)
+	err = BuildConfig(builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -202,7 +202,7 @@ themes:
 		Theme:       "test",
 	}
 
-	err = InitConfig(builtins)
+	err = BuildConfig(builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -237,7 +237,7 @@ themes:
 		Theme:       "test",
 	}
 
-	err = InitConfig(builtins)
+	err = BuildConfig(builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -358,7 +358,7 @@ themes:
 	for _, tt := range tests {
 		testname := tt.plain
 
-		err := InitConfig(builtins)
+		err := BuildConfig(builtins)
 		if err != nil {
 			t.Errorf("InitConfig() failed with this error: %s", err)
 		}
@@ -423,7 +423,7 @@ func TestPatternsRFC3339(t *testing.T) {
 		Theme: "tokyonight-dark",
 	}
 
-	err = InitConfig(builtins)
+	err = BuildConfig(builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -468,7 +468,7 @@ func TestPatternsTime(t *testing.T) {
 		Theme: "tokyonight-dark",
 	}
 
-	err = InitConfig(builtins)
+	err = BuildConfig(builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -535,7 +535,7 @@ func TestPatternsDates(t *testing.T) {
 		Theme: "tokyonight-dark",
 	}
 
-	err = InitConfig(builtins)
+	err = BuildConfig(builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -582,7 +582,7 @@ func TestPatternsDuration(t *testing.T) {
 		Theme: "tokyonight-dark",
 	}
 
-	err = InitConfig(builtins)
+	err = BuildConfig(builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -626,7 +626,7 @@ func TestPatternsLogfmtGeneral(t *testing.T) {
 		Theme: "tokyonight-dark",
 	}
 
-	err = InitConfig(builtins)
+	err = BuildConfig(builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -670,7 +670,7 @@ func TestPatternsLogfmtString(t *testing.T) {
 		Theme: "tokyonight-dark",
 	}
 
-	err = InitConfig(builtins)
+	err = BuildConfig(builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -721,7 +721,7 @@ func TestPatternsIPv4(t *testing.T) {
 		Theme: "tokyonight-dark",
 	}
 
-	err = InitConfig(builtins)
+	err = BuildConfig(builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -923,7 +923,7 @@ func TestPatternsIPv6(t *testing.T) {
 		Theme: "tokyonight-dark",
 	}
 
-	err = InitConfig(builtins)
+	err = BuildConfig(builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -969,7 +969,7 @@ func TestPatternsMACAddress(t *testing.T) {
 		Theme: "tokyonight-dark",
 	}
 
-	err = InitConfig(builtins)
+	err = BuildConfig(builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -1012,7 +1012,7 @@ func TestPatternsUUID(t *testing.T) {
 		Theme: "tokyonight-dark",
 	}
 
-	err = InitConfig(builtins)
+	err = BuildConfig(builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}

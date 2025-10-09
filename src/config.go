@@ -11,61 +11,57 @@ import (
 	"github.com/knadh/koanf/v2"
 )
 
-var Config *koanf.Koanf
-
-func InitConfig(builtins fs.FS) error {
+func BuildConfig(builtins fs.FS, opts Settings) (*koanf.Koanf, error) {
 	config := koanf.New(".")
 
 	// load built-in configuration
-	if err := loadBuiltinConfig(config, builtins); err != nil {
-		return err
+	if err := loadBuiltinConfig(config, builtins, opts); err != nil {
+		return nil, err
 	}
 
 	// read configuration from default paths
 	if err := loadConfig(config, defaultConfigPaths, true); err != nil {
-		return err
+		return nil, err
 	}
 
 	// read configuration from ./.logalize.yaml
 	if err := loadConfig(config, []string{"./.logalize.yaml"}, true); err != nil {
-		return err
+		return nil, err
 	}
 
 	// read configuration from user defined path(s)
-	if err := loadConfig(config, Opts.ConfigPaths, false); err != nil {
-		return err
+	if err := loadConfig(config, opts.ConfigPaths, false); err != nil {
+		return nil, err
 	}
 
 	// check theme availability
-	if !config.Exists("themes." + Opts.Theme) {
-		return fmt.Errorf("Theme \"%s\" is not defined. Use -T/--list-themes flag to see the list of all available themes", Opts.Theme)
+	if !config.Exists("themes." + opts.Theme) {
+		return nil, fmt.Errorf("Theme \"%s\" is not defined. Use -T/--list-themes flag to see the list of all available themes", opts.Theme)
 	}
 
 	// keep in the config only things we want to colorize
-	if Opts.HighlightOnlyLogFormats || Opts.HighlightOnlyPatterns || Opts.HighlightOnlyWords {
+	if opts.HighlightOnlyLogFormats || opts.HighlightOnlyPatterns || opts.HighlightOnlyWords {
 		configBackup := config.Copy()
 
 		config.Delete("formats")
 		config.Delete("patterns")
 		config.Delete("words")
 
-		if Opts.HighlightOnlyLogFormats {
+		if opts.HighlightOnlyLogFormats {
 			config.MergeAt(configBackup.Cut("formats"), "formats")
 		}
-		if Opts.HighlightOnlyPatterns {
+		if opts.HighlightOnlyPatterns {
 			config.MergeAt(configBackup.Cut("patterns"), "patterns")
 		}
-		if Opts.HighlightOnlyWords {
+		if opts.HighlightOnlyWords {
 			config.MergeAt(configBackup.Cut("words"), "words")
 		}
 	}
 
-	Config = config
-
-	return nil
+	return config, nil
 }
 
-func loadBuiltinConfig(config *koanf.Koanf, builtins fs.FS) error {
+func loadBuiltinConfig(config *koanf.Koanf, builtins fs.FS, opts Settings) error {
 	var loadFromDirRecursively func(entries []fs.DirEntry, path string) error
 	loadFromDirRecursively = func(entries []fs.DirEntry, path string) error {
 		for _, entry := range entries {
@@ -96,19 +92,19 @@ func loadBuiltinConfig(config *koanf.Koanf, builtins fs.FS) error {
 		return err
 	}
 
-	if Opts.NoBuiltinLogFormats {
+	if opts.NoBuiltinLogFormats {
 		config.Delete("formats")
 	}
 
-	if Opts.NoBuiltinPatterns {
+	if opts.NoBuiltinPatterns {
 		config.Delete("patterns")
 	}
 
-	if Opts.NoBuiltinWords {
+	if opts.NoBuiltinWords {
 		config.Delete("words")
 	}
 
-	if Opts.NoBuiltins {
+	if opts.NoBuiltins {
 		config.Delete("formats")
 		config.Delete("patterns")
 		config.Delete("words")

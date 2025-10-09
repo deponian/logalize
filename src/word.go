@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/aaaton/golem/v4"
+	"github.com/knadh/koanf/v2"
 )
 
 type WordGroup struct {
@@ -23,43 +24,41 @@ type WordGroups struct {
 	Lemmatizer *golem.Lemmatizer
 }
 
-var Words WordGroups
-
 // InitWords initializes global list of words collected
 // from *koanf.Koanf configuration
-func initWords(lemmatizer *golem.Lemmatizer) error {
-	Words = WordGroups{}
-	for _, wordGroupName := range Config.MapKeys("words") {
+func initWords(opts Settings, config *koanf.Koanf, lemmatizer *golem.Lemmatizer) (WordGroups, error) {
+	var words WordGroups
+	for _, wordGroupName := range config.MapKeys("words") {
 		var wordGroup WordGroup
 
 		wordGroup.Name = wordGroupName
 
-		path := "themes." + Opts.Theme + ".words." + wordGroupName + "."
-		wordGroup.Foreground = Config.String(path + "fg")
-		wordGroup.Background = Config.String(path + "bg")
-		wordGroup.Style = Config.String(path + "style")
+		path := "themes." + opts.Theme + ".words." + wordGroupName + "."
+		wordGroup.Foreground = config.String(path + "fg")
+		wordGroup.Background = config.String(path + "bg")
+		wordGroup.Style = config.String(path + "style")
 
-		if err := Config.Unmarshal("words."+wordGroupName, &wordGroup.List); err != nil {
-			return err
+		if err := config.Unmarshal("words."+wordGroupName, &wordGroup.List); err != nil {
+			return WordGroups{}, err
 		}
 
 		if err := wordGroup.check(); err != nil {
-			return err
+			return WordGroups{}, err
 		}
 
 		switch wordGroupName {
 		case "good":
-			Words.Good = wordGroup
+			words.Good = wordGroup
 		case "bad":
-			Words.Bad = wordGroup
+			words.Bad = wordGroup
 		default:
-			Words.Other = append(Words.Other, wordGroup)
+			words.Other = append(words.Other, wordGroup)
 		}
 	}
 
-	Words.Lemmatizer = lemmatizer
+	words.Lemmatizer = lemmatizer
 
-	return nil
+	return words, nil
 }
 
 func (wg WordGroup) check() error {
@@ -88,16 +87,16 @@ func (wg WordGroup) check() error {
 }
 
 // highlightWord colors single word in a string
-func (words WordGroups) highlightWord(word string) string {
+func (words WordGroups) highlightWord(word string, h Highlighter) string {
 	allWordGroups := append(words.Other, words.Good, words.Bad)
 	for _, wordGroup := range allWordGroups {
 		lemma := words.Lemmatizer.Lemma(word)
 		if slices.Contains(wordGroup.List, lemma) ||
 			slices.Contains(wordGroup.List, word) ||
 			slices.Contains(wordGroup.List, strings.ToLower(word)) {
-			word = highlight(word, wordGroup.Foreground, wordGroup.Background, wordGroup.Style)
-			if Opts.Debug {
-				word = addDebugInfo(word, wordGroup)
+			word = h.highlight(word, wordGroup.Foreground, wordGroup.Background, wordGroup.Style)
+			if h.opts.Debug {
+				word = h.addDebugInfo(word, wordGroup)
 			}
 			break
 		}
@@ -109,15 +108,15 @@ func (words WordGroups) highlightWord(word string) string {
 // highlightNegated colors a phrase with negated word in a string
 // if the word is good, then color the whole phrase as bad and vice versa
 // if the word is neither good nor bad, then don't color the phrase
-func (words WordGroups) highlightNegatedWord(phrase, negator, word string) string {
+func (words WordGroups) highlightNegatedWord(phrase, negator, word string, h Highlighter) string {
 	lemma := words.Lemmatizer.Lemma(word)
 	// good
 	if slices.Contains(words.Good.List, lemma) ||
 		slices.Contains(words.Good.List, word) ||
 		slices.Contains(words.Good.List, strings.ToLower(word)) {
-		phrase = highlight(phrase, words.Bad.Foreground, words.Bad.Background, words.Bad.Style)
-		if Opts.Debug {
-			phrase = addDebugInfo(phrase, words.Good)
+		phrase = h.highlight(phrase, words.Bad.Foreground, words.Bad.Background, words.Bad.Style)
+		if h.opts.Debug {
+			phrase = h.addDebugInfo(phrase, words.Good)
 		}
 		return phrase
 	}
@@ -125,9 +124,9 @@ func (words WordGroups) highlightNegatedWord(phrase, negator, word string) strin
 	if slices.Contains(words.Bad.List, lemma) ||
 		slices.Contains(words.Bad.List, word) ||
 		slices.Contains(words.Bad.List, strings.ToLower(word)) {
-		phrase = highlight(phrase, words.Good.Foreground, words.Good.Background, words.Good.Style)
-		if Opts.Debug {
-			phrase = addDebugInfo(phrase, words.Bad)
+		phrase = h.highlight(phrase, words.Good.Foreground, words.Good.Background, words.Good.Style)
+		if h.opts.Debug {
+			phrase = h.addDebugInfo(phrase, words.Bad)
 		}
 		return phrase
 	}
@@ -136,9 +135,9 @@ func (words WordGroups) highlightNegatedWord(phrase, negator, word string) strin
 		if slices.Contains(wordGroup.List, lemma) ||
 			slices.Contains(wordGroup.List, word) ||
 			slices.Contains(wordGroup.List, strings.ToLower(word)) {
-			word = highlight(word, wordGroup.Foreground, wordGroup.Background, wordGroup.Style)
-			if Opts.Debug {
-				word = addDebugInfo(word, wordGroup)
+			word = h.highlight(word, wordGroup.Foreground, wordGroup.Background, wordGroup.Style)
+			if h.opts.Debug {
+				word = h.addDebugInfo(word, wordGroup)
 			}
 			return negator + " " + word
 		}
@@ -148,7 +147,7 @@ func (words WordGroups) highlightNegatedWord(phrase, negator, word string) strin
 }
 
 // highlight colors all words in a string
-func (words WordGroups) highlight(str string) string {
+func (words WordGroups) highlight(str string, h Highlighter) string {
 	if str == "" {
 		return str
 	}
@@ -156,22 +155,22 @@ func (words WordGroups) highlight(str string) string {
 	// skip already colored parts of the string
 	matches := sgrANSIEscapeSequenceRegexp.FindStringSubmatchIndex(str)
 	if matches != nil {
-		leftPart := words.highlight(str[0:matches[0]])
+		leftPart := words.highlight(str[0:matches[0]], h)
 		alreadyColored := str[matches[0]:matches[1]]
-		rightPart := words.highlight(str[matches[1]:])
+		rightPart := words.highlight(str[matches[1]:], h)
 		return leftPart + alreadyColored + rightPart
 	}
 
 	for {
 		if m := negatedWordRegexp.FindStringSubmatchIndex(str); m != nil {
-			leftPart := words.highlight(str[0:m[0]])
-			match := words.highlightNegatedWord(str[m[0]:m[1]], str[m[2]:m[3]], str[m[4]:m[5]])
-			rightPart := words.highlight(str[m[1]:])
+			leftPart := words.highlight(str[0:m[0]], h)
+			match := words.highlightNegatedWord(str[m[0]:m[1]], str[m[2]:m[3]], str[m[4]:m[5]], h)
+			rightPart := words.highlight(str[m[1]:], h)
 			return leftPart + match + rightPart
 		} else if m := wordRegexp.FindStringIndex(str); m != nil {
-			leftPart := words.highlight(str[0:m[0]])
-			match := words.highlightWord(str[m[0]:m[1]])
-			rightPart := words.highlight(str[m[1]:])
+			leftPart := words.highlight(str[0:m[0]], h)
+			match := words.highlightWord(str[m[0]:m[1]], h)
+			rightPart := words.highlight(str[m[1]:], h)
 			return leftPart + match + rightPart
 		} else {
 			return str

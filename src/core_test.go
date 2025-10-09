@@ -373,7 +373,7 @@ themes:
 		Theme:       "test",
 	}
 
-	err = InitConfig(builtins)
+	err = BuildConfig(builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -488,7 +488,7 @@ themes:
 		Theme:       "test-with-default-color",
 	}
 
-	err = InitConfig(builtins)
+	err = BuildConfig(builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -601,7 +601,7 @@ themes:
 		Theme:       "test",
 		DryRun:      true,
 	}
-	err = InitConfig(builtins)
+	err = BuildConfig(builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -716,7 +716,7 @@ themes:
 
 		NoANSIEscapeSequencesStripping: true,
 	}
-	err = InitConfig(builtins)
+	err = BuildConfig(builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -832,7 +832,7 @@ themes:
 		Debug:       true,
 	}
 
-	err = InitConfig(builtins)
+	err = BuildConfig(builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -884,7 +884,7 @@ themes:
 		NoBuiltins:  true,
 		Theme:       "test",
 	}
-	err = InitConfig(builtins)
+	err = BuildConfig(builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -912,7 +912,7 @@ themes:
 		NoBuiltins:  true,
 		Theme:       "test",
 	}
-	err = InitConfig(builtins)
+	err = BuildConfig(builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -941,7 +941,7 @@ themes:
 		NoBuiltins:  true,
 		Theme:       "test",
 	}
-	err = InitConfig(builtins)
+	err = BuildConfig(builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -991,7 +991,7 @@ themes:
 		NoBuiltins:  true,
 		Theme:       "test",
 	}
-	err = InitConfig(builtins)
+	err = BuildConfig(builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -1064,7 +1064,7 @@ themes:
 		NoBuiltins:  true,
 		Theme:       "test",
 	}
-	err = InitConfig(builtins)
+	err = BuildConfig(builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}

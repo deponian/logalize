@@ -26,25 +26,23 @@ type Settings struct {
 	NoANSIEscapeSequencesStripping bool // disable removing of ANSI escape sequences from the input
 }
 
-var Opts Settings
-
-func InitSettings(flags *pflag.FlagSet) error {
+func BuildSettings(flags *pflag.FlagSet) (Settings, error) {
 	config := koanf.New(".")
 
 	// read settings from default paths
 	if err := loadConfig(config, defaultConfigPaths, true); err != nil {
-		return err
+		return Settings{}, err
 	}
 
 	// read settings from ./.logalize.yaml
 	if err := loadConfig(config, []string{"./.logalize.yaml"}, true); err != nil {
-		return err
+		return Settings{}, err
 	}
 
 	// read settings from user defined path(s)
 	userConfigs, _ := flags.GetStringArray("config")
 	if err := loadConfig(config, userConfigs, false); err != nil {
-		return err
+		return Settings{}, err
 	}
 
 	// build settings step by step
@@ -54,9 +52,7 @@ func InitSettings(flags *pflag.FlagSet) error {
 	opts = getSettingFromConfig(opts, config)
 	opts = getSettingFromFlags(opts, flags)
 
-	Opts = opts
-
-	return nil
+	return opts, nil
 }
 
 func getBuiltinSettings() Settings {

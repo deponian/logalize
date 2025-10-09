@@ -5,19 +5,12 @@ import (
 	"bytes"
 	"io"
 
-	"github.com/aaaton/golem/v4"
+	"github.com/knadh/koanf/v2"
 )
 
-func Run(reader io.Reader, writer io.StringWriter, lemmatizer *golem.Lemmatizer) error {
-	if err := initPatterns(); err != nil {
-		return err
-	}
-
-	if err := initWords(lemmatizer); err != nil {
-		return err
-	}
-
-	if err := initLogFormats(); err != nil {
+func Run(reader io.Reader, writer io.StringWriter, opts Settings, config *koanf.Koanf) error {
+	highlighter, err := NewHighlighter(opts, config)
+	if err != nil {
 		return err
 	}
 
@@ -38,7 +31,7 @@ func Run(reader io.Reader, writer io.StringWriter, lemmatizer *golem.Lemmatizer)
 				lastCharacter = string(b)
 			}
 
-			colored := colorize(buffer.String())
+			colored := highlighter.colorize(buffer.String())
 
 			_, err := writer.WriteString(colored + lastCharacter)
 			if err != nil {
@@ -58,32 +51,4 @@ func Run(reader io.Reader, writer io.StringWriter, lemmatizer *golem.Lemmatizer)
 	}
 
 	return nil
-}
-
-// colorize detects log formats, patterns and words in the input string
-// and returns colored result string
-func colorize(line string) string {
-	// don't alter the input in any way if user set --dry-run flag
-	if Opts.DryRun {
-		return line
-	}
-
-	// remove all ANSI escape sequences from the input by default
-	if !Opts.NoANSIEscapeSequencesStripping {
-		line = allANSIEscapeSequencesRegexp.ReplaceAllString(line, "")
-	}
-
-	// try one of the log formats
-	for _, logFormat := range LogFormats {
-		if logFormat.CapGroups.FullRegExp.MatchString(line) {
-			return logFormat.highlight(line)
-		}
-	}
-
-	// if log format wasn't detected highlight patterns and words
-	// and then apply default color to the rest
-	line = Patterns.highlight(line)
-	line = Words.highlight(line)
-	line = applyDefaultColor(line)
-	return line
 }

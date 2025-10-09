@@ -57,7 +57,7 @@ func TestConfigLoadBuiltinFlagNoBuiltins(t *testing.T) {
 		Theme:               "tokyonight-dark",
 	}
 
-	err = InitConfig(builtins)
+	err = BuildConfig(builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -119,7 +119,7 @@ func TestConfigLoadBuiltinFlagNoBuiltinLogFormats(t *testing.T) {
 		Theme:               "tokyonight-dark",
 	}
 
-	err = InitConfig(builtins)
+	err = BuildConfig(builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -181,7 +181,7 @@ func TestConfigLoadBuiltinFlagNoBuiltinPatterns(t *testing.T) {
 		Theme:               "tokyonight-dark",
 	}
 
-	err = InitConfig(builtins)
+	err = BuildConfig(builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -243,7 +243,7 @@ func TestConfigLoadBuiltinFlagNoBuiltinWords(t *testing.T) {
 		Theme:               "tokyonight-dark",
 	}
 
-	err = InitConfig(builtins)
+	err = BuildConfig(builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -305,7 +305,7 @@ func TestConfigLoadBuiltinFlagNoBuiltinPatternsAndWords(t *testing.T) {
 		Theme:               "tokyonight-dark",
 	}
 
-	err = InitConfig(builtins)
+	err = BuildConfig(builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -367,7 +367,7 @@ func TestConfigLoadBuiltinFlagDryRun(t *testing.T) {
 		Theme:                   "tokyonight-dark",
 	}
 
-	err = InitConfig(builtins)
+	err = BuildConfig(builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -429,7 +429,7 @@ func TestConfigLoadBuiltinFlagHighlightOnlyLogFormats(t *testing.T) {
 		Theme:                   "tokyonight-dark",
 	}
 
-	err = InitConfig(builtins)
+	err = BuildConfig(builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -491,7 +491,7 @@ func TestConfigLoadBuiltinFlagHighlightOnlyPatterns(t *testing.T) {
 		Theme:                   "tokyonight-dark",
 	}
 
-	err = InitConfig(builtins)
+	err = BuildConfig(builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -553,7 +553,7 @@ func TestConfigLoadBuiltinFlagHighlightOnlyWords(t *testing.T) {
 		Theme:                   "tokyonight-dark",
 	}
 
-	err = InitConfig(builtins)
+	err = BuildConfig(builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -590,7 +590,7 @@ func TestConfigLoadBuiltinBad(t *testing.T) {
 	}
 
 	t.Run("TestConfigLoadBuiltinLogformatsBadYAML", func(t *testing.T) {
-		err := InitConfig(builtinsLogformatsBad)
+		err := BuildConfig(builtinsLogformatsBad)
 		if err == nil || err.Error() != "yaml: line 3: mapping values are not allowed in this context" {
 			t.Errorf("InitConfig() should have failed with *errors.errorString, got: [%T] %s", err, err)
 		}
@@ -603,7 +603,7 @@ func TestConfigLoadBuiltinBad(t *testing.T) {
 	}
 
 	t.Run("TestConfigLoadBuiltinPatternsBadYAML", func(t *testing.T) {
-		err := InitConfig(builtinsPatternsBad)
+		err := BuildConfig(builtinsPatternsBad)
 		if err == nil || err.Error() != "yaml: line 2: mapping values are not allowed in this context" {
 			t.Errorf("InitConfig() should have failed with *errors.errorString, got: [%T] %s", err, err)
 		}
@@ -616,7 +616,7 @@ func TestConfigLoadBuiltinBad(t *testing.T) {
 	}
 
 	t.Run("TestConfigLoadBuiltinWordsBadYAML", func(t *testing.T) {
-		err := InitConfig(builtinsWordsBad)
+		err := BuildConfig(builtinsWordsBad)
 		if err == nil || err.Error() != "yaml: line 2: mapping values are not allowed in this context" {
 			t.Errorf("InitConfig() should have failed with *errors.errorString, got: [%T] %s", err, err)
 		}
@@ -629,7 +629,7 @@ func TestConfigLoadBuiltinBad(t *testing.T) {
 	}
 
 	t.Run("TestConfigLoadBuiltinThemesBadYAML", func(t *testing.T) {
-		err := InitConfig(builtinsThemesBad)
+		err := BuildConfig(builtinsThemesBad)
 		if err == nil || err.Error() != "yaml: line 2: mapping values are not allowed in this context" {
 			t.Errorf("InitConfig() should have failed with *errors.errorString, got: [%T] %s", err, err)
 		}
@@ -826,7 +826,7 @@ themes:
 		Theme:       "test",
 	}
 
-	err = InitConfig(builtins)
+	err = BuildConfig(builtins)
 	if err != nil {
 		t.Errorf("InitConfig() failed with this error: %s", err)
 	}
@@ -872,7 +872,7 @@ formats:
 	}
 
 	t.Run("TestConfigLoadUserDefinedBadYAML", func(t *testing.T) {
-		err := InitConfig(builtins)
+		err := BuildConfig(builtins)
 		if err == nil || err.Error() != "yaml: line 4: mapping values are not allowed in this context" {
 			t.Errorf("InitConfig() should have failed with *errors.errorString, got: [%T] %s", err, err)
 		}
@@ -885,7 +885,7 @@ formats:
 	}
 
 	t.Run("TestConfigLoadUserDefinedFileDoesntExist", func(t *testing.T) {
-		err := InitConfig(builtins)
+		err := BuildConfig(builtins)
 		if _, ok := err.(*fs.PathError); !ok {
 			t.Errorf("InitConfig() should have failed with *fs.PathError, got: [%T] %s", err, err)
 		}
@@ -905,7 +905,7 @@ formats:
 	}
 
 	t.Run("TestConfigLoadUserDefinedReadOnly", func(t *testing.T) {
-		err := InitConfig(builtins)
+		err := BuildConfig(builtins)
 		if _, ok := err.(*fs.PathError); !ok {
 			t.Errorf("InitConfig() should have failed with *fs.PathError, got: [%T] %s", err, err)
 		}
@@ -943,7 +943,7 @@ formats:
 	defaultConfigPaths = append(defaultConfigPaths, tempDefaultConfig)
 
 	t.Run("TestConfigLoadDefaultBadYAML", func(t *testing.T) {
-		err := InitConfig(builtins)
+		err := BuildConfig(builtins)
 		if err == nil || err.Error() != "yaml: line 4: mapping values are not allowed in this context" {
 			t.Errorf("InitConfig() should have failed with *errors.errorString, got: [%T] %s", err, err)
 		}
@@ -955,7 +955,7 @@ formats:
 	}
 
 	t.Run("TestConfigLoadDefaultReadOnly", func(t *testing.T) {
-		err := InitConfig(builtins)
+		err := BuildConfig(builtins)
 		if _, ok := err.(*fs.PathError); !ok {
 			t.Errorf("InitConfig() should have failed with *fs.PathError, got: [%T] %s", err, err)
 		}
@@ -1007,7 +1007,7 @@ formats:
 	}
 
 	t.Run("TestConfigLoadDotLogalizeBadYAML", func(t *testing.T) {
-		err := InitConfig(builtins)
+		err := BuildConfig(builtins)
 		if err == nil || err.Error() != "yaml: line 4: mapping values are not allowed in this context" {
 			t.Errorf("InitConfig() should have failed with *errors.errorString, got: [%T] %s", err, err)
 		}
@@ -1019,7 +1019,7 @@ formats:
 	}
 
 	t.Run("TestConfigLoadDotLogalizeReadOnly", func(t *testing.T) {
-		err := InitConfig(builtins)
+		err := BuildConfig(builtins)
 		if _, ok := err.(*fs.PathError); !ok {
 			t.Errorf("InitConfig() should have failed with *fs.PathError, got: [%T] %s", err, err)
 		}
@@ -1049,7 +1049,7 @@ themes:
 	}
 
 	t.Run("TestConfigThemeIsDefined", func(t *testing.T) {
-		err := InitConfig(builtins)
+		err := BuildConfig(builtins)
 		if err != nil {
 			t.Errorf("InitConfig() failed with this error: %s", err)
 		}
@@ -1062,7 +1062,7 @@ themes:
 	}
 
 	t.Run("TestConfigThemeIsNotDefined", func(t *testing.T) {
-		err := InitConfig(builtins)
+		err := BuildConfig(builtins)
 		if err == nil || err.Error() != "Theme \"idontexist\" is not defined. Use -T/--list-themes flag to see the list of all available themes" {
 			t.Errorf("InitConfig() should have failed with \"Theme \"idontexist\" is not defined. Use -T/--list-themes flag to see the list of all available themes\", got: [%T] %s", err, err)
 		}
