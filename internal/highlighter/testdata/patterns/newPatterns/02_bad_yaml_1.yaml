@@ -1,0 +1,4 @@
+patterns:
+  string:priority: 100
+themes:
+  test:

@@ -1,0 +1,5 @@
+patterns:
+  test:
+    regexp: (.*)
+  test2:
+    regexp: (\d\d\d)

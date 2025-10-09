@@ -28,9 +28,9 @@ builds:
     ldflags:
       - -s
       - -w
-      - -X main.version={{ .Version }}
-      - -X main.commit={{ .ShortCommit }}
-      - -X main.date={{ printf "%.10s" .CommitDate }}
+      - -X github.com/deponian/logalize/cmd/logalize.version={{ .Version }}
+      - -X github.com/deponian/logalize/cmd/logalize.commit={{ .ShortCommit }}
+      - -X github.com/deponian/logalize/cmd/logalize.date={{ printf "%.10s" .CommitDate }}
 
 archives:
   - id: binary

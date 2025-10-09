@@ -1,0 +1,28 @@
+words:
+  good:
+    - "true"
+    - "complete"
+  bad:
+    - "false"
+    - "fail"
+  friends:
+    - "toni"
+    - "wenzel"
+  foes:
+    - "argus"
+    - "cletus"
+
+themes:
+  test:
+    words:
+      good:
+        fg: "#52fa8a"
+        style: bold
+      bad:
+        bg: "#f06c62"
+      friends:
+        fg: "#f834b2"
+        style: underline
+      foes:
+        fg: "#120fbb"
+        style: underline

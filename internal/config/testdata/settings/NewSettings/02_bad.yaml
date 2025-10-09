@@ -1,0 +1,5 @@
+settings:
+  theme: test
+
+themes:
+  not-test: {}

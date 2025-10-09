@@ -1,0 +1,30 @@
+patterns:
+  string:
+    priority: 500
+    regexp: ("[^"]+"|'[^']+')
+
+  number:
+    regexp: (\d+)
+
+  ipv4-address:
+    regexps:
+      - regexp: (\d\d\d(\.\d\d\d){3})
+        name: one
+      - regexp: ((:\d{1,5})?)
+        name: two
+
+themes:
+  test:
+    patterns:
+      string:
+        fg: "#00ff00"
+
+      number:
+        bg: "#00ffff"
+        style: bold
+
+      ipv4-address:
+        one:
+          fg: "#ffc777"
+        two:
+          fg: "#ff966c"

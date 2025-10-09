@@ -1,0 +1,5 @@
+formats:
+  test:
+  regexp: bad
+themes:
+  test:

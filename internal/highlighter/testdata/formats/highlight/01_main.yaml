@@ -1,0 +1,25 @@
+formats:
+  test:
+    - regexp: (\d{1,3}(\.\d{1,3}){3} )
+      name: one
+    - regexp: ([^ ]+ )
+      name: two
+    - regexp: (\[.+\] )
+      name: three
+    - regexp: ("[^"]+")
+      name: four
+
+themes:
+  test:
+    formats:
+      test:
+        one:
+          fg: "#f5ce42"
+        two:
+          bg: "#764a9e"
+        three:
+          style: bold
+        four:
+          fg: "#9daf99"
+          bg: "#76fb99"
+          style: underline

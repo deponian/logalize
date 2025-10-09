@@ -447,6 +447,9 @@ settings:
   only-words: false
 
   no-ansi-escape-sequences-stripping: false
+
+  debug: false
+  dry-run: false
 ```
 
 Here you can set some options that are equivalent to command line flags. `theme` is the same as `--theme` flag and so on. Only the flags from the example above are supported.

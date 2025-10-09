@@ -2,6 +2,7 @@ package main
 
 import (
 	"embed"
+	"log"
 	"os"
 
 	cmd "github.com/deponian/logalize/cmd/logalize"
@@ -9,16 +10,25 @@ import (
 
 func main() {
 	var builtins embed.FS
-	cmd.Init(builtins, "", "", "")
+	logalizeCmd := cmd.NewCommand(builtins)
 
 	shell := os.Args[1]
 
 	switch shell {
 	case "bash":
-		cmd.LogalizeCmd.Root().GenBashCompletionV2(os.Stdout, true)
+		err := logalizeCmd.Root().GenBashCompletionV2(os.Stdout, true)
+		if err != nil {
+			log.Fatal(err)
+		}
 	case "zsh":
-		cmd.LogalizeCmd.Root().GenZshCompletion(os.Stdout)
+		err := logalizeCmd.Root().GenZshCompletion(os.Stdout)
+		if err != nil {
+			log.Fatal(err)
+		}
 	case "fish":
-		cmd.LogalizeCmd.Root().GenFishCompletion(os.Stdout, true)
+		err := logalizeCmd.Root().GenFishCompletion(os.Stdout, true)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 }

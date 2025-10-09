@@ -115,17 +115,16 @@ func buildCommand(m mango.ManPage, doc mango.Builder, c mango.Command) {
 }
 
 func main() {
-	var builtins embed.FS
 	version := os.Args[1]
 	date := time.Now().Format("2006-01-02")
 	var section uint = 1
 
-	cmd.Init(builtins, version, "", date)
+	logalizeCmd := cmd.NewCommand(embed.FS{})
 
-	name := cmd.LogalizeCmd.Name()
-	description := cmd.LogalizeCmd.Short
+	name := logalizeCmd.Name()
+	description := logalizeCmd.Short
 
-	manPage, err := mcobra.NewManPage(section, cmd.LogalizeCmd)
+	manPage, err := mcobra.NewManPage(section, logalizeCmd)
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -1,0 +1,5 @@
+patterns:
+  test:
+    regexps: 4
+themes:
+  test:

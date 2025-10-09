@@ -1,0 +1,9 @@
+patterns:
+  string:
+    regexp: (.*)
+
+themes:
+  test:
+    patterns:
+      string:
+        style: hello

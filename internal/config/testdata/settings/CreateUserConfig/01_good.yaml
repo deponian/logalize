@@ -1,0 +1,32 @@
+settings:
+  theme: test
+
+formats:
+  menetekel:
+    - name: one
+      regexp: (.*)
+
+patterns:
+  string:
+    regexp: (.*)
+
+words:
+  bad:
+    - "false"
+  good:
+    - "true"
+
+themes:
+  test:
+    formats:
+      menetekel:
+        one:
+          fg: "#f5ce42"
+    patterns:
+      string:
+        fg: "#00ff00"
+    words:
+      bad:
+        bg: "#f06c62"
+      good:
+        fg: "#52fa8a"

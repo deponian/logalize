@@ -1,0 +1,10 @@
+words:
+  good:
+    - "true"
+
+themes:
+  test:
+    words:
+      good:
+        fg: "#52fa8a"
+        style: patterns

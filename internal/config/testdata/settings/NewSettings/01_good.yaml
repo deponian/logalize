@@ -1,0 +1,14 @@
+settings:
+  theme: test
+
+  only-logformats: true
+  only-patterns: true
+  only-words: true
+
+  no-ansi-escape-sequences-stripping: false
+
+  debug: false
+  dry-run: false
+
+themes:
+  test: {}

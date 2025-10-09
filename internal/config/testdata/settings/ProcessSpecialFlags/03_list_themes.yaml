@@ -1,0 +1,7 @@
+settings:
+  theme: test
+
+themes:
+  test: {}
+  test2: {}
+  test3: {}

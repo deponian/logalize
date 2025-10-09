@@ -1,0 +1,6 @@
+patterns:
+  string:
+    priority: 100
+    regexp: .*
+themes:
+  test:

@@ -13,9 +13,9 @@ DATE := $(shell git show -s --date=format:'%Y-%m-%d' --format=%cd $(COMMIT))
 # building vars
 EXTRA_LDFLAGS ?=
 ldflags       := -s -w
-ldflags       += -X main.version=$(VERSION)
-ldflags       += -X main.commit=$(COMMIT)
-ldflags       += -X main.date=$(DATE)
+ldflags       += -X github.com/deponian/logalize/cmd/logalize.version=$(VERSION)
+ldflags       += -X github.com/deponian/logalize/cmd/logalize.commit=$(COMMIT)
+ldflags       += -X github.com/deponian/logalize/cmd/logalize.date=$(DATE)
 ldflags       += $(EXTRA_LDFLAGS)
 
 EXTRA_GOFLAGS ?=
@@ -56,27 +56,26 @@ help:
 ## tidy: format code and tidy modfile
 .PHONY: tidy
 tidy:
-	go fmt ./src
+	go fmt ./cmd/...
+	go fmt ./internal/...
 	go mod tidy -v
 
 ## audit: run quality control checks
 .PHONY: audit
 audit:
+	rm -rf ./internal/highlighter/builtins
+	cp -r builtins ./internal/highlighter
 	go mod verify
-	go vet ./src
-	go run honnef.co/go/tools/cmd/staticcheck@latest -checks=all,-ST1000,-U1000 ./src
-	go run golang.org/x/vuln/cmd/govulncheck@latest ./src
+	go vet ./internal/... ./cmd/...
+	go run honnef.co/go/tools/cmd/staticcheck@latest -checks=all,-ST1000,-U1000 ./internal/... ./cmd/...
+	go run golang.org/x/vuln/cmd/govulncheck@latest ./internal/... ./cmd/...
 
 ## test: run all tests
 .PHONY: test
 test:
-	rm -rf src/builtins
-	rm -rf src/themes
-	cp -r builtins src/
-	cp -r themes src/
-	go test -race -coverprofile=coverage.out ./src
-	rm -rf src/builtins
-	rm -rf src/themes
+	rm -rf ./internal/highlighter/builtins
+	cp -r builtins ./internal/highlighter
+	go test -race -coverprofile=coverage.out ./internal/...
 
 ## coverage-func: run all tests and display coverage with "-func"
 .PHONY: coverage-func

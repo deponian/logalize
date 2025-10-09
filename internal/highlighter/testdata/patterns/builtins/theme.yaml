@@ -1,0 +1,132 @@
+settings:
+  theme: test
+
+themes:
+  test:
+    patterns:
+      # 2024-02-17T06:56:10Z
+      # 2024-02-17T06:56:10.636960544Z
+      # 2024-02-17T06:56:10.636960544+01:00
+      rfc3339:
+        # 2024-02-17
+        date:
+          fg: "#c099ff"
+        # T
+        t-delimiter:
+          fg: "#82aaff"
+        # 06:56:10.636960544
+        time:
+          fg: "#fca7ea"
+        # Z
+        # +01:00
+        offset:
+          fg: "#82aaff"
+
+      # 23:42:12
+      # 23:42:12.034123
+      time:
+        fg: "#fca7ea"
+
+      # 1999-07-10
+      # 1999/07/10
+      # 07-10-1999
+      # 07/10/1999
+      date-1:
+        fg: "#c099ff"
+
+      # 27 Jan
+      # 27 January
+      # 27 Jan 2023
+      # 27 August 2023
+      # 27-Jan-2023
+      # 27-August-2023
+      # 27/Jan/2023
+      # 27/August/2023
+      date-2:
+        fg: "#c099ff"
+
+      # Jan 27
+      # January 27
+      # Jan 27 2023
+      # August 27 2023
+      # Jan-27-2023
+      # August-27-2023
+      # Jan/27/2023
+      # August/27/2023
+      date-3:
+        fg: "#c099ff"
+
+      # Mon 17
+      # Sunday 3
+      date-4:
+        fg: "#c099ff"
+
+      # 5s
+      # 7.5h
+      # 75.984854ms
+      duration:
+        # 7.5
+        number:
+          fg: "#4fd6be"
+        # h
+        unit:
+          fg: "#41a6b5"
+
+      # xxxxx=xxxxxxx
+      logfmt-general:
+        key:
+          fg: "#9aadec"
+        equal-sign:
+          fg: "#636da6"
+        value:
+          style: patterns-and-words
+
+      # xxxxx="xxxxxxx"
+      logfmt-string:
+        key:
+          fg: "#9aadec"
+        equal-sign:
+          fg: "#636da6"
+        opening-quotation-mark:
+          fg: "#9aadec"
+        value:
+          style: patterns-and-words
+        closing-quotation-mark:
+          fg: "#9aadec"
+
+      # 0.0.0.0
+      # 10.0.0.200/16
+      # 127.0.0.1:8080
+      ipv4-address:
+        # 10.0.0.200
+        address:
+          fg: "#76d3ff"
+        # /16
+        # :8080
+        mask-or-port:
+          fg: "#0db9d7"
+
+      # 2001:db8:4006:812::200e
+      # [2001:db8:4006:812::200e]:8080
+      ipv6-address:
+        # [
+        opening-bracket:
+          fg: "#636da6"
+        # 2001:db8:4006:812::200e
+        address:
+          fg: "#76d3ff"
+        # ]
+        closing-bracket:
+          fg: "#636da6"
+        # :8080
+        port:
+          fg: "#0db9d7"
+
+      # 3D:F2:C9:A6:B3:4F
+      # 3D-F2-C9-A6-B3-4F
+      mac-address:
+        fg: "#4fd6be"
+
+      # 0a99af43-0ad4-4237-b9cd-064966eb2803
+      uuid:
+        fg: "#86e1fc"

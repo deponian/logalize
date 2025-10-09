@@ -49,20 +49,18 @@ linters:
     usetesting:
       os-temp-dir: true
 
-  # exclusions:
-  #   generated: lax
-  #   presets:
-  #     - comments
-  #     - std-error-handling
-  #     - common-false-positives
-  #     - legacy
-  #
-  #   rules:
-  #     - path: _test\.go
-  #       linters:
-  #         - funlen
-  #         - errcheck
-  #         - dupl
-  #         - gocognit
-  #         - godoclint
-  #         - lll
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - std-error-handling
+      - common-false-positives
+      - legacy
+
+    rules:
+      - path: _test\.go
+        linters:
+          - funlen
+          - dupl
+          - godoclint
+          - lll

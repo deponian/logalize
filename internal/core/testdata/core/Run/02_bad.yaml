@@ -1,0 +1,49 @@
+formats:
+  menetekel:
+    - regexp: (\d{1,3}(\.\d{1,3}){3} )
+      name: one
+    - regexp: ([^ ]+ )
+      name: two
+    - regexp: (\[.+\] )
+      name: three
+    - regexp: ("[^"]+")
+      name: four
+
+patterns:
+  string:
+    priority: 500
+    regexp: .*  # <- error
+
+words:
+  good:
+    - "true"
+    - "complete"
+  bad:
+    - "false"
+    - "fail"
+
+themes:
+  test:
+    formats:
+      menetekel:
+        one:
+          fg: "#f5ce42"
+        two:
+          bg: "#764a9e"
+        three:
+          style: bold
+        four:
+          fg: "#9daf99"
+          bg: "#76fb99"
+          style: underline
+
+    patterns:
+      string:
+        fg: "#00ff00"
+
+    words:
+      good:
+        fg: "#52fa8a"
+        style: bold
+      bad:
+        bg: "#f06c62"

@@ -1,0 +1,62 @@
+patterns:
+  string:
+    priority: 500
+    regexp: ("[^"]+"|'[^']+')
+
+  ipv4-address:
+    priority: 400
+    regexp: (\d{1,3}(\.\d{1,3}){3})
+
+  number:
+    regexp: (\d+)
+
+  http-status:
+    priority: 300
+    regexps:
+    - regexp: (status:)
+      name: status
+    - regexp: (\d\d\d)
+      name: code
+      alternatives:
+        - regexp: (1\d\d)
+          name: 1xx
+        - regexp: (2\d\d)
+          name: 2xx
+        - regexp: (3\d\d)
+          name: 3xx
+        - regexp: (4\d\d)
+          name: 4xx
+        - regexp: (5\d\d)
+          name: 5xx
+
+themes:
+  test:
+    patterns:
+      string:
+        fg: "#00ff00"
+
+      ipv4-address:
+        fg: "#ff0000"
+        bg: "#ffff00"
+        style: bold
+
+      number:
+        bg: "#005050"
+
+      http-status:
+        code:
+          default:
+            fg: "#ffffff"
+          1xx:
+            fg: "#505050"
+          2xx:
+            fg: "#00ff00"
+            style: overline
+          3xx:
+            fg: "#00ffff"
+            style: crossout
+          4xx:
+            fg: "#ff0000"
+            style: reverse
+          5xx:
+            fg: "#ff00ff"

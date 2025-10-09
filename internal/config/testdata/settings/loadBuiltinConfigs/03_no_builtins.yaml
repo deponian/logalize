@@ -1,0 +1,14 @@
+formats:
+  menetekel:
+    - name: one
+      regexp: (.*)
+
+patterns:
+  string:
+    regexp: (.*)
+
+words:
+  bad:
+    - "false"
+  good:
+    - "true"

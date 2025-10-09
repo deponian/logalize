@@ -1,0 +1,16 @@
+settings:
+  theme: test
+
+  no-builtin-logformats: true
+  no-builtin-patterns: true
+  no-builtin-words: true
+  no-builtins: true
+
+  only-logformats: true
+  only-patterns: true
+  only-words: true
+
+  no-ansi-escape-sequences-stripping: true
+
+  debug: true
+  dry-run: true
