@@ -1,4 +1,4 @@
-package logalize
+package highlighter
 
 import (
 	"fmt"
@@ -6,11 +6,12 @@ import (
 
 	"github.com/aaaton/golem/v4"
 	"github.com/aaaton/golem/v4/dicts/en"
+	"github.com/deponian/logalize/internal/config"
 	"github.com/muesli/termenv"
 )
 
 type Highlighter struct {
-	settings Settings
+	settings config.Settings
 
 	colorProfile termenv.Profile
 
@@ -19,7 +20,7 @@ type Highlighter struct {
 	words    WordGroups
 }
 
-func NewHighlighter(settings Settings) (Highlighter, error) {
+func NewHighlighter(settings config.Settings) (Highlighter, error) {
 	h := Highlighter{settings: settings}
 
 	h.colorProfile = termenv.NewOutput(os.Stdout, termenv.WithUnsafe()).EnvColorProfile()
@@ -45,7 +46,7 @@ func NewHighlighter(settings Settings) (Highlighter, error) {
 
 // colorize detects log formats, patterns and words in the input string
 // and returns colored result string
-func (h Highlighter) colorize(line string) string {
+func (h Highlighter) Colorize(line string) string {
 	// don't alter the input in any way if user set --dry-run flag
 	if h.settings.Opts.DryRun {
 		return line

@@ -8,7 +8,8 @@ import (
 	"os"
 	"strings"
 
-	logalize "github.com/deponian/logalize/src"
+	"github.com/deponian/logalize/internal/config"
+	"github.com/deponian/logalize/internal/core"
 	"github.com/goccy/go-yaml"
 	"github.com/knadh/koanf/v2"
 	"github.com/spf13/cobra"
@@ -40,7 +41,7 @@ It's fast and extensible alternative to ccze and colorize.`,
 			}
 
 			// build config
-			settings, err := logalize.NewSettings(builtins, LogalizeCmd.Flags())
+			settings, err := config.NewSettings(builtins, LogalizeCmd.Flags())
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -58,7 +59,7 @@ It's fast and extensible alternative to ccze and colorize.`,
 			}
 
 			// run the app
-			err = logalize.Run(os.Stdin, os.Stdout, settings)
+			err = core.Run(os.Stdin, os.Stdout, settings)
 			if err != nil {
 				log.Fatal(err)
 			}

@@ -1,4 +1,4 @@
-package logalize
+package config
 
 import (
 	"bytes"

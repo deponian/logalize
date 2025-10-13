@@ -1,13 +1,16 @@
-package logalize
+package core
 
 import (
 	"bufio"
 	"bytes"
 	"io"
+
+	"github.com/deponian/logalize/internal/config"
+	"github.com/deponian/logalize/internal/highlighter"
 )
 
-func Run(reader io.Reader, writer io.StringWriter, settings Settings) error {
-	highlighter, err := NewHighlighter(settings)
+func Run(reader io.Reader, writer io.StringWriter, settings config.Settings) error {
+	hl, err := highlighter.NewHighlighter(settings)
 	if err != nil {
 		return err
 	}
@@ -29,7 +32,7 @@ func Run(reader io.Reader, writer io.StringWriter, settings Settings) error {
 				lastCharacter = string(b)
 			}
 
-			colored := highlighter.colorize(buffer.String())
+			colored := hl.Colorize(buffer.String())
 
 			_, err := writer.WriteString(colored + lastCharacter)
 			if err != nil {
