@@ -2,6 +2,8 @@ package logalize
 
 import (
 	"fmt"
+
+	"github.com/knadh/koanf/v2"
 )
 
 // LogFormat represents a log format
@@ -15,13 +17,13 @@ type LogFormatList []LogFormat
 
 // InitLogFormats returns list of LogFormats collected
 // from *koanf.Koanf configuration
-func initLogFormats(settings Settings) (LogFormatList, error) {
+func initLogFormats(config *koanf.Koanf) (LogFormatList, error) {
 	var logFormats LogFormatList
-	for _, formatName := range settings.Config.MapKeys("formats") {
+	for _, formatName := range config.MapKeys("formats") {
 		var logFormat LogFormat
 		logFormat.Name = formatName
 		logFormat.CapGroups = &CapGroupList{}
-		if err := settings.Config.Unmarshal("formats."+formatName, &logFormat.CapGroups.Groups); err != nil {
+		if err := config.Unmarshal("formats."+formatName, &logFormat.CapGroups.Groups); err != nil {
 			return nil, err
 		}
 		logFormats = append(logFormats, logFormat)
@@ -30,23 +32,23 @@ func initLogFormats(settings Settings) (LogFormatList, error) {
 	for _, format := range logFormats {
 		// set colors and style from the theme
 		for i, cg := range format.CapGroups.Groups {
-			path := "themes." + settings.Opts.Theme + ".formats." + format.Name + "." + cg.Name
+			path := "theme.formats." + format.Name + "." + cg.Name
 			cgReal := &format.CapGroups.Groups[i]
 
 			if len(cg.Alternatives) > 0 {
-				cgReal.Foreground = settings.Config.String(path + ".default.fg")
-				cgReal.Background = settings.Config.String(path + ".default.bg")
-				cgReal.Style = settings.Config.String(path + ".default.style")
+				cgReal.Foreground = config.String(path + ".default.fg")
+				cgReal.Background = config.String(path + ".default.bg")
+				cgReal.Style = config.String(path + ".default.style")
 				for j, alt := range cg.Alternatives {
 					altReal := &format.CapGroups.Groups[i].Alternatives[j]
-					altReal.Foreground = settings.Config.String(path + "." + alt.Name + ".fg")
-					altReal.Background = settings.Config.String(path + "." + alt.Name + ".bg")
-					altReal.Style = settings.Config.String(path + "." + alt.Name + ".style")
+					altReal.Foreground = config.String(path + "." + alt.Name + ".fg")
+					altReal.Background = config.String(path + "." + alt.Name + ".bg")
+					altReal.Style = config.String(path + "." + alt.Name + ".style")
 				}
 			} else {
-				cgReal.Foreground = settings.Config.String(path + ".fg")
-				cgReal.Background = settings.Config.String(path + ".bg")
-				cgReal.Style = settings.Config.String(path + ".style")
+				cgReal.Foreground = config.String(path + ".fg")
+				cgReal.Background = config.String(path + ".bg")
+				cgReal.Style = config.String(path + ".style")
 			}
 		}
 

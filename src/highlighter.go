@@ -28,15 +28,15 @@ func NewHighlighter(settings Settings) (Highlighter, error) {
 	if err != nil {
 		return Highlighter{}, err
 	}
-	if h.words, err = initWords(settings, lemmatizer); err != nil {
+	if h.words, err = initWords(settings.Config, lemmatizer); err != nil {
 		return Highlighter{}, err
 	}
 
-	if h.formats, err = initLogFormats(settings); err != nil {
+	if h.formats, err = initLogFormats(settings.Config); err != nil {
 		return Highlighter{}, err
 	}
 
-	if h.patterns, err = initPatterns(settings); err != nil {
+	if h.patterns, err = initPatterns(settings.Config); err != nil {
 		return Highlighter{}, err
 	}
 
@@ -130,7 +130,7 @@ func (h Highlighter) applyDefaultColor(str string) string {
 		return leftPart + alreadyColored + rightPart
 	}
 
-	defaultColor := h.settings.Config.StringMap("themes." + h.settings.Opts.Theme + ".default")
+	defaultColor := h.settings.Config.StringMap("themes.default")
 	return h.highlight(str, defaultColor["fg"], defaultColor["bg"], defaultColor["style"])
 }
 

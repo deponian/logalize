@@ -54,6 +54,8 @@ func NewSettings(builtins fs.FS, flags *pflag.FlagSet) (Settings, error) {
 	if !config.Exists("themes." + opts.Theme) {
 		return Settings{}, fmt.Errorf("Theme \"%s\" is not defined. Use -T/--list-themes flag to see the list of all available themes", opts.Theme)
 	}
+	config.MergeAt(config.Cut("themes."+opts.Theme), "theme")
+	config.Delete("themes")
 
 	// keep in the config only things we want to colorize
 	if opts.HighlightOnlyLogFormats || opts.HighlightOnlyPatterns || opts.HighlightOnlyWords {
@@ -75,6 +77,17 @@ func NewSettings(builtins fs.FS, flags *pflag.FlagSet) (Settings, error) {
 	}
 
 	return Settings{Config: config, Opts: opts}, nil
+}
+
+func loadConfig(config *koanf.Koanf, paths []string, ignoreNonExistent bool) error {
+	for _, path := range paths {
+		err := config.Load(file.Provider(path), yaml.Parser())
+		// ignore only errors about non-existent files
+		if err != nil && !(errors.Is(err, os.ErrNotExist) && ignoreNonExistent) {
+			return err
+		}
+	}
+	return nil
 }
 
 func loadBuiltinConfig(main *koanf.Koanf, builtins fs.FS, opts Options) (*koanf.Koanf, error) {
@@ -134,17 +147,6 @@ func loadBuiltinConfig(main *koanf.Koanf, builtins fs.FS, opts Options) (*koanf.
 	}
 
 	return builtinConfig, nil
-}
-
-func loadConfig(config *koanf.Koanf, paths []string, ignoreNonExistent bool) error {
-	for _, path := range paths {
-		err := config.Load(file.Provider(path), yaml.Parser())
-		// ignore only errors about non-existent files
-		if err != nil && !(errors.Is(err, os.ErrNotExist) && ignoreNonExistent) {
-			return err
-		}
-	}
-	return nil
 }
 
 // Options stores the values of command-line and config options
