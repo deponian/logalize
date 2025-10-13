@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	"github.com/aaaton/golem/v4"
-	"github.com/knadh/koanf/v2"
 )
 
 type WordGroup struct {
@@ -26,19 +25,19 @@ type WordGroups struct {
 
 // InitWords initializes global list of words collected
 // from *koanf.Koanf configuration
-func initWords(opts Settings, config *koanf.Koanf, lemmatizer *golem.Lemmatizer) (WordGroups, error) {
+func initWords(settings Settings, lemmatizer *golem.Lemmatizer) (WordGroups, error) {
 	var words WordGroups
-	for _, wordGroupName := range config.MapKeys("words") {
+	for _, wordGroupName := range settings.Config.MapKeys("words") {
 		var wordGroup WordGroup
 
 		wordGroup.Name = wordGroupName
 
-		path := "themes." + opts.Theme + ".words." + wordGroupName + "."
-		wordGroup.Foreground = config.String(path + "fg")
-		wordGroup.Background = config.String(path + "bg")
-		wordGroup.Style = config.String(path + "style")
+		path := "themes." + settings.Opts.Theme + ".words." + wordGroupName + "."
+		wordGroup.Foreground = settings.Config.String(path + "fg")
+		wordGroup.Background = settings.Config.String(path + "bg")
+		wordGroup.Style = settings.Config.String(path + "style")
 
-		if err := config.Unmarshal("words."+wordGroupName, &wordGroup.List); err != nil {
+		if err := settings.Config.Unmarshal("words."+wordGroupName, &wordGroup.List); err != nil {
 			return WordGroups{}, err
 		}
 
@@ -95,7 +94,7 @@ func (words WordGroups) highlightWord(word string, h Highlighter) string {
 			slices.Contains(wordGroup.List, word) ||
 			slices.Contains(wordGroup.List, strings.ToLower(word)) {
 			word = h.highlight(word, wordGroup.Foreground, wordGroup.Background, wordGroup.Style)
-			if h.opts.Debug {
+			if h.settings.Opts.Debug {
 				word = h.addDebugInfo(word, wordGroup)
 			}
 			break
@@ -115,7 +114,7 @@ func (words WordGroups) highlightNegatedWord(phrase, negator, word string, h Hig
 		slices.Contains(words.Good.List, word) ||
 		slices.Contains(words.Good.List, strings.ToLower(word)) {
 		phrase = h.highlight(phrase, words.Bad.Foreground, words.Bad.Background, words.Bad.Style)
-		if h.opts.Debug {
+		if h.settings.Opts.Debug {
 			phrase = h.addDebugInfo(phrase, words.Good)
 		}
 		return phrase
@@ -125,7 +124,7 @@ func (words WordGroups) highlightNegatedWord(phrase, negator, word string, h Hig
 		slices.Contains(words.Bad.List, word) ||
 		slices.Contains(words.Bad.List, strings.ToLower(word)) {
 		phrase = h.highlight(phrase, words.Good.Foreground, words.Good.Background, words.Good.Style)
-		if h.opts.Debug {
+		if h.settings.Opts.Debug {
 			phrase = h.addDebugInfo(phrase, words.Bad)
 		}
 		return phrase
@@ -136,7 +135,7 @@ func (words WordGroups) highlightNegatedWord(phrase, negator, word string, h Hig
 			slices.Contains(wordGroup.List, word) ||
 			slices.Contains(wordGroup.List, strings.ToLower(word)) {
 			word = h.highlight(word, wordGroup.Foreground, wordGroup.Background, wordGroup.Style)
-			if h.opts.Debug {
+			if h.settings.Opts.Debug {
 				word = h.addDebugInfo(word, wordGroup)
 			}
 			return negator + " " + word

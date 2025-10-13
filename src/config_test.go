@@ -49,7 +49,7 @@ func TestConfigLoadBuiltinFlagNoBuiltins(t *testing.T) {
 		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
 	}
 
-	Opts = Settings{
+	Opts = Options{
 		NoBuiltinLogFormats: false,
 		NoBuiltinPatterns:   false,
 		NoBuiltinWords:      false,
@@ -111,7 +111,7 @@ func TestConfigLoadBuiltinFlagNoBuiltinLogFormats(t *testing.T) {
 		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
 	}
 
-	Opts = Settings{
+	Opts = Options{
 		NoBuiltinLogFormats: true,
 		NoBuiltinPatterns:   false,
 		NoBuiltinWords:      false,
@@ -173,7 +173,7 @@ func TestConfigLoadBuiltinFlagNoBuiltinPatterns(t *testing.T) {
 		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
 	}
 
-	Opts = Settings{
+	Opts = Options{
 		NoBuiltinLogFormats: false,
 		NoBuiltinPatterns:   true,
 		NoBuiltinWords:      false,
@@ -235,7 +235,7 @@ func TestConfigLoadBuiltinFlagNoBuiltinWords(t *testing.T) {
 		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
 	}
 
-	Opts = Settings{
+	Opts = Options{
 		NoBuiltinLogFormats: false,
 		NoBuiltinPatterns:   false,
 		NoBuiltinWords:      true,
@@ -297,7 +297,7 @@ func TestConfigLoadBuiltinFlagNoBuiltinPatternsAndWords(t *testing.T) {
 		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
 	}
 
-	Opts = Settings{
+	Opts = Options{
 		NoBuiltinLogFormats: false,
 		NoBuiltinPatterns:   true,
 		NoBuiltinWords:      true,
@@ -359,7 +359,7 @@ func TestConfigLoadBuiltinFlagDryRun(t *testing.T) {
 		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
 	}
 
-	Opts = Settings{
+	Opts = Options{
 		HighlightOnlyLogFormats: false,
 		HighlightOnlyPatterns:   false,
 		HighlightOnlyWords:      false,
@@ -421,7 +421,7 @@ func TestConfigLoadBuiltinFlagHighlightOnlyLogFormats(t *testing.T) {
 		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
 	}
 
-	Opts = Settings{
+	Opts = Options{
 		HighlightOnlyLogFormats: true,
 		HighlightOnlyPatterns:   false,
 		HighlightOnlyWords:      false,
@@ -483,7 +483,7 @@ func TestConfigLoadBuiltinFlagHighlightOnlyPatterns(t *testing.T) {
 		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
 	}
 
-	Opts = Settings{
+	Opts = Options{
 		HighlightOnlyLogFormats: false,
 		HighlightOnlyPatterns:   true,
 		HighlightOnlyWords:      false,
@@ -545,7 +545,7 @@ func TestConfigLoadBuiltinFlagHighlightOnlyWords(t *testing.T) {
 		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
 	}
 
-	Opts = Settings{
+	Opts = Options{
 		HighlightOnlyLogFormats: false,
 		HighlightOnlyPatterns:   false,
 		HighlightOnlyWords:      true,
@@ -579,7 +579,7 @@ func TestConfigLoadBuiltinFlagHighlightOnlyWords(t *testing.T) {
 func TestConfigLoadBuiltinBad(t *testing.T) {
 	colorProfile = termenv.TrueColor
 
-	Opts = Settings{
+	Opts = Options{
 		Theme: "tokyonight-dark",
 	}
 
@@ -820,7 +820,7 @@ themes:
 		t.Errorf("Wasn't able to write test file to %s: %s", userConfig2, err)
 	}
 
-	Opts = Settings{
+	Opts = Options{
 		ConfigPaths: []string{userConfig1, userConfig2},
 		NoBuiltins:  true,
 		Theme:       "test",
@@ -865,7 +865,7 @@ formats:
 		t.Errorf("Wasn't able to write test file to %s: %s", userConfig, err)
 	}
 
-	Opts = Settings{
+	Opts = Options{
 		ConfigPaths: []string{userConfig},
 		NoBuiltins:  true,
 		Theme:       "tokyonight-dark",
@@ -878,7 +878,7 @@ formats:
 		}
 	})
 
-	Opts = Settings{
+	Opts = Options{
 		ConfigPaths: []string{userConfig + "error"},
 		NoBuiltins:  true,
 		Theme:       "tokyonight-dark",
@@ -898,7 +898,7 @@ formats:
 		t.Errorf("Wasn't able to write test file to %s: %s", userConfig, err)
 	}
 
-	Opts = Settings{
+	Opts = Options{
 		ConfigPaths: []string{userConfigReadOnly},
 		NoBuiltins:  false,
 		Theme:       "tokyonight-dark",
@@ -934,7 +934,7 @@ formats:
 		}
 	})
 
-	Opts = Settings{
+	Opts = Options{
 		ConfigPaths: []string{},
 		NoBuiltins:  true,
 		Theme:       "tokyonight-dark",
@@ -1000,7 +1000,7 @@ formats:
 		}
 	})
 
-	Opts = Settings{
+	Opts = Options{
 		ConfigPaths: []string{},
 		NoBuiltins:  true,
 		Theme:       "tokyonight-dark",
@@ -1043,7 +1043,7 @@ themes:
 	}
 
 	// good
-	Opts = Settings{
+	Opts = Options{
 		ConfigPaths: []string{testConfig},
 		Theme:       "test",
 	}
@@ -1056,7 +1056,7 @@ themes:
 	})
 
 	// bad
-	Opts = Settings{
+	Opts = Options{
 		ConfigPaths: []string{testConfig},
 		Theme:       "idontexist",
 	}

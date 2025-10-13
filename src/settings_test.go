@@ -125,7 +125,7 @@ settings:
 		t.Errorf("flags.Parse() failed with an error: %s", err)
 	}
 
-	correctOpts := Settings{
+	correctOpts := Options{
 		ConfigPaths: []string{userConfig},
 
 		Theme: "tokyonight-dark",
@@ -215,7 +215,7 @@ settings:
 		t.Errorf("Error during config loading: %s", err)
 	}
 
-	correctOpts := Settings{
+	correctOpts := Options{
 		Theme: "test",
 
 		NoBuiltinLogFormats: true,
@@ -231,7 +231,7 @@ settings:
 	}
 
 	t.Run("TestSettingsFromConfig", func(t *testing.T) {
-		opts := getSettingFromConfig(Settings{}, config)
+		opts := getSettingFromConfig(Options{}, config)
 
 		if !cmp.Equal(opts, correctOpts) {
 			t.Errorf("got %v, want %v", opts, correctOpts)
@@ -269,7 +269,7 @@ func TestSettingsFromFlags(t *testing.T) {
 	if err := flags.Parse(args); err != nil {
 		t.Errorf("flags.Parse() failed with an error: %s", err)
 	}
-	correctOpts := Settings{
+	correctOpts := Options{
 		Theme: "test",
 
 		Debug: true,
@@ -288,7 +288,7 @@ func TestSettingsFromFlags(t *testing.T) {
 	}
 
 	t.Run("TestSettingsFromFlags", func(t *testing.T) {
-		opts := getSettingFromFlags(Settings{}, flags)
+		opts := getSettingFromFlags(Options{}, flags)
 
 		if !cmp.Equal(opts, correctOpts) {
 			t.Errorf("got %v, want %v", opts, correctOpts)

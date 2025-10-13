@@ -40,29 +40,25 @@ It's fast and extensible alternative to ccze and colorize.`,
 			}
 
 			// build config
-			opts, err := logalize.BuildSettings(LogalizeCmd.Flags())
-			if err != nil {
-				log.Fatal(err)
-			}
-			config, err := logalize.BuildConfig(builtins, opts)
+			settings, err := logalize.NewSettings(builtins, LogalizeCmd.Flags())
 			if err != nil {
 				log.Fatal(err)
 			}
 
 			// print config
 			if printConfigFlag {
-				printConfig(config)
+				printConfig(settings.Config)
 				os.Exit(0)
 			}
 
 			// list themes
 			if listThemesFlag {
-				listThemes(config)
+				listThemes(settings.Config)
 				os.Exit(0)
 			}
 
 			// run the app
-			err = logalize.Run(os.Stdin, os.Stdout, opts, config)
+			err = logalize.Run(os.Stdin, os.Stdout, settings)
 			if err != nil {
 				log.Fatal(err)
 			}

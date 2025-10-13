@@ -102,7 +102,7 @@ themes:
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}
 
-	Opts = Settings{
+	Opts = Options{
 		ConfigPaths: []string{testConfig},
 		NoBuiltins:  true,
 		Theme:       "test",
@@ -137,7 +137,7 @@ themes:
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}
 
-	Opts = Settings{
+	Opts = Options{
 		ConfigPaths: []string{testConfig},
 		NoBuiltins:  true,
 		Theme:       "test",
@@ -178,7 +178,7 @@ themes:
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}
 
-	Opts = Settings{
+	Opts = Options{
 		ConfigPaths: []string{testConfig},
 		NoBuiltins:  true,
 		Theme:       "test",
@@ -244,7 +244,7 @@ themes:
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}
 
-	Opts = Settings{
+	Opts = Options{
 		ConfigPaths: []string{testConfig},
 		NoBuiltins:  true,
 		Theme:       "test",
@@ -307,7 +307,7 @@ func TestLogFormatNginxCombined(t *testing.T) {
 		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
 	}
 
-	Opts = Settings{
+	Opts = Options{
 		Theme: "tokyonight-dark",
 	}
 
@@ -389,7 +389,7 @@ func TestLogFormatNginxIngressController(t *testing.T) {
 		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
 	}
 
-	Opts = Settings{
+	Opts = Options{
 		Theme: "tokyonight-dark",
 	}
 
@@ -447,7 +447,7 @@ func TestLogFormatKlog(t *testing.T) {
 		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
 	}
 
-	Opts = Settings{
+	Opts = Options{
 		Theme: "tokyonight-dark",
 	}
 
@@ -505,7 +505,7 @@ func TestLogFormatRedis(t *testing.T) {
 		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
 	}
 
-	Opts = Settings{
+	Opts = Options{
 		Theme: "tokyonight-dark",
 	}
 
@@ -579,7 +579,7 @@ func TestLogFormatSyslogRFC3164(t *testing.T) {
 		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
 	}
 
-	Opts = Settings{
+	Opts = Options{
 		Theme: "tokyonight-dark",
 	}
 

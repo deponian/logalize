@@ -3,8 +3,6 @@ package logalize
 import (
 	"os"
 	"regexp"
-
-	"github.com/muesli/termenv"
 )
 
 var (
@@ -57,9 +55,6 @@ var (
 		`(?:\x1B\[|\x9B)0?m`,
 	)
 )
-
-// global color profile for all colorization
-var colorProfile = termenv.NewOutput(os.Stdout, termenv.WithUnsafe()).EnvColorProfile()
 
 // where to find default configuration files
 var defaultConfigPaths = getDefaultConfigPaths()

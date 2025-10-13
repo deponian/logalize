@@ -97,7 +97,7 @@ themes:
 	if err != nil {
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}
-	Opts = Settings{
+	Opts = Options{
 		ConfigPaths: []string{testConfig},
 		NoBuiltins:  true,
 		Theme:       "test",
@@ -133,7 +133,7 @@ themes:
 	if err != nil {
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}
-	Opts = Settings{
+	Opts = Options{
 		ConfigPaths: []string{testConfig},
 		NoBuiltins:  true,
 		Theme:       "test",
@@ -164,7 +164,7 @@ themes:
 	if err != nil {
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}
-	Opts = Settings{
+	Opts = Options{
 		ConfigPaths: []string{testConfig},
 		NoBuiltins:  true,
 		Theme:       "test",
@@ -196,7 +196,7 @@ themes:
 	if err != nil {
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}
-	Opts = Settings{
+	Opts = Options{
 		ConfigPaths: []string{testConfig},
 		NoBuiltins:  true,
 		Theme:       "test",
@@ -231,7 +231,7 @@ themes:
 	if err != nil {
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}
-	Opts = Settings{
+	Opts = Options{
 		ConfigPaths: []string{testConfig},
 		NoBuiltins:  true,
 		Theme:       "test",
@@ -349,7 +349,7 @@ themes:
 	if err != nil {
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}
-	Opts = Settings{
+	Opts = Options{
 		ConfigPaths: []string{testConfig},
 		NoBuiltins:  true,
 		Theme:       "test",
@@ -419,7 +419,7 @@ func TestPatternsRFC3339(t *testing.T) {
 		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
 	}
 
-	Opts = Settings{
+	Opts = Options{
 		Theme: "tokyonight-dark",
 	}
 
@@ -464,7 +464,7 @@ func TestPatternsTime(t *testing.T) {
 		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
 	}
 
-	Opts = Settings{
+	Opts = Options{
 		Theme: "tokyonight-dark",
 	}
 
@@ -531,7 +531,7 @@ func TestPatternsDates(t *testing.T) {
 		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
 	}
 
-	Opts = Settings{
+	Opts = Options{
 		Theme: "tokyonight-dark",
 	}
 
@@ -578,7 +578,7 @@ func TestPatternsDuration(t *testing.T) {
 		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
 	}
 
-	Opts = Settings{
+	Opts = Options{
 		Theme: "tokyonight-dark",
 	}
 
@@ -622,7 +622,7 @@ func TestPatternsLogfmtGeneral(t *testing.T) {
 		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
 	}
 
-	Opts = Settings{
+	Opts = Options{
 		Theme: "tokyonight-dark",
 	}
 
@@ -666,7 +666,7 @@ func TestPatternsLogfmtString(t *testing.T) {
 		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
 	}
 
-	Opts = Settings{
+	Opts = Options{
 		Theme: "tokyonight-dark",
 	}
 
@@ -717,7 +717,7 @@ func TestPatternsIPv4(t *testing.T) {
 		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
 	}
 
-	Opts = Settings{
+	Opts = Options{
 		Theme: "tokyonight-dark",
 	}
 
@@ -919,7 +919,7 @@ func TestPatternsIPv6(t *testing.T) {
 		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
 	}
 
-	Opts = Settings{
+	Opts = Options{
 		Theme: "tokyonight-dark",
 	}
 
@@ -965,7 +965,7 @@ func TestPatternsMACAddress(t *testing.T) {
 		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
 	}
 
-	Opts = Settings{
+	Opts = Options{
 		Theme: "tokyonight-dark",
 	}
 
@@ -1008,7 +1008,7 @@ func TestPatternsUUID(t *testing.T) {
 		t.Errorf("golem.New(en.New()) failed with this error: %s", err)
 	}
 
-	Opts = Settings{
+	Opts = Options{
 		Theme: "tokyonight-dark",
 	}
 

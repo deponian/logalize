@@ -367,7 +367,7 @@ themes:
 	if err != nil {
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}
-	Opts = Settings{
+	Opts = Options{
 		ConfigPaths: []string{testConfig},
 		NoBuiltins:  true,
 		Theme:       "test",
@@ -482,7 +482,7 @@ themes:
 		{"\nfalse\rtrue\n", "\n\x1b[48;2;240;108;97mfalse\x1b[0m\r\x1b[38;2;81;250;138;1mtrue\x1b[0m\n"},
 	}
 
-	Opts = Settings{
+	Opts = Options{
 		ConfigPaths: []string{testConfig},
 		NoBuiltins:  true,
 		Theme:       "test-with-default-color",
@@ -595,7 +595,7 @@ themes:
 		{"true\rfalse", "true\rfalse"},
 		{"\nfalse\rtrue\n", "\nfalse\rtrue\n"},
 	}
-	Opts = Settings{
+	Opts = Options{
 		ConfigPaths: []string{testConfig},
 		NoBuiltins:  true,
 		Theme:       "test",
@@ -709,7 +709,7 @@ themes:
 		{"\rtrue\rfalse", "\r\x1b[38;2;81;250;138;1mtrue\x1b[0m\r\x1b[48;2;240;108;97mfalse\x1b[0m"},
 		{"\nfalse\rtrue\n", "\n\x1b[48;2;240;108;97mfalse\x1b[0m\r\x1b[38;2;81;250;138;1mtrue\x1b[0m\n"},
 	}
-	Opts = Settings{
+	Opts = Options{
 		ConfigPaths: []string{testConfig},
 		NoBuiltins:  true,
 		Theme:       "test",
@@ -825,7 +825,7 @@ themes:
 		{"\nfalse\rtrue\n", "\n\x1b[7m[w(bad)]\x1b[0m\x1b[48;2;240;108;97mfalse\x1b[0m\x1b[7m[w(/bad)]\x1b[0m\r\x1b[7m[w(good)]\x1b[0m\x1b[38;2;81;250;138;1mtrue\x1b[0m\x1b[7m[w(/good)]\x1b[0m\n"},
 	}
 
-	Opts = Settings{
+	Opts = Options{
 		ConfigPaths: []string{testConfig},
 		NoBuiltins:  true,
 		Theme:       "test",
@@ -879,7 +879,7 @@ themes:
 	if err != nil {
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}
-	Opts = Settings{
+	Opts = Options{
 		ConfigPaths: []string{testConfig},
 		NoBuiltins:  true,
 		Theme:       "test",
@@ -907,7 +907,7 @@ themes:
 	if err != nil {
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}
-	Opts = Settings{
+	Opts = Options{
 		ConfigPaths: []string{testConfig},
 		NoBuiltins:  true,
 		Theme:       "test",
@@ -936,7 +936,7 @@ themes:
 	if err != nil {
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}
-	Opts = Settings{
+	Opts = Options{
 		ConfigPaths: []string{testConfig},
 		NoBuiltins:  true,
 		Theme:       "test",
@@ -986,7 +986,7 @@ themes:
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}
 
-	Opts = Settings{
+	Opts = Options{
 		ConfigPaths: []string{testConfig},
 		NoBuiltins:  true,
 		Theme:       "test",
@@ -1059,7 +1059,7 @@ themes:
 		t.Errorf("Wasn't able to write test file to %s: %s", testConfig, err)
 	}
 
-	Opts = Settings{
+	Opts = Options{
 		ConfigPaths: []string{testConfig},
 		NoBuiltins:  true,
 		Theme:       "test",

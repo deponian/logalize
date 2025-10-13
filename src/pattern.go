@@ -3,8 +3,6 @@ package logalize
 import (
 	"fmt"
 	"sort"
-
-	"github.com/knadh/koanf/v2"
 )
 
 // Pattern represents a pattern
@@ -19,21 +17,21 @@ type PatternList []Pattern
 
 // InitPatterns initializes global list of patterns collected
 // from *koanf.Koanf configuration
-func initPatterns(opts Settings, config *koanf.Koanf) (PatternList, error) {
+func initPatterns(settings Settings) (PatternList, error) {
 	var patterns PatternList
 
 	// collect list of patterns
-	for _, patternName := range config.MapKeys("patterns") {
+	for _, patternName := range settings.Config.MapKeys("patterns") {
 		var pattern Pattern
 		pattern.Name = patternName
-		pattern.Priority = config.Int("patterns." + patternName + ".priority")
+		pattern.Priority = settings.Config.Int("patterns." + patternName + ".priority")
 		pattern.CapGroups = &CapGroupList{}
-		if config.Exists("patterns." + patternName + ".regexps") {
-			if err := config.Unmarshal("patterns."+patternName+".regexps", &pattern.CapGroups.Groups); err != nil {
+		if settings.Config.Exists("patterns." + patternName + ".regexps") {
+			if err := settings.Config.Unmarshal("patterns."+patternName+".regexps", &pattern.CapGroups.Groups); err != nil {
 				return nil, err
 			}
 		} else {
-			if err := config.Unmarshal("patterns."+patternName, &pattern.CapGroups.Groups); err != nil {
+			if err := settings.Config.Unmarshal("patterns."+patternName, &pattern.CapGroups.Groups); err != nil {
 				return nil, err
 			}
 		}
@@ -48,26 +46,26 @@ func initPatterns(opts Settings, config *koanf.Koanf) (PatternList, error) {
 			// simple CapGroupLists don't have a name (see "uuid" pattern)
 			// so we need a second level of nesting only for the complex ones (those with "regexps" field)
 			var path string
-			if config.Exists("patterns." + pattern.Name + ".regexps") {
-				path = "themes." + opts.Theme + ".patterns." + pattern.Name + "." + cg.Name
+			if settings.Config.Exists("patterns." + pattern.Name + ".regexps") {
+				path = "themes." + settings.Opts.Theme + ".patterns." + pattern.Name + "." + cg.Name
 			} else {
-				path = "themes." + opts.Theme + ".patterns." + pattern.Name
+				path = "themes." + settings.Opts.Theme + ".patterns." + pattern.Name
 			}
 			if len(cg.Alternatives) > 0 {
-				cgReal.Foreground = config.String(path + ".default.fg")
-				cgReal.Background = config.String(path + ".default.bg")
-				cgReal.Style = config.String(path + "default.style")
+				cgReal.Foreground = settings.Config.String(path + ".default.fg")
+				cgReal.Background = settings.Config.String(path + ".default.bg")
+				cgReal.Style = settings.Config.String(path + "default.style")
 
 				for j, alt := range cg.Alternatives {
 					altReal := &pattern.CapGroups.Groups[i].Alternatives[j]
-					altReal.Foreground = config.String(path + "." + alt.Name + ".fg")
-					altReal.Background = config.String(path + "." + alt.Name + ".bg")
-					altReal.Style = config.String(path + "." + alt.Name + ".style")
+					altReal.Foreground = settings.Config.String(path + "." + alt.Name + ".fg")
+					altReal.Background = settings.Config.String(path + "." + alt.Name + ".bg")
+					altReal.Style = settings.Config.String(path + "." + alt.Name + ".style")
 				}
 			} else {
-				cgReal.Foreground = config.String(path + ".fg")
-				cgReal.Background = config.String(path + ".bg")
-				cgReal.Style = config.String(path + ".style")
+				cgReal.Foreground = settings.Config.String(path + ".fg")
+				cgReal.Background = settings.Config.String(path + ".bg")
+				cgReal.Style = settings.Config.String(path + ".style")
 			}
 		}
 
@@ -109,7 +107,7 @@ func (patterns PatternList) highlight(str string, h Highlighter) string {
 			leftPart := patterns.highlight(str[0:matches[0]], h)
 			match := pattern.CapGroups.highlight(str[matches[0]:matches[1]], h)
 			rightPart := patterns.highlight(str[matches[1]:], h)
-			if h.opts.Debug {
+			if h.settings.Opts.Debug {
 				match = h.addDebugInfo(match, pattern)
 			}
 			return leftPart + match + rightPart

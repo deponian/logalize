@@ -4,12 +4,10 @@ import (
 	"bufio"
 	"bytes"
 	"io"
-
-	"github.com/knadh/koanf/v2"
 )
 
-func Run(reader io.Reader, writer io.StringWriter, opts Settings, config *koanf.Koanf) error {
-	highlighter, err := NewHighlighter(opts, config)
+func Run(reader io.Reader, writer io.StringWriter, settings Settings) error {
+	highlighter, err := NewHighlighter(settings)
 	if err != nil {
 		return err
 	}
@@ -49,6 +47,5 @@ func Run(reader io.Reader, writer io.StringWriter, opts Settings, config *koanf.
 
 		buffer.WriteByte(b)
 	}
-
 	return nil
 }

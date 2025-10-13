@@ -2,38 +2,41 @@ package logalize
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/aaaton/golem/v4"
 	"github.com/aaaton/golem/v4/dicts/en"
-	"github.com/knadh/koanf/v2"
 	"github.com/muesli/termenv"
 )
 
 type Highlighter struct {
-	opts   Settings
-	config *koanf.Koanf
+	settings Settings
+
+	colorProfile termenv.Profile
 
 	formats  LogFormatList
 	patterns PatternList
 	words    WordGroups
 }
 
-func NewHighlighter(opts Settings, config *koanf.Koanf) (Highlighter, error) {
-	h := Highlighter{opts: opts, config: config}
+func NewHighlighter(settings Settings) (Highlighter, error) {
+	h := Highlighter{settings: settings}
+
+	h.colorProfile = termenv.NewOutput(os.Stdout, termenv.WithUnsafe()).EnvColorProfile()
 
 	lemmatizer, err := golem.New(en.New())
 	if err != nil {
 		return Highlighter{}, err
 	}
-	if h.words, err = initWords(opts, config, lemmatizer); err != nil {
+	if h.words, err = initWords(settings, lemmatizer); err != nil {
 		return Highlighter{}, err
 	}
 
-	if h.formats, err = initLogFormats(opts, config); err != nil {
+	if h.formats, err = initLogFormats(settings); err != nil {
 		return Highlighter{}, err
 	}
 
-	if h.patterns, err = initPatterns(opts, config); err != nil {
+	if h.patterns, err = initPatterns(settings); err != nil {
 		return Highlighter{}, err
 	}
 
@@ -44,12 +47,12 @@ func NewHighlighter(opts Settings, config *koanf.Koanf) (Highlighter, error) {
 // and returns colored result string
 func (h Highlighter) colorize(line string) string {
 	// don't alter the input in any way if user set --dry-run flag
-	if h.opts.DryRun {
+	if h.settings.Opts.DryRun {
 		return line
 	}
 
 	// remove all ANSI escape sequences from the input by default
-	if !h.opts.NoANSIEscapeSequencesStripping {
+	if !h.settings.Opts.NoANSIEscapeSequencesStripping {
 		line = allANSIEscapeSequencesRegexp.ReplaceAllString(line, "")
 	}
 
@@ -89,10 +92,10 @@ func (h Highlighter) highlight(str, fg, bg, style string) string {
 
 	coloredStr := termenv.String(str)
 	if fg != "" {
-		coloredStr = coloredStr.Foreground(colorProfile.Color(fg))
+		coloredStr = coloredStr.Foreground(h.colorProfile.Color(fg))
 	}
 	if bg != "" {
-		coloredStr = coloredStr.Background(colorProfile.Color(bg))
+		coloredStr = coloredStr.Background(h.colorProfile.Color(bg))
 	}
 	switch style {
 	case "bold":
@@ -127,7 +130,7 @@ func (h Highlighter) applyDefaultColor(str string) string {
 		return leftPart + alreadyColored + rightPart
 	}
 
-	defaultColor := h.config.StringMap("themes." + h.opts.Theme + ".default")
+	defaultColor := h.settings.Config.StringMap("themes." + h.settings.Opts.Theme + ".default")
 	return h.highlight(str, defaultColor["fg"], defaultColor["bg"], defaultColor["style"])
 }
 
