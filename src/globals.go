@@ -1,7 +1,6 @@
 package logalize
 
 import (
-	"os"
 	"regexp"
 )
 
@@ -55,14 +54,3 @@ var (
 		`(?:\x1B\[|\x9B)0?m`,
 	)
 )
-
-// where to find default configuration files
-var defaultConfigPaths = getDefaultConfigPaths()
-
-func getDefaultConfigPaths() []string {
-	homeDir, _ := os.UserHomeDir()
-	return []string{
-		"/etc/logalize/logalize.yaml",
-		homeDir + "/.config/logalize/logalize.yaml",
-	}
-}

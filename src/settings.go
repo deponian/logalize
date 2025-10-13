@@ -22,18 +22,7 @@ func NewSettings(builtins fs.FS, flags *pflag.FlagSet) (Settings, error) {
 	config := koanf.New(".")
 
 	// read configuration from default paths
-	if err := loadConfig(config, defaultConfigPaths, true); err != nil {
-		return Settings{}, err
-	}
-
-	// read configuration from ./.logalize.yaml
-	if err := loadConfig(config, []string{"./.logalize.yaml"}, true); err != nil {
-		return Settings{}, err
-	}
-
-	// read configuration from user defined path(s)
-	userConfigs, _ := flags.GetStringArray("config")
-	if err := loadConfig(config, userConfigs, false); err != nil {
+	if err := loadUserConfigs(config, flags); err != nil {
 		return Settings{}, err
 	}
 
@@ -45,7 +34,7 @@ func NewSettings(builtins fs.FS, flags *pflag.FlagSet) (Settings, error) {
 	opts = getSettingFromFlags(opts, flags)
 
 	// load (on not) the built-in configuration based on options
-	config, err := loadBuiltinConfig(config, builtins, opts)
+	config, err := loadBuiltinConfigs(config, builtins, opts)
 	if err != nil {
 		return Settings{}, err
 	}
@@ -79,18 +68,46 @@ func NewSettings(builtins fs.FS, flags *pflag.FlagSet) (Settings, error) {
 	return Settings{Config: config, Opts: opts}, nil
 }
 
-func loadConfig(config *koanf.Koanf, paths []string, ignoreNonExistent bool) error {
-	for _, path := range paths {
-		err := config.Load(file.Provider(path), yaml.Parser())
-		// ignore only errors about non-existent files
-		if err != nil && !(errors.Is(err, os.ErrNotExist) && ignoreNonExistent) {
-			return err
+func loadUserConfigs(config *koanf.Koanf, flags *pflag.FlagSet) error {
+	loadConfig := func(paths []string, ignoreNonExistent bool) error {
+		for _, path := range paths {
+			err := config.Load(file.Provider(path), yaml.Parser())
+			// ignore only errors about non-existent files
+			if err != nil && !(errors.Is(err, os.ErrNotExist) && ignoreNonExistent) {
+				return err
+			}
 		}
+		return nil
 	}
+
+	// read configuration from default paths
+	if err := loadConfig(getDefaultConfigPaths(), true); err != nil {
+		return err
+	}
+
+	// read configuration from ./.logalize.yaml
+	if err := loadConfig([]string{"./.logalize.yaml"}, true); err != nil {
+		return err
+	}
+
+	// read configuration from user defined path(s)
+	paths, _ := flags.GetStringArray("config")
+	if err := loadConfig(paths, false); err != nil {
+		return err
+	}
+
 	return nil
 }
 
-func loadBuiltinConfig(main *koanf.Koanf, builtins fs.FS, opts Options) (*koanf.Koanf, error) {
+func getDefaultConfigPaths() []string {
+	homeDir, _ := os.UserHomeDir()
+	return []string{
+		"/etc/logalize/logalize.yaml",
+		homeDir + "/.config/logalize/logalize.yaml",
+	}
+}
+
+func loadBuiltinConfigs(main *koanf.Koanf, builtins fs.FS, opts Options) (*koanf.Koanf, error) {
 	var loadRecursively func(config *koanf.Koanf, entries []fs.DirEntry, path string) error
 	loadRecursively = func(config *koanf.Koanf, entries []fs.DirEntry, path string) error {
 		for _, entry := range entries {
