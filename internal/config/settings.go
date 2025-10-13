@@ -1,6 +1,7 @@
 package config
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"io/fs"
@@ -12,6 +13,7 @@ import (
 	"github.com/knadh/koanf/providers/rawbytes"
 	"github.com/knadh/koanf/v2"
 	"github.com/spf13/pflag"
+	goyaml "gopkg.in/yaml.v3"
 )
 
 type Settings struct {
@@ -167,7 +169,7 @@ func loadBuiltinConfigs(main *koanf.Koanf, builtins fs.FS, opts Options) (*koanf
 	return builtinConfig, nil
 }
 
-func (s Settings) ListThemes() string {
+func (s Settings) PrintThemes() string {
 	themes := s.Config.MapKeys("themes")
 
 	if len(themes) == 0 {
@@ -182,4 +184,17 @@ func (s Settings) ListThemes() string {
 	fmt.Fprintf(&result, "\nUse one of these with -t/--theme flag\n")
 
 	return result.String()
+}
+
+func (s Settings) PrintConfig() (string, error) {
+	var buf bytes.Buffer
+	enc := goyaml.NewEncoder(&buf)
+	enc.SetIndent(2)
+	defer enc.Close()
+
+	if err := enc.Encode(s.Config.Raw()); err != nil {
+		return "", err
+	}
+
+	return buf.String(), nil
 }

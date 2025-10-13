@@ -10,8 +10,6 @@ import (
 
 	"github.com/deponian/logalize/internal/config"
 	"github.com/deponian/logalize/internal/core"
-	"github.com/goccy/go-yaml"
-	"github.com/knadh/koanf/v2"
 	"github.com/spf13/cobra"
 )
 
@@ -48,13 +46,13 @@ It's fast and extensible alternative to ccze and colorize.`,
 
 			// print config
 			if printConfigFlag {
-				printConfig(settings.Config)
+				fmt.Print(settings.PrintConfig())
 				os.Exit(0)
 			}
 
 			// list themes
 			if listThemesFlag {
-				fmt.Println(settings.ListThemes())
+				fmt.Printf(settings.PrintThemes())
 				os.Exit(0)
 			}
 
@@ -124,25 +122,4 @@ func printBuiltins(builtins embed.FS) error {
 	}
 
 	return nil
-}
-
-// custom YAML parser for koanf
-// to print the config indented by two spaces instead of four
-type YAML struct{}
-
-func (p *YAML) Unmarshal(b []byte) (map[string]any, error) {
-	var out map[string]any
-	if err := yaml.Unmarshal(b, &out); err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (p *YAML) Marshal(o map[string]any) ([]byte, error) {
-	return yaml.MarshalWithOptions(o, yaml.Indent(2), yaml.IndentSequence(true))
-}
-
-func printConfig(config *koanf.Koanf) {
-	configBytes, _ := config.Marshal(&YAML{})
-	fmt.Print(string(configBytes))
 }
