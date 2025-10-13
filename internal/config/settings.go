@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/fs"
 	"os"
+	"strings"
 
 	"github.com/knadh/koanf/parsers/yaml"
 	"github.com/knadh/koanf/providers/file"
@@ -43,8 +44,8 @@ func NewSettings(builtins fs.FS, flags *pflag.FlagSet) (Settings, error) {
 	if !config.Exists("themes." + opts.Theme) {
 		return Settings{}, fmt.Errorf("Theme \"%s\" is not defined. Use -T/--list-themes flag to see the list of all available themes", opts.Theme)
 	}
+	// make current theme available in the config via the path "theme."
 	config.MergeAt(config.Cut("themes."+opts.Theme), "theme")
-	config.Delete("themes")
 
 	// keep in the config only things we want to colorize
 	if opts.HighlightOnlyLogFormats || opts.HighlightOnlyPatterns || opts.HighlightOnlyWords {
@@ -164,4 +165,21 @@ func loadBuiltinConfigs(main *koanf.Koanf, builtins fs.FS, opts Options) (*koanf
 	}
 
 	return builtinConfig, nil
+}
+
+func (s Settings) ListThemes() string {
+	themes := s.Config.MapKeys("themes")
+
+	if len(themes) == 0 {
+		fmt.Println("There are no themes available")
+	}
+
+	var result strings.Builder
+	fmt.Fprintln(&result, "Available themes:")
+	for _, theme := range themes {
+		fmt.Fprintf(&result, "  - %s\n", theme)
+	}
+	fmt.Fprintf(&result, "\nUse one of these with -t/--theme flag\n")
+
+	return result.String()
 }

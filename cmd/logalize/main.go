@@ -54,7 +54,7 @@ It's fast and extensible alternative to ccze and colorize.`,
 
 			// list themes
 			if listThemesFlag {
-				listThemes(settings.Config)
+				fmt.Println(settings.ListThemes())
 				os.Exit(0)
 			}
 
@@ -124,19 +124,6 @@ func printBuiltins(builtins embed.FS) error {
 	}
 
 	return nil
-}
-
-func listThemes(config *koanf.Koanf) {
-	themes := config.MapKeys("themes")
-	if len(themes) == 0 {
-		fmt.Println("There are no themes available")
-	} else {
-		fmt.Println("Available themes:")
-		for _, theme := range themes {
-			fmt.Printf("  - %s\n", theme)
-		}
-		fmt.Printf("\nUse one of these with -t/--theme flag\n")
-	}
 }
 
 // custom YAML parser for koanf
