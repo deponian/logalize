@@ -8,17 +8,18 @@ import (
 	"os"
 	"strings"
 
+	goyaml "github.com/goccy/go-yaml"
 	"github.com/knadh/koanf/parsers/yaml"
 	"github.com/knadh/koanf/providers/file"
 	"github.com/knadh/koanf/providers/rawbytes"
 	"github.com/knadh/koanf/v2"
 	"github.com/spf13/pflag"
-	goyaml "gopkg.in/yaml.v3"
 )
 
 type Settings struct {
-	Config *koanf.Koanf
-	Opts   Options
+	Config   *koanf.Koanf
+	Opts     Options
+	Builtins fs.FS
 }
 
 func NewSettings(builtins fs.FS, flags *pflag.FlagSet) (Settings, error) {
@@ -32,9 +33,9 @@ func NewSettings(builtins fs.FS, flags *pflag.FlagSet) (Settings, error) {
 	// build options step by step
 	// first get defaults, then override with values from configs
 	// then override with everything we get from flags
-	opts := getBuiltinSettings()
-	opts = getSettingFromConfig(opts, config)
-	opts = getSettingFromFlags(opts, flags)
+	opts := getBuiltinOptions()
+	opts = getOptionsFromConfig(opts, config)
+	opts = getOptionsFromFlags(opts, flags)
 
 	// load (on not) the built-in configuration based on options
 	config, err := loadBuiltinConfigs(config, builtins, opts)
@@ -68,7 +69,7 @@ func NewSettings(builtins fs.FS, flags *pflag.FlagSet) (Settings, error) {
 		}
 	}
 
-	return Settings{Config: config, Opts: opts}, nil
+	return Settings{Config: config, Opts: opts, Builtins: builtins}, nil
 }
 
 func loadUserConfigs(config *koanf.Koanf, flags *pflag.FlagSet) error {
@@ -81,6 +82,14 @@ func loadUserConfigs(config *koanf.Koanf, flags *pflag.FlagSet) error {
 			}
 		}
 		return nil
+	}
+
+	getDefaultConfigPaths := func() []string {
+		homeDir, _ := os.UserHomeDir()
+		return []string{
+			"/etc/logalize/logalize.yaml",
+			homeDir + "/.config/logalize/logalize.yaml",
+		}
 	}
 
 	// read configuration from default paths
@@ -100,14 +109,6 @@ func loadUserConfigs(config *koanf.Koanf, flags *pflag.FlagSet) error {
 	}
 
 	return nil
-}
-
-func getDefaultConfigPaths() []string {
-	homeDir, _ := os.UserHomeDir()
-	return []string{
-		"/etc/logalize/logalize.yaml",
-		homeDir + "/.config/logalize/logalize.yaml",
-	}
 }
 
 func loadBuiltinConfigs(main *koanf.Koanf, builtins fs.FS, opts Options) (*koanf.Koanf, error) {
@@ -169,7 +170,59 @@ func loadBuiltinConfigs(main *koanf.Koanf, builtins fs.FS, opts Options) (*koanf
 	return builtinConfig, nil
 }
 
-func (s Settings) PrintThemes() string {
+// ProcessSpecialFlags checks flags like --print-config and --list-themes
+// that should produce some text output and then exit the program
+func (s Settings) ProcessSpecialFlags() (data string, exit bool) {
+	if s.Opts.PrintConfig {
+		return s.printConfig(), true
+	}
+	if s.Opts.PrintBuiltins {
+		return s.printBuiltins(), true
+	}
+	if s.Opts.ListThemes {
+		return s.listThemes(), true
+	}
+
+	return "", false
+}
+
+func (s Settings) printConfig() string {
+	// print only what we want to show
+	config := koanf.New(".")
+	config.MergeAt(s.Config.Cut("formats"), "formats")
+	config.MergeAt(s.Config.Cut("patterns"), "patterns")
+	config.MergeAt(s.Config.Cut("words"), "words")
+	config.MergeAt(s.Config.Cut("themes"), "themes")
+
+	var buf bytes.Buffer
+	enc := goyaml.NewEncoder(&buf, goyaml.IndentSequence(true))
+	defer enc.Close()
+
+	enc.Encode(config.Raw())
+
+	return buf.String()
+}
+
+func (s Settings) printBuiltins() string {
+	var b strings.Builder
+	fs.WalkDir(s.Builtins, ".", func(p string, d fs.DirEntry, err error) error {
+		if err != nil || d.IsDir() {
+			return err
+		}
+		data, e := fs.ReadFile(s.Builtins, p)
+		if e != nil {
+			return e
+		}
+		b.WriteString("---\n")
+		b.Write(data)
+		b.WriteByte('\n')
+		return nil
+	})
+
+	return b.String()
+}
+
+func (s Settings) listThemes() string {
 	themes := s.Config.MapKeys("themes")
 
 	if len(themes) == 0 {
@@ -184,17 +237,4 @@ func (s Settings) PrintThemes() string {
 	fmt.Fprintf(&result, "\nUse one of these with -t/--theme flag\n")
 
 	return result.String()
-}
-
-func (s Settings) PrintConfig() (string, error) {
-	var buf bytes.Buffer
-	enc := goyaml.NewEncoder(&buf)
-	enc.SetIndent(2)
-	defer enc.Close()
-
-	if err := enc.Encode(s.Config.Raw()); err != nil {
-		return "", err
-	}
-
-	return buf.String(), nil
 }

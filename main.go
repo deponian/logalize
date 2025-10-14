@@ -2,14 +2,9 @@ package main
 
 import (
 	"embed"
+	"os"
 
 	cmd "github.com/deponian/logalize/cmd/logalize"
-)
-
-var (
-	version string = "0.0.0"
-	commit  string = "latest"
-	date    string = "2024-05-12"
 )
 
 //go:embed builtins/*
@@ -17,6 +12,5 @@ var (
 var builtins embed.FS
 
 func main() {
-	cmd.Init(builtins, version, commit, date)
-	cmd.Execute()
+	os.Exit(cmd.Run(builtins))
 }

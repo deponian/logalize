@@ -25,9 +25,13 @@ type Options struct {
 	DryRun bool // don't alter the input
 
 	NoANSIEscapeSequencesStripping bool // disable removing of ANSI escape sequences from the input
+
+	PrintConfig   bool // print fully merged configuration file and exit the program
+	PrintBuiltins bool // print built-in configuration and exit the program
+	ListThemes    bool // print all available themes and exit the program
 }
 
-func getBuiltinSettings() Options {
+func getBuiltinOptions() Options {
 	return Options{
 		ConfigPaths: []string{},
 
@@ -47,10 +51,14 @@ func getBuiltinSettings() Options {
 		DryRun: false,
 
 		NoANSIEscapeSequencesStripping: false,
+
+		PrintConfig:   false,
+		PrintBuiltins: false,
+		ListThemes:    false,
 	}
 }
 
-func getSettingFromConfig(opts Options, config *koanf.Koanf) Options {
+func getOptionsFromConfig(opts Options, config *koanf.Koanf) Options {
 	if config.Exists("settings.theme") {
 		opts.Theme = config.String("settings.theme")
 	}
@@ -85,7 +93,7 @@ func getSettingFromConfig(opts Options, config *koanf.Koanf) Options {
 	return opts
 }
 
-func getSettingFromFlags(opts Options, flags *pflag.FlagSet) Options {
+func getOptionsFromFlags(opts Options, flags *pflag.FlagSet) Options {
 	if flags.Changed("config") {
 		opts.ConfigPaths, _ = flags.GetStringArray("config")
 	}
@@ -126,6 +134,16 @@ func getSettingFromFlags(opts Options, flags *pflag.FlagSet) Options {
 
 	if flags.Changed("no-ansi-escape-sequences-stripping") {
 		opts.NoANSIEscapeSequencesStripping, _ = flags.GetBool("no-ansi-escape-sequences-stripping")
+	}
+
+	if flags.Changed("print-config") {
+		opts.PrintConfig, _ = flags.GetBool("print-config")
+	}
+	if flags.Changed("print-builtins") {
+		opts.PrintBuiltins, _ = flags.GetBool("print-builtins")
+	}
+	if flags.Changed("list-themes") {
+		opts.ListThemes, _ = flags.GetBool("list-themes")
 	}
 
 	return opts

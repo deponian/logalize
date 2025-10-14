@@ -13,9 +13,9 @@ DATE := $(shell git show -s --date=format:'%Y-%m-%d' --format=%cd $(COMMIT))
 # building vars
 EXTRA_LDFLAGS ?=
 ldflags       := -s -w
-ldflags       += -X main.version=$(VERSION)
-ldflags       += -X main.commit=$(COMMIT)
-ldflags       += -X main.date=$(DATE)
+ldflags       += -X github.com/deponian/logalize/cmd/logalize.version=$(VERSION)
+ldflags       += -X github.com/deponian/logalize/cmd/logalize.commit=$(COMMIT)
+ldflags       += -X github.com/deponian/logalize/cmd/logalize.date=$(DATE)
 ldflags       += $(EXTRA_LDFLAGS)
 
 EXTRA_GOFLAGS ?=

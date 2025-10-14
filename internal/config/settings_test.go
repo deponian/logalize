@@ -231,7 +231,7 @@ settings:
 	}
 
 	t.Run("TestSettingsFromConfig", func(t *testing.T) {
-		opts := getSettingFromConfig(Options{}, config)
+		opts := getOptionsFromConfig(Options{}, config)
 
 		if !cmp.Equal(opts, correctOpts) {
 			t.Errorf("got %v, want %v", opts, correctOpts)
@@ -288,7 +288,7 @@ func TestSettingsFromFlags(t *testing.T) {
 	}
 
 	t.Run("TestSettingsFromFlags", func(t *testing.T) {
-		opts := getSettingFromFlags(Options{}, flags)
+		opts := getOptionsFromFlags(Options{}, flags)
 
 		if !cmp.Equal(opts, correctOpts) {
 			t.Errorf("got %v, want %v", opts, correctOpts)
