@@ -15,9 +15,9 @@ type Highlighter struct {
 
 	colorProfile termenv.Profile
 
-	formats  LogFormatList
-	patterns PatternList
-	words    WordGroups
+	formats  logFormatList
+	patterns patternList
+	words    wordGroups
 }
 
 func NewHighlighter(settings config.Settings) (Highlighter, error) {
@@ -29,15 +29,15 @@ func NewHighlighter(settings config.Settings) (Highlighter, error) {
 	if err != nil {
 		return Highlighter{}, err
 	}
-	if h.words, err = initWords(settings.Config, lemmatizer); err != nil {
+	if h.words, err = newWords(settings.Config, lemmatizer); err != nil {
 		return Highlighter{}, err
 	}
 
-	if h.formats, err = initLogFormats(settings.Config); err != nil {
+	if h.formats, err = newLogFormats(settings.Config); err != nil {
 		return Highlighter{}, err
 	}
 
-	if h.patterns, err = initPatterns(settings.Config); err != nil {
+	if h.patterns, err = newPatterns(settings.Config); err != nil {
 		return Highlighter{}, err
 	}
 
@@ -140,13 +140,13 @@ func (h Highlighter) addDebugInfo(str string, kind any) string {
 	closing := ""
 
 	switch k := kind.(type) {
-	case LogFormat:
+	case logFormat:
 		opening = fmt.Sprintf("[lf(%s)]", k.Name)
 		closing = fmt.Sprintf("[lf(/%s)]", k.Name)
-	case Pattern:
+	case pattern:
 		opening = fmt.Sprintf("[p(%s)]", k.Name)
 		closing = fmt.Sprintf("[p(/%s)]", k.Name)
-	case WordGroup:
+	case wordGroup:
 		opening = fmt.Sprintf("[w(%s)]", k.Name)
 		closing = fmt.Sprintf("[w(/%s)]", k.Name)
 	}

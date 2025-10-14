@@ -9,7 +9,7 @@ import (
 	"github.com/knadh/koanf/v2"
 )
 
-type WordGroup struct {
+type wordGroup struct {
 	Name       string
 	List       []string
 	Foreground string
@@ -17,19 +17,19 @@ type WordGroup struct {
 	Style      string
 }
 
-type WordGroups struct {
-	Good       WordGroup
-	Bad        WordGroup
-	Other      []WordGroup
+type wordGroups struct {
+	Good       wordGroup
+	Bad        wordGroup
+	Other      []wordGroup
 	Lemmatizer *golem.Lemmatizer
 }
 
 // InitWords initializes global list of words collected
 // from *koanf.Koanf configuration
-func initWords(config *koanf.Koanf, lemmatizer *golem.Lemmatizer) (WordGroups, error) {
-	var words WordGroups
+func newWords(config *koanf.Koanf, lemmatizer *golem.Lemmatizer) (wordGroups, error) {
+	var words wordGroups
 	for _, wordGroupName := range config.MapKeys("words") {
-		var wordGroup WordGroup
+		var wordGroup wordGroup
 
 		wordGroup.Name = wordGroupName
 
@@ -39,11 +39,11 @@ func initWords(config *koanf.Koanf, lemmatizer *golem.Lemmatizer) (WordGroups, e
 		wordGroup.Style = config.String(path + "style")
 
 		if err := config.Unmarshal("words."+wordGroupName, &wordGroup.List); err != nil {
-			return WordGroups{}, err
+			return wordGroups{}, err
 		}
 
 		if err := wordGroup.check(); err != nil {
-			return WordGroups{}, err
+			return wordGroups{}, err
 		}
 
 		switch wordGroupName {
@@ -61,7 +61,7 @@ func initWords(config *koanf.Koanf, lemmatizer *golem.Lemmatizer) (WordGroups, e
 	return words, nil
 }
 
-func (wg WordGroup) check() error {
+func (wg wordGroup) check() error {
 	// check foreground
 	if !colorRegexp.MatchString(wg.Foreground) {
 		return fmt.Errorf(
@@ -87,7 +87,7 @@ func (wg WordGroup) check() error {
 }
 
 // highlightWord colors single word in a string
-func (words WordGroups) highlightWord(word string, h Highlighter) string {
+func (words wordGroups) highlightWord(word string, h Highlighter) string {
 	allWordGroups := append(words.Other, words.Good, words.Bad)
 	for _, wordGroup := range allWordGroups {
 		lemma := words.Lemmatizer.Lemma(word)
@@ -108,7 +108,7 @@ func (words WordGroups) highlightWord(word string, h Highlighter) string {
 // highlightNegated colors a phrase with negated word in a string
 // if the word is good, then color the whole phrase as bad and vice versa
 // if the word is neither good nor bad, then don't color the phrase
-func (words WordGroups) highlightNegatedWord(phrase, negator, word string, h Highlighter) string {
+func (words wordGroups) highlightNegatedWord(phrase, negator, word string, h Highlighter) string {
 	lemma := words.Lemmatizer.Lemma(word)
 	// good
 	if slices.Contains(words.Good.List, lemma) ||
@@ -147,7 +147,7 @@ func (words WordGroups) highlightNegatedWord(phrase, negator, word string, h Hig
 }
 
 // highlight colors all words in a string
-func (words WordGroups) highlight(str string, h Highlighter) string {
+func (words wordGroups) highlight(str string, h Highlighter) string {
 	if str == "" {
 		return str
 	}

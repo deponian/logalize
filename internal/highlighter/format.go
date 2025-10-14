@@ -6,23 +6,23 @@ import (
 	"github.com/knadh/koanf/v2"
 )
 
-// LogFormat represents a log format
-type LogFormat struct {
+// logFormat represents a log format
+type logFormat struct {
 	Name      string
-	CapGroups *CapGroupList
+	CapGroups *capGroupList
 }
 
-// LogFormatList represents a list of log formats
-type LogFormatList []LogFormat
+// logFormatList represents a list of log formats
+type logFormatList []logFormat
 
 // InitLogFormats returns list of LogFormats collected
 // from *koanf.Koanf configuration
-func initLogFormats(config *koanf.Koanf) (LogFormatList, error) {
-	var logFormats LogFormatList
+func newLogFormats(config *koanf.Koanf) (logFormatList, error) {
+	var logFormats logFormatList
 	for _, formatName := range config.MapKeys("formats") {
-		var logFormat LogFormat
+		var logFormat logFormat
 		logFormat.Name = formatName
-		logFormat.CapGroups = &CapGroupList{}
+		logFormat.CapGroups = &capGroupList{}
 		if err := config.Unmarshal("formats."+formatName, &logFormat.CapGroups.Groups); err != nil {
 			return nil, err
 		}
@@ -61,7 +61,7 @@ func initLogFormats(config *koanf.Koanf) (LogFormatList, error) {
 	return logFormats, nil
 }
 
-func (lf *LogFormat) highlight(str string, h Highlighter) (coloredStr string) {
+func (lf *logFormat) highlight(str string, h Highlighter) (coloredStr string) {
 	str = lf.CapGroups.highlight(str, h)
 	if h.settings.Opts.Debug {
 		str = h.addDebugInfo(str, *lf)

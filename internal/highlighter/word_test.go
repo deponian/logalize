@@ -42,9 +42,9 @@ themes:
         fg: "#120fbb"
         style: underline
 `
-	goodGroup := WordGroup{"good", []string{"true"}, "#52fa8a", "", "bold"}
-	badGroup := WordGroup{"bad", []string{"fail", "fatal"}, "", "#f06c62", ""}
-	otherGroups := []WordGroup{
+	goodGroup := wordGroup{"good", []string{"true"}, "#52fa8a", "", "bold"}
+	badGroup := wordGroup{"bad", []string{"fail", "fatal"}, "", "#f06c62", ""}
+	otherGroups := []wordGroup{
 		{"foes", []string{"argus", "cletus"}, "#120fbb", "", "underline"},
 		{"friends", []string{"toni", "wenzel"}, "#f834b2", "", "underline"},
 	}
@@ -76,7 +76,7 @@ themes:
 	}
 
 	t.Run("TestWordsInitGood", func(t *testing.T) {
-		if err := initWords(lemmatizer); err != nil {
+		if err := newWords(lemmatizer); err != nil {
 			t.Errorf("InitWords() failed with this error: %s", err)
 		}
 		if !cmp.Equal(Words.Good, goodGroup) {
@@ -116,7 +116,7 @@ themes:
 	}
 
 	t.Run("TestWordsInitBadYAML", func(t *testing.T) {
-		if err := initWords(lemmatizer); err == nil {
+		if err := newWords(lemmatizer); err == nil {
 			t.Errorf("InitWords() should have failed")
 		}
 	})
@@ -152,7 +152,7 @@ themes:
 	}
 
 	t.Run("TestWordsInitBadStyle", func(t *testing.T) {
-		if err := initWords(lemmatizer); err == nil {
+		if err := newWords(lemmatizer); err == nil {
 			t.Errorf("InitWords() should have failed")
 		}
 	})
@@ -161,31 +161,31 @@ themes:
 func TestWordsCheck(t *testing.T) {
 	tests := []struct {
 		err string
-		wg  WordGroup
+		wg  wordGroup
 	}{
 		{
 			"%!s(<nil>)",
-			WordGroup{"testNoErr", []string{"test"}, "#ff0000", "#00ff00", "bold"},
+			wordGroup{"testNoErr", []string{"test"}, "#ff0000", "#00ff00", "bold"},
 		},
 		{
 			fmt.Sprintf(`[word group: testForegroundErr] foreground color #ff00xd doesn't match %s pattern`, colorRegexp),
-			WordGroup{"testForegroundErr", []string{"test"}, "#ff00xd", "", ""},
+			wordGroup{"testForegroundErr", []string{"test"}, "#ff00xd", "", ""},
 		},
 		{
 			fmt.Sprintf(`[word group: testBackgroundErr] background color hello doesn't match %s pattern`, colorRegexp),
-			WordGroup{"testBackgroundErr", []string{"test"}, "", "hello", ""},
+			wordGroup{"testBackgroundErr", []string{"test"}, "", "hello", ""},
 		},
 		{
 			fmt.Sprintf(`[word group: testStyleErr1] style words doesn't match %s pattern`, nonRecursiveStyleRegexp),
-			WordGroup{"testStyleErr1", []string{"test"}, "", "", "words"},
+			wordGroup{"testStyleErr1", []string{"test"}, "", "", "words"},
 		},
 		{
 			fmt.Sprintf(`[word group: testStyleErr2] style patterns doesn't match %s pattern`, nonRecursiveStyleRegexp),
-			WordGroup{"testStyleErr2", []string{"test"}, "", "", "patterns"},
+			wordGroup{"testStyleErr2", []string{"test"}, "", "", "patterns"},
 		},
 		{
 			fmt.Sprintf(`[word group: testStyleErr3] style patterns-and-words doesn't match %s pattern`, nonRecursiveStyleRegexp),
-			WordGroup{"testStyleErr3", []string{"test"}, "", "", "patterns-and-words"},
+			wordGroup{"testStyleErr3", []string{"test"}, "", "", "patterns-and-words"},
 		},
 	}
 
@@ -274,7 +274,7 @@ themes:
 			t.Errorf("InitConfig() failed with this error: %s", err)
 		}
 
-		if err := initWords(lemmatizer); err != nil {
+		if err := newWords(lemmatizer); err != nil {
 			t.Errorf("InitWords() failed with this error: %s", err)
 		}
 
@@ -381,7 +381,7 @@ themes:
 			t.Errorf("InitConfig() failed with this error: %s", err)
 		}
 
-		if err := initWords(lemmatizer); err != nil {
+		if err := newWords(lemmatizer); err != nil {
 			t.Errorf("InitWords() failed with this error: %s", err)
 		}
 
@@ -495,7 +495,7 @@ themes:
 			t.Errorf("InitConfig() failed with this error: %s", err)
 		}
 
-		if err := initWords(lemmatizer); err != nil {
+		if err := newWords(lemmatizer); err != nil {
 			t.Errorf("InitWords() failed with this error: %s", err)
 		}
 

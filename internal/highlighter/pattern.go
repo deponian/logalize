@@ -7,27 +7,27 @@ import (
 	"github.com/knadh/koanf/v2"
 )
 
-// Pattern represents a pattern
-type Pattern struct {
+// pattern represents a pattern
+type pattern struct {
 	Name      string
 	Priority  int
-	CapGroups *CapGroupList
+	CapGroups *capGroupList
 }
 
-// PatternList represents a list of pattern
-type PatternList []Pattern
+// patternList represents a list of pattern
+type patternList []pattern
 
 // InitPatterns initializes global list of patterns collected
 // from *koanf.Koanf configuration
-func initPatterns(config *koanf.Koanf) (PatternList, error) {
-	var patterns PatternList
+func newPatterns(config *koanf.Koanf) (patternList, error) {
+	var patterns patternList
 
 	// collect list of patterns
 	for _, patternName := range config.MapKeys("patterns") {
-		var pattern Pattern
+		var pattern pattern
 		pattern.Name = patternName
 		pattern.Priority = config.Int("patterns." + patternName + ".priority")
-		pattern.CapGroups = &CapGroupList{}
+		pattern.CapGroups = &capGroupList{}
 		if config.Exists("patterns." + patternName + ".regexps") {
 			if err := config.Unmarshal("patterns."+patternName+".regexps", &pattern.CapGroups.Groups); err != nil {
 				return nil, err
@@ -88,7 +88,7 @@ func initPatterns(config *koanf.Koanf) (PatternList, error) {
 
 // highlight colorizes various patterns
 // like IP address, date, HTTP response code, etc.
-func (patterns PatternList) highlight(str string, h Highlighter) string {
+func (patterns patternList) highlight(str string, h Highlighter) string {
 	if str == "" {
 		return str
 	}

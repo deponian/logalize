@@ -31,8 +31,8 @@ type Options struct {
 	ListThemes    bool // print all available themes and exit the program
 }
 
-func getBuiltinOptions() Options {
-	return Options{
+func newOptions() *Options {
+	return &Options{
 		ConfigPaths: []string{},
 
 		Theme: "tokyonight-dark",
@@ -58,7 +58,7 @@ func getBuiltinOptions() Options {
 	}
 }
 
-func getOptionsFromConfig(opts Options, config *koanf.Koanf) Options {
+func (opts *Options) readFromConfig(config *koanf.Koanf) {
 	if config.Exists("settings.theme") {
 		opts.Theme = config.String("settings.theme")
 	}
@@ -89,11 +89,9 @@ func getOptionsFromConfig(opts Options, config *koanf.Koanf) Options {
 	if config.Exists("settings.no-ansi-escape-sequences-stripping") {
 		opts.NoANSIEscapeSequencesStripping = config.Bool("settings.no-ansi-escape-sequences-stripping")
 	}
-
-	return opts
 }
 
-func getOptionsFromFlags(opts Options, flags *pflag.FlagSet) Options {
+func (opts *Options) readFromFlags(flags *pflag.FlagSet) {
 	if flags.Changed("config") {
 		opts.ConfigPaths, _ = flags.GetStringArray("config")
 	}
@@ -145,6 +143,4 @@ func getOptionsFromFlags(opts Options, flags *pflag.FlagSet) Options {
 	if flags.Changed("list-themes") {
 		opts.ListThemes, _ = flags.GetBool("list-themes")
 	}
-
-	return opts
 }

@@ -33,12 +33,12 @@ func NewSettings(builtins fs.FS, flags *pflag.FlagSet) (Settings, error) {
 	// build options step by step
 	// first get defaults, then override with values from configs
 	// then override with everything we get from flags
-	opts := getBuiltinOptions()
-	opts = getOptionsFromConfig(opts, config)
-	opts = getOptionsFromFlags(opts, flags)
+	opts := newOptions()
+	opts.readFromConfig(config)
+	opts.readFromFlags(flags)
 
 	// load (on not) the built-in configuration based on options
-	config, err := loadBuiltinConfigs(config, builtins, opts)
+	config, err := loadBuiltinConfigs(config, builtins, *opts)
 	if err != nil {
 		return Settings{}, err
 	}
@@ -69,7 +69,7 @@ func NewSettings(builtins fs.FS, flags *pflag.FlagSet) (Settings, error) {
 		}
 	}
 
-	return Settings{Config: config, Opts: opts, Builtins: builtins}, nil
+	return Settings{Config: config, Opts: *opts, Builtins: builtins}, nil
 }
 
 func loadUserConfigs(config *koanf.Koanf, flags *pflag.FlagSet) error {

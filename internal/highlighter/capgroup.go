@@ -6,25 +6,25 @@ import (
 	"strconv"
 )
 
-// CapGroup represents one capture group in a config file
-type CapGroup struct {
+// capGroup represents one capture group in a config file
+type capGroup struct {
 	Name         string `koanf:"name"`
 	RegExpStr    string `koanf:"regexp"`
 	Foreground   string
 	Background   string
 	Style        string
-	Alternatives []CapGroup     `koanf:"alternatives"`
+	Alternatives []capGroup     `koanf:"alternatives"`
 	RegExp       *regexp.Regexp `koanf:"-"`
 }
 
-// CapGroupList represents a list of capture groups
+// capGroupList represents a list of capture groups
 // that will be parsed as one big regular expression
-type CapGroupList struct {
-	Groups     []CapGroup
+type capGroupList struct {
+	Groups     []capGroup
 	FullRegExp *regexp.Regexp
 }
 
-func (cgl *CapGroupList) init(isLogFormat bool) error {
+func (cgl *capGroupList) init(isLogFormat bool) error {
 	for _, group := range cgl.Groups {
 		// check that all regexps are valid regular expressions
 		if err := group.check(); err != nil {
@@ -54,8 +54,17 @@ func (cgl *CapGroupList) init(isLogFormat bool) error {
 	return nil
 }
 
+func (cgl *capGroupList) highlight(str string, h Highlighter) (coloredStr string) {
+	matches := cgl.FullRegExp.FindStringSubmatch(str)
+	for i, cg := range cgl.Groups {
+		match := matches[cgl.FullRegExp.SubexpIndex("capGroup"+strconv.Itoa(i))]
+		coloredStr += cg.highlight(match, h)
+	}
+	return coloredStr
+}
+
 // highlight colorizes string and applies a style
-func (cg *CapGroup) highlight(str string, h Highlighter) string {
+func (cg *capGroup) highlight(str string, h Highlighter) string {
 	if len(cg.Alternatives) > 0 {
 		for _, alt := range cg.Alternatives {
 			if alt.RegExp.MatchString(str) {
@@ -67,8 +76,17 @@ func (cg *CapGroup) highlight(str string, h Highlighter) string {
 	return h.highlight(str, cg.Foreground, cg.Background, cg.Style)
 }
 
+func (cgl *capGroupList) check() error {
+	for _, cg := range cgl.Groups {
+		if err := cg.check(); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 // check checks one capture group's fields match corresponding patterns
-func (cg *CapGroup) check() error {
+func (cg *capGroup) check() error {
 	// check regexp
 	if cg.RegExpStr == "" {
 		return fmt.Errorf("empty regexps are not allowed")
@@ -112,24 +130,6 @@ func (cg *CapGroup) check() error {
 			if err := alt.check(); err != nil {
 				return fmt.Errorf("[capture group: %s] %s", cg.RegExpStr, err)
 			}
-		}
-	}
-	return nil
-}
-
-func (cgl *CapGroupList) highlight(str string, h Highlighter) (coloredStr string) {
-	matches := cgl.FullRegExp.FindStringSubmatch(str)
-	for i, cg := range cgl.Groups {
-		match := matches[cgl.FullRegExp.SubexpIndex("capGroup"+strconv.Itoa(i))]
-		coloredStr += cg.highlight(match, h)
-	}
-	return coloredStr
-}
-
-func (cgl *CapGroupList) check() error {
-	for _, cg := range cgl.Groups {
-		if err := cg.check(); err != nil {
-			return err
 		}
 	}
 	return nil

@@ -69,8 +69,8 @@ themes:
             fg: "#ff00ff"
 `
 
-	correctCapGroupList := CapGroupList{
-		[]CapGroup{
+	correctCapGroupList := capGroupList{
+		[]capGroup{
 			{"one", `(\d{1,3}(\.\d{1,3}){3} )`, "#f5ce42", "", "", nil, nil},
 			{"two", `([^ ]+ )`, "", "#764a9e", "", nil, nil},
 			{"three", `(\[.+\] )`, "", "", "bold", nil, nil},
@@ -78,7 +78,7 @@ themes:
 			{
 				"five",
 				`(\d\d\d)`, "", "", "",
-				[]CapGroup{
+				[]capGroup{
 					{"1", `(1\d\d)`, "#505050", "", "", nil, regexp.MustCompile(`(1\d\d)`)},
 					{"2", `(2\d\d)`, "#00ff00", "", "overline", nil, regexp.MustCompile(`(2\d\d)`)},
 					{"3", `(3\d\d)`, "#00ffff", "", "crossout", nil, regexp.MustCompile(`(3\d\d)`)},
@@ -114,7 +114,7 @@ themes:
 	}
 
 	t.Run("TestFormatsInit", func(t *testing.T) {
-		if err := initLogFormats(); err != nil {
+		if err := newLogFormats(); err != nil {
 			t.Errorf("InitLogFormats() failed with this error: %s", err)
 		}
 
@@ -149,7 +149,7 @@ themes:
 	}
 
 	t.Run("TestFormatsInitBadYAML", func(t *testing.T) {
-		if err := initLogFormats(); err == nil {
+		if err := newLogFormats(); err == nil {
 			t.Errorf("InitLogFormats() should have failed")
 		}
 	})
@@ -190,7 +190,7 @@ themes:
 	}
 
 	t.Run("TestFormatsInitBadRegExp", func(t *testing.T) {
-		if err := initLogFormats(); err == nil {
+		if err := newLogFormats(); err == nil {
 			t.Errorf("InitLogFormats() should have failed")
 		}
 	})
@@ -258,7 +258,7 @@ themes:
 			t.Errorf("InitConfig() failed with this error: %s", err)
 		}
 
-		if err := initLogFormats(); err != nil {
+		if err := newLogFormats(); err != nil {
 			t.Errorf("InitLogFormats() failed with this error: %s", err)
 		}
 		t.Run(testname, func(t *testing.T) {

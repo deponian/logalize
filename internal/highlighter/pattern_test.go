@@ -47,17 +47,17 @@ themes:
         two:
           fg: "#ff966c"
 `
-	correctPatterns := []Pattern{
-		{"string", 500, &CapGroupList{
-			[]CapGroup{
+	correctPatterns := []pattern{
+		{"string", 500, &capGroupList{
+			[]capGroup{
 				{
 					"", `("[^"]+"|'[^']+')`, "#00ff00", "", "", nil, nil,
 				},
 			},
 			regexp.MustCompile(`(?P<capGroup0>(?:"[^"]+"|'[^']+'))`),
 		}},
-		{"ipv4-address", 0, &CapGroupList{
-			[]CapGroup{
+		{"ipv4-address", 0, &capGroupList{
+			[]capGroup{
 				{
 					"", `(\d\d\d(\.\d\d\d){3})`, "#ffc777", "", "", nil, nil,
 				},
@@ -67,8 +67,8 @@ themes:
 			},
 			regexp.MustCompile(`(?P<capGroup0>(?:\d\d\d(\.\d\d\d){3}))(?P<capGroup1>(?:(:\d{1,5})?))`),
 		}},
-		{"number", 0, &CapGroupList{
-			[]CapGroup{
+		{"number", 0, &capGroupList{
+			[]capGroup{
 				{
 					"", `(\d+)`, "", "#00ffff", "bold", nil, nil,
 				},
@@ -77,7 +77,7 @@ themes:
 		}},
 	}
 
-	comparePatterns := func(pattern1, pattern2 Pattern) error {
+	comparePatterns := func(pattern1, pattern2 pattern) error {
 		if pattern1.Name != pattern2.Name || pattern1.Priority != pattern2.Priority {
 			return fmt.Errorf("[pattern1: %s, pattern2: %s] names or priorities aren't equal", pattern1.Name, pattern2.Name)
 		}
@@ -109,7 +109,7 @@ themes:
 	}
 
 	t.Run("TestPatternsInit", func(t *testing.T) {
-		if err := initPatterns(); err != nil {
+		if err := newPatterns(); err != nil {
 			t.Errorf("InitPatterns() failed with this error: %s", err)
 		}
 
@@ -145,7 +145,7 @@ themes:
 	}
 
 	t.Run("TestPatternsInitBadYAML1", func(t *testing.T) {
-		if err := initPatterns(); err == nil {
+		if err := newPatterns(); err == nil {
 			t.Errorf("InitPatterns() should have failed")
 		}
 	})
@@ -176,7 +176,7 @@ themes:
 	}
 
 	t.Run("TestPatternsInitBadYAML2", func(t *testing.T) {
-		if err := initPatterns(); err == nil {
+		if err := newPatterns(); err == nil {
 			t.Errorf("InitPatterns() should have failed")
 		}
 	})
@@ -208,7 +208,7 @@ themes:
 	}
 
 	t.Run("TestPatternsInitBadRegExp", func(t *testing.T) {
-		if err := initPatterns(); err == nil {
+		if err := newPatterns(); err == nil {
 			t.Errorf("InitPatterns() should have failed")
 		}
 	})
@@ -243,7 +243,7 @@ themes:
 	}
 
 	t.Run("TestPatternsInitBadRegExp", func(t *testing.T) {
-		if err := initPatterns(); err == nil {
+		if err := newPatterns(); err == nil {
 			t.Errorf("InitPatterns() should have failed")
 		}
 	})
@@ -363,10 +363,10 @@ themes:
 			t.Errorf("InitConfig() failed with this error: %s", err)
 		}
 
-		if err := initPatterns(); err != nil {
+		if err := newPatterns(); err != nil {
 			t.Errorf("InitPatterns() failed with this error: %s", err)
 		}
-		if err := initWords(lemmatizer); err != nil {
+		if err := newWords(lemmatizer); err != nil {
 			t.Errorf("InitWords() failed with this error: %s", err)
 		}
 		t.Run(testname, func(t *testing.T) {
