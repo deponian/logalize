@@ -25,7 +25,7 @@ It's fast and extensible alternative to ccze and colorize.`,
 		Version:      fmt.Sprintf("%s (%s) %s", version, commit, date),
 		Args:         cobra.NoArgs,
 		SilenceUsage: true,
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(cmd *cobra.Command, _ []string) error {
 			// build config
 			settings, err := config.NewSettings(builtins, cmd.Flags())
 			if err != nil {
@@ -40,7 +40,7 @@ It's fast and extensible alternative to ccze and colorize.`,
 				return nil
 			}
 
-			// run the app
+			// run the main loop
 			err = core.Run(os.Stdin, os.Stdout, settings)
 			if err != nil {
 				return err
