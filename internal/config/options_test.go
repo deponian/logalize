@@ -16,14 +16,14 @@ func TestOptionsReadFromConfig(t *testing.T) {
 
 		Theme: "test",
 
-		NoBuiltinLogFormats: true,
-		NoBuiltinPatterns:   true,
-		NoBuiltinWords:      true,
-		NoBuiltins:          true,
+		NoBuiltinFormats:  true,
+		NoBuiltinPatterns: true,
+		NoBuiltinWords:    true,
+		NoBuiltins:        true,
 
-		HighlightOnlyLogFormats: true,
-		HighlightOnlyPatterns:   true,
-		HighlightOnlyWords:      true,
+		HighlightOnlyFormats:  true,
+		HighlightOnlyPatterns: true,
+		HighlightOnlyWords:    true,
 
 		NoANSIEscapeSequencesStripping: true,
 
@@ -64,14 +64,14 @@ func TestOptionsReadFromFlags(t *testing.T) {
 
 		Theme: "test",
 
-		NoBuiltinLogFormats: true,
-		NoBuiltinPatterns:   true,
-		NoBuiltinWords:      true,
-		NoBuiltins:          true,
+		NoBuiltinFormats:  true,
+		NoBuiltinPatterns: true,
+		NoBuiltinWords:    true,
+		NoBuiltins:        true,
 
-		HighlightOnlyLogFormats: true,
-		HighlightOnlyPatterns:   true,
-		HighlightOnlyWords:      true,
+		HighlightOnlyFormats:  true,
+		HighlightOnlyPatterns: true,
+		HighlightOnlyWords:    true,
 
 		NoANSIEscapeSequencesStripping: true,
 
@@ -89,12 +89,12 @@ func TestOptionsReadFromFlags(t *testing.T) {
 
 	flags.StringP("theme", "t", "tokyonight-dark", "")
 
-	flags.BoolP("no-builtin-logformats", "L", false, "")
+	flags.BoolP("no-builtin-formats", "L", false, "")
 	flags.BoolP("no-builtin-patterns", "P", false, "")
 	flags.BoolP("no-builtin-words", "W", false, "")
 	flags.BoolP("no-builtins", "N", false, "")
 
-	flags.BoolP("only-logformats", "l", false, "")
+	flags.BoolP("only-formats", "f", false, "")
 	flags.BoolP("only-patterns", "p", false, "")
 	flags.BoolP("only-words", "w", false, "")
 
@@ -112,11 +112,11 @@ func TestOptionsReadFromFlags(t *testing.T) {
 		"--config", "test2",
 		"--config", "test3",
 		"--theme", "test",
-		"--no-builtin-logformats",
+		"--no-builtin-formats",
 		"--no-builtin-patterns",
 		"--no-builtin-words",
 		"--no-builtins",
-		"--only-logformats",
+		"--only-formats",
 		"--only-patterns",
 		"--only-words",
 		"--no-ansi-escape-sequences-stripping",

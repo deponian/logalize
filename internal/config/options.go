@@ -14,14 +14,14 @@ type Options struct {
 
 	Debug bool // add debug info to the output
 
-	NoBuiltinLogFormats bool // disable built-in log formats
-	NoBuiltinPatterns   bool // disable built-in patterns
-	NoBuiltinWords      bool // disable built-in words
-	NoBuiltins          bool // disable built-in log formats, patterns and words
+	NoBuiltinFormats  bool // disable built-in formats
+	NoBuiltinPatterns bool // disable built-in patterns
+	NoBuiltinWords    bool // disable built-in words
+	NoBuiltins        bool // disable built-in formats, patterns and words
 
-	HighlightOnlyLogFormats bool // highlight only log formats
-	HighlightOnlyPatterns   bool // highlight only patterns
-	HighlightOnlyWords      bool // highlight only words
+	HighlightOnlyFormats  bool // highlight only formats
+	HighlightOnlyPatterns bool // highlight only patterns
+	HighlightOnlyWords    bool // highlight only words
 
 	DryRun bool // don't alter the input
 
@@ -39,14 +39,14 @@ func NewOptions() *Options {
 
 		Theme: "tokyonight-dark",
 
-		NoBuiltinLogFormats: false,
-		NoBuiltinPatterns:   false,
-		NoBuiltinWords:      false,
-		NoBuiltins:          false,
+		NoBuiltinFormats:  false,
+		NoBuiltinPatterns: false,
+		NoBuiltinWords:    false,
+		NoBuiltins:        false,
 
-		HighlightOnlyLogFormats: false,
-		HighlightOnlyPatterns:   false,
-		HighlightOnlyWords:      false,
+		HighlightOnlyFormats:  false,
+		HighlightOnlyPatterns: false,
+		HighlightOnlyWords:    false,
 
 		NoANSIEscapeSequencesStripping: false,
 
@@ -70,8 +70,8 @@ func (opts *Options) ReadFromConfig(cfg *koanf.Koanf) {
 		opts.Theme = cfg.String("settings.theme")
 	}
 
-	if cfg.Exists("settings.no-builtin-logformats") {
-		opts.NoBuiltinLogFormats = cfg.Bool("settings.no-builtin-logformats")
+	if cfg.Exists("settings.no-builtin-formats") {
+		opts.NoBuiltinFormats = cfg.Bool("settings.no-builtin-formats")
 	}
 	if cfg.Exists("settings.no-builtin-patterns") {
 		opts.NoBuiltinPatterns = cfg.Bool("settings.no-builtin-patterns")
@@ -83,8 +83,8 @@ func (opts *Options) ReadFromConfig(cfg *koanf.Koanf) {
 		opts.NoBuiltins = cfg.Bool("settings.no-builtins")
 	}
 
-	if cfg.Exists("settings.only-logformats") {
-		opts.HighlightOnlyLogFormats = cfg.Bool("settings.only-logformats")
+	if cfg.Exists("settings.only-formats") {
+		opts.HighlightOnlyFormats = cfg.Bool("settings.only-formats")
 	}
 	if cfg.Exists("settings.only-patterns") {
 		opts.HighlightOnlyPatterns = cfg.Bool("settings.only-patterns")
@@ -120,8 +120,8 @@ func (opts *Options) ReadFromFlags(flags *pflag.FlagSet) {
 		opts.Theme, _ = flags.GetString("theme")
 	}
 
-	if flags.Changed("no-builtin-logformats") {
-		opts.NoBuiltinLogFormats, _ = flags.GetBool("no-builtin-logformats")
+	if flags.Changed("no-builtin-formats") {
+		opts.NoBuiltinFormats, _ = flags.GetBool("no-builtin-formats")
 	}
 	if flags.Changed("no-builtin-patterns") {
 		opts.NoBuiltinPatterns, _ = flags.GetBool("no-builtin-patterns")
@@ -133,8 +133,8 @@ func (opts *Options) ReadFromFlags(flags *pflag.FlagSet) {
 		opts.NoBuiltins, _ = flags.GetBool("no-builtins")
 	}
 
-	if flags.Changed("only-logformats") {
-		opts.HighlightOnlyLogFormats, _ = flags.GetBool("only-logformats")
+	if flags.Changed("only-formats") {
+		opts.HighlightOnlyFormats, _ = flags.GetBool("only-formats")
 	}
 	if flags.Changed("only-patterns") {
 		opts.HighlightOnlyPatterns, _ = flags.GetBool("only-patterns")

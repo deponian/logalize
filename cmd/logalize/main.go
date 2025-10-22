@@ -64,14 +64,14 @@ It's fast and extensible alternative to ccze and colorize.`,
 
 	root.Flags().BoolP("debug", "d", false, "add debug info to the output")
 
-	root.Flags().BoolP("no-builtin-logformats", "L", false, "disable built-in log formats highlighting")
+	root.Flags().BoolP("no-builtin-formats", "L", false, "disable built-in formats highlighting")
 	root.Flags().BoolP("no-builtin-patterns", "P", false, "disable built-in patterns highlighting")
 	root.Flags().BoolP("no-builtin-words", "W", false, "disable built-in words highlighting")
-	root.Flags().BoolP("no-builtins", "N", false, "disable built-in log formats, patterns and words highlighting")
+	root.Flags().BoolP("no-builtins", "N", false, "disable built-in formats, patterns and words highlighting")
 
-	root.Flags().BoolP("only-logformats", "l", false, "highlight only log formats (can be combined with -p and -w)")
-	root.Flags().BoolP("only-patterns", "p", false, "highlight only patterns (can be combined with -l and -w)")
-	root.Flags().BoolP("only-words", "w", false, "highlight only words (can be combined with -l and -p)")
+	root.Flags().BoolP("only-formats", "f", false, "highlight only formats (can be combined with -p and -w)")
+	root.Flags().BoolP("only-patterns", "p", false, "highlight only patterns (can be combined with -f and -w)")
+	root.Flags().BoolP("only-words", "w", false, "highlight only words (can be combined with -f and -p)")
 	root.Flags().BoolP("dry-run", "n", false, "don't alter the input in any way")
 
 	root.Flags().BoolP("no-ansi-escape-sequences-stripping", "s", false, "disable removing of ANSI escape sequences (save input colors)")
@@ -79,7 +79,7 @@ It's fast and extensible alternative to ccze and colorize.`,
 	// these flags will print something and stop the program
 	root.Flags().BoolP("print-config", "C", false, "print full configuration file")
 	root.Flags().BoolP("list-themes", "T", false, "display a list of all available themes")
-	root.Flags().BoolP("print-builtins", "b", false, "print built-in log formats, patterns and words as separate YAML files")
+	root.Flags().BoolP("print-builtins", "b", false, "print built-in formats, patterns and words as separate YAML files")
 
 	return root
 }

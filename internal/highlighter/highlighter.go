@@ -15,7 +15,7 @@ import (
 type Highlighter struct {
 	settings config.Settings
 
-	formats  logFormatList
+	formats  formatList
 	patterns patternList
 	words    wordGroups
 }
@@ -23,14 +23,14 @@ type Highlighter struct {
 // NewHighlighter creates a Highlighter configured from the provided settings.
 //
 // The constructor determines the effective terminal color profile and loads
-// log formats, patterns, and word groups for the selected theme. If the
-// settings restrict highlighting to only certain categories (log formats,
+// formats, patterns, and word groups for the selected theme. If the
+// settings restrict highlighting to only certain categories (formats,
 // patterns, or words), the other categories are initialized empty.
 // It returns an error if configuration cannot be loaded or parsed.
 func NewHighlighter(settings config.Settings) (Highlighter, error) {
 	h := Highlighter{settings: settings}
 
-	formats, err := newLogFormats(settings.Config, settings.Opts.Theme)
+	formats, err := newFormats(settings.Config, settings.Opts.Theme)
 	if err != nil {
 		return Highlighter{}, err
 	}
@@ -46,12 +46,12 @@ func NewHighlighter(settings config.Settings) (Highlighter, error) {
 	}
 
 	// keep in the highlighter only things we want to colorize
-	if settings.Opts.HighlightOnlyLogFormats || settings.Opts.HighlightOnlyPatterns || settings.Opts.HighlightOnlyWords {
+	if settings.Opts.HighlightOnlyFormats || settings.Opts.HighlightOnlyPatterns || settings.Opts.HighlightOnlyWords {
 		// init with the empty config all the things we don't need
-		if settings.Opts.HighlightOnlyLogFormats {
+		if settings.Opts.HighlightOnlyFormats {
 			h.formats = formats
 		} else {
-			h.formats, _ = newLogFormats(nil, "")
+			h.formats, _ = newFormats(nil, "")
 		}
 
 		if settings.Opts.HighlightOnlyPatterns {
@@ -87,14 +87,14 @@ func (h Highlighter) Colorize(line string) string {
 		line = allANSIEscapeSequencesRegexp.ReplaceAllString(line, "")
 	}
 
-	// try one of the log formats
-	for _, logFormat := range h.formats {
-		if logFormat.match(line) {
-			return logFormat.highlight(line, h)
+	// try one of the formats
+	for _, format := range h.formats {
+		if format.match(line) {
+			return format.highlight(line, h)
 		}
 	}
 
-	// if log format wasn't detected highlight patterns and words
+	// if format wasn't detected highlight patterns and words
 	// and then apply default color to the rest
 	line = h.patterns.highlight(line, h)
 	line = h.words.highlight(line, h)
@@ -177,9 +177,9 @@ func (h Highlighter) addDebugInfo(str string, kind any) string {
 	closing := ""
 
 	switch k := kind.(type) {
-	case logFormat:
-		opening = fmt.Sprintf("[lf(%s)]", k.Name)
-		closing = fmt.Sprintf("[lf(/%s)]", k.Name)
+	case format:
+		opening = fmt.Sprintf("[f(%s)]", k.Name)
+		closing = fmt.Sprintf("[f(/%s)]", k.Name)
 	case pattern:
 		opening = fmt.Sprintf("[p(%s)]", k.Name)
 		closing = fmt.Sprintf("[p(/%s)]", k.Name)

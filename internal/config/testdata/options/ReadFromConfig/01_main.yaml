@@ -1,12 +1,12 @@
 settings:
   theme: test
 
-  no-builtin-logformats: true
+  no-builtin-formats: true
   no-builtin-patterns: true
   no-builtin-words: true
   no-builtins: true
 
-  only-logformats: true
+  only-formats: true
   only-patterns: true
   only-words: true
 

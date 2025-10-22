@@ -60,7 +60,7 @@ func compareCapGroupLists(list1, list2 capGroupList) error {
 }
 
 func TestCapGroupsListInit(t *testing.T) {
-	logFormatCapGroupList := &capGroupList{
+	formatCapGroupList := &capGroupList{
 		[]capGroup{
 			{"", `(\d{1,3}(\.\d{1,3}){3} )`, "", "", "", nil, nil},
 			{"", `([^ ]+ )`, "", "", "", nil, nil},
@@ -82,7 +82,7 @@ func TestCapGroupsListInit(t *testing.T) {
 		nil,
 	}
 
-	correctLogFormatCapGroupList := capGroupList{
+	correctFormatCapGroupList := capGroupList{
 		[]capGroup{
 			{"", `(\d{1,3}(\.\d{1,3}){3} )`, "", "", "", nil, nil},
 			{"", `([^ ]+ )`, "", "", "", nil, nil},
@@ -119,11 +119,11 @@ func TestCapGroupsListInit(t *testing.T) {
 	}
 
 	t.Run("TestCapGroupsListInit", func(t *testing.T) {
-		if err := logFormatCapGroupList.init(true); err != nil {
-			t.Errorf("logFormatCapGroupList.init(\"\", true) failed with this error: %s", err)
+		if err := formatCapGroupList.init(true); err != nil {
+			t.Errorf("formatCapGroupList.init(\"\", true) failed with this error: %s", err)
 		}
 
-		if err := compareCapGroupLists(*logFormatCapGroupList, correctLogFormatCapGroupList); err != nil {
+		if err := compareCapGroupLists(*formatCapGroupList, correctFormatCapGroupList); err != nil {
 			t.Errorf("%s", err)
 		}
 

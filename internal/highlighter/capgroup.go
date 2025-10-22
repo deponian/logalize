@@ -24,7 +24,7 @@ type capGroupList struct {
 	FullRegExp *regexp.Regexp
 }
 
-func (cgl *capGroupList) init(isLogFormat bool) error {
+func (cgl *capGroupList) init(isFormat bool) error {
 	for _, group := range cgl.Groups {
 		// check that all regexps are valid regular expressions
 		if err := group.check(); err != nil {
@@ -38,7 +38,7 @@ func (cgl *capGroupList) init(isLogFormat bool) error {
 		// add name for the capture group
 		format += fmt.Sprintf("(?P<capGroup%d>(?:%s))", i, cg.RegExpStr[1:len(cg.RegExpStr)-1])
 	}
-	if isLogFormat {
+	if isFormat {
 		format = "^" + format + "$"
 	}
 	cgl.FullRegExp = regexp.MustCompile(format)

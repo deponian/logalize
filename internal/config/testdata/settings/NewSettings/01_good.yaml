@@ -1,7 +1,7 @@
 settings:
   theme: test
 
-  only-logformats: true
+  only-formats: true
   only-patterns: true
   only-words: true
 

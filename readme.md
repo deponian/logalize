@@ -4,7 +4,7 @@
   <img alt="Screenshot" src="images/avif/logo-light.avif">
 </picture>
 
-93% of all logs are not colored[^1]. It's sad. Maybe even illegal. It's time to logalize them. **Logalize** is a log colorizer like [colorize](https://github.com/raszi/colorize) and [ccze](https://github.com/cornet/ccze). But it's faster and, much more importantly, it's extensible. No more hardcoded templates for logs and keywords. Logalize is fully customizable via `logalize.yaml` where you can define your log formats, keyword patterns and more.
+93% of all logs are not colored[^1]. It's sad. Maybe even illegal. It's time to logalize them. **Logalize** is a log colorizer like [colorize](https://github.com/raszi/colorize) and [ccze](https://github.com/cornet/ccze). But it's faster and, much more importantly, it's extensible. No more hardcoded templates for logs and keywords. Logalize is fully customizable via `logalize.yaml` where you can define your formats, keyword patterns and more.
 
 <p align="center">
   <a href="https://github.com/deponian/logalize/actions"><img src="https://github.com/deponian/logalize/actions/workflows/tests.yml/badge.svg" alt="Build Status"></a>
@@ -76,7 +76,7 @@ go install github.com/deponian/logalize@latest
 How it works
 ------------
 
-Logalize reads one line from stdin at a time and then checks if it matches one of log formats (`formats`), general regular expressions (`patterns`) or plain English words and their [inflected](https://en.wikipedia.org/wiki/Inflection) forms (`words`). See configuration below for more details.
+Logalize reads one line from stdin at a time and then checks if it matches one of formats (`formats`), general regular expressions (`patterns`) or plain English words and their [inflected](https://en.wikipedia.org/wiki/Inflection) forms (`words`). See configuration below for more details.
 
 Simplified version of the main loop:
 1. Read a line from stdin
@@ -98,7 +98,7 @@ If more than one configuration file is found, they are merged. The lower the fil
 
 A configuration file can contain five top-level keys: `formats`, `patterns`, `words`, `themes` and `settings`. In the first three you define what you want to catch and in `themes` you describe how you want to colorize it. `settings` is a way to set some options if you don't want to pass them as flags.
 
-### Log formats
+### Formats
 
 Configuration example:
 
@@ -124,7 +124,7 @@ formats:
           name: 5xx
 ```
 
-`formats` describe complete log formats. A line must match a format completely to be colored. For example, the full regular expression for the "kuvaq" format above will look like this:\
+`formats` describe complete formats. A line must match a format completely to be colored. For example, the full regular expression for the "kuvaq" format above will look like this:\
 `^(\d{1,3}(\.\d{1,3}){3} )(- )("[^"]+" )(\d\d\d)$`
 
 Only lines below will match this format:
@@ -138,11 +138,11 @@ But not these:
 
 For an overview of regular expression syntax, see the [regexp/syntax](https://pkg.go.dev/regexp/syntax) package.
 
-Full log format example using all available fields:
+Full format example using all available fields:
 
 ```yaml
 formats:
-  # name of a log format
+  # name of a format
   elysium:
     # regexp must begin with an opening parenthesis `(`
     # and it must end with a paired closing parenthesis `)`
@@ -175,7 +175,7 @@ formats:
     # ^(\d\d\d )(--- )([[:xdigit:]]{32})$
 ```
 
-You can find built-in `formats` [here](builtins/logformats). If you want to customize them or turn them off completely, overwrite the corresponding values in your `logalize.yaml`. See [Customization](#customization) section below for more details.
+You can find built-in `formats` [here](builtins/formats). If you want to customize them or turn them off completely, overwrite the corresponding values in your `logalize.yaml`. See [Customization](#customization) section below for more details.
 
 ### Patterns
 
@@ -201,7 +201,7 @@ patterns:
 
 ```
 
-`patterns` are standard regular expressions. You can highlight any sequence of characters in a string that matches a regular expression. It may consist of several parts (see `ipv4-address-with-port` above). This is convenient if you want different parts of a pattern to have different colors or styles. Think of these complex patterns as little log formats that can be found in any part of a string.
+`patterns` are standard regular expressions. You can highlight any sequence of characters in a string that matches a regular expression. It may consist of several parts (see `ipv4-address-with-port` above). This is convenient if you want different parts of a pattern to have different colors or styles. Think of these complex patterns as little formats that can be found in any part of a string.
 
 Patterns have priority. Ones with higher priority will be painted earlier. Default priority is 0. The priorities of the built-in patterns are between -100 and 100.
 
@@ -215,9 +215,9 @@ patterns:
     # patterns with higher priority will be painted earlier
     # default priority is 0
     priority: 10
-    # the same fields are used here as in log formats (see above)
+    # the same fields are used here as in formats (see above)
     regexp: (\d\d\d)
-    # patterns can have alternatives just like in log formats
+    # patterns can have alternatives just like in formats
     alternatives:
       - regexp: (2\d\d)
         name: 2xx
@@ -229,7 +229,7 @@ patterns:
         name: 5xx
 
   # complex pattern (when you use "regexps" field)
-  # the same fields are used here as in log formats (see above)
+  # the same fields are used here as in formats (see above)
   # complex pattern are formed from all regexps in the "regexps" list
   # e.g. pattern below will be rendered as (\d{1,3}(\.\d{1,3}){3})((:\d{1,5})?)
   # the main difference from a simple pattern is that you can control
@@ -245,7 +245,7 @@ patterns:
   # that builds on other patterns. for example, you want to make a highlighter
   # for the "logfmt" format. an example of "logfmt" log line:
   # ts=2024-02-16T23:00:02.953Z caller=db.go:16 level=info component=tsdb msg="Deleting..."
-  # you can't use log formats (see above) because the structure of "logfmt" is variable.
+  # you can't use formats (see above) because the structure of "logfmt" is variable.
   # in such a case, you can describe the base "logfmt" element (xxx=xxx) and look for other
   # existing patterns (date, time, IP address, etc.) on the right side of the equals sign
   # (see how to accomplish this below in the "themes" section)
@@ -418,7 +418,7 @@ themes:
       # . . .
 ```
 
-`themes` is the place where you apply colors and style to log formats, patterns and word groups you defined earlier (or to the built-in ones). Every capture group can be colorized using `fg`, `bg` and `style` fields.
+`themes` is the place where you apply colors and style to formats, patterns and word groups you defined earlier (or to the built-in ones). Every capture group can be colorized using `fg`, `bg` and `style` fields.
 
 `fg` and `bg` are foreground and background colors correspondingly. They can be a hex value like `#ff0000` or a number between 0 and 255 for ANSI colors.
 
@@ -437,12 +437,12 @@ Configuration example:
 settings:
   theme: "utopia"
 
-  no-builtin-logformats: false
+  no-builtin-formats: false
   no-builtin-patterns: false
   no-builtin-words: false
   no-builtins: true
 
-  only-logformats: false
+  only-formats: false
   only-patterns: false
   only-words: false
 
@@ -520,7 +520,7 @@ settings:
 
 #### I want to disable all builtins and use only data from my own `logalize.yaml`
 
-1. Define any log formats, patterns, word groups and themes in your `logalize.yaml`
+1. Define any formats, patterns, word groups and themes in your `logalize.yaml`
 2. Disable builtins in `settings` section:
 ```yaml
 # . . .

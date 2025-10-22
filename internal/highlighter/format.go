@@ -6,53 +6,51 @@ import (
 	"github.com/knadh/koanf/v2"
 )
 
-// logFormat represents a log format
-type logFormat struct {
+type format struct {
 	Name      string
 	CapGroups *capGroupList
 }
 
-// logFormatList represents a list of log formats
-type logFormatList []logFormat
+type formatList []format
 
-// newLogFormats returns list of LogFormats collected
+// newFormats returns list of formats collected
 // from *koanf.Koanf configuration
-func newLogFormats(config *koanf.Koanf, theme string) (logFormatList, error) {
+func newFormats(config *koanf.Koanf, theme string) (formatList, error) {
 	if config == nil {
-		return logFormatList{}, nil
+		return formatList{}, nil
 	}
 
-	logFormats, err := collectLogFormats(config)
+	formats, err := collectFormats(config)
 	if err != nil {
 		return nil, err
 	}
 
-	for i := range logFormats {
-		if err := initLogFormat(&logFormats[i], config, theme); err != nil {
+	for i := range formats {
+		if err := initFormat(&formats[i], config, theme); err != nil {
 			return nil, err
 		}
 	}
 
-	return logFormats, nil
+	return formats, nil
 }
 
-func collectLogFormats(config *koanf.Koanf) (logFormatList, error) {
-	var logFormats logFormatList
+func collectFormats(config *koanf.Koanf) (formatList, error) {
+	var formats formatList
 
 	for _, formatName := range config.MapKeys("formats") {
-		var logFormat logFormat
-		logFormat.Name = formatName
-		logFormat.CapGroups = &capGroupList{}
-		if err := config.Unmarshal("formats."+formatName, &logFormat.CapGroups.Groups); err != nil {
+		var format format
+		format.Name = formatName
+		format.CapGroups = &capGroupList{}
+		if err := config.Unmarshal("formats."+formatName, &format.CapGroups.Groups); err != nil {
 			return nil, err
 		}
-		logFormats = append(logFormats, logFormat)
+		formats = append(formats, format)
 	}
 
-	return logFormats, nil
+	return formats, nil
 }
 
-func initLogFormat(lf *logFormat, config *koanf.Koanf, theme string) error {
+func initFormat(lf *format, config *koanf.Koanf, theme string) error {
 	// set colors and style from the theme
 	for i, cg := range lf.CapGroups.Groups {
 		path := "themes." + theme + ".formats." + lf.Name + "." + cg.Name
@@ -77,13 +75,13 @@ func initLogFormat(lf *logFormat, config *koanf.Koanf, theme string) error {
 
 	// init capgroups
 	if err := lf.CapGroups.init(true); err != nil {
-		return fmt.Errorf("[log format: %s] %s", lf.Name, err)
+		return fmt.Errorf("[format: %s] %s", lf.Name, err)
 	}
 
 	return nil
 }
 
-func (lf logFormat) highlight(str string, h Highlighter) (coloredStr string) {
+func (lf format) highlight(str string, h Highlighter) (coloredStr string) {
 	str = lf.CapGroups.highlight(str, h)
 	if h.settings.Opts.Debug {
 		str = h.addDebugInfo(str, lf)
@@ -92,6 +90,6 @@ func (lf logFormat) highlight(str string, h Highlighter) (coloredStr string) {
 	return str
 }
 
-func (lf logFormat) match(str string) bool {
+func (lf format) match(str string) bool {
 	return lf.CapGroups.FullRegExp.MatchString(str)
 }

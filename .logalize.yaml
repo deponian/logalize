@@ -5,12 +5,12 @@
 # settings:
 #   theme: "utopia"
 
-#   no-builtin-logformats: false
+#   no-builtin-formats: false
 #   no-builtin-patterns: false
 #   no-builtin-words: false
 #   no-builtins: true
 
-#   only-logformats: false
+#   only-formats: false
 #   only-patterns: false
 #   only-words: false
 #

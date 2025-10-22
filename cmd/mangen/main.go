@@ -144,7 +144,7 @@ func main() {
 	doc.Section("Description")
 	doc.Text(`Logalize is a log colorizer. It's extensible alternative to ccze and colorize.
 
-Logalize reads one line from stdin at a time and then checks if it matches one of log formats ("formats" key in configuration file), general regular expressions ("patterns" key in configuration file) or plain English words and their inflected forms ("words" key in configuration file).
+Logalize reads one line from stdin at a time and then checks if it matches one of formats ("formats" key in configuration file), general regular expressions ("patterns" key in configuration file) or plain English words and their inflected forms ("words" key in configuration file).
 
 Simplified version of the main loop:`)
 

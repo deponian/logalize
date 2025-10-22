@@ -12,7 +12,7 @@ import (
 	"github.com/muesli/termenv"
 )
 
-func compareFormats(format1, format2 logFormat) error {
+func compareFormats(format1, format2 format) error {
 	if format1.Name != format2.Name {
 		return fmt.Errorf("[format1: %s, format2: %s] names aren't equal", format1.Name, format2.Name)
 	}
@@ -24,7 +24,7 @@ func compareFormats(format1, format2 logFormat) error {
 	return nil
 }
 
-func compareFormatLists(fl1, fl2 logFormatList) error {
+func compareFormatLists(fl1, fl2 formatList) error {
 	if len(fl1) != len(fl2) {
 		return fmt.Errorf("format lists have differenet length")
 	}
@@ -39,7 +39,7 @@ func compareFormatLists(fl1, fl2 logFormatList) error {
 }
 
 func TestFormatsNewGood(t *testing.T) {
-	correctFormat := logFormat{
+	correctFormat := format{
 		"test", &capGroupList{
 			[]capGroup{
 				{"one", `(\d{1,3}(\.\d{1,3}){3} )`, "#f5ce42", "", "", nil, nil},
@@ -70,9 +70,9 @@ func TestFormatsNewGood(t *testing.T) {
 	}
 
 	t.Run("TestFormatsNewGood", func(t *testing.T) {
-		formats, err := newLogFormats(cfg, "test")
+		formats, err := newFormats(cfg, "test")
 		if err != nil {
-			t.Errorf("newLogFormats() failed with this error: %s", err)
+			t.Errorf("newFormats() failed with this error: %s", err)
 		}
 
 		if err := compareFormats(formats[0], correctFormat); err != nil {
@@ -89,8 +89,8 @@ func TestFormatsNewBadYAML(t *testing.T) {
 	}
 
 	t.Run("TestFormatsNewBadYAML", func(t *testing.T) {
-		if _, err := newLogFormats(cfg, "test"); err == nil {
-			t.Errorf("newLogFormats() should have failed")
+		if _, err := newFormats(cfg, "test"); err == nil {
+			t.Errorf("newFormats() should have failed")
 		}
 	})
 }
@@ -103,8 +103,8 @@ func TestFormatsNewBadRegExp(t *testing.T) {
 	}
 
 	t.Run("TestFormatsNewBadRegExp", func(t *testing.T) {
-		if _, err := newLogFormats(cfg, "test"); err == nil {
-			t.Errorf("newLogFormats() should have failed")
+		if _, err := newFormats(cfg, "test"); err == nil {
+			t.Errorf("newFormats() should have failed")
 		}
 	})
 }
@@ -132,7 +132,7 @@ func TestFormatsHighlight(t *testing.T) {
 		t.Errorf("NewHighlighter() failed with this error: %s", err)
 	}
 
-	formats, err := newLogFormats(settings.Config, "test")
+	formats, err := newFormats(settings.Config, "test")
 	if err != nil {
 		t.Errorf("newWords() failed with this error: %s", err)
 	}
@@ -305,7 +305,7 @@ func TestFormatsBuiltins(t *testing.T) {
 		t.Errorf("NewHighlighter() failed with this error: %s", err)
 	}
 
-	formats, err := newLogFormats(settings.Config, "test")
+	formats, err := newFormats(settings.Config, "test")
 	if err != nil {
 		t.Errorf("newWords() failed with this error: %s", err)
 	}

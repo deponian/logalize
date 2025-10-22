@@ -121,7 +121,7 @@ func loadBuiltinConfigs(builtins fs.FS, userConfig *koanf.Koanf, opts Options) *
 	builtinsDir, _ := fs.ReadDir(builtins, "builtins")
 	loadRecursively(cfg, builtinsDir, "builtins/")
 
-	if opts.NoBuiltinLogFormats {
+	if opts.NoBuiltinFormats {
 		cfg.Delete("formats")
 	}
 
