@@ -79,7 +79,7 @@ It's fast and extensible alternative to ccze and colorize.`,
 	// these flags will print something and stop the program
 	root.Flags().BoolP("print-config", "C", false, "print full configuration file")
 	root.Flags().BoolP("list-themes", "T", false, "display a list of all available themes")
-	root.Flags().BoolP("print-builtins", "b", false, "print built-in formats, patterns and words as separate YAML files")
+	root.Flags().BoolP("print-builtins", "B", false, "print built-in formats, patterns and words as separate YAML files")
 
 	return root
 }

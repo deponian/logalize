@@ -105,7 +105,7 @@ func TestOptionsReadFromFlags(t *testing.T) {
 
 	flags.BoolP("print-config", "C", false, "")
 	flags.BoolP("list-themes", "T", false, "")
-	flags.BoolP("print-builtins", "b", false, "")
+	flags.BoolP("print-builtins", "B", false, "")
 
 	args := []string{
 		"--config", "test1",
