@@ -44,10 +44,10 @@ func (cgl *capGroupList) init(isFormat bool) error {
 	cgl.FullRegExp = regexp.MustCompile(format)
 
 	// build regexps for capture groups' alternatives
-	for _, cg := range cgl.Groups {
+	for i, cg := range cgl.Groups {
 		if len(cg.Alternatives) > 0 {
-			for i, alt := range cg.Alternatives {
-				cg.Alternatives[i].RegExp = regexp.MustCompile(alt.RegExpStr)
+			for j, alt := range cg.Alternatives {
+				cgl.Groups[i].Alternatives[j].RegExp = regexp.MustCompile(alt.RegExpStr)
 			}
 		}
 	}
