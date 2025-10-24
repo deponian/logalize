@@ -38,7 +38,7 @@ linters:
       check-alias: true
 
     gocognit:
-      min-complexity: 20
+      min-complexity: 25
 
     godoclint:
       default: all

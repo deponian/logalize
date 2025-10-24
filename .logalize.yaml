@@ -16,6 +16,50 @@
 #
 #   no-ansi-escape-sequences-stripping: false
 
+formats:
+  test:
+    - regexp: ([IWEF][0-9]{4} )
+      name: log-level
+      alternatives:
+        - regexp: (I[0-9]{4} )
+          name: info
+        - regexp: (W[0-9]{4} )
+          name: warning
+        - regexp: (E[0-9]{4} )
+          name: error
+        - regexp: (F[0-9]{4} )
+          name: fatal
+    - regexp: (--- )
+      name: separator
+    - regexp: ([0-9]+ )
+      name: thread-id
+    - regexp: (.*)
+      name: message
+
+themes:
+  tokyonight-dark:
+    formats:
+      test:
+        log-level:
+          info:
+            fg: "#82aaff"
+            style: bold
+          warning:
+            fg: "#ffc777"
+            style: bold
+          error:
+            fg: "#ff757f"
+            style: bold
+          fatal:
+            fg: "#c53b53"
+            style: bold
+        separator:
+          fg: "#456789"
+        thread-id:
+          link-to: log-level
+        message:
+          style: "patterns-and-words"
+
 # formats:
 #   nginx-combined:
 #     - regexp: (\d{1,3}(?:\.\d{1,3}){3} )
