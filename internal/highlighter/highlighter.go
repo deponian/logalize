@@ -16,6 +16,10 @@ import (
 type Highlighter struct {
 	settings config.Settings
 
+	defaultFg    string
+	defaultBg    string
+	defaultStyle string
+
 	formats  formatList
 	patterns patternList
 	words    wordGroups
@@ -70,6 +74,14 @@ func NewHighlighter(settings config.Settings) (Highlighter, error) {
 		h.formats = formats
 		h.patterns = patterns
 		h.words = words
+	}
+
+	// set default color
+	if settings.Config != nil {
+		defaultColor := settings.Config.StringMap("themes." + settings.Opts.Theme + ".default")
+		h.defaultFg = defaultColor["fg"]
+		h.defaultBg = defaultColor["bg"]
+		h.defaultStyle = defaultColor["style"]
 	}
 
 	return h, nil
@@ -160,9 +172,7 @@ func (h Highlighter) applyDefaultColor(str string) string {
 			return part
 		}
 
-		defaultColor := h.settings.Config.StringMap("themes." + h.settings.Opts.Theme + ".default")
-
-		return h.highlight(part, defaultColor["fg"], defaultColor["bg"], defaultColor["style"])
+		return h.highlight(part, h.defaultFg, h.defaultBg, h.defaultStyle)
 	})
 }
 
