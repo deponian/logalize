@@ -64,7 +64,7 @@ func CreateUserConfig(userPaths []string) (*koanf.Koanf, error) {
 		for _, path := range paths {
 			err := cfg.Load(file.Provider(path), yaml.Parser())
 			// ignore only errors about non-existent files
-			if err != nil && (!errors.Is(err, os.ErrNotExist) || !ignoreNonExistent) {
+			if err != nil && (!errors.Is(err, fs.ErrNotExist) || !ignoreNonExistent) {
 				return err
 			}
 		}
