@@ -67,39 +67,32 @@ func newWords(config *koanf.Koanf, theme string) (wordGroups, error) {
 	return words, nil
 }
 
-// highlight colors all words in a string
+// highlight colors all words in a string.
+// It doesn't touch already colored parts of the input.
 func (words wordGroups) highlight(str string, h Highlighter) string {
-	if str == "" {
-		return str
-	}
+	return walkNonSGR(str, func(part string) string {
+		if part == "" {
+			return part
+		}
 
-	// skip already colored parts of the string
-	matches := sgrANSIEscapeSequenceRegexp.FindStringSubmatchIndex(str)
-	if matches != nil {
-		leftPart := words.highlight(str[0:matches[0]], h)
-		alreadyColored := str[matches[0]:matches[1]]
-		rightPart := words.highlight(str[matches[1]:], h)
+		if m := negatedWordRegexp.FindStringSubmatchIndex(part); m != nil {
+			leftPart := words.highlight(part[0:m[0]], h)
+			match := words.highlightNegatedWord(part[m[0]:m[1]], part[m[2]:m[3]], part[m[4]:m[5]], h)
+			rightPart := words.highlight(part[m[1]:], h)
 
-		return leftPart + alreadyColored + rightPart
-	}
+			return leftPart + match + rightPart
+		}
 
-	if m := negatedWordRegexp.FindStringSubmatchIndex(str); m != nil {
-		leftPart := words.highlight(str[0:m[0]], h)
-		match := words.highlightNegatedWord(str[m[0]:m[1]], str[m[2]:m[3]], str[m[4]:m[5]], h)
-		rightPart := words.highlight(str[m[1]:], h)
+		if m := wordRegexp.FindStringIndex(part); m != nil {
+			leftPart := words.highlight(part[0:m[0]], h)
+			match := words.highlightWord(part[m[0]:m[1]], h)
+			rightPart := words.highlight(part[m[1]:], h)
 
-		return leftPart + match + rightPart
-	}
+			return leftPart + match + rightPart
+		}
 
-	if m := wordRegexp.FindStringIndex(str); m != nil {
-		leftPart := words.highlight(str[0:m[0]], h)
-		match := words.highlightWord(str[m[0]:m[1]], h)
-		rightPart := words.highlight(str[m[1]:], h)
-
-		return leftPart + match + rightPart
-	}
-
-	return str
+		return part
+	})
 }
 
 // highlightWord colors single word in a string

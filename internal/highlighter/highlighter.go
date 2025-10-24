@@ -3,6 +3,7 @@ package highlighter
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/deponian/logalize/internal/config"
 	"github.com/muesli/termenv"
@@ -152,24 +153,17 @@ func (h Highlighter) highlight(str, fg, bg, style string) string {
 	return coloredStr.String()
 }
 
+// applyDefaultColor applies default color to all non-colored parts of the input.
 func (h Highlighter) applyDefaultColor(str string) string {
-	if str == "" {
-		return str
-	}
+	return walkNonSGR(str, func(part string) string {
+		if part == "" {
+			return part
+		}
 
-	// skip already colored parts of the string
-	matches := sgrANSIEscapeSequenceRegexp.FindStringSubmatchIndex(str)
-	if matches != nil {
-		leftPart := h.applyDefaultColor(str[0:matches[0]])
-		alreadyColored := str[matches[0]:matches[1]]
-		rightPart := h.applyDefaultColor(str[matches[1]:])
+		defaultColor := h.settings.Config.StringMap("themes." + h.settings.Opts.Theme + ".default")
 
-		return leftPart + alreadyColored + rightPart
-	}
-
-	defaultColor := h.settings.Config.StringMap("themes." + h.settings.Opts.Theme + ".default")
-
-	return h.highlight(str, defaultColor["fg"], defaultColor["bg"], defaultColor["style"])
+		return h.highlight(part, defaultColor["fg"], defaultColor["bg"], defaultColor["style"])
+	})
 }
 
 func (h Highlighter) addDebugInfo(str string, kind any) string {
@@ -192,4 +186,26 @@ func (h Highlighter) addDebugInfo(str string, kind any) string {
 	closing = h.highlight(closing, "", "", "reverse")
 
 	return opening + str + closing
+}
+
+// walkNonSGR applies f to every non-colored part and keeps SGR segments untouched
+func walkNonSGR(str string, f func(string) string) string {
+	if str == "" {
+		return str
+	}
+	out := strings.Builder{}
+	for {
+		loc := sgrANSIEscapeSequenceRegexp.FindStringIndex(str)
+		if loc == nil {
+			out.WriteString(f(str))
+
+			return out.String()
+		}
+		// color left part
+		out.WriteString(f(str[:loc[0]]))
+		// copy already colored part verbatim
+		out.WriteString(str[loc[0]:loc[1]])
+		// process right part
+		str = str[loc[1]:]
+	}
 }

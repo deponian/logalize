@@ -104,37 +104,27 @@ func initPattern(p *pattern, config *koanf.Koanf, theme string) error {
 	return nil
 }
 
-// highlight colorizes various patterns
-// like IP address, date, HTTP response code, etc.
+// highlight colorizes various patterns like IP address, date, HTTP response code, etc.
+// It doesn't touch already colored parts of the input.
 func (patterns patternList) highlight(str string, h Highlighter) string {
-	if str == "" {
-		return str
-	}
-
-	// skip already colored parts of the string
-	matches := sgrANSIEscapeSequenceRegexp.FindStringSubmatchIndex(str)
-	if matches != nil {
-		leftPart := patterns.highlight(str[0:matches[0]], h)
-		alreadyColored := str[matches[0]:matches[1]]
-		rightPart := patterns.highlight(str[matches[1]:], h)
-
-		return leftPart + alreadyColored + rightPart
-	}
-
-	// color patterns
-	for _, pattern := range patterns {
-		matches := pattern.CapGroups.FullRegExp.FindStringSubmatchIndex(str)
-		if matches != nil {
-			leftPart := patterns.highlight(str[0:matches[0]], h)
-			match := pattern.CapGroups.highlight(str[matches[0]:matches[1]], h)
-			rightPart := patterns.highlight(str[matches[1]:], h)
-			if h.settings.Opts.Debug {
-				match = h.addDebugInfo(match, pattern)
-			}
-
-			return leftPart + match + rightPart
+	return walkNonSGR(str, func(part string) string {
+		if part == "" {
+			return part
 		}
-	}
+		for _, pattern := range patterns {
+			matches := pattern.CapGroups.FullRegExp.FindStringSubmatchIndex(part)
+			if matches != nil {
+				leftPart := patterns.highlight(part[0:matches[0]], h)
+				match := pattern.CapGroups.highlight(part[matches[0]:matches[1]], h)
+				rightPart := patterns.highlight(part[matches[1]:], h)
+				if h.settings.Opts.Debug {
+					match = h.addDebugInfo(match, pattern)
+				}
 
-	return str
+				return leftPart + match + rightPart
+			}
+		}
+
+		return part
+	})
 }
