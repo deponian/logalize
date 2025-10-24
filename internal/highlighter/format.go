@@ -41,7 +41,7 @@ func collectFormats(config *koanf.Koanf) (formatList, error) {
 		var format format
 		format.Name = formatName
 		format.CapGroups = &capGroupList{}
-		if err := config.Unmarshal("formats."+formatName, &format.CapGroups.Groups); err != nil {
+		if err := config.Unmarshal("formats."+formatName, &format.CapGroups.groups); err != nil {
 			return nil, err
 		}
 		formats = append(formats, format)
@@ -52,16 +52,16 @@ func collectFormats(config *koanf.Koanf) (formatList, error) {
 
 func initFormat(lf *format, config *koanf.Koanf, theme string) error {
 	// set colors and style from the theme
-	for i, cg := range lf.CapGroups.Groups {
+	for i, cg := range lf.CapGroups.groups {
 		path := "themes." + theme + ".formats." + lf.Name + "." + cg.Name
-		cgReal := &lf.CapGroups.Groups[i]
+		cgReal := &lf.CapGroups.groups[i]
 
 		if len(cg.Alternatives) > 0 {
 			cgReal.Foreground = config.String(path + ".default.fg")
 			cgReal.Background = config.String(path + ".default.bg")
 			cgReal.Style = config.String(path + ".default.style")
 			for j, alt := range cg.Alternatives {
-				altReal := &lf.CapGroups.Groups[i].Alternatives[j]
+				altReal := &lf.CapGroups.groups[i].Alternatives[j]
 				altReal.Foreground = config.String(path + "." + alt.Name + ".fg")
 				altReal.Background = config.String(path + "." + alt.Name + ".bg")
 				altReal.Style = config.String(path + "." + alt.Name + ".style")
@@ -71,6 +71,9 @@ func initFormat(lf *format, config *koanf.Koanf, theme string) error {
 			cgReal.Background = config.String(path + ".bg")
 			cgReal.Style = config.String(path + ".style")
 		}
+
+		cgReal.LinkTo = config.String(path + ".link-to")
+
 	}
 
 	// init capgroups
@@ -91,5 +94,5 @@ func (lf format) highlight(str string, h Highlighter) (coloredStr string) {
 }
 
 func (lf format) match(str string) bool {
-	return lf.CapGroups.FullRegExp.MatchString(str)
+	return lf.CapGroups.fullRegExp.MatchString(str)
 }

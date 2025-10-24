@@ -8,24 +8,33 @@ import (
 
 // capGroup represents one capturing group in a config file
 type capGroup struct {
-	Name         string `koanf:"name"`
-	RegExpStr    string `koanf:"regexp"`
-	Foreground   string
-	Background   string
-	Style        string
-	Alternatives []capGroup     `koanf:"alternatives"`
-	RegExp       *regexp.Regexp `koanf:"-"`
+	Name      string `koanf:"name"`
+	RegExpStr string `koanf:"regexp"`
+
+	Foreground string
+	Background string
+	Style      string
+
+	// LinkTo makes this group inherit the color/style from another group
+	// (the target group is referenced by its Name and must exist in the same list)
+	LinkTo string
+
+	Alternatives []capGroup `koanf:"alternatives"`
+
+	RegExp *regexp.Regexp `koanf:"-"`
 }
 
 // capGroupList represents a list of capturing groups
 // that will be parsed as one big regular expression
 type capGroupList struct {
-	Groups     []capGroup
-	FullRegExp *regexp.Regexp
+	groups     []capGroup
+	fullRegExp *regexp.Regexp
+	// index maps group names to their index in Groups for quick lookup
+	index map[string]int
 }
 
 func (cgl *capGroupList) init(isFormat bool) error {
-	for _, group := range cgl.Groups {
+	for _, group := range cgl.groups {
 		// check that all regexps are valid regular expressions
 		if err := group.check(); err != nil {
 			return err
@@ -33,22 +42,60 @@ func (cgl *capGroupList) init(isFormat bool) error {
 	}
 
 	// build regexp for the whole list
-	var format string
-	for i, cg := range cgl.Groups {
+	var fullRegExp string
+	for i, cg := range cgl.groups {
 		// add name for the capturing group
-		format += fmt.Sprintf("(?P<capGroup%d>(?:%s))", i, cg.RegExpStr[1:len(cg.RegExpStr)-1])
+		fullRegExp += fmt.Sprintf("(?P<capGroup%d>(?:%s))", i, cg.RegExpStr[1:len(cg.RegExpStr)-1])
 	}
 	if isFormat {
-		format = "^" + format + "$"
+		fullRegExp = "^" + fullRegExp + "$"
 	}
-	cgl.FullRegExp = regexp.MustCompile(format)
+	cgl.fullRegExp = regexp.MustCompile(fullRegExp)
 
 	// build regexps for capturing groups' alternatives
-	for i, cg := range cgl.Groups {
+	for i, cg := range cgl.groups {
 		if len(cg.Alternatives) > 0 {
 			for j, alt := range cg.Alternatives {
-				cgl.Groups[i].Alternatives[j].RegExp = regexp.MustCompile(alt.RegExpStr)
+				cgl.groups[i].Alternatives[j].RegExp = regexp.MustCompile(alt.RegExpStr)
 			}
+		}
+	}
+
+	if err := cgl.validateLinkTo(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// validateLinkTo validates link targets & cycles
+func (cgl *capGroupList) validateLinkTo() error {
+	// build name to index lookup
+	cgl.index = make(map[string]int)
+	for i, cg := range cgl.groups {
+		if cg.Name != "" {
+			cgl.index[cg.Name] = i
+		}
+	}
+
+	for _, cg := range cgl.groups {
+		if cg.LinkTo == "" {
+			continue
+		}
+		// cycle detection (A->B->C->A)
+		seen := map[string]bool{}
+		for cg.LinkTo != "" {
+			if cg.Name != "" {
+				if seen[cg.Name] {
+					return fmt.Errorf("[capture group: %s] cyclic link-to detected", cg.Name)
+				}
+				seen[cg.Name] = true
+			}
+			idx, ok := cgl.index[cg.LinkTo]
+			if !ok {
+				return fmt.Errorf("[capture group: %s] link-to %q refers to unknown capture group", cg.Name, cg.LinkTo)
+			}
+			cg = cgl.groups[idx]
 		}
 	}
 
@@ -56,9 +103,16 @@ func (cgl *capGroupList) init(isFormat bool) error {
 }
 
 func (cgl *capGroupList) highlight(str string, h Highlighter) (coloredStr string) {
-	matches := cgl.FullRegExp.FindStringSubmatch(str)
-	for i, cg := range cgl.Groups {
-		match := matches[cgl.FullRegExp.SubexpIndex("capGroup"+strconv.Itoa(i))]
+	matches := cgl.fullRegExp.FindStringSubmatch(str)
+	for i, cg := range cgl.groups {
+		match := matches[cgl.fullRegExp.SubexpIndex("capGroup"+strconv.Itoa(i))]
+
+		// If this group links to another, borrow that group's effective style.
+		if fg, bg, style, ok := cgl.linkedStyle(matches, cg); ok {
+			coloredStr += h.highlight(match, fg, bg, style)
+
+			continue
+		}
 		coloredStr += cg.highlight(match, h)
 	}
 
@@ -78,8 +132,43 @@ func (cg *capGroup) highlight(str string, h Highlighter) string {
 	return h.highlight(str, cg.Foreground, cg.Background, cg.Style)
 }
 
+// linkedStyle returns the effective style of the target group if cg.LinkTo is set:
+// - if the target has matching alternatives, return that alt's fg/bg/style
+// - else return the target's default fg/bg/style
+func (cgl *capGroupList) linkedStyle(matches []string, cg capGroup) (fg, bg, style string, ok bool) {
+	if cg.LinkTo == "" || cgl.index == nil {
+		return "", "", "", false
+	}
+	// Follow chains (A->B->C). Stop on first non-link group
+	// Don't worry about cycle, they are already handled by validateLinkTo()
+	curIdx := cgl.index[cg.LinkTo]
+	for {
+
+		target := cgl.groups[curIdx]
+		// hop if chained link
+		if target.LinkTo != "" {
+			curIdx = cgl.index[target.LinkTo]
+
+			continue
+		}
+
+		// compute effective style of the terminal target
+		match := matches[cgl.fullRegExp.SubexpIndex("capGroup"+strconv.Itoa(curIdx))]
+
+		if len(target.Alternatives) > 0 {
+			for _, alt := range target.Alternatives {
+				if alt.RegExp.MatchString(match) {
+					return alt.Foreground, alt.Background, alt.Style, true
+				}
+			}
+		}
+
+		return target.Foreground, target.Background, target.Style, true
+	}
+}
+
 func (cgl *capGroupList) check() error {
-	for _, cg := range cgl.Groups {
+	for _, cg := range cgl.groups {
 		if err := cg.check(); err != nil {
 			return err
 		}

@@ -418,7 +418,7 @@ themes:
       # . . .
 ```
 
-`themes` is the place where you apply colors and style to formats, patterns, and word groups you defined earlier (or to the built-in ones). Every capturing group can be colorized using the `fg`, `bg` and `style` fields.
+`themes` is the place where you apply colors and style to formats, patterns, and word groups you defined earlier (or to the built-in ones). Every capturing group can be colorized using the `fg`, `bg`, and `style` fields. There is also a special field called `link-to`. See the next section for details.
 
 `fg` and `bg` are foreground and background colors, respectively. They can be hex values like `#ff0000` or numbers between 0 and 255 for ANSI colors.
 
@@ -428,6 +428,68 @@ The `style` field can be set to one of seven regular styles: `bold`, `faint`, `i
 - `patterns-and-words` - use highlighting from both the `patterns` and `words` sections
 
 You can get a list of all available themes with the `-T/--list-themes` flag and set it with the `-t/--theme` flag or the `theme` key in the `settings` section (see below).
+
+#### Linking styles between capturing groups (`link-to`)
+
+Use `link-to` to reuse the exact color and style of another capturing group in the same format or in the same complex pattern. The link is resolved at runtime for every line:
+
+- If the target group has alternatives and one of them matched, the linked group inherits that alternative’s `fg`/`bg`/`style`.
+- Otherwise, it inherits the target group’s default `fg`/`bg`/`style`.
+
+Configuration example:
+
+```yaml
+formats:
+  organon:
+    - regexp: ([IWEF][0-9]{4} )
+      name: log-level
+      alternatives:
+        - regexp: (I[0-9]{4} )
+          name: info
+        - regexp: (W[0-9]{4} )
+          name: warning
+        - regexp: (E[0-9]{4} )
+          name: error
+        - regexp: (F[0-9]{4} )
+          name: fatal
+    - regexp: (--- )
+      name: separator
+    - regexp: ([0-9]+ )
+      name: thread-id
+    - regexp: (.*)
+      name: message
+
+themes:
+  paradox:
+    formats:
+      organon:
+        log-level:
+          info:
+            fg: "#82aaff"
+            style: bold
+          warning:
+            fg: "#ffc777"
+            style: bold
+          error:
+            fg: "#ff757f"
+            style: bold
+          fatal:
+            fg: "#c53b53"
+            style: bold
+        separator:
+          fg: "#456789"
+        thread-id:
+          link-to: log-level   # inherits the effective style of "log-level"
+        message:
+          style: patterns-and-words
+```
+
+In the example above, when `log-level` matches `warning`, `thread-id` is colored with the same foreground and style as the `warning` alternative of `log-level` (here: `#ffc777` + `bold`). The inheritance is dynamic per line.
+
+**Notes**
+- `link-to` works within a single format or within a single complex pattern (it cannot link across different formats or patterns).
+- Links can be chained (`A -> B -> C`); cycles are invalid and will be rejected during initialization.
+- When `link-to` is present, the linked style takes precedence over any `fg`/`bg`/`style` set directly on that group.
 
 ### Settings
 

@@ -37,6 +37,23 @@ formats:
     - regexp: («.*»)
       name: four
 
+  portafisco-link-to:
+    - regexp: (\d{5} - )
+      name: one
+    - regexp: (".*" )
+      name: two
+    - regexp: (\d\d\d )
+      name: three
+      alternatives:
+        - regexp: (1\d\d )
+          name: 1xx
+        - regexp: (2\d\d )
+          name: 2xx
+        - regexp: (3\d\d )
+          name: 3xx
+    - regexp: (end)
+      name: four
+
 patterns:
   string:
     priority: 500
@@ -120,6 +137,25 @@ themes:
           style: words
         four:
           style: patterns-and-words
+
+      portafisco-link-to:
+        one:
+          link-to: three
+        two:
+          link-to: one
+        three:
+          default:
+            fg: "#ffffff"
+          1xx:
+            fg: "#505050"
+          2xx:
+            fg: "#00ff00"
+            style: overline
+          3xx:
+            fg: "#00ffff"
+            style: crossout
+        four:
+          fg: "#ff0000"
 
     patterns:
       string:
@@ -207,6 +243,25 @@ themes:
           style: words
         four:
           style: patterns-and-words
+
+      portafisco-link-to:
+        one:
+          link-to: three
+        two:
+          link-to: one
+        three:
+          default:
+            fg: "#ffffff"
+          1xx:
+            fg: "#505050"
+          2xx:
+            fg: "#00ff00"
+            style: overline
+          3xx:
+            fg: "#00ffff"
+            style: crossout
+        four:
+          fg: "#ff0000"
 
     patterns:
       string:

@@ -4,18 +4,18 @@
 
 # settings:
 #   theme: "utopia"
-
+#
 #   no-builtin-formats: false
 #   no-builtin-patterns: false
 #   no-builtin-words: false
 #   no-builtins: true
-
+#
 #   only-formats: false
 #   only-patterns: false
 #   only-words: false
 #
 #   no-ansi-escape-sequences-stripping: false
-
+#
 # formats:
 #   nginx-combined:
 #     - regexp: (\d{1,3}(?:\.\d{1,3}){3} )
@@ -45,18 +45,18 @@
 #       name: http-referer
 #     - regexp: ("[^"]+")
 #       name: http-user-agent
-
+#
 # patterns:
 #   string:
 #     priority: 500
 #     regexp: ("[^"]+"|'[^']+')
-
+#
 #   number:
 #     regexp: (\d+)
-
+#
 #   ipv4-address:
 #     regexp: (\d{1,3}(\.\d{1,3}){3})
-
+#
 #   http-status:
 #     regexp: (\d\d\d)
 #     alternatives:
@@ -68,7 +68,7 @@
 #         name: 4xx
 #       - regexp: (5\d\d)
 #         name: 5xx
-
+#
 #   http-status-code:
 #     priority: 100
 #     regexps:
@@ -85,7 +85,7 @@
 #             name: 4xx
 #           - regexp: ( 5\d\d)
 #             name: 5xx
-
+#
 # words:
 #   warning:
 #     - "ignore"
@@ -95,7 +95,7 @@
 #     - "skip"
 #     - "warn"
 #     - "restart"
-
+#
 # themes:
 #   utopia:
 #     formats:
@@ -128,19 +128,19 @@
 #         http-referer:
 #           fg: "#fca7ea"
 #         http-user-agent:
-#           fg: "#82aaff"
-
+#           link-to: remote-user
+#
 #     patterns:
 #       string:
 #         fg: "#00ff00"
-
+#
 #       number:
 #         bg: "#00ffff"
 #         style: bold
-
+#
 #       ipv4-address:
 #         fg: "#ffc777"
-
+#
 #       http-status:
 #         default:
 #           fg: "#ffffff"
@@ -152,7 +152,7 @@
 #           fg: "#ff0000"
 #         5xx:
 #           fg: "#ff00ff"
-
+#
 #       http-status-code:
 #         code:
 #           fg: "#ffffff"
@@ -167,7 +167,7 @@
 #             fg: "#ff0000"
 #           5xx:
 #             fg: "#ff00ff"
-
+#
 #     words:
 #       warning:
 #         fg: "#fcba03"

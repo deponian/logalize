@@ -47,29 +47,32 @@ func TestPatternsNewGood(t *testing.T) {
 		{"string", 500, &capGroupList{
 			[]capGroup{
 				{
-					"string", `("[^"]+"|'[^']+')`, "#00ff00", "", "", nil, nil,
+					"string", `("[^"]+"|'[^']+')`, "#00ff00", "", "", "", nil, nil,
 				},
 			},
 			regexp.MustCompile(`(?P<capGroup0>(?:"[^"]+"|'[^']+'))`),
+			map[string]int{"string": 0},
 		}},
 		{"ipv4-address", 0, &capGroupList{
 			[]capGroup{
 				{
-					"one", `(\d\d\d(\.\d\d\d){3})`, "#ffc777", "", "", nil, nil,
+					"one", `(\d\d\d(\.\d\d\d){3})`, "#ffc777", "", "", "", nil, nil,
 				},
 				{
-					"two", `((:\d{1,5})?)`, "#ff966c", "", "", nil, nil,
+					"two", `((:\d{1,5})?)`, "#ff966c", "", "", "", nil, nil,
 				},
 			},
 			regexp.MustCompile(`(?P<capGroup0>(?:\d\d\d(\.\d\d\d){3}))(?P<capGroup1>(?:(:\d{1,5})?))`),
+			map[string]int{"one": 0, "two": 1},
 		}},
 		{"number", 0, &capGroupList{
 			[]capGroup{
 				{
-					"number", `(\d+)`, "", "#00ffff", "bold", nil, nil,
+					"number", `(\d+)`, "", "#00ffff", "bold", "", nil, nil,
 				},
 			},
 			regexp.MustCompile(`(?P<capGroup0>(?:\d+))`),
+			map[string]int{"number": 0},
 		}},
 	}
 

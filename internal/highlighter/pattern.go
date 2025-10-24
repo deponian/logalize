@@ -52,11 +52,11 @@ func collectPatterns(config *koanf.Koanf) (patternList, error) {
 		pattern.Priority = config.Int("patterns." + patternName + ".priority")
 		pattern.CapGroups = &capGroupList{}
 		if config.Exists("patterns." + patternName + ".regexps") {
-			if err := config.Unmarshal("patterns."+patternName+".regexps", &pattern.CapGroups.Groups); err != nil {
+			if err := config.Unmarshal("patterns."+patternName+".regexps", &pattern.CapGroups.groups); err != nil {
 				return nil, err
 			}
 		} else {
-			if err := config.Unmarshal("patterns."+patternName, &pattern.CapGroups.Groups); err != nil {
+			if err := config.Unmarshal("patterns."+patternName, &pattern.CapGroups.groups); err != nil {
 				return nil, err
 			}
 		}
@@ -68,8 +68,8 @@ func collectPatterns(config *koanf.Koanf) (patternList, error) {
 
 func initPattern(p *pattern, config *koanf.Koanf, theme string) error {
 	// set colors and style from the theme
-	for i, cg := range p.CapGroups.Groups {
-		cgReal := &p.CapGroups.Groups[i]
+	for i, cg := range p.CapGroups.groups {
+		cgReal := &p.CapGroups.groups[i]
 		// simple CapGroupLists don't have a name (see "uuid" pattern)
 		// so we need a second level of nesting only for the complex ones (those with "regexps" field)
 		var path string
@@ -81,13 +81,14 @@ func initPattern(p *pattern, config *koanf.Koanf, theme string) error {
 			// if we have a pattern with one regexp then it should get its name
 			cgReal.Name = p.Name
 		}
+
 		if len(cg.Alternatives) > 0 {
 			cgReal.Foreground = config.String(path + ".default.fg")
 			cgReal.Background = config.String(path + ".default.bg")
 			cgReal.Style = config.String(path + ".default.style")
 
 			for j, alt := range cg.Alternatives {
-				altReal := &p.CapGroups.Groups[i].Alternatives[j]
+				altReal := &p.CapGroups.groups[i].Alternatives[j]
 				altReal.Foreground = config.String(path + "." + alt.Name + ".fg")
 				altReal.Background = config.String(path + "." + alt.Name + ".bg")
 				altReal.Style = config.String(path + "." + alt.Name + ".style")
@@ -97,6 +98,8 @@ func initPattern(p *pattern, config *koanf.Koanf, theme string) error {
 			cgReal.Background = config.String(path + ".bg")
 			cgReal.Style = config.String(path + ".style")
 		}
+
+		cgReal.LinkTo = config.String(path + ".link-to")
 	}
 
 	// init capturing groups
@@ -115,7 +118,7 @@ func (patterns patternList) highlight(str string, h Highlighter) string {
 			return part
 		}
 		for _, pattern := range patterns {
-			matches := pattern.CapGroups.FullRegExp.FindStringSubmatchIndex(part)
+			matches := pattern.CapGroups.fullRegExp.FindStringSubmatchIndex(part)
 			if matches != nil {
 				leftPart := patterns.highlight(part[0:matches[0]], h)
 				match := pattern.CapGroups.highlight(part[matches[0]:matches[1]], h)

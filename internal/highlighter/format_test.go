@@ -42,24 +42,25 @@ func TestFormatsNewGood(t *testing.T) {
 	correctFormat := format{
 		"test", &capGroupList{
 			[]capGroup{
-				{"one", `(\d{1,3}(\.\d{1,3}){3} )`, "#f5ce42", "", "", nil, nil},
-				{"two", `([^ ]+ )`, "", "#764a9e", "", nil, nil},
-				{"three", `(\[.+\] )`, "", "", "bold", nil, nil},
-				{"four", `("[^"]+")`, "#9daf99", "#76fb99", "underline", nil, nil},
+				{"one", `(\d{1,3}(\.\d{1,3}){3} )`, "#f5ce42", "", "", "", nil, nil},
+				{"two", `([^ ]+ )`, "", "#764a9e", "", "", nil, nil},
+				{"three", `(\[.+\] )`, "", "", "bold", "", nil, nil},
+				{"four", `("[^"]+")`, "#9daf99", "#76fb99", "underline", "", nil, nil},
 				{
 					"five",
-					`(\d\d\d)`, "", "", "",
+					`(\d\d\d)`, "", "", "", "",
 					[]capGroup{
-						{"1", `(1\d\d)`, "#505050", "", "", nil, regexp.MustCompile(`(1\d\d)`)},
-						{"2", `(2\d\d)`, "#00ff00", "", "overline", nil, regexp.MustCompile(`(2\d\d)`)},
-						{"3", `(3\d\d)`, "#00ffff", "", "crossout", nil, regexp.MustCompile(`(3\d\d)`)},
-						{"4", `(4\d\d)`, "#ff0000", "", "reverse", nil, regexp.MustCompile(`(4\d\d)`)},
-						{"5", `(5\d\d)`, "#ff00ff", "", "", nil, regexp.MustCompile(`(5\d\d)`)},
+						{"1", `(1\d\d)`, "#505050", "", "", "", nil, regexp.MustCompile(`(1\d\d)`)},
+						{"2", `(2\d\d)`, "#00ff00", "", "overline", "", nil, regexp.MustCompile(`(2\d\d)`)},
+						{"3", `(3\d\d)`, "#00ffff", "", "crossout", "", nil, regexp.MustCompile(`(3\d\d)`)},
+						{"4", `(4\d\d)`, "#ff0000", "", "reverse", "", nil, regexp.MustCompile(`(4\d\d)`)},
+						{"5", `(5\d\d)`, "#ff00ff", "", "", "", nil, regexp.MustCompile(`(5\d\d)`)},
 					},
 					nil,
 				},
 			},
 			regexp.MustCompile(`^(?P<capGroup0>(?:\d{1,3}(\.\d{1,3}){3} ))(?P<capGroup1>(?:[^ ]+ ))(?P<capGroup2>(?:\[.+\] ))(?P<capGroup3>(?:"[^"]+"))(?P<capGroup4>(?:\d\d\d))$`),
+			map[string]int{"one": 0, "two": 1, "three": 2, "four": 3, "five": 4},
 		},
 	}
 
