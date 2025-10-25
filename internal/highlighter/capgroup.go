@@ -73,9 +73,7 @@ func (cgl *capGroupList) validateLinkTo() error {
 	// build name to index lookup
 	cgl.index = make(map[string]int)
 	for i, cg := range cgl.groups {
-		if cg.Name != "" {
-			cgl.index[cg.Name] = i
-		}
+		cgl.index[cg.Name] = i
 	}
 
 	for _, cg := range cgl.groups {
@@ -85,12 +83,10 @@ func (cgl *capGroupList) validateLinkTo() error {
 		// cycle detection (A->B->C->A)
 		seen := map[string]bool{}
 		for cg.LinkTo != "" {
-			if cg.Name != "" {
-				if seen[cg.Name] {
-					return fmt.Errorf("[capture group: %s] cyclic link-to detected", cg.Name)
-				}
-				seen[cg.Name] = true
+			if seen[cg.Name] {
+				return fmt.Errorf("[capture group: %s] cyclic link-to detected", cg.Name)
 			}
+			seen[cg.Name] = true
 			idx, ok := cgl.index[cg.LinkTo]
 			if !ok {
 				return fmt.Errorf("[capture group: %s] link-to %q refers to unknown capture group", cg.Name, cg.LinkTo)
