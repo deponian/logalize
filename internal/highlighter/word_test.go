@@ -95,23 +95,23 @@ func TestWordsCheck(t *testing.T) {
 			wordGroup{"testNoErr", []string{"test"}, "#ff0000", "#00ff00", "bold"},
 		},
 		{
-			fmt.Sprintf(`[word group: testForegroundErr] foreground color #ff00xd doesn't match %s pattern`, colorRegexp),
+			fmt.Sprintf(`[word group: testForegroundErr] foreground color #ff00xd doesn't match %s pattern`, colorRegExp),
 			wordGroup{"testForegroundErr", []string{"test"}, "#ff00xd", "", ""},
 		},
 		{
-			fmt.Sprintf(`[word group: testBackgroundErr] background color hello doesn't match %s pattern`, colorRegexp),
+			fmt.Sprintf(`[word group: testBackgroundErr] background color hello doesn't match %s pattern`, colorRegExp),
 			wordGroup{"testBackgroundErr", []string{"test"}, "", "hello", ""},
 		},
 		{
-			fmt.Sprintf(`[word group: testStyleErr1] style words doesn't match %s pattern`, nonRecursiveStyleRegexp),
+			fmt.Sprintf(`[word group: testStyleErr1] style words doesn't match %s pattern`, nonRecursiveStyleRegExp),
 			wordGroup{"testStyleErr1", []string{"test"}, "", "", "words"},
 		},
 		{
-			fmt.Sprintf(`[word group: testStyleErr2] style patterns doesn't match %s pattern`, nonRecursiveStyleRegexp),
+			fmt.Sprintf(`[word group: testStyleErr2] style patterns doesn't match %s pattern`, nonRecursiveStyleRegExp),
 			wordGroup{"testStyleErr2", []string{"test"}, "", "", "patterns"},
 		},
 		{
-			fmt.Sprintf(`[word group: testStyleErr3] style patterns-and-words doesn't match %s pattern`, nonRecursiveStyleRegexp),
+			fmt.Sprintf(`[word group: testStyleErr3] style patterns-and-words doesn't match %s pattern`, nonRecursiveStyleRegExp),
 			wordGroup{"testStyleErr3", []string{"test"}, "", "", "patterns-and-words"},
 		},
 	}
@@ -222,7 +222,7 @@ func TestWordsHighlightNegatedWord(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run("TestWordsHighlightNegatedWord"+tt.plain, func(t *testing.T) {
-			m := negatedWordRegexp.FindStringSubmatchIndex(tt.plain)
+			m := negatedWordRegExp.FindStringSubmatchIndex(tt.plain)
 			colored := words.highlightNegatedWord(tt.plain[m[0]:m[1]], tt.plain[m[2]:m[3]], tt.plain[m[4]:m[5]], hl)
 			if colored != tt.colored {
 				t.Errorf("got %s, want %s", colored, tt.colored)

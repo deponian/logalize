@@ -75,7 +75,7 @@ func (words wordGroups) highlight(str string, h Highlighter) string {
 			return part
 		}
 
-		if m := negatedWordRegexp.FindStringSubmatchIndex(part); m != nil {
+		if m := negatedWordRegExp.FindStringSubmatchIndex(part); m != nil {
 			leftPart := words.highlight(part[0:m[0]], h)
 			match := words.highlightNegatedWord(part[m[0]:m[1]], part[m[2]:m[3]], part[m[4]:m[5]], h)
 			rightPart := words.highlight(part[m[1]:], h)
@@ -83,7 +83,7 @@ func (words wordGroups) highlight(str string, h Highlighter) string {
 			return leftPart + match + rightPart
 		}
 
-		if m := wordRegexp.FindStringIndex(part); m != nil {
+		if m := wordRegExp.FindStringIndex(part); m != nil {
 			leftPart := words.highlight(part[0:m[0]], h)
 			match := words.highlightWord(part[m[0]:m[1]], h)
 			rightPart := words.highlight(part[m[1]:], h)
@@ -161,26 +161,26 @@ func (words wordGroups) highlightNegatedWord(phrase, negator, word string, h Hig
 
 func (wg wordGroup) check() error {
 	// check foreground
-	if !colorRegexp.MatchString(wg.Foreground) {
+	if !colorRegExp.MatchString(wg.Foreground) {
 		return fmt.Errorf(
 			"[word group: %s] foreground color %s doesn't match %s pattern",
-			wg.Name, wg.Foreground, colorRegexp,
+			wg.Name, wg.Foreground, colorRegExp,
 		)
 	}
 
 	// check background
-	if !colorRegexp.MatchString(wg.Background) {
+	if !colorRegExp.MatchString(wg.Background) {
 		return fmt.Errorf(
 			"[word group: %s] background color %s doesn't match %s pattern",
-			wg.Name, wg.Background, colorRegexp,
+			wg.Name, wg.Background, colorRegExp,
 		)
 	}
 
 	// check style
-	if !nonRecursiveStyleRegexp.MatchString(wg.Style) {
+	if !nonRecursiveStyleRegExp.MatchString(wg.Style) {
 		return fmt.Errorf(
 			"[word group: %s] style %s doesn't match %s pattern",
-			wg.Name, wg.Style, nonRecursiveStyleRegexp,
+			wg.Name, wg.Style, nonRecursiveStyleRegExp,
 		)
 	}
 

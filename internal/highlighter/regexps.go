@@ -6,14 +6,14 @@ import (
 
 var (
 	// values from configuration files will be checked using these regular expressions
-	capGroupRegexp          = regexp.MustCompile(`^\(.+\)$`)
-	colorRegexp             = regexp.MustCompile(`^(#[[:xdigit:]]{6}|[[:digit:]]{1,3})?$`)
-	styleRegexp             = regexp.MustCompile(`^(bold|faint|italic|underline|overline|crossout|reverse|words|patterns|patterns-and-words)?$`)
-	nonRecursiveStyleRegexp = regexp.MustCompile(`^(bold|faint|italic|underline|overline|crossout|reverse)?$`)
+	capGroupRegExp          = regexp.MustCompile(`^\(.+\)$`)
+	colorRegExp             = regexp.MustCompile(`^(#[[:xdigit:]]{6}|[[:digit:]]{1,3})?$`)
+	styleRegExp             = regexp.MustCompile(`^(bold|faint|italic|underline|overline|crossout|reverse|words|patterns|patterns-and-words)?$`)
+	nonRecursiveStyleRegExp = regexp.MustCompile(`^(bold|faint|italic|underline|overline|crossout|reverse)?$`)
 
 	// "words" will be deletected using these regular expressions
-	wordRegexp        = regexp.MustCompile(`[A-Za-z]+`)
-	negatedWordRegexp = regexp.MustCompile(`(` +
+	wordRegExp        = regexp.MustCompile(`[A-Za-z]+`)
+	negatedWordRegExp = regexp.MustCompile(`(` +
 		// complex negation
 		// can't be, shouldn't be, etc.
 		`[A-Za-z]+n't be` +
@@ -34,7 +34,7 @@ var (
 	// based on https://github.com/chalk/ansi-regex
 	// with the addition of ":"-separated colors like '\x1B[38:5:185mTEST\e[0m'
 	// match (or try to match) all ANSI escape sequences
-	allANSIEscapeSequencesRegexp = regexp.MustCompile(`` +
+	allANSIEscapeSequencesRegExp = regexp.MustCompile(`` +
 		`[\x1B\x9B]` +
 		`[[\]()#;?]*` +
 		`(?:(?:(?:(?:;[-a-zA-Z\d\\/#&.:=?%@~_]+)*|[a-zA-Z\d]+(?:;[-a-zA-Z\d\\/#&.:=?%@~_]*)*)?(?:\x07|\x1B\x5C|\x9C))` +
@@ -43,7 +43,7 @@ var (
 	)
 
 	// match only Select Graphic Rendition sequences
-	sgrANSIEscapeSequenceRegexp = regexp.MustCompile(`` +
+	sgrANSIEscapeSequenceRegExp = regexp.MustCompile(`` +
 		// CSI (Control Sequence Introducer)
 		`(?:\x1B\[|\x9B)` +
 		// opening sequence (attributes that set color or text style)

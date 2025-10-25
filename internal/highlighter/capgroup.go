@@ -188,7 +188,7 @@ func (cg *capGroup) check() error {
 	if cg.RegExpStr == "" {
 		return fmt.Errorf("[capturing group: %s] empty \"regexp\" field", cg.Name)
 	}
-	if !capGroupRegexp.MatchString(cg.RegExpStr) {
+	if !capGroupRegExp.MatchString(cg.RegExpStr) {
 		return fmt.Errorf(
 			"[capturing group: %s] regexp %s must start with ( and end with )",
 			cg.Name, cg.RegExpStr)
@@ -203,24 +203,24 @@ func (cg *capGroup) check() error {
 	}
 
 	// check foreground
-	if !colorRegexp.MatchString(cg.Foreground) {
+	if !colorRegExp.MatchString(cg.Foreground) {
 		return fmt.Errorf(
 			"[capturing group: %s] foreground color %s doesn't match %s regexp",
-			cg.Name, cg.Foreground, colorRegexp)
+			cg.Name, cg.Foreground, colorRegExp)
 	}
 
 	// check background
-	if !colorRegexp.MatchString(cg.Background) {
+	if !colorRegExp.MatchString(cg.Background) {
 		return fmt.Errorf(
 			"[capturing group: %s] background color %s doesn't match %s regexp",
-			cg.Name, cg.Background, colorRegexp)
+			cg.Name, cg.Background, colorRegExp)
 	}
 
 	// check style
-	if !styleRegexp.MatchString(cg.Style) {
+	if !styleRegExp.MatchString(cg.Style) {
 		return fmt.Errorf(
 			"[capturing group: %s] style %s doesn't match %s regexp",
-			cg.Name, cg.Style, styleRegexp)
+			cg.Name, cg.Style, styleRegExp)
 	}
 
 	// check alternatives

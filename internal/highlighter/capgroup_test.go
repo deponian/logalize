@@ -424,7 +424,7 @@ func TestCapGroupsListCheck(t *testing.T) {
 			},
 		},
 		{
-			fmt.Sprintf(`[capturing group: one] foreground color ff00df doesn't match %s regexp`, colorRegexp),
+			fmt.Sprintf(`[capturing group: one] foreground color ff00df doesn't match %s regexp`, colorRegExp),
 			capGroupList{
 				[]capGroup{
 					{"one", `(\d+)`, "ff00df", "", "", "", []capGroup{}, nil},
@@ -434,7 +434,7 @@ func TestCapGroupsListCheck(t *testing.T) {
 			},
 		},
 		{
-			fmt.Sprintf(`[capturing group: one] background color 7000 doesn't match %s regexp`, colorRegexp),
+			fmt.Sprintf(`[capturing group: one] background color 7000 doesn't match %s regexp`, colorRegExp),
 			capGroupList{
 				[]capGroup{
 					{"one", `(\d+)`, "", "7000", "", "", []capGroup{}, nil},
@@ -444,7 +444,7 @@ func TestCapGroupsListCheck(t *testing.T) {
 			},
 		},
 		{
-			fmt.Sprintf(`[capturing group: one] style NotAStyle doesn't match %s regexp`, styleRegexp),
+			fmt.Sprintf(`[capturing group: one] style NotAStyle doesn't match %s regexp`, styleRegExp),
 			capGroupList{
 				[]capGroup{
 					{"one", `(\d+)`, "", "", "NotAStyle", "", []capGroup{}, nil},
