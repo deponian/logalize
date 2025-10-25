@@ -1,6 +1,6 @@
 module github.com/deponian/logalize
 
-go 1.25.0
+go 1.25.3
 
 require (
 	github.com/aaaton/golem/v4 v4.0.2
