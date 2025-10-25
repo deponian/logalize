@@ -183,6 +183,11 @@ func (cg *capGroup) check() error {
 	if cg.Name == "" {
 		return fmt.Errorf("capturing group can't have empty \"name\" field")
 	}
+	if keywordRegExp.MatchString(cg.Name) {
+		return fmt.Errorf(
+			"[capturing group: %s] capturing group cannot be named \"fg\", \"bg\", \"style\", or \"link-to\"",
+			cg.Name)
+	}
 
 	// check regexp
 	if cg.RegExpStr == "" {

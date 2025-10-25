@@ -10,6 +10,7 @@ var (
 	colorRegExp             = regexp.MustCompile(`^(#[[:xdigit:]]{6}|[[:digit:]]{1,3})?$`)
 	styleRegExp             = regexp.MustCompile(`^(bold|faint|italic|underline|overline|crossout|reverse|words|patterns|patterns-and-words)?$`)
 	nonRecursiveStyleRegExp = regexp.MustCompile(`^(bold|faint|italic|underline|overline|crossout|reverse)?$`)
+	keywordRegExp           = regexp.MustCompile(`^(fg|bg|style|link-to)$`)
 
 	// "words" will be deletected using these regular expressions
 	wordRegExp        = regexp.MustCompile(`[A-Za-z]+`)

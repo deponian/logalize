@@ -384,6 +384,16 @@ func TestCapGroupsListCheck(t *testing.T) {
 			},
 		},
 		{
+			`[capturing group: fg] capturing group cannot be named "fg", "bg", "style", or "link-to"`,
+			capGroupList{
+				[]capGroup{
+					{"fg", `(.*)`, "", "", "", "", []capGroup{}, nil},
+				},
+				nil,
+				nil,
+			},
+		},
+		{
 			`[capturing group: one] regexp () must start with ( and end with )`,
 			capGroupList{
 				[]capGroup{
