@@ -147,13 +147,13 @@ formats:
     # Regexp must begin with an opening parenthesis `(`
     # and it must end with a paired closing parenthesis `)`
     # Regexp can't be empty `()`
-    # That is, your regexp must be within one capture group
+    # That is, your regexp must be within one capturing group
     # and contain a valid regular expression.
     - regexp: (\d\d\d )
-      # Name of the capture group.
+      # Name of the capturing group.
       # It will be used to assign colors and style
       # later in the "themes" section (see below).
-      name: capture-group-name
+      name: capgroup-name
       # Alternatives are useful when you have a general regular expression
       # but want different colors for a specific subset of cases
       # within this regular expression.
@@ -346,7 +346,7 @@ themes:
             style: bold
 
       elysium:
-        capture-group-name:
+        capgroup-name:
           default:
             fg: "#ffffff"
           2xx:
@@ -418,7 +418,7 @@ themes:
       # . . .
 ```
 
-`themes` is the place where you apply colors and style to formats, patterns, and word groups you defined earlier (or to the built-in ones). Every capture group can be colorized using the `fg`, `bg` and `style` fields.
+`themes` is the place where you apply colors and style to formats, patterns, and word groups you defined earlier (or to the built-in ones). Every capturing group can be colorized using the `fg`, `bg` and `style` fields.
 
 `fg` and `bg` are foreground and background colors, respectively. They can be hex values like `#ff0000` or numbers between 0 and 255 for ANSI colors.
 

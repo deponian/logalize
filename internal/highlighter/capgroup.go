@@ -6,7 +6,7 @@ import (
 	"strconv"
 )
 
-// capGroup represents one capture group in a config file
+// capGroup represents one capturing group in a config file
 type capGroup struct {
 	Name         string `koanf:"name"`
 	RegExpStr    string `koanf:"regexp"`
@@ -17,7 +17,7 @@ type capGroup struct {
 	RegExp       *regexp.Regexp `koanf:"-"`
 }
 
-// capGroupList represents a list of capture groups
+// capGroupList represents a list of capturing groups
 // that will be parsed as one big regular expression
 type capGroupList struct {
 	Groups     []capGroup
@@ -35,7 +35,7 @@ func (cgl *capGroupList) init(isFormat bool) error {
 	// build regexp for the whole list
 	var format string
 	for i, cg := range cgl.Groups {
-		// add name for the capture group
+		// add name for the capturing group
 		format += fmt.Sprintf("(?P<capGroup%d>(?:%s))", i, cg.RegExpStr[1:len(cg.RegExpStr)-1])
 	}
 	if isFormat {
@@ -43,7 +43,7 @@ func (cgl *capGroupList) init(isFormat bool) error {
 	}
 	cgl.FullRegExp = regexp.MustCompile(format)
 
-	// build regexps for capture groups' alternatives
+	// build regexps for capturing groups' alternatives
 	for i, cg := range cgl.Groups {
 		if len(cg.Alternatives) > 0 {
 			for j, alt := range cg.Alternatives {
@@ -88,27 +88,27 @@ func (cgl *capGroupList) check() error {
 	return nil
 }
 
-// check checks one capture group's fields match corresponding patterns
+// check checks one capturing group's fields match corresponding patterns
 func (cg *capGroup) check() error {
 	// check name
 	if cg.Name == "" {
-		return fmt.Errorf("capture group can't have empty \"name\" field")
+		return fmt.Errorf("capturing group can't have empty \"name\" field")
 	}
 
 	// check regexp
 	if cg.RegExpStr == "" {
-		return fmt.Errorf("[capture group: %s] empty \"regexp\" field", cg.Name)
+		return fmt.Errorf("[capturing group: %s] empty \"regexp\" field", cg.Name)
 	}
 	if !capGroupRegexp.MatchString(cg.RegExpStr) {
 		return fmt.Errorf(
-			"[capture group: %s] regexp %s must start with ( and end with )",
+			"[capturing group: %s] regexp %s must start with ( and end with )",
 			cg.Name, cg.RegExpStr)
 	}
 	if _, err := regexp.Compile(cg.RegExpStr[1 : len(cg.RegExpStr)-1]); err != nil {
 		return fmt.Errorf(
-			"[capture group: %s] %s\nCheck that the \"regexp\" starts with an opening bracket ( and "+
+			"[capturing group: %s] %s\nCheck that the \"regexp\" starts with an opening bracket ( and "+
 				"ends with a paired closing bracket )\nThat is, your \"regexp\" must be "+
-				"within one large capture group and contain a valid regular expression",
+				"within one large capturing group and contain a valid regular expression",
 			cg.Name,
 			err)
 	}
@@ -116,21 +116,21 @@ func (cg *capGroup) check() error {
 	// check foreground
 	if !colorRegexp.MatchString(cg.Foreground) {
 		return fmt.Errorf(
-			"[capture group: %s] foreground color %s doesn't match %s regexp",
+			"[capturing group: %s] foreground color %s doesn't match %s regexp",
 			cg.Name, cg.Foreground, colorRegexp)
 	}
 
 	// check background
 	if !colorRegexp.MatchString(cg.Background) {
 		return fmt.Errorf(
-			"[capture group: %s] background color %s doesn't match %s regexp",
+			"[capturing group: %s] background color %s doesn't match %s regexp",
 			cg.Name, cg.Background, colorRegexp)
 	}
 
 	// check style
 	if !styleRegexp.MatchString(cg.Style) {
 		return fmt.Errorf(
-			"[capture group: %s] style %s doesn't match %s regexp",
+			"[capturing group: %s] style %s doesn't match %s regexp",
 			cg.Name, cg.Style, styleRegexp)
 	}
 
@@ -138,7 +138,7 @@ func (cg *capGroup) check() error {
 	if len(cg.Alternatives) > 0 {
 		for _, alt := range cg.Alternatives {
 			if err := alt.check(); err != nil {
-				return fmt.Errorf("[capture group: %s] %s", cg.Name, err)
+				return fmt.Errorf("[capturing group: %s] %s", cg.Name, err)
 			}
 		}
 	}

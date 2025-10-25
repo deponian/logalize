@@ -167,7 +167,7 @@ func TestCapGroupsListCheck(t *testing.T) {
 			},
 		},
 		{
-			`capture group can't have empty "name" field`,
+			`capturing group can't have empty "name" field`,
 			capGroupList{
 				[]capGroup{
 					{"", `(.*)`, "", "", "", []capGroup{}, nil},
@@ -176,7 +176,7 @@ func TestCapGroupsListCheck(t *testing.T) {
 			},
 		},
 		{
-			`[capture group: one] regexp () must start with ( and end with )`,
+			`[capturing group: one] regexp () must start with ( and end with )`,
 			capGroupList{
 				[]capGroup{
 					{"one", `()`, "", "", "", []capGroup{}, nil},
@@ -185,7 +185,7 @@ func TestCapGroupsListCheck(t *testing.T) {
 			},
 		},
 		{
-			`[capture group: one] empty "regexp" field`,
+			`[capturing group: one] empty "regexp" field`,
 			capGroupList{
 				[]capGroup{
 					{"one", ``, "", "", "", []capGroup{}, nil},
@@ -194,7 +194,7 @@ func TestCapGroupsListCheck(t *testing.T) {
 			},
 		},
 		{
-			`[capture group: one] regexp ) must start with ( and end with )`,
+			`[capturing group: one] regexp ) must start with ( and end with )`,
 			capGroupList{
 				[]capGroup{
 					{"one", `)`, "", "", "", []capGroup{}, nil},
@@ -203,7 +203,7 @@ func TestCapGroupsListCheck(t *testing.T) {
 			},
 		},
 		{
-			`[capture group: one] regexp (\d\d-\d\d-\d\d must start with ( and end with )`,
+			`[capturing group: one] regexp (\d\d-\d\d-\d\d must start with ( and end with )`,
 			capGroupList{
 				[]capGroup{
 					{"one", `(\d\d-\d\d-\d\d`, "", "", "", []capGroup{}, nil},
@@ -212,7 +212,7 @@ func TestCapGroupsListCheck(t *testing.T) {
 			},
 		},
 		{
-			fmt.Sprintf(`[capture group: one] foreground color ff00df doesn't match %s regexp`, colorRegexp),
+			fmt.Sprintf(`[capturing group: one] foreground color ff00df doesn't match %s regexp`, colorRegexp),
 			capGroupList{
 				[]capGroup{
 					{"one", `(\d+)`, "ff00df", "", "", []capGroup{}, nil},
@@ -221,7 +221,7 @@ func TestCapGroupsListCheck(t *testing.T) {
 			},
 		},
 		{
-			fmt.Sprintf(`[capture group: one] background color 7000 doesn't match %s regexp`, colorRegexp),
+			fmt.Sprintf(`[capturing group: one] background color 7000 doesn't match %s regexp`, colorRegexp),
 			capGroupList{
 				[]capGroup{
 					{"one", `(\d+)`, "", "7000", "", []capGroup{}, nil},
@@ -230,7 +230,7 @@ func TestCapGroupsListCheck(t *testing.T) {
 			},
 		},
 		{
-			fmt.Sprintf(`[capture group: one] style NotAStyle doesn't match %s regexp`, styleRegexp),
+			fmt.Sprintf(`[capturing group: one] style NotAStyle doesn't match %s regexp`, styleRegexp),
 			capGroupList{
 				[]capGroup{
 					{"one", `(\d+)`, "", "", "NotAStyle", []capGroup{}, nil},
@@ -239,7 +239,7 @@ func TestCapGroupsListCheck(t *testing.T) {
 			},
 		},
 		{
-			`[capture group: one] [capture group: alt1] regexp hello must start with ( and end with )`,
+			`[capturing group: one] [capturing group: alt1] regexp hello must start with ( and end with )`,
 			capGroupList{
 				[]capGroup{
 					{"one", `(\d+)`, "", "", "", []capGroup{{"alt1", "hello", "", "", "", nil, nil}}, nil},
@@ -248,7 +248,7 @@ func TestCapGroupsListCheck(t *testing.T) {
 			},
 		},
 		{
-			"[capture group: one] error parsing regexp: unexpected ): `\\d+)(\\d+`\nCheck that the \"regexp\" starts with an opening bracket ( and ends with a paired closing bracket )\nThat is, your \"regexp\" must be within one large capture group and contain a valid regular expression",
+			"[capturing group: one] error parsing regexp: unexpected ): `\\d+)(\\d+`\nCheck that the \"regexp\" starts with an opening bracket ( and ends with a paired closing bracket )\nThat is, your \"regexp\" must be within one large capturing group and contain a valid regular expression",
 			capGroupList{
 				[]capGroup{
 					{"one", `(\d+)(\d+)`, "", "", "", nil, nil},

@@ -99,7 +99,7 @@ func initPattern(p *pattern, config *koanf.Koanf, theme string) error {
 		}
 	}
 
-	// init capture groups
+	// init capturing groups
 	if err := p.CapGroups.init(false); err != nil {
 		return fmt.Errorf("[pattern: %s] %s", p.Name, err)
 	}
