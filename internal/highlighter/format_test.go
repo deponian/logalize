@@ -18,7 +18,7 @@ func compareFormats(format1, format2 format) error {
 	}
 
 	if err := compareCapGroupLists(*format1.CapGroups, *format2.CapGroups); err != nil {
-		return err
+		return fmt.Errorf("[format1: %s, format2: %s] %s", format1.Name, format2.Name, err)
 	}
 
 	return nil
@@ -302,12 +302,12 @@ func TestFormatsBuiltins(t *testing.T) {
 
 	hl, err := NewHighlighter(settings)
 	if err != nil {
-		t.Errorf("NewHighlighter() failed with this error: %s", err)
+		t.Fatalf("NewHighlighter() failed with this error: %s", err)
 	}
 
 	formats, err := newFormats(settings.Config, "test")
 	if err != nil {
-		t.Errorf("newWords() failed with this error: %s", err)
+		t.Fatalf("newWords() failed with this error: %s", err)
 	}
 
 	for _, tt := range tests {

@@ -77,6 +77,9 @@ func initPattern(p *pattern, config *koanf.Koanf, theme string) error {
 			path = "themes." + theme + ".patterns." + p.Name + "." + cg.Name
 		} else {
 			path = "themes." + theme + ".patterns." + p.Name
+
+			// if we have a pattern with one regexp then it should get its name
+			cgReal.Name = p.Name
 		}
 		if len(cg.Alternatives) > 0 {
 			cgReal.Foreground = config.String(path + ".default.fg")

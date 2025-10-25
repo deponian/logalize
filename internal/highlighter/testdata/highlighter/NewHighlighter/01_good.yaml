@@ -15,15 +15,15 @@ formats:
       name: five
       alternatives:
         - regexp: (1\d\d)
-          name: 1
+          name: alt1
         - regexp: (2\d\d)
-          name: 2
+          name: alt2
         - regexp: (3\d\d)
-          name: 3
+          name: alt3
         - regexp: (4\d\d)
-          name: 4
+          name: alt4
         - regexp: (5\d\d)
-          name: 5
+          name: alt5
 
 patterns:
   string:
@@ -68,18 +68,18 @@ themes:
           bg: "#76fb99"
           style: underline
         five:
-          1:
+          alt1:
             fg: "#505050"
-          2:
+          alt2:
             fg: "#00ff00"
             style: overline
-          3:
+          alt3:
             fg: "#00ffff"
             style: crossout
-          4:
+          alt4:
             fg: "#ff0000"
             style: reverse
-          5:
+          alt5:
             fg: "#ff00ff"
 
     patterns:

@@ -38,6 +38,7 @@ func compareCapGroups(group1, group2 capGroup) error {
 		group1.RegExp.String() != group2.RegExp.String() {
 		return fmt.Errorf("first regexp %s != second regexp %s", group1.RegExp.String(), group2.RegExp.String())
 	}
+
 	return nil
 }
 
@@ -49,32 +50,33 @@ func compareCapGroupLists(list1, list2 capGroupList) error {
 
 	for i := range list1.Groups {
 		if err := compareCapGroups(list1.Groups[i], list2.Groups[i]); err != nil {
-			return fmt.Errorf("[capgroup1: %s, capgroup2: %s]: %s", list1.Groups[i].RegExpStr, list2.Groups[i].RegExpStr, err)
+			return fmt.Errorf("[capgroup1: %s, capgroup2: %s]: %s", list1.Groups[i].Name, list2.Groups[i].Name, err)
 		}
 	}
 
 	if list1.FullRegExp.String() != list2.FullRegExp.String() {
 		return fmt.Errorf("first regexp %s != second regexp %s", list1.FullRegExp.String(), list2.FullRegExp.String())
 	}
+
 	return nil
 }
 
 func TestCapGroupsListInit(t *testing.T) {
 	formatCapGroupList := &capGroupList{
 		[]capGroup{
-			{"", `(\d{1,3}(\.\d{1,3}){3} )`, "", "", "", nil, nil},
-			{"", `([^ ]+ )`, "", "", "", nil, nil},
-			{"", `(\[.+\] )`, "", "", "", nil, nil},
-			{"", `("[^"]+")`, "", "", "", nil, nil},
+			{"one", `(\d{1,3}(\.\d{1,3}){3} )`, "", "", "", nil, nil},
+			{"two", `([^ ]+ )`, "", "", "", nil, nil},
+			{"three", `(\[.+\] )`, "", "", "", nil, nil},
+			{"four", `("[^"]+")`, "", "", "", nil, nil},
 			{
-				"",
+				"five",
 				`(\d\d\d)`, "", "", "",
 				[]capGroup{
-					{"", `(1\d\d)`, "", "", "", nil, nil},
-					{"", `(2\d\d)`, "", "", "", nil, nil},
-					{"", `(3\d\d)`, "", "", "", nil, nil},
-					{"", `(4\d\d)`, "", "", "", nil, nil},
-					{"", `(5\d\d)`, "", "", "", nil, nil},
+					{"alt1", `(1\d\d)`, "", "", "", nil, nil},
+					{"alt2", `(2\d\d)`, "", "", "", nil, nil},
+					{"alt3", `(3\d\d)`, "", "", "", nil, nil},
+					{"alt4", `(4\d\d)`, "", "", "", nil, nil},
+					{"alt5", `(5\d\d)`, "", "", "", nil, nil},
 				},
 				nil,
 			},
@@ -84,19 +86,19 @@ func TestCapGroupsListInit(t *testing.T) {
 
 	correctFormatCapGroupList := capGroupList{
 		[]capGroup{
-			{"", `(\d{1,3}(\.\d{1,3}){3} )`, "", "", "", nil, nil},
-			{"", `([^ ]+ )`, "", "", "", nil, nil},
-			{"", `(\[.+\] )`, "", "", "", nil, nil},
-			{"", `("[^"]+")`, "", "", "", nil, nil},
+			{"one", `(\d{1,3}(\.\d{1,3}){3} )`, "", "", "", nil, nil},
+			{"two", `([^ ]+ )`, "", "", "", nil, nil},
+			{"three", `(\[.+\] )`, "", "", "", nil, nil},
+			{"four", `("[^"]+")`, "", "", "", nil, nil},
 			{
-				"",
+				"five",
 				`(\d\d\d)`, "", "", "",
 				[]capGroup{
-					{"", `(1\d\d)`, "", "", "", nil, regexp.MustCompile(`(1\d\d)`)},
-					{"", `(2\d\d)`, "", "", "", nil, regexp.MustCompile(`(2\d\d)`)},
-					{"", `(3\d\d)`, "", "", "", nil, regexp.MustCompile(`(3\d\d)`)},
-					{"", `(4\d\d)`, "", "", "", nil, regexp.MustCompile(`(4\d\d)`)},
-					{"", `(5\d\d)`, "", "", "", nil, regexp.MustCompile(`(5\d\d)`)},
+					{"alt1", `(1\d\d)`, "", "", "", nil, regexp.MustCompile(`(1\d\d)`)},
+					{"alt2", `(2\d\d)`, "", "", "", nil, regexp.MustCompile(`(2\d\d)`)},
+					{"alt3", `(3\d\d)`, "", "", "", nil, regexp.MustCompile(`(3\d\d)`)},
+					{"alt4", `(4\d\d)`, "", "", "", nil, regexp.MustCompile(`(4\d\d)`)},
+					{"alt5", `(5\d\d)`, "", "", "", nil, regexp.MustCompile(`(5\d\d)`)},
 				},
 				nil,
 			},
@@ -106,14 +108,14 @@ func TestCapGroupsListInit(t *testing.T) {
 
 	patternCapGroupList := &capGroupList{
 		[]capGroup{
-			{"", `(\d{1,3}(\.\d{1,3}){3})`, "", "", "", nil, nil},
+			{"one", `(\d{1,3}(\.\d{1,3}){3})`, "", "", "", nil, nil},
 		},
 		nil,
 	}
 
 	correctPatternCapGroupList := capGroupList{
 		[]capGroup{
-			{"", `(\d{1,3}(\.\d{1,3}){3})`, "", "", "", nil, nil},
+			{"one", `(\d{1,3}(\.\d{1,3}){3})`, "", "", "", nil, nil},
 		},
 		regexp.MustCompile(`(?P<capGroup0>(?:\d{1,3}(\.\d{1,3}){3}))`),
 	}
@@ -146,101 +148,110 @@ func TestCapGroupsListCheck(t *testing.T) {
 			"%!s(<nil>)",
 			capGroupList{
 				[]capGroup{
-					{"", `(\d+:)`, "", "", "", []capGroup{}, nil},
-					{"", `(\d+:)`, "", "", "bold", []capGroup{}, nil},
-					{"", `(\d+:)`, "", "#ff00ff", "", []capGroup{}, nil},
-					{"", `(\d+:)`, "", "#ff0000", "underline", []capGroup{}, nil},
-					{"", `(\d+:)`, "#0f0f0f", "", "", []capGroup{}, nil},
-					{"", `(\d+:)`, "#0f0f0f", "", "faint", []capGroup{}, nil},
-					{"", `(\d+:)`, "#0f0f0f", "#ff00ff", "", []capGroup{}, nil},
-					{"", `(\d+:)`, "#0f0f0f", "#ff0000", "italic", []capGroup{}, nil},
-					{"", `(\d+:)`, "#0f0f0f", "1", "overline", []capGroup{}, nil},
-					{"", `(\d+:)`, "37", "#ff0000", "crossout", []capGroup{}, nil},
-					{"", `(\d+:)`, "214", "15", "reverse", []capGroup{}, nil},
-					{"", `(\d+:)`, "#0f0f0f", "#ff0000", "patterns", []capGroup{}, nil},
-					{"", `(\d+:)`, "#0f0f0f", "#ff0000", "words", []capGroup{}, nil},
-					{"", `(\d+:)`, "#0f0f0f", "#ff0000", "patterns-and-words", []capGroup{}, nil},
+					{"1", `(\d+:)`, "", "", "", []capGroup{}, nil},
+					{"2", `(\d+:)`, "", "", "bold", []capGroup{}, nil},
+					{"3", `(\d+:)`, "", "#ff00ff", "", []capGroup{}, nil},
+					{"4", `(\d+:)`, "", "#ff0000", "underline", []capGroup{}, nil},
+					{"5", `(\d+:)`, "#0f0f0f", "", "", []capGroup{}, nil},
+					{"6", `(\d+:)`, "#0f0f0f", "", "faint", []capGroup{}, nil},
+					{"7", `(\d+:)`, "#0f0f0f", "#ff00ff", "", []capGroup{}, nil},
+					{"8", `(\d+:)`, "#0f0f0f", "#ff0000", "italic", []capGroup{}, nil},
+					{"9", `(\d+:)`, "#0f0f0f", "1", "overline", []capGroup{}, nil},
+					{"10", `(\d+:)`, "37", "#ff0000", "crossout", []capGroup{}, nil},
+					{"11", `(\d+:)`, "214", "15", "reverse", []capGroup{}, nil},
+					{"12", `(\d+:)`, "#0f0f0f", "#ff0000", "patterns", []capGroup{}, nil},
+					{"13", `(\d+:)`, "#0f0f0f", "#ff0000", "words", []capGroup{}, nil},
+					{"14", `(\d+:)`, "#0f0f0f", "#ff0000", "patterns-and-words", []capGroup{}, nil},
 				},
 				nil,
 			},
 		},
 		{
-			`[capture group: ()] regexp () must start with ( and end with )`,
+			`capture group can't have empty "name" field`,
 			capGroupList{
 				[]capGroup{
-					{"", `()`, "", "", "", []capGroup{}, nil},
+					{"", `(.*)`, "", "", "", []capGroup{}, nil},
 				},
 				nil,
 			},
 		},
 		{
-			`empty regexps are not allowed`,
+			`[capture group: one] regexp () must start with ( and end with )`,
 			capGroupList{
 				[]capGroup{
-					{"", ``, "", "", "", []capGroup{}, nil},
+					{"one", `()`, "", "", "", []capGroup{}, nil},
 				},
 				nil,
 			},
 		},
 		{
-			`[capture group: )] regexp ) must start with ( and end with )`,
+			`[capture group: one] empty "regexp" field`,
 			capGroupList{
 				[]capGroup{
-					{"", `)`, "", "", "", []capGroup{}, nil},
+					{"one", ``, "", "", "", []capGroup{}, nil},
 				},
 				nil,
 			},
 		},
 		{
-			`[capture group: (\d\d-\d\d-\d\d] regexp (\d\d-\d\d-\d\d must start with ( and end with )`,
+			`[capture group: one] regexp ) must start with ( and end with )`,
 			capGroupList{
 				[]capGroup{
-					{"", `(\d\d-\d\d-\d\d`, "", "", "", []capGroup{}, nil},
+					{"one", `)`, "", "", "", []capGroup{}, nil},
 				},
 				nil,
 			},
 		},
 		{
-			fmt.Sprintf(`[capture group: (\d+)] foreground color ff00df doesn't match %s regexp`, colorRegexp),
+			`[capture group: one] regexp (\d\d-\d\d-\d\d must start with ( and end with )`,
 			capGroupList{
 				[]capGroup{
-					{"", `(\d+)`, "ff00df", "", "", []capGroup{}, nil},
+					{"one", `(\d\d-\d\d-\d\d`, "", "", "", []capGroup{}, nil},
 				},
 				nil,
 			},
 		},
 		{
-			fmt.Sprintf(`[capture group: (\d+)] background color 7000 doesn't match %s regexp`, colorRegexp),
+			fmt.Sprintf(`[capture group: one] foreground color ff00df doesn't match %s regexp`, colorRegexp),
 			capGroupList{
 				[]capGroup{
-					{"", `(\d+)`, "", "7000", "", []capGroup{}, nil},
+					{"one", `(\d+)`, "ff00df", "", "", []capGroup{}, nil},
 				},
 				nil,
 			},
 		},
 		{
-			fmt.Sprintf(`[capture group: (\d+)] style NotAStyle doesn't match %s regexp`, styleRegexp),
+			fmt.Sprintf(`[capture group: one] background color 7000 doesn't match %s regexp`, colorRegexp),
 			capGroupList{
 				[]capGroup{
-					{"", `(\d+)`, "", "", "NotAStyle", []capGroup{}, nil},
+					{"one", `(\d+)`, "", "7000", "", []capGroup{}, nil},
 				},
 				nil,
 			},
 		},
 		{
-			`[capture group: (\d+)] [capture group: hello] regexp hello must start with ( and end with )`,
+			fmt.Sprintf(`[capture group: one] style NotAStyle doesn't match %s regexp`, styleRegexp),
 			capGroupList{
 				[]capGroup{
-					{"", `(\d+)`, "", "", "", []capGroup{{"", "hello", "", "", "", nil, nil}}, nil},
+					{"one", `(\d+)`, "", "", "NotAStyle", []capGroup{}, nil},
 				},
 				nil,
 			},
 		},
 		{
-			"error parsing regexp: unexpected ): `\\d+)(\\d+`\nCheck that the \"regexp\" starts with an opening bracket ( and ends with a paired closing bracket )\nThat is, your \"regexp\" must be within one large capture group and contain a valid regular expression",
+			`[capture group: one] [capture group: alt1] regexp hello must start with ( and end with )`,
 			capGroupList{
 				[]capGroup{
-					{"", `(\d+)(\d+)`, "", "", "", nil, nil},
+					{"one", `(\d+)`, "", "", "", []capGroup{{"alt1", "hello", "", "", "", nil, nil}}, nil},
+				},
+				nil,
+			},
+		},
+		{
+			"[capture group: one] error parsing regexp: unexpected ): `\\d+)(\\d+`\nCheck that the \"regexp\" starts with an opening bracket ( and ends with a paired closing bracket )\nThat is, your \"regexp\" must be within one large capture group and contain a valid regular expression",
+			capGroupList{
+				[]capGroup{
+					{"one", `(\d+)(\d+)`, "", "", "", nil, nil},
 				},
 				nil,
 			},

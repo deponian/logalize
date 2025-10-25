@@ -90,20 +90,26 @@ func (cgl *capGroupList) check() error {
 
 // check checks one capture group's fields match corresponding patterns
 func (cg *capGroup) check() error {
+	// check name
+	if cg.Name == "" {
+		return fmt.Errorf("capture group can't have empty \"name\" field")
+	}
+
 	// check regexp
 	if cg.RegExpStr == "" {
-		return fmt.Errorf("empty regexps are not allowed")
+		return fmt.Errorf("[capture group: %s] empty \"regexp\" field", cg.Name)
 	}
 	if !capGroupRegexp.MatchString(cg.RegExpStr) {
 		return fmt.Errorf(
 			"[capture group: %s] regexp %s must start with ( and end with )",
-			cg.RegExpStr, cg.RegExpStr)
+			cg.Name, cg.RegExpStr)
 	}
 	if _, err := regexp.Compile(cg.RegExpStr[1 : len(cg.RegExpStr)-1]); err != nil {
 		return fmt.Errorf(
-			"%s\nCheck that the \"regexp\" starts with an opening bracket ( and "+
+			"[capture group: %s] %s\nCheck that the \"regexp\" starts with an opening bracket ( and "+
 				"ends with a paired closing bracket )\nThat is, your \"regexp\" must be "+
 				"within one large capture group and contain a valid regular expression",
+			cg.Name,
 			err)
 	}
 
@@ -111,28 +117,28 @@ func (cg *capGroup) check() error {
 	if !colorRegexp.MatchString(cg.Foreground) {
 		return fmt.Errorf(
 			"[capture group: %s] foreground color %s doesn't match %s regexp",
-			cg.RegExpStr, cg.Foreground, colorRegexp)
+			cg.Name, cg.Foreground, colorRegexp)
 	}
 
 	// check background
 	if !colorRegexp.MatchString(cg.Background) {
 		return fmt.Errorf(
 			"[capture group: %s] background color %s doesn't match %s regexp",
-			cg.RegExpStr, cg.Background, colorRegexp)
+			cg.Name, cg.Background, colorRegexp)
 	}
 
 	// check style
 	if !styleRegexp.MatchString(cg.Style) {
 		return fmt.Errorf(
 			"[capture group: %s] style %s doesn't match %s regexp",
-			cg.RegExpStr, cg.Style, styleRegexp)
+			cg.Name, cg.Style, styleRegexp)
 	}
 
 	// check alternatives
 	if len(cg.Alternatives) > 0 {
 		for _, alt := range cg.Alternatives {
 			if err := alt.check(); err != nil {
-				return fmt.Errorf("[capture group: %s] %s", cg.RegExpStr, err)
+				return fmt.Errorf("[capture group: %s] %s", cg.Name, err)
 			}
 		}
 	}

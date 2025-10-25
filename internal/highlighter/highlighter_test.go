@@ -42,11 +42,11 @@ func TestHighlighterNewGood(t *testing.T) {
 						"five",
 						`(\d\d\d)`, "", "", "",
 						[]capGroup{
-							{"1", `(1\d\d)`, "#505050", "", "", nil, regexp.MustCompile(`(1\d\d)`)},
-							{"2", `(2\d\d)`, "#00ff00", "", "overline", nil, regexp.MustCompile(`(2\d\d)`)},
-							{"3", `(3\d\d)`, "#00ffff", "", "crossout", nil, regexp.MustCompile(`(3\d\d)`)},
-							{"4", `(4\d\d)`, "#ff0000", "", "reverse", nil, regexp.MustCompile(`(4\d\d)`)},
-							{"5", `(5\d\d)`, "#ff00ff", "", "", nil, regexp.MustCompile(`(5\d\d)`)},
+							{"alt1", `(1\d\d)`, "#505050", "", "", nil, regexp.MustCompile(`(1\d\d)`)},
+							{"alt2", `(2\d\d)`, "#00ff00", "", "overline", nil, regexp.MustCompile(`(2\d\d)`)},
+							{"alt3", `(3\d\d)`, "#00ffff", "", "crossout", nil, regexp.MustCompile(`(3\d\d)`)},
+							{"alt4", `(4\d\d)`, "#ff0000", "", "reverse", nil, regexp.MustCompile(`(4\d\d)`)},
+							{"alt5", `(5\d\d)`, "#ff00ff", "", "", nil, regexp.MustCompile(`(5\d\d)`)},
 						},
 						nil,
 					},
@@ -60,7 +60,7 @@ func TestHighlighterNewGood(t *testing.T) {
 		{"string", 500, &capGroupList{
 			[]capGroup{
 				{
-					"", `("[^"]+"|'[^']+')`, "#00ff00", "", "", nil, nil,
+					"string", `("[^"]+"|'[^']+')`, "#00ff00", "", "", nil, nil,
 				},
 			},
 			regexp.MustCompile(`(?P<capGroup0>(?:"[^"]+"|'[^']+'))`),
@@ -79,7 +79,7 @@ func TestHighlighterNewGood(t *testing.T) {
 		{"number", 0, &capGroupList{
 			[]capGroup{
 				{
-					"", `(\d+)`, "", "#00ffff", "bold", nil, nil,
+					"number", `(\d+)`, "", "#00ffff", "bold", nil, nil,
 				},
 			},
 			regexp.MustCompile(`(?P<capGroup0>(?:\d+))`),
@@ -191,11 +191,11 @@ func TestHighlighterNewHighlightOnlyFormats(t *testing.T) {
 						"five",
 						`(\d\d\d)`, "", "", "",
 						[]capGroup{
-							{"1", `(1\d\d)`, "#505050", "", "", nil, regexp.MustCompile(`(1\d\d)`)},
-							{"2", `(2\d\d)`, "#00ff00", "", "overline", nil, regexp.MustCompile(`(2\d\d)`)},
-							{"3", `(3\d\d)`, "#00ffff", "", "crossout", nil, regexp.MustCompile(`(3\d\d)`)},
-							{"4", `(4\d\d)`, "#ff0000", "", "reverse", nil, regexp.MustCompile(`(4\d\d)`)},
-							{"5", `(5\d\d)`, "#ff00ff", "", "", nil, regexp.MustCompile(`(5\d\d)`)},
+							{"alt1", `(1\d\d)`, "#505050", "", "", nil, regexp.MustCompile(`(1\d\d)`)},
+							{"alt2", `(2\d\d)`, "#00ff00", "", "overline", nil, regexp.MustCompile(`(2\d\d)`)},
+							{"alt3", `(3\d\d)`, "#00ffff", "", "crossout", nil, regexp.MustCompile(`(3\d\d)`)},
+							{"alt4", `(4\d\d)`, "#ff0000", "", "reverse", nil, regexp.MustCompile(`(4\d\d)`)},
+							{"alt5", `(5\d\d)`, "#ff00ff", "", "", nil, regexp.MustCompile(`(5\d\d)`)},
 						},
 						nil,
 					},
@@ -244,7 +244,7 @@ func TestHighlighterNewHighlightOnlyPatterns(t *testing.T) {
 		{"string", 500, &capGroupList{
 			[]capGroup{
 				{
-					"", `("[^"]+"|'[^']+')`, "#00ff00", "", "", nil, nil,
+					"string", `("[^"]+"|'[^']+')`, "#00ff00", "", "", nil, nil,
 				},
 			},
 			regexp.MustCompile(`(?P<capGroup0>(?:"[^"]+"|'[^']+'))`),
@@ -263,7 +263,7 @@ func TestHighlighterNewHighlightOnlyPatterns(t *testing.T) {
 		{"number", 0, &capGroupList{
 			[]capGroup{
 				{
-					"", `(\d+)`, "", "#00ffff", "bold", nil, nil,
+					"number", `(\d+)`, "", "#00ffff", "bold", nil, nil,
 				},
 			},
 			regexp.MustCompile(`(?P<capGroup0>(?:\d+))`),

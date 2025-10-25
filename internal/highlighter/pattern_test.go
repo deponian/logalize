@@ -22,7 +22,7 @@ func comparePatterns(pattern1, pattern2 pattern) error {
 	}
 
 	if err := compareCapGroupLists(*pattern1.CapGroups, *pattern2.CapGroups); err != nil {
-		return err
+		return fmt.Errorf("[pattern1: %s, pattern2: %s] %s", pattern1.Name, pattern2.Name, err)
 	}
 
 	return nil
@@ -47,7 +47,7 @@ func TestPatternsNewGood(t *testing.T) {
 		{"string", 500, &capGroupList{
 			[]capGroup{
 				{
-					"", `("[^"]+"|'[^']+')`, "#00ff00", "", "", nil, nil,
+					"string", `("[^"]+"|'[^']+')`, "#00ff00", "", "", nil, nil,
 				},
 			},
 			regexp.MustCompile(`(?P<capGroup0>(?:"[^"]+"|'[^']+'))`),
@@ -66,7 +66,7 @@ func TestPatternsNewGood(t *testing.T) {
 		{"number", 0, &capGroupList{
 			[]capGroup{
 				{
-					"", `(\d+)`, "", "#00ffff", "bold", nil, nil,
+					"number", `(\d+)`, "", "#00ffff", "bold", nil, nil,
 				},
 			},
 			regexp.MustCompile(`(?P<capGroup0>(?:\d+))`),
@@ -476,12 +476,12 @@ func TestPatternsBuiltins(t *testing.T) {
 
 	hl, err := NewHighlighter(settings)
 	if err != nil {
-		t.Errorf("NewHighlighter() failed with this error: %s", err)
+		t.Fatalf("NewHighlighter() failed with this error: %s", err)
 	}
 
 	patterns, err := newPatterns(settings.Config, "test")
 	if err != nil {
-		t.Errorf("newWords() failed with this error: %s", err)
+		t.Fatalf("newWords() failed with this error: %s", err)
 	}
 
 	for _, tt := range tests {

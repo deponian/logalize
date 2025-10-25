@@ -68,7 +68,9 @@ patterns:
   duration:
     priority: -5
     regexps:
+      # separate the duration from the previous word-ish thing
       - regexp: (^|[^a-zA-Z0-9])
+        name: start
       # 7.5
       - regexp: (\d+(?:\.\d+)?)
         name: number
