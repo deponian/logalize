@@ -82,24 +82,19 @@ func initPattern(p *pattern, config *koanf.Koanf, theme string) error {
 			cgReal.Name = p.Name
 		}
 
-		if len(cg.Alternatives) > 0 {
-			cgReal.Foreground = config.String(path + ".default.fg")
-			cgReal.Background = config.String(path + ".default.bg")
-			cgReal.Style = config.String(path + ".default.style")
+		cgReal.Foreground = config.String(path + ".fg")
+		cgReal.Background = config.String(path + ".bg")
+		cgReal.Style = config.String(path + ".style")
+		cgReal.LinkTo = config.String(path + ".link-to")
 
+		if len(cg.Alternatives) > 0 {
 			for j, alt := range cg.Alternatives {
 				altReal := &p.CapGroups.groups[i].Alternatives[j]
 				altReal.Foreground = config.String(path + "." + alt.Name + ".fg")
 				altReal.Background = config.String(path + "." + alt.Name + ".bg")
 				altReal.Style = config.String(path + "." + alt.Name + ".style")
 			}
-		} else {
-			cgReal.Foreground = config.String(path + ".fg")
-			cgReal.Background = config.String(path + ".bg")
-			cgReal.Style = config.String(path + ".style")
 		}
-
-		cgReal.LinkTo = config.String(path + ".link-to")
 	}
 
 	// init capturing groups

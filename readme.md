@@ -312,8 +312,9 @@ Configuration example:
 themes:
   # Name of a theme
   utopia:
-    # The default color is used for anything that does not fall into a format, pattern, or word.
-    # If you don't specify a default color, the normal color of your terminal will be used.
+    # The default color is used for anything that does not fall into
+    # a format, pattern, or word. If you don't specify a default color,
+    # the normal color of your terminal will be used.
     #default:
     #  fg: "#ff0000"
     #  bg: "#00ff00"
@@ -330,8 +331,12 @@ themes:
           fg: "#9ddb56"
           bg: "#f5ce42"
         http-status-code:
-          default:
-            fg: "#ffffff"
+          # default colors and style if none of the alternatives are matched
+          fg: "#ffffff"
+          bg: "#f5ce42"
+          style: bold
+
+          # alternatives
           2xx:
             fg: "#00ff00"
             style: bold
@@ -347,8 +352,7 @@ themes:
 
       elysium:
         capgroup-name:
-          default:
-            fg: "#ffffff"
+          fg: "#ffffff"
           2xx:
             fg: "#00ff00"
             style: bold
@@ -371,8 +375,7 @@ themes:
         style: bold
 
       http-status-code:
-        default:
-          fg: "#ffffff"
+        fg: "#ffffff"
         2xx:
           fg: "#00ff00"
         3xx:

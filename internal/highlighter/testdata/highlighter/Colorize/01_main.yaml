@@ -144,8 +144,7 @@ themes:
         two:
           link-to: one
         three:
-          default:
-            fg: "#ffffff"
+          fg: "#ffffff"
           1xx:
             fg: "#505050"
           2xx:
@@ -170,8 +169,7 @@ themes:
         bg: "#005050"
 
       http-status-code:
-        default:
-          fg: "#ffffff"
+        fg: "#ffffff"
         1xx:
           fg: "#505050"
         2xx:
@@ -250,8 +248,7 @@ themes:
         two:
           link-to: one
         three:
-          default:
-            fg: "#ffffff"
+          fg: "#ffffff"
           1xx:
             fg: "#505050"
           2xx:
@@ -276,8 +273,7 @@ themes:
         bg: "#005050"
 
       http-status-code:
-        default:
-          fg: "#ffffff"
+        fg: "#ffffff"
         1xx:
           fg: "#505050"
         2xx:

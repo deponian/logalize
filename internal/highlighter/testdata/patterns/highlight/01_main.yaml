@@ -45,8 +45,7 @@ themes:
 
       http-status:
         code:
-          default:
-            fg: "#ffffff"
+          fg: "#ffffff"
           1xx:
             fg: "#505050"
           2xx:

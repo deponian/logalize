@@ -928,7 +928,7 @@ func TestHighlighterColorize(t *testing.T) {
 			colored := hl.Colorize(tt.plain)
 
 			if colored != tt.coloredNormal {
-				t.Errorf("got %q, want %q", colored, tt.coloredNormal)
+				t.Errorf("got %v, want %v", colored, tt.coloredNormal)
 			}
 		})
 	}

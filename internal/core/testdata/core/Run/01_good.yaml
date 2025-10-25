@@ -134,8 +134,7 @@ themes:
         bg: "#005050"
 
       http-status-code:
-        default:
-          fg: "#ffffff"
+        fg: "#ffffff"
         1xx:
           fg: "#505050"
         2xx:

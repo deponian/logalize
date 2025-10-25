@@ -142,8 +142,7 @@
 #         fg: "#ffc777"
 #
 #       http-status:
-#         default:
-#           fg: "#ffffff"
+#         fg: "#ffffff"
 #         2xx:
 #           fg: "#00ff00"
 #         3xx:
@@ -157,8 +156,7 @@
 #         code:
 #           fg: "#ffffff"
 #         status:
-#           default:
-#             fg: "#ffffff"
+#           fg: "#ffffff"
 #           2xx:
 #             fg: "#00ff00"
 #           3xx:
