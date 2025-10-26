@@ -82,12 +82,12 @@ func (cgl *capGroupList) validateLinkTo() error {
 		seen := map[string]bool{}
 		for cg.LinkTo != "" {
 			if seen[cg.Name] {
-				return fmt.Errorf("[capture group: %s] cyclic link-to detected", cg.Name)
+				return fmt.Errorf("[capturing group: %s] cyclic link-to detected", cg.Name)
 			}
 			seen[cg.Name] = true
 			idx, ok := cgl.index[cg.LinkTo]
 			if !ok {
-				return fmt.Errorf("[capture group: %s] link-to %q refers to unknown capture group", cg.Name, cg.LinkTo)
+				return fmt.Errorf("[capturing group: %s] link-to %q refers to unknown capturing group", cg.Name, cg.LinkTo)
 			}
 			cg = cgl.groups[idx]
 		}
@@ -166,6 +166,15 @@ func (cgl *capGroupList) validate() error {
 		if err := cg.validate(); err != nil {
 			return err
 		}
+	}
+
+	// check that capgroup names are unique
+	seen := make(map[string]bool, len(cgl.groups))
+	for _, cg := range cgl.groups {
+		if seen[cg.Name] {
+			return fmt.Errorf("[capturing group: %s] capturing group names must be unique", cg.Name)
+		}
+		seen[cg.Name] = true
 	}
 
 	return nil

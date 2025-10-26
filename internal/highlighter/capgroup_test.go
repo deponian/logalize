@@ -160,7 +160,7 @@ func TestCapGroupsListInitBad(t *testing.T) {
 		cgl capGroupList
 	}{
 		{
-			`[capture group: one] link-to "hello" refers to unknown capture group`,
+			`[capturing group: one] link-to "hello" refers to unknown capturing group`,
 			capGroupList{
 				[]capGroup{
 					{"one", `(\d+:)`, "", "", "", "hello", []capGroup{}, nil},
@@ -188,7 +188,7 @@ func TestCapGroupsValidateLinkTo(t *testing.T) {
 		cgl capGroupList
 	}{
 		{
-			`[capture group: one] link-to "hello" refers to unknown capture group`,
+			`[capturing group: one] link-to "hello" refers to unknown capturing group`,
 			capGroupList{
 				[]capGroup{
 					{"one", `(\d+:)`, "", "", "", "hello", []capGroup{}, nil},
@@ -200,7 +200,7 @@ func TestCapGroupsValidateLinkTo(t *testing.T) {
 			},
 		},
 		{
-			`[capture group: one] cyclic link-to detected`,
+			`[capturing group: one] cyclic link-to detected`,
 			capGroupList{
 				[]capGroup{
 					{"one", `(\d+:)`, "", "", "", "two", []capGroup{}, nil},
@@ -211,7 +211,7 @@ func TestCapGroupsValidateLinkTo(t *testing.T) {
 			},
 		},
 		{
-			`[capture group: one] cyclic link-to detected`,
+			`[capturing group: one] cyclic link-to detected`,
 			capGroupList{
 				[]capGroup{
 					{"one", `(\d+:)`, "", "", "", "two", []capGroup{}, nil},
@@ -388,6 +388,18 @@ func TestCapGroupsListCheck(t *testing.T) {
 			capGroupList{
 				[]capGroup{
 					{"fg", `(.*)`, "", "", "", "", []capGroup{}, nil},
+				},
+				nil,
+				nil,
+			},
+		},
+		{
+			`[capturing group: one] capturing group names must be unique`,
+			capGroupList{
+				[]capGroup{
+					{"one", `(.*)`, "", "", "", "", []capGroup{}, nil},
+					{"two", `(.*)`, "", "", "", "", []capGroup{}, nil},
+					{"one", `(.*)`, "", "", "", "", []capGroup{}, nil},
 				},
 				nil,
 				nil,
