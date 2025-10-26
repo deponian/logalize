@@ -48,7 +48,7 @@ func newWords(config *koanf.Koanf, theme string) (wordGroups, error) {
 			return wordGroups{}, err
 		}
 
-		if err := wordGroup.check(); err != nil {
+		if err := wordGroup.validate(); err != nil {
 			return wordGroups{}, err
 		}
 
@@ -159,7 +159,7 @@ func (words wordGroups) highlightNegatedWord(phrase, negator, word string, h Hig
 	return phrase
 }
 
-func (wg wordGroup) check() error {
+func (wg wordGroup) validate() error {
 	// check foreground
 	if !colorRegExp.MatchString(wg.Foreground) {
 		return fmt.Errorf(

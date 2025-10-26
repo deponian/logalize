@@ -118,7 +118,7 @@ func TestWordsCheck(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run("TestWordsCheck"+tt.wg.Name, func(t *testing.T) {
-			if err := fmt.Sprintf("%s", tt.wg.check()); err != tt.err {
+			if err := fmt.Sprintf("%s", tt.wg.validate()); err != tt.err {
 				t.Errorf("got %s, want %s", err, tt.err)
 			}
 		})

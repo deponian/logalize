@@ -488,7 +488,7 @@ func TestCapGroupsListCheck(t *testing.T) {
 	for _, tt := range tests {
 		testname := tt.cgl.groups[0].RegExpStr
 		t.Run(testname, func(t *testing.T) {
-			if err := fmt.Sprintf("%s", tt.cgl.check()); err != tt.err {
+			if err := fmt.Sprintf("%s", tt.cgl.validate()); err != tt.err {
 				t.Errorf("got %s, want %s", err, tt.err)
 			}
 		})

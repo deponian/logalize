@@ -34,11 +34,9 @@ type capGroupList struct {
 }
 
 func (cgl *capGroupList) init(isFormat bool) error {
-	for _, group := range cgl.groups {
-		// check that all regexps are valid regular expressions
-		if err := group.check(); err != nil {
-			return err
-		}
+	// check that all regexps are valid regular expressions
+	if err := cgl.validate(); err != nil {
+		return err
 	}
 
 	// build regexp for the whole list
@@ -163,9 +161,9 @@ func (cgl *capGroupList) linkedStyle(matches []string, cg capGroup) (fg, bg, sty
 	}
 }
 
-func (cgl *capGroupList) check() error {
+func (cgl *capGroupList) validate() error {
 	for _, cg := range cgl.groups {
-		if err := cg.check(); err != nil {
+		if err := cg.validate(); err != nil {
 			return err
 		}
 	}
@@ -173,8 +171,8 @@ func (cgl *capGroupList) check() error {
 	return nil
 }
 
-// check checks one capturing group's fields match corresponding patterns
-func (cg *capGroup) check() error {
+// validate checks one capturing group's fields match corresponding patterns
+func (cg *capGroup) validate() error {
 	// check name
 	if cg.Name == "" {
 		return fmt.Errorf("capturing group can't have empty \"name\" field")
@@ -227,7 +225,7 @@ func (cg *capGroup) check() error {
 	// check alternatives
 	if len(cg.Alternatives) > 0 {
 		for _, alt := range cg.Alternatives {
-			if err := alt.check(); err != nil {
+			if err := alt.validate(); err != nil {
 				return fmt.Errorf("[capturing group: %s] %s", cg.Name, err)
 			}
 		}
