@@ -1,0 +1,387 @@
+# Source: https://github.com/folke/tokyonight.nvim
+themes:
+  tokyonight-light:
+    # default color is used for anything that is not fall into a format, pattern or word
+    # if you don't specify a default color, the normal color of your terminal will be used
+    #default:
+    #  fg: "#ff0000"
+    #  bg: "#00ff00"
+    #  style: "bold"
+
+    formats:
+      # INFO:
+      # Nginx predefined "combined" format
+      #
+      # SOURCE:
+      # https://nginx.org/en/docs/http/ngx_http_log_module.html
+      #
+      # SCHEME:
+      # $remote_addr - $remote_user [$time_local] "$request" $status $body_bytes_sent "$http_referer" "$http_user_agent"
+      nginx-combined:
+        remote-addr:
+          fg: "#8c6c3e"
+        dash:
+          fg: "#6c75a0"
+        remote-user:
+          fg: "#007a6e"
+        time-local:
+          fg: "#7847bd"
+        request:
+          fg: "#587539"
+        status:
+          1xx:
+            fg: "#0044cc"
+            style: bold
+          2xx:
+            fg: "#1a8f00"
+            style: bold
+          3xx:
+            fg: "#007a8a"
+            style: bold
+          4xx:
+            fg: "#c40000"
+            style: bold
+          5xx:
+            fg: "#9b00b3"
+            style: bold
+        body-bytes-sent:
+          fg: "#6172b0"
+        http-referer:
+          fg: "#d23d94"
+        http-user-agent:
+          fg: "#2e7de9"
+
+      # INFO:
+      # Ingress Nginx default format
+      #
+      # SOURCE:
+      # https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/log-format/
+      #
+      # SCHEME:
+      # $remote_addr - $remote_user [$time_local] "$request" $status $body_bytes_sent "$http_referer" "$http_user_agent" $request_length $request_time [$proxy_upstream_name] [$proxy_alternative_upstream_name] $upstream_addr $upstream_response_length $upstream_response_time $upstream_status $req_id
+      nginx-ingress-controller:
+        remote-addr:
+          fg: "#8c6c3e"
+        dash:
+          fg: "#6c75a0"
+        remote-user:
+          fg: "#007a6e"
+        time-local:
+          fg: "#7847bd"
+        request:
+          fg: "#587539"
+        status:
+          1xx:
+            fg: "#0044cc"
+            style: bold
+          2xx:
+            fg: "#1a8f00"
+            style: bold
+          3xx:
+            fg: "#007a8a"
+            style: bold
+          4xx:
+            fg: "#c40000"
+            style: bold
+          5xx:
+            fg: "#9b00b3"
+            style: bold
+        body-bytes-sent:
+          fg: "#6172b0"
+        http-referer:
+          fg: "#d23d94"
+        http-user-agent:
+          fg: "#2e7de9"
+        request-length:
+          fg: "#007197"
+        request-time:
+          fg: "#587539"
+        proxy-upstream-name:
+          fg: "#1476c4"
+        proxy-alternative-upstream-name:
+          fg: "#6172b0"
+        upstream-addr:
+          fg: "#8c6c3e"
+        upstream-response-length:
+          fg: "#7847bd"
+        upstream-response-time:
+          fg: "#007a8a"
+        upstream-status:
+          1xx:
+            fg: "#0044cc"
+            style: bold
+          2xx:
+            fg: "#1a8f00"
+            style: bold
+          3xx:
+            fg: "#007a8a"
+            style: bold
+          4xx:
+            fg: "#c40000"
+            style: bold
+          5xx:
+            fg: "#9b00b3"
+            style: bold
+        req-id:
+          fg: "#6172b0"
+
+      # INFO:
+      # klog format, useful for things like Cert Manager, Cluster Autoscaler and other Kubernetes-related logs
+      #
+      # SOURCE:
+      # https://github.com/kubernetes/klog/blob/9ad246211af1ed84621ee94a26fcce0038b69cd1/klog.go#L581-L597
+      #
+      # SCHEME:
+      # Lmmdd hh:mm:ss.uuuuuu threadid file:line] msg...
+      #
+      # where the fields are defined as follows:
+      # 	L                A single character, representing the log level (eg 'I' for INFO)
+      # 	mm               The month (zero padded; ie May is '05')
+      # 	dd               The day (zero padded)
+      # 	hh:mm:ss.uuuuuu  Time in hours, minutes and fractional seconds
+      # 	threadid         The space-padded thread ID as returned by GetTID()
+      # 	file             The file name
+      # 	line             The line number
+      # 	msg              The user-supplied message
+      klog:
+        log-level:
+          info:
+            fg: "#2e7de9"
+            style: bold
+          warning:
+            fg: "#b15c00"
+            style: bold
+          error:
+            fg: "#f52a65"
+            style: bold
+          fatal:
+            fg: "#c4243b"
+            style: bold
+        time:
+          fg: "#d23d94"
+        thread-id:
+          fg: "#6172b0"
+        filename:
+          fg: "#007197"
+        line-number:
+          fg: "#6172b0"
+        bracket:
+          fg: "#b85c2e"
+        message:
+          style: "patterns-and-words"
+
+      # INFO:
+      # Redis default log format
+      #
+      # SOURCE:
+      # https://github.com/redis/redis/issues/12918#issuecomment-1880735488
+      # https://github.com/redis/redis/issues/2545#issuecomment-97270522
+      #
+      # SCHEME:
+      # PID:ROLE day month year hh:mm:ss.uuu log-level-char msg
+      redis:
+        pid:
+          fg: "#3d6dcf"
+        colon:
+          fg: "#6172b0"
+        role:
+          master:
+            fg: "#f52a65"
+            style: bold
+          replica:
+            fg: "#2e7de9"
+            style: bold
+          sentinel:
+            fg: "#b15c00"
+            style: bold
+          rdb-aof-writing-child:
+            fg: "#4d7a2e"
+            style: bold
+        date:
+          fg: "#7847bd"
+        time:
+          fg: "#d23d94"
+        log-level:
+          warning:
+            fg: "#b15c00"
+            style: bold
+          notice:
+            fg: "#007197"
+            style: bold
+          info:
+            fg: "#2e7de9"
+            style: bold
+          debug:
+            fg: "#4d7a2e"
+            style: bold
+        message:
+          style: "patterns-and-words"
+
+      # INFO:
+      # Syslog (RFC 3164)
+      #
+      # SOURCE:
+      # https://www.rfc-editor.org/rfc/rfc3164.html
+      #
+      # SCHEME:
+      # <priority>Mmm dd hh:mm:ss hostname program[pid]: message
+      syslog-rfc3164:
+        priority:
+          fg: "#007197"
+        date:
+          fg: "#7847bd"
+        time:
+          fg: "#d23d94"
+        hostname:
+          fg: "#007197"
+        program:
+          fg: "#2e7de9"
+        pid:
+          fg: "#8c6c3e"
+        colon:
+          fg: "#6172b0"
+        message:
+          style: "patterns-and-words"
+
+    patterns:
+      # 2024-02-17T06:56:10Z
+      # 2024-02-17T06:56:10.636960544Z
+      # 2024-02-17T06:56:10.636960544+01:00
+      rfc3339:
+        # 2024-02-17
+        date:
+          fg: "#7847bd"
+        # T
+        t-delimiter:
+          fg: "#2e7de9"
+        # 06:56:10.636960544
+        time:
+          fg: "#d23d94"
+        # Z
+        # +01:00
+        offset:
+          fg: "#2e7de9"
+
+      # 23:42:12
+      # 23:42:12.034123
+      time:
+        fg: "#d23d94"
+
+      # 1999-07-10
+      # 1999/07/10
+      # 07-10-1999
+      # 07/10/1999
+      date-1:
+        fg: "#7847bd"
+
+      # 27 Jan
+      # 27 January
+      # 27 Jan 2023
+      # 27 August 2023
+      # 27-Jan-2023
+      # 27-August-2023
+      # 27/Jan/2023
+      # 27/August/2023
+      date-2:
+        fg: "#7847bd"
+
+      # Jan 27
+      # January 27
+      # Jan 27 2023
+      # August 27 2023
+      # Jan-27-2023
+      # August-27-2023
+      # Jan/27/2023
+      # August/27/2023
+      date-3:
+        fg: "#7847bd"
+
+      # Mon 17
+      # Sunday 3
+      date-4:
+        fg: "#7847bd"
+
+      # 5s
+      # 7.5h
+      # 75.984854ms
+      duration:
+        # 7.5
+        number:
+          fg: "#007a6e"
+        # h
+        unit:
+          fg: "#007197"
+
+      # xxxxx=xxxxxxx
+      logfmt-general:
+        key:
+          fg: "#3d6dcf"
+        equal-sign:
+          fg: "#6172b0"
+        value:
+          style: patterns-and-words
+
+      # xxxxx="xxxxxxx"
+      logfmt-string:
+        key:
+          fg: "#3d6dcf"
+        equal-sign:
+          fg: "#6172b0"
+        opening-quotation-mark:
+          fg: "#3d6dcf"
+        value:
+          style: patterns-and-words
+        closing-quotation-mark:
+          fg: "#3d6dcf"
+
+      # 0.0.0.0
+      # 10.0.0.200/16
+      # 127.0.0.1:8080
+      ipv4-address:
+        # 10.0.0.200
+        address:
+          fg: "#1578c9"
+        # /16
+        # :8080
+        mask-or-port:
+          fg: "#006a8e"
+
+      # 2001:db8:4006:812::200e
+      # [2001:db8:4006:812::200e]:8080
+      ipv6-address:
+        # [
+        opening-bracket:
+          fg: "#6172b0"
+        # 2001:db8:4006:812::200e
+        address:
+          fg: "#1578c9"
+        # ]
+        closing-bracket:
+          fg: "#6172b0"
+        # :8080
+        port:
+          fg: "#006a8e"
+
+      # 3D:F2:C9:A6:B3:4F
+      # 3D-F2-C9-A6-B3-4F
+      mac-address:
+        fg: "#007a6e"
+
+      # 0a99af43-0ad4-4237-b9cd-064966eb2803
+      uuid:
+        fg: "#147f95"
+
+    # see lists of the words themselves here: https://github.com/deponian/logalize/tree/main/builtins/words
+    words:
+      bad:
+        fg: "#c4312b"
+        style: bold
+      good:
+        fg: "#1a8f3e"
+        style: bold
+      info:
+        fg: "#1a6dd4"
+        style: bold
+      warning:
+        fg: "#a65f00"
+        style: bold
