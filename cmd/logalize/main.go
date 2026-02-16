@@ -7,6 +7,7 @@ import (
 
 	"github.com/deponian/logalize/internal/config"
 	"github.com/deponian/logalize/internal/core"
+	"github.com/muesli/termenv"
 	"github.com/spf13/cobra"
 )
 
@@ -34,7 +35,7 @@ It's fast and extensible alternative to ccze and colorize.`,
 			}
 
 			// build application settings
-			settings, err := config.NewSettings(builtins, cfg, cmd.Flags())
+			settings, err := config.NewSettings(builtins, cfg, cmd.Flags(), hasDarkBackground())
 			if err != nil {
 				return err
 			}
@@ -82,6 +83,26 @@ It's fast and extensible alternative to ccze and colorize.`,
 	root.Flags().BoolP("print-builtins", "B", false, "print built-in formats, patterns and words as separate YAML files")
 
 	return root
+}
+
+// We need to query the terminal outside the main application package
+// because if we include this code inside, it will be impossible to test
+// it completely and achieve 100% coverage.
+// Don't look at me like that.
+func hasDarkBackground() bool {
+	tty, err := os.OpenFile("/dev/tty", os.O_RDWR, 0)
+	if err != nil {
+		return true
+	}
+	defer tty.Close()
+
+	detector := termenv.NewOutput(tty)
+
+	if detector.HasDarkBackground() {
+		return true
+	} else {
+		return false
+	}
 }
 
 func Run(builtins embed.FS) int {

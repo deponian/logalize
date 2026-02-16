@@ -112,7 +112,7 @@ func TestHighlighterNewGood(t *testing.T) {
 		t.Fatalf("cfg.Load(...) failed with this error: %s", err)
 	}
 
-	settings, err := config.NewSettings(embed.FS{}, cfg, nil)
+	settings, err := config.NewSettings(embed.FS{}, cfg, nil, true)
 	if err != nil {
 		t.Fatalf("config.NewSettings(...) failed with this error: %s", err)
 	}
@@ -137,7 +137,7 @@ func TestHighlighterNewBadFormats(t *testing.T) {
 		t.Fatalf("cfg.Load(...) failed with this error: %s", err)
 	}
 
-	settings, err := config.NewSettings(embed.FS{}, cfg, nil)
+	settings, err := config.NewSettings(embed.FS{}, cfg, nil, true)
 	if err != nil {
 		t.Fatalf("config.NewSettings(...) failed with this error: %s", err)
 	}
@@ -220,7 +220,7 @@ func TestHighlighterNewHighlightOnlyFormats(t *testing.T) {
 		t.Fatalf("cfg.Set(...) failed with this error: %s", err)
 	}
 
-	settings, err := config.NewSettings(embed.FS{}, cfg, nil)
+	settings, err := config.NewSettings(embed.FS{}, cfg, nil, true)
 	if err != nil {
 		t.Fatalf("config.NewSettings(...) failed with this error: %s", err)
 	}
@@ -288,7 +288,7 @@ func TestHighlighterNewHighlightOnlyPatterns(t *testing.T) {
 		t.Fatalf("cfg.Set(...) failed with this error: %s", err)
 	}
 
-	settings, err := config.NewSettings(embed.FS{}, cfg, nil)
+	settings, err := config.NewSettings(embed.FS{}, cfg, nil, true)
 	if err != nil {
 		t.Fatalf("config.NewSettings(...) failed with this error: %s", err)
 	}
@@ -333,7 +333,7 @@ func TestHighlighterNewHighlightOnlyWords(t *testing.T) {
 		t.Fatalf("cfg.Set(...) failed with this error: %s", err)
 	}
 
-	settings, err := config.NewSettings(embed.FS{}, cfg, nil)
+	settings, err := config.NewSettings(embed.FS{}, cfg, nil, true)
 	if err != nil {
 		t.Fatalf("config.NewSettings(...) failed with this error: %s", err)
 	}
@@ -912,7 +912,7 @@ func TestHighlighterColorize(t *testing.T) {
 		t.Fatalf("cfg.Set(...) failed with this error: %s", err)
 	}
 
-	settings, err := config.NewSettings(embed.FS{}, cfg, nil)
+	settings, err := config.NewSettings(embed.FS{}, cfg, nil, true)
 	if err != nil {
 		t.Fatalf("config.NewSettings(...) failed with this error: %s", err)
 	}
@@ -944,7 +944,7 @@ func TestHighlighterColorize(t *testing.T) {
 		t.Fatalf("cfg.Set(...) failed with this error: %s", err)
 	}
 
-	settings, err = config.NewSettings(embed.FS{}, cfg, nil)
+	settings, err = config.NewSettings(embed.FS{}, cfg, nil, true)
 	if err != nil {
 		t.Fatalf("config.NewSettings(...) failed with this error: %s", err)
 	}
@@ -980,7 +980,7 @@ func TestHighlighterColorize(t *testing.T) {
 		t.Fatalf("cfg.Set(...) failed with this error: %s", err)
 	}
 
-	settings, err = config.NewSettings(embed.FS{}, cfg, nil)
+	settings, err = config.NewSettings(embed.FS{}, cfg, nil, true)
 	if err != nil {
 		t.Fatalf("config.NewSettings(...) failed with this error: %s", err)
 	}
@@ -1016,7 +1016,7 @@ func TestHighlighterColorize(t *testing.T) {
 		t.Fatalf("cfg.Set(...) failed with this error: %s", err)
 	}
 
-	settings, err = config.NewSettings(embed.FS{}, cfg, nil)
+	settings, err = config.NewSettings(embed.FS{}, cfg, nil, true)
 	if err != nil {
 		t.Fatalf("config.NewSettings(...) failed with this error: %s", err)
 	}
@@ -1052,7 +1052,7 @@ func TestHighlighterColorize(t *testing.T) {
 		t.Fatalf("cfg.Set(...) failed with this error: %s", err)
 	}
 
-	settings, err = config.NewSettings(embed.FS{}, cfg, nil)
+	settings, err = config.NewSettings(embed.FS{}, cfg, nil, true)
 	if err != nil {
 		t.Fatalf("config.NewSettings(...) failed with this error: %s", err)
 	}

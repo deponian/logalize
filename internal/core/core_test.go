@@ -42,7 +42,7 @@ func TestRunGood(t *testing.T) {
 		t.Fatalf("cfg.Set(...) failed with this error: %s", err)
 	}
 
-	settings, err := config.NewSettings(builtins, cfg, nil)
+	settings, err := config.NewSettings(builtins, cfg, nil, true)
 	if err != nil {
 		t.Fatalf("config.NewSettings(...) failed with this error: %s", err)
 	}
@@ -76,7 +76,7 @@ func TestRunBad(t *testing.T) {
 		t.Fatalf("cfg.Set(...) failed with this error: %s", err)
 	}
 
-	settings, err := config.NewSettings(builtins, cfg, nil)
+	settings, err := config.NewSettings(builtins, cfg, nil, true)
 	if err != nil {
 		t.Fatalf("config.NewSettings(...) failed with this error: %s", err)
 	}

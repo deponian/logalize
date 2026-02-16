@@ -28,11 +28,11 @@ type Settings struct {
 // NewSettings creates new Settings instance from built-ins (formats, patterns, words, etc.),
 // user configuration (files in /etc/logalize/..., ~/.config/logalize and ./.logalize.yaml)
 // and command line flags.
-func NewSettings(builtins fs.FS, userConfig *koanf.Koanf, flags *pflag.FlagSet) (Settings, error) {
+func NewSettings(builtins fs.FS, userConfig *koanf.Koanf, flags *pflag.FlagSet, hasDarkBackground bool) (Settings, error) {
 	// build options step by step
 	// first get defaults, then override with values from user configuration
 	// then override with everything we get from flags
-	opts := NewOptions()
+	opts := NewOptions(hasDarkBackground)
 	opts.ReadFromConfig(userConfig)
 	opts.ReadFromFlags(flags)
 
@@ -49,9 +49,10 @@ func NewSettings(builtins fs.FS, userConfig *koanf.Koanf, flags *pflag.FlagSet) 
 	}
 
 	return Settings{
-		Config:       config,
-		Opts:         *opts,
-		Builtins:     builtins,
+		Config:   config,
+		Opts:     *opts,
+		Builtins: builtins,
+		// we need WithUnsafe() to color output even if it's a pipe or a file
 		ColorProfile: termenv.NewOutput(os.Stdout, termenv.WithUnsafe()).EnvColorProfile(),
 	}, nil
 }

@@ -10,6 +10,22 @@ import (
 	"github.com/spf13/pflag"
 )
 
+func TestOptionsNew(t *testing.T) {
+	t.Run("TestOptionsNewDarkBackground", func(t *testing.T) {
+		opts := NewOptions(true)
+		if !cmp.Equal(opts.Theme, "tokyonight-dark") {
+			t.Errorf("got: %v, want: %v", opts.Theme, "tokyonight-dark")
+		}
+	})
+
+	t.Run("TestOptionsNewLightBackground", func(t *testing.T) {
+		opts := NewOptions(false)
+		if !cmp.Equal(opts.Theme, "tokyonight-light") {
+			t.Errorf("got: %v, want: %v", opts.Theme, "tokyonight-light")
+		}
+	})
+}
+
 func TestOptionsReadFromConfig(t *testing.T) {
 	correctOpts := Options{
 		ConfigPaths: []string{},
@@ -42,7 +58,7 @@ func TestOptionsReadFromConfig(t *testing.T) {
 	}
 
 	t.Run("TestOptionsReadFromConfig", func(t *testing.T) {
-		opts := NewOptions()
+		opts := NewOptions(true)
 		opts.ReadFromConfig(cfg)
 		if !cmp.Equal(*opts, correctOpts) {
 			t.Errorf("got: %v, want: %v", *opts, correctOpts)
@@ -50,10 +66,10 @@ func TestOptionsReadFromConfig(t *testing.T) {
 	})
 
 	t.Run("TestOptionsReadFromConfigNil", func(t *testing.T) {
-		opts := NewOptions()
+		opts := NewOptions(true)
 		opts.ReadFromConfig(nil)
-		if !cmp.Equal(*opts, *NewOptions()) {
-			t.Errorf("got: %v, want: %v", *opts, *NewOptions())
+		if !cmp.Equal(*opts, *NewOptions(true)) {
+			t.Errorf("got: %v, want: %v", *opts, *NewOptions(true))
 		}
 	})
 }
@@ -132,7 +148,7 @@ func TestOptionsReadFromFlags(t *testing.T) {
 	}
 
 	t.Run("TestOptionsReadFromFlags", func(t *testing.T) {
-		opts := NewOptions()
+		opts := NewOptions(true)
 		opts.ReadFromFlags(flags)
 		if !cmp.Equal(*opts, correctOpts) {
 			t.Errorf("got: %v, want: %v", *opts, correctOpts)
@@ -140,10 +156,10 @@ func TestOptionsReadFromFlags(t *testing.T) {
 	})
 
 	t.Run("TestOptionsReadFromFlagsNil", func(t *testing.T) {
-		opts := NewOptions()
+		opts := NewOptions(true)
 		opts.ReadFromFlags(nil)
-		if !cmp.Equal(*opts, *NewOptions()) {
-			t.Errorf("got: %v, want: %v", *opts, *NewOptions())
+		if !cmp.Equal(*opts, *NewOptions(true)) {
+			t.Errorf("got: %v, want: %v", *opts, *NewOptions(true))
 		}
 	})
 }

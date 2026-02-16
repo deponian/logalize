@@ -33,11 +33,17 @@ type Options struct {
 }
 
 // NewOptions create new instance of Options with default values.
-func NewOptions() *Options {
+func NewOptions(hasDarkBackground bool) *Options {
+	var theme string
+	if hasDarkBackground {
+		theme = "tokyonight-dark"
+	} else {
+		theme = "tokyonight-light"
+	}
 	return &Options{
 		ConfigPaths: []string{},
 
-		Theme: "tokyonight-dark",
+		Theme: theme,
 
 		NoBuiltinFormats:  false,
 		NoBuiltinPatterns: false,

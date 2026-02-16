@@ -104,7 +104,7 @@ func TestSettingsNewGood(t *testing.T) {
 		t.Errorf("flags.Parse() failed with an error: %s", err)
 	}
 
-	settings, err := NewSettings(embed.FS{}, cfg, flags)
+	settings, err := NewSettings(embed.FS{}, cfg, flags, true)
 	if err != nil {
 		t.Fatalf("NewSettings(...) failed with this error: %s", err)
 	}
@@ -124,7 +124,7 @@ func TestSettingsNewBad(t *testing.T) {
 		t.Fatalf("cfg.Load(...) failed with this error: %s", err)
 	}
 
-	_, err = NewSettings(embed.FS{}, cfg, nil)
+	_, err = NewSettings(embed.FS{}, cfg, nil, true)
 	if err == nil {
 		t.Error("NewSettings(...) should have failed")
 	}
@@ -300,7 +300,7 @@ func TestSettingsProcessSpecialFlagsPrintConfig(t *testing.T) {
 		t.Fatalf("cfg.Load(...) failed with this error: %s", err)
 	}
 
-	settings, err := NewSettings(embed.FS{}, cfg, nil)
+	settings, err := NewSettings(embed.FS{}, cfg, nil, true)
 	if err != nil {
 		t.Fatalf("NewSettings(...) failed with this error: %s", err)
 	}
@@ -336,7 +336,7 @@ func TestSettingsProcessSpecialFlagsPrintBuiltins(t *testing.T) {
 		t.Fatalf("cfg.Load(...) failed with this error: %s", err)
 	}
 
-	settings, err := NewSettings(builtins, cfg, nil)
+	settings, err := NewSettings(builtins, cfg, nil, true)
 	if err != nil {
 		t.Fatalf("NewSettings(...) failed with this error: %s", err)
 	}
@@ -359,7 +359,7 @@ func TestSettingsProcessSpecialFlagsListThemes(t *testing.T) {
 		t.Fatalf("cfg.Load(...) failed with this error: %s", err)
 	}
 
-	settings, err := NewSettings(embed.FS{}, cfg, nil)
+	settings, err := NewSettings(embed.FS{}, cfg, nil, true)
 	if err != nil {
 		t.Fatalf("NewSettings(...) failed with this error: %s", err)
 	}
@@ -382,7 +382,7 @@ func TestSettingsProcessSpecialFlagsNoFlags(t *testing.T) {
 		t.Fatalf("cfg.Load(...) failed with this error: %s", err)
 	}
 
-	settings, err := NewSettings(embed.FS{}, cfg, nil)
+	settings, err := NewSettings(embed.FS{}, cfg, nil, true)
 	if err != nil {
 		t.Fatalf("NewSettings(...) failed with this error: %s", err)
 	}
