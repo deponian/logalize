@@ -98,11 +98,7 @@ func hasDarkBackground() bool {
 
 	detector := termenv.NewOutput(tty)
 
-	if detector.HasDarkBackground() {
-		return true
-	} else {
-		return false
-	}
+	return detector.HasDarkBackground()
 }
 
 func Run(builtins embed.FS) int {
