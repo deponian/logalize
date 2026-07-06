@@ -9,7 +9,6 @@
 <p align="center">
   <a href="https://github.com/deponian/logalize/actions"><img src="https://github.com/deponian/logalize/actions/workflows/tests.yml/badge.svg" alt="Build Status"></a>
   <a href="https://codecov.io/gh/deponian/logalize"><img src="https://codecov.io/gh/deponian/logalize/graph/badge.svg?token=8NJ4ZC8COT"/></a>
-  <a href="https://goreportcard.com/report/github.com/deponian/logalize"><img src="https://goreportcard.com/badge/github.com/deponian/logalize" alt="Go Report Card"></a>
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License"></a>
   <a href="https://github.com/deponian/logalize/releases/latest"><img src="https://img.shields.io/github/v/release/deponian/logalize" alt="Github Release"></a>
   <a href="https://ko-fi.com/M4M41I8ECW"><img src="https://img.shields.io/badge/Buy_me_a_coffee-FF5E5B?logo=kofi&logoColor=white" alt="Ko-fi"></a>
