@@ -1,0 +1,69 @@
+# INFO:
+# Traefik CLF (Common Log Format) access log, the "common" format
+# It's the standard CLF extended with four Traefik specific fields
+#
+# SOURCE:
+# https://doc.traefik.io/traefik/reference/install-configuration/observability/logs-and-accesslogs/#traefik-clf-format-fields
+# https://github.com/traefik/traefik/blob/master/pkg/middlewares/accesslog/logger_formatters.go
+#
+# SCHEME:
+# <remote_IP_address> - <client_user_name_if_available> [<timestamp>] "<request_method> <request_path> <request_protocol>" <HTTP_status> <content-length> "<request_referrer>" "<request_user_agent>" <number_of_requests_received_since_Traefik_started> "<Traefik_router_name>" "<Traefik_server_URL>" <request_duration_in_ms>ms
+#
+# every field Traefik can't fill in is replaced with a dash ("-" or "\"-\"")
+
+formats:
+  traefik-common:
+    # <remote_IP_address>
+    # it's a bare host (IPv4, IPv6 or a hostname) without a port
+    - regexp: ([^ ]+ )
+      name: remote-addr
+    # -
+    - regexp: (- )
+      name: ident
+    # <client_user_name_if_available>
+    - regexp: ([^ ]+ )
+      name: remote-user
+    # [<timestamp>]
+    - regexp: (\[[^\]]+\] )
+      name: timestamp
+    # "<request_method> <request_path> <request_protocol>"
+    - regexp: ("[^"]*" )
+      name: request
+    # <HTTP_status>
+    # it's the DownstreamStatus, the status sent to the client
+    # sometimes it's just a plain 0 for some reason
+    - regexp: ((?:\d\d\d|-|0) )
+      name: status
+      alternatives:
+        - regexp: (1\d\d )
+          name: 1xx
+        - regexp: (2\d\d )
+          name: 2xx
+        - regexp: (3\d\d )
+          name: 3xx
+        - regexp: (4\d\d )
+          name: 4xx
+        - regexp: (5\d\d )
+          name: 5xx
+    # <content-length>
+    - regexp: ((?:\d+|-) )
+      name: content-length
+    # "<request_referrer>"
+    # Traefik escapes all inner quotation marks with a backslash
+    - regexp: ("(?:[^"\\]|\\.)*" )
+      name: referer
+    # "<request_user_agent>"
+    - regexp: ("(?:[^"\\]|\\.)*" )
+      name: user-agent
+    # <number_of_requests_received_since_Traefik_started>
+    - regexp: ((?:\d+|-) )
+      name: request-count
+    # "<Traefik_router_name>"
+    - regexp: ("(?:[^"\\]|\\.)*" )
+      name: router-name
+    # "<Traefik_server_URL>"
+    - regexp: ("(?:[^"\\]|\\.)*" )
+      name: server-url
+    # <request_duration_in_ms>ms
+    - regexp: ([\d\.]+ms)
+      name: duration

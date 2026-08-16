@@ -58,6 +58,58 @@ themes:
           fg: "#076678"
 
       # INFO:
+      # Traefik access log in CLF (Common Log Format) mode, which is the Combined Log
+      # Format plus four Traefik-specific fields appended after the user agent
+      #
+      # SOURCE:
+      # https://doc.traefik.io/traefik/observability/access-logs/
+      #
+      # SCHEME:
+      # <remote_IP_address> - <client_user_name_if_available> [<timestamp>] "<request_method> <request_path> <request_protocol>" <HTTP_status> <content-length> "<request_referrer>" "<request_user_agent>" <number_of_requests_received_since_Traefik_started> "<Traefik_router_name>" "<Traefik_server_URL>" <request_duration_in_ms>ms
+      traefik-common:
+        remote-addr:
+          fg: "#504945"
+        ident:
+          fg: "#076678"
+        remote-user:
+          fg: "#076678"
+        timestamp:
+          fg: "#8f3f71"
+        request:
+          fg: "#504945"
+        status:
+          fg: "#076678"
+          1xx:
+            fg: "#076678"
+            style: bold
+          2xx:
+            fg: "#79740e"
+            style: bold
+          3xx:
+            fg: "#076678"
+            style: bold
+          4xx:
+            fg: "#9d0006"
+            style: bold
+          5xx:
+            fg: "#8f3f71"
+            style: bold
+        content-length:
+          fg: "#076678"
+        referer:
+          fg: "#504945"
+        user-agent:
+          fg: "#076678"
+        request-count:
+          fg: "#076678"
+        router-name:
+          fg: "#076678"
+        server-url:
+          fg: "#504945"
+        duration:
+          fg: "#076678"
+
+      # INFO:
       # Ingress Nginx default format
       #
       # SOURCE:
