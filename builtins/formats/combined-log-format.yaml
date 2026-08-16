@@ -1,0 +1,59 @@
+# INFO:
+# Combined Log Format (NCSA combined/XLF/ELF), the de facto standard access log
+# format shared by Apache httpd ("combined"), Nginx ("combined"), Traefik ("genericCLF") and others
+#
+# SOURCE:
+# https://httpd.apache.org/docs/current/logs.html#combined
+# https://nginx.org/en/docs/http/ngx_http_log_module.html
+# https://doc.traefik.io/traefik/reference/install-configuration/observability/logs-and-accesslogs/#generic-clf-format-fields
+#
+# SCHEME:
+# (Apache): %h %l %u %t "%r" %>s %b "%{Referer}i" "%{User-agent}i"
+# (Nginx): $remote_addr - $remote_user [$time_local] "$request" $status $body_bytes_sent "$http_referer" "$http_user_agent"
+# (Traefik): <remote_IP_address> - <client_user_name_if_available> [<timestamp>] "<request_method> <request_path> <request_protocol>" <HTTP_status> <content-length> "<request_referrer>" "<request_user_agent>"
+
+formats:
+  combined-log-format:
+    # %h / $remote_addr
+    # IPv4, IPv6 or a hostname (Apache with HostnameLookups On)
+    - regexp: ([^ ]+ )
+      name: remote-addr
+    # %l
+    # RFC 1413 identity of the client, "-" unless identd is enabled.
+    # Nginx has no equivalent and always writes a literal "-" here
+    - regexp: ([^ ]+ )
+      name: ident
+    # %u / $remote_user
+    - regexp: ([^ ]+ )
+      name: remote-user
+    # %t / [$time_local]
+    - regexp: (\[[^\]]+\] )
+      name: timestamp
+    # "%r" / "$request"
+    # Apache escapes an embedded quote as \", Nginx as \x22, Traefik as %22
+    - regexp: ("(?:[^"\\]|\\.)*" )
+      name: request
+    # %>s / $status
+    - regexp: (\d{3} )
+      name: status
+      alternatives:
+        - regexp: (1\d\d )
+          name: 1xx
+        - regexp: (2\d\d )
+          name: 2xx
+        - regexp: (3\d\d )
+          name: 3xx
+        - regexp: (4\d\d )
+          name: 4xx
+        - regexp: (5\d\d )
+          name: 5xx
+    # %b / $body_bytes_sent
+    # Apache's %b writes "-" instead of 0 when no body was sent
+    - regexp: ((?:\d+|-) )
+      name: body-bytes-sent
+    # "%{Referer}i" / "$http_referer"
+    - regexp: ("(?:[^"\\]|\\.)*" )
+      name: http-referer
+    # "%{User-agent}i" / "$http_user_agent"
+    - regexp: ("(?:[^"\\]|\\.)*")
+      name: http-user-agent

@@ -17,20 +17,22 @@
 #   no-ansi-escape-sequences-stripping: false
 #
 # formats:
-#   nginx-combined:
-#     - regexp: (\d{1,3}(?:\.\d{1,3}){3} )
+#   combined-log-format:
+#     - regexp: ([^ ]+ )
 #       name: remote-addr
-#     - regexp: (- )
-#       name: dash
+#     - regexp: ([^ ]+ )
+#       name: ident
 #     - regexp: ([^ ]+ )
 #       name: remote-user
-#     - regexp: (\[.+\] )
-#       name: time-local
-#     - regexp: ("[^"]+" )
+#     - regexp: (\[[^\]]+\] )
+#       name: timestamp
+#     - regexp: ("(?:[^"\\]|\\.)*" )
 #       name: request
-#     - regexp: (\d\d\d )
+#     - regexp: (\d{3} )
 #       name: status
 #       alternatives:
+#         - regexp: (1\d\d )
+#           name: 1xx
 #         - regexp: (2\d\d )
 #           name: 2xx
 #         - regexp: (3\d\d )
@@ -39,11 +41,11 @@
 #           name: 4xx
 #         - regexp: (5\d\d )
 #           name: 5xx
-#     - regexp: ([\d]+ )
+#     - regexp: ((?:\d+|-) )
 #       name: body-bytes-sent
-#     - regexp: ("[^"]+" )
+#     - regexp: ("(?:[^"\\]|\\.)*" )
 #       name: http-referer
-#     - regexp: ("[^"]+")
+#     - regexp: ("(?:[^"\\]|\\.)*")
 #       name: http-user-agent
 #
 # patterns:
@@ -99,18 +101,22 @@
 # themes:
 #   utopia:
 #     formats:
-#       nginx-combined:
+#       combined-log-format:
 #         remote-addr:
-#           fg: "#ffc777"
-#         dash:
+#           fg: "#eecc9f"
+#         ident:
 #           fg: "#828bb8"
 #         remote-user:
 #           fg: "#4fd6be"
-#         time-local:
+#         timestamp:
 #           fg: "#c099ff"
 #         request:
 #           fg: "#c3e88d"
 #         status:
+#           fg: "#828bb8"
+#           1xx:
+#             fg: "#0000ff"
+#             style: bold
 #           2xx:
 #             fg: "#00ff00"
 #             style: bold

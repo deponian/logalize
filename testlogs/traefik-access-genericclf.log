@@ -1,0 +1,6 @@
+192.168.65.1 - - [16/Aug/2026:12:38:26 +0000] "GET /products/42?ref=newsletter&utm_source=email HTTP/1.1" 200 608 "https://www.google.com/search?q=traefik+access+logs" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
+192.168.65.1 - - [16/Aug/2026:12:38:26 +0000] "GET /robots.txt HTTP/1.1" 200 468 "-" "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"
+192.168.65.1 - - [16/Aug/2026:12:38:26 +0000] "GET /checkout/step-2 HTTP/1.1" 302 576 "https://shop.example.com/cart" "Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1"
+192.168.65.1 - - [16/Aug/2026:12:38:26 +0000] "GET /t/say%22hello%22 HTTP/1.1" 404 419 "-" "quote-in-path/1.0"
+192.168.65.1 - - [16/Aug/2026:12:38:26 +0000] "GET /t/quoted-ua HTTP/1.1" 200 430 "-" "Mozilla/5.0 \"QuotedAgent\" build 2"
+192.168.65.1 - - [16/Aug/2026:12:38:26 +0000] "GET /t/quoted-referer HTTP/1.1" 100 461 "https://example.com/a\"b\"c" "quoted-referer-test/1.0"

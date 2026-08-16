@@ -5,25 +5,31 @@ themes:
   test:
     formats:
       # INFO:
-      # Nginx predefined "combined" format
+      # Combined Log Format (NCSA combined/XLF/ELF), the de facto standard access log
+      # format shared by Apache httpd ("combined"), Nginx ("combined"), Traefik ("genericCLF") and others
       #
       # SOURCE:
+      # https://httpd.apache.org/docs/current/logs.html#combined
       # https://nginx.org/en/docs/http/ngx_http_log_module.html
+      # https://doc.traefik.io/traefik/reference/install-configuration/observability/logs-and-accesslogs/#generic-clf-format-fields
       #
       # SCHEME:
-      # $remote_addr - $remote_user [$time_local] "$request" $status $body_bytes_sent "$http_referer" "$http_user_agent"
-      nginx-combined:
+      # (Apache): %h %l %u %t "%r" %>s %b "%{Referer}i" "%{User-agent}i"
+      # (Nginx): $remote_addr - $remote_user [$time_local] "$request" $status $body_bytes_sent "$http_referer" "$http_user_agent"
+      # (Traefik): <remote_IP_address> - <client_user_name_if_available> [<timestamp>] "<request_method> <request_path> <request_protocol>" <HTTP_status> <content-length> "<request_referrer>" "<request_user_agent>"
+      combined-log-format:
         remote-addr:
           fg: "#eecc9f"
-        dash:
+        ident:
           fg: "#828bb8"
         remote-user:
           fg: "#4fd6be"
-        time-local:
+        timestamp:
           fg: "#c099ff"
         request:
           fg: "#c3e88d"
         status:
+          fg: "#828bb8"
           1xx:
             fg: "#0000ff"
             style: bold

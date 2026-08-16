@@ -154,7 +154,7 @@ func TestFormatsBuiltins(t *testing.T) {
 		plain   string
 		colored string
 	}{
-		// nginx-combined
+		// combined-log-format
 		{
 			`127.0.0.1 - - [16/Feb/2024:00:01:01 +0000] "GET / HTTP/1.1" 100 162 "-" "Mozilla/5.0 (iPhone; CPU iPhone OS 16_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Mobile/15E148 Safari/604.1"`,
 			"\x1b[38;2;238;204;159m127.0.0.1 \x1b[0m\x1b[38;2;130;139;184m- \x1b[0m\x1b[38;2;79;214;190m- \x1b[0m\x1b[38;2;192;153;255m[16/Feb/2024:00:01:01 +0000] \x1b[0m\x1b[38;2;195;232;141m\"GET / HTTP/1.1\" \x1b[0m\x1b[38;2;0;0;255;1m100 \x1b[0m\x1b[38;2;99;109;166m162 \x1b[0m\x1b[38;2;252;167;234m\"-\" \x1b[0m\x1b[38;2;130;170;255m\"Mozilla/5.0 (iPhone; CPU iPhone OS 16_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Mobile/15E148 Safari/604.1\"\x1b[0m",
@@ -174,6 +174,34 @@ func TestFormatsBuiltins(t *testing.T) {
 		{
 			`127.0.0.1 - - [16/Feb/2024:00:01:01 +0000] "GET / HTTP/1.1" 503 162 "-" "Mozilla/5.0 (iPhone; CPU iPhone OS 16_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Mobile/15E148 Safari/604.1"`,
 			"\x1b[38;2;238;204;159m127.0.0.1 \x1b[0m\x1b[38;2;130;139;184m- \x1b[0m\x1b[38;2;79;214;190m- \x1b[0m\x1b[38;2;192;153;255m[16/Feb/2024:00:01:01 +0000] \x1b[0m\x1b[38;2;195;232;141m\"GET / HTTP/1.1\" \x1b[0m\x1b[38;2;255;0;255;1m503 \x1b[0m\x1b[38;2;99;109;166m162 \x1b[0m\x1b[38;2;252;167;234m\"-\" \x1b[0m\x1b[38;2;130;170;255m\"Mozilla/5.0 (iPhone; CPU iPhone OS 16_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Mobile/15E148 Safari/604.1\"\x1b[0m",
+		},
+		{
+			`127.0.0.1 - frank [10/Oct/2000:13:55:36 -0700] "GET /apache_pb.gif HTTP/1.0" 200 2326 "http://www.example.com/start.html" "Mozilla/4.08 [en] (Win98; I ;Nav)"`,
+			"\x1b[38;2;238;204;159m127.0.0.1 \x1b[0m\x1b[38;2;130;139;184m- \x1b[0m\x1b[38;2;79;214;190mfrank \x1b[0m\x1b[38;2;192;153;255m[10/Oct/2000:13:55:36 -0700] \x1b[0m\x1b[38;2;195;232;141m\"GET /apache_pb.gif HTTP/1.0\" \x1b[0m\x1b[38;2;0;255;0;1m200 \x1b[0m\x1b[38;2;99;109;166m2326 \x1b[0m\x1b[38;2;252;167;234m\"http://www.example.com/start.html\" \x1b[0m\x1b[38;2;130;170;255m\"Mozilla/4.08 [en] (Win98; I ;Nav)\"\x1b[0m",
+		},
+		{
+			`127.0.0.1 - - [16/Feb/2024:00:12:46 +0000] "GET /robots.txt HTTP/1.1" 304 - "-" "curl/8.4.0"`,
+			"\x1b[38;2;238;204;159m127.0.0.1 \x1b[0m\x1b[38;2;130;139;184m- \x1b[0m\x1b[38;2;79;214;190m- \x1b[0m\x1b[38;2;192;153;255m[16/Feb/2024:00:12:46 +0000] \x1b[0m\x1b[38;2;195;232;141m\"GET /robots.txt HTTP/1.1\" \x1b[0m\x1b[38;2;0;255;255;1m304 \x1b[0m\x1b[38;2;99;109;166m- \x1b[0m\x1b[38;2;252;167;234m\"-\" \x1b[0m\x1b[38;2;130;170;255m\"curl/8.4.0\"\x1b[0m",
+		},
+		{
+			`2001:db8:85a3::8a2e:370:7334 - - [16/Feb/2024:00:13:02 +0000] "GET /index.html HTTP/2.0" 200 8193 "https://example.com/" "curl/8.4.0"`,
+			"\x1b[38;2;238;204;159m2001:db8:85a3::8a2e:370:7334 \x1b[0m\x1b[38;2;130;139;184m- \x1b[0m\x1b[38;2;79;214;190m- \x1b[0m\x1b[38;2;192;153;255m[16/Feb/2024:00:13:02 +0000] \x1b[0m\x1b[38;2;195;232;141m\"GET /index.html HTTP/2.0\" \x1b[0m\x1b[38;2;0;255;0;1m200 \x1b[0m\x1b[38;2;99;109;166m8193 \x1b[0m\x1b[38;2;252;167;234m\"https://example.com/\" \x1b[0m\x1b[38;2;130;170;255m\"curl/8.4.0\"\x1b[0m",
+		},
+		{
+			`::1 - - [16/Feb/2024:00:13:44 +0000] "OPTIONS * HTTP/1.0" 200 - "-" "Apache/2.4.58 (Unix) (internal dummy connection)"`,
+			"\x1b[38;2;238;204;159m::1 \x1b[0m\x1b[38;2;130;139;184m- \x1b[0m\x1b[38;2;79;214;190m- \x1b[0m\x1b[38;2;192;153;255m[16/Feb/2024:00:13:44 +0000] \x1b[0m\x1b[38;2;195;232;141m\"OPTIONS * HTTP/1.0\" \x1b[0m\x1b[38;2;0;255;0;1m200 \x1b[0m\x1b[38;2;99;109;166m- \x1b[0m\x1b[38;2;252;167;234m\"-\" \x1b[0m\x1b[38;2;130;170;255m\"Apache/2.4.58 (Unix) (internal dummy connection)\"\x1b[0m",
+		},
+		{
+			`client.example.com - - [16/Feb/2024:00:14:07 +0000] "POST /api/v1/upload HTTP/1.1" 503 617 "-" "-"`,
+			"\x1b[38;2;238;204;159mclient.example.com \x1b[0m\x1b[38;2;130;139;184m- \x1b[0m\x1b[38;2;79;214;190m- \x1b[0m\x1b[38;2;192;153;255m[16/Feb/2024:00:14:07 +0000] \x1b[0m\x1b[38;2;195;232;141m\"POST /api/v1/upload HTTP/1.1\" \x1b[0m\x1b[38;2;255;0;255;1m503 \x1b[0m\x1b[38;2;99;109;166m617 \x1b[0m\x1b[38;2;252;167;234m\"-\" \x1b[0m\x1b[38;2;130;170;255m\"-\"\x1b[0m",
+		},
+		{
+			`198.51.100.42 - - [16/Feb/2024:00:15:21 +0000] "GET /search?q=\"quoted\" HTTP/1.1" 400 226 "-" "python-requests/2.31.0"`,
+			"\x1b[38;2;238;204;159m198.51.100.42 \x1b[0m\x1b[38;2;130;139;184m- \x1b[0m\x1b[38;2;79;214;190m- \x1b[0m\x1b[38;2;192;153;255m[16/Feb/2024:00:15:21 +0000] \x1b[0m\x1b[38;2;195;232;141m\"GET /search?q=\\\"quoted\\\" HTTP/1.1\" \x1b[0m\x1b[38;2;255;0;0;1m400 \x1b[0m\x1b[38;2;99;109;166m226 \x1b[0m\x1b[38;2;252;167;234m\"-\" \x1b[0m\x1b[38;2;130;170;255m\"python-requests/2.31.0\"\x1b[0m",
+		},
+		{
+			`127.0.0.1 - - [16/Feb/2024:00:16:03 +0000] "GET / HTTP/1.1" 000 0 "-" "-"`,
+			"\x1b[38;2;238;204;159m127.0.0.1 \x1b[0m\x1b[38;2;130;139;184m- \x1b[0m\x1b[38;2;79;214;190m- \x1b[0m\x1b[38;2;192;153;255m[16/Feb/2024:00:16:03 +0000] \x1b[0m\x1b[38;2;195;232;141m\"GET / HTTP/1.1\" \x1b[0m\x1b[38;2;130;139;184m000 \x1b[0m\x1b[38;2;99;109;166m0 \x1b[0m\x1b[38;2;252;167;234m\"-\" \x1b[0m\x1b[38;2;130;170;255m\"-\"\x1b[0m",
 		},
 
 		// ingress-nginx-controller
