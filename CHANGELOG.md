@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.1] - 2026-08-16
+
+### Added
+
+- Add "err", "okay", "inf" and "wrn" to the built-in lists of words
+- Add "traefik-common" log format
+
+### Changed
+
+- Switch to go v1.26.5 and update modules
+- Rename "nginx-ingress-controller" log format to "ingress-nginx-controller"
+- Convert "nginx-combined" log format into more general "combined-log-format" log format
+
 ## [0.8.0] - 2026-04-01
 
 ### Added
@@ -248,6 +261,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Print version as "version (commit) date"
 
+[0.8.1]: https://github.com/deponian/logalize/compare/v0.8.0..v0.8.1
 [0.8.0]: https://github.com/deponian/logalize/compare/v0.7.1..v0.8.0
 [0.7.1]: https://github.com/deponian/logalize/compare/v0.7.0..v0.7.1
 [0.7.0]: https://github.com/deponian/logalize/compare/v0.6.1..v0.7.0
