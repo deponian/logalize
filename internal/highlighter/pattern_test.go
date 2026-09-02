@@ -1,7 +1,6 @@
 package highlighter
 
 import (
-	"embed"
 	"fmt"
 	"regexp"
 	"testing"
@@ -12,9 +11,6 @@ import (
 	"github.com/knadh/koanf/v2"
 	"github.com/muesli/termenv"
 )
-
-//go:embed builtins/*
-var builtins embed.FS
 
 func comparePatterns(pattern1, pattern2 pattern) error {
 	if pattern1.Name != pattern2.Name || pattern1.Priority != pattern2.Priority {
@@ -471,7 +467,7 @@ func TestPatternsBuiltins(t *testing.T) {
 		t.Fatalf("cfg.Load(...) failed with this error: %s", err)
 	}
 
-	settings, err := config.NewSettings(builtins, cfg, nil, true)
+	settings, err := config.NewSettings(repoRoot(), cfg, nil, true)
 	if err != nil {
 		t.Fatalf("config.NewSettings(...) failed with this error: %s", err)
 	}

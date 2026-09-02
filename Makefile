@@ -63,8 +63,6 @@ tidy:
 ## audit: run quality control checks
 .PHONY: audit
 audit:
-	rm -rf ./internal/highlighter/builtins
-	cp -r builtins ./internal/highlighter
 	go mod verify
 	go vet ./internal/... ./cmd/...
 	go run honnef.co/go/tools/cmd/staticcheck@latest -checks=all,-ST1000,-U1000 ./internal/... ./cmd/...
@@ -73,8 +71,6 @@ audit:
 ## test: run all tests
 .PHONY: test
 test:
-	rm -rf ./internal/highlighter/builtins
-	cp -r builtins ./internal/highlighter
 	go test -race -coverprofile=coverage.out ./internal/...
 
 ## coverage-func: run all tests and display coverage with "-func"
