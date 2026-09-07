@@ -152,228 +152,262 @@ func TestFormatsHighlight(t *testing.T) {
 func TestFormatsBuiltins(t *testing.T) {
 	tests := []struct {
 		plain   string
-		colored string
+		format  string
+		labeled string
 	}{
 		// combined-log-format
 		{
 			`127.0.0.1 - - [16/Feb/2024:00:01:01 +0000] "GET / HTTP/1.1" 100 162 "-" "Mozilla/5.0 (iPhone; CPU iPhone OS 16_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Mobile/15E148 Safari/604.1"`,
-			"\x1b[38;2;238;204;159m127.0.0.1 \x1b[0m\x1b[38;2;130;139;184m- \x1b[0m\x1b[38;2;79;214;190m- \x1b[0m\x1b[38;2;192;153;255m[16/Feb/2024:00:01:01 +0000] \x1b[0m\x1b[38;2;195;232;141m\"GET / HTTP/1.1\" \x1b[0m\x1b[38;2;0;0;255;1m100 \x1b[0m\x1b[38;2;99;109;166m162 \x1b[0m\x1b[38;2;252;167;234m\"-\" \x1b[0m\x1b[38;2;130;170;255m\"Mozilla/5.0 (iPhone; CPU iPhone OS 16_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Mobile/15E148 Safari/604.1\"\x1b[0m",
+			"combined-log-format",
+			`<remote-addr>127.0.0.1 </remote-addr><ident>- </ident><remote-user>- </remote-user><timestamp>[16/Feb/2024:00:01:01 +0000] </timestamp><request>"GET / HTTP/1.1" </request><status:1xx>100 </status:1xx><body-bytes-sent>162 </body-bytes-sent><http-referer>"-" </http-referer><http-user-agent>"Mozilla/5.0 (iPhone; CPU iPhone OS 16_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Mobile/15E148 Safari/604.1"</http-user-agent>`,
 		},
 		{
 			`127.0.0.1 - - [16/Feb/2024:00:01:01 +0000] "GET / HTTP/1.1" 200 162 "-" "Mozilla/5.0 (iPhone; CPU iPhone OS 16_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Mobile/15E148 Safari/604.1"`,
-			"\x1b[38;2;238;204;159m127.0.0.1 \x1b[0m\x1b[38;2;130;139;184m- \x1b[0m\x1b[38;2;79;214;190m- \x1b[0m\x1b[38;2;192;153;255m[16/Feb/2024:00:01:01 +0000] \x1b[0m\x1b[38;2;195;232;141m\"GET / HTTP/1.1\" \x1b[0m\x1b[38;2;0;255;0;1m200 \x1b[0m\x1b[38;2;99;109;166m162 \x1b[0m\x1b[38;2;252;167;234m\"-\" \x1b[0m\x1b[38;2;130;170;255m\"Mozilla/5.0 (iPhone; CPU iPhone OS 16_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Mobile/15E148 Safari/604.1\"\x1b[0m",
+			"combined-log-format",
+			`<remote-addr>127.0.0.1 </remote-addr><ident>- </ident><remote-user>- </remote-user><timestamp>[16/Feb/2024:00:01:01 +0000] </timestamp><request>"GET / HTTP/1.1" </request><status:2xx>200 </status:2xx><body-bytes-sent>162 </body-bytes-sent><http-referer>"-" </http-referer><http-user-agent>"Mozilla/5.0 (iPhone; CPU iPhone OS 16_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Mobile/15E148 Safari/604.1"</http-user-agent>`,
 		},
 		{
 			`127.0.0.1 - - [16/Feb/2024:00:01:01 +0000] "GET / HTTP/1.1" 302 162 "-" "Mozilla/5.0 (iPhone; CPU iPhone OS 16_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Mobile/15E148 Safari/604.1"`,
-			"\x1b[38;2;238;204;159m127.0.0.1 \x1b[0m\x1b[38;2;130;139;184m- \x1b[0m\x1b[38;2;79;214;190m- \x1b[0m\x1b[38;2;192;153;255m[16/Feb/2024:00:01:01 +0000] \x1b[0m\x1b[38;2;195;232;141m\"GET / HTTP/1.1\" \x1b[0m\x1b[38;2;0;255;255;1m302 \x1b[0m\x1b[38;2;99;109;166m162 \x1b[0m\x1b[38;2;252;167;234m\"-\" \x1b[0m\x1b[38;2;130;170;255m\"Mozilla/5.0 (iPhone; CPU iPhone OS 16_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Mobile/15E148 Safari/604.1\"\x1b[0m",
+			"combined-log-format",
+			`<remote-addr>127.0.0.1 </remote-addr><ident>- </ident><remote-user>- </remote-user><timestamp>[16/Feb/2024:00:01:01 +0000] </timestamp><request>"GET / HTTP/1.1" </request><status:3xx>302 </status:3xx><body-bytes-sent>162 </body-bytes-sent><http-referer>"-" </http-referer><http-user-agent>"Mozilla/5.0 (iPhone; CPU iPhone OS 16_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Mobile/15E148 Safari/604.1"</http-user-agent>`,
 		},
 		{
 			`127.0.0.1 - - [16/Feb/2024:00:01:01 +0000] "GET / HTTP/1.1" 404 162 "-" "Mozilla/5.0 (iPhone; CPU iPhone OS 16_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Mobile/15E148 Safari/604.1"`,
-			"\x1b[38;2;238;204;159m127.0.0.1 \x1b[0m\x1b[38;2;130;139;184m- \x1b[0m\x1b[38;2;79;214;190m- \x1b[0m\x1b[38;2;192;153;255m[16/Feb/2024:00:01:01 +0000] \x1b[0m\x1b[38;2;195;232;141m\"GET / HTTP/1.1\" \x1b[0m\x1b[38;2;255;0;0;1m404 \x1b[0m\x1b[38;2;99;109;166m162 \x1b[0m\x1b[38;2;252;167;234m\"-\" \x1b[0m\x1b[38;2;130;170;255m\"Mozilla/5.0 (iPhone; CPU iPhone OS 16_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Mobile/15E148 Safari/604.1\"\x1b[0m",
+			"combined-log-format",
+			`<remote-addr>127.0.0.1 </remote-addr><ident>- </ident><remote-user>- </remote-user><timestamp>[16/Feb/2024:00:01:01 +0000] </timestamp><request>"GET / HTTP/1.1" </request><status:4xx>404 </status:4xx><body-bytes-sent>162 </body-bytes-sent><http-referer>"-" </http-referer><http-user-agent>"Mozilla/5.0 (iPhone; CPU iPhone OS 16_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Mobile/15E148 Safari/604.1"</http-user-agent>`,
 		},
 		{
 			`127.0.0.1 - - [16/Feb/2024:00:01:01 +0000] "GET / HTTP/1.1" 503 162 "-" "Mozilla/5.0 (iPhone; CPU iPhone OS 16_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Mobile/15E148 Safari/604.1"`,
-			"\x1b[38;2;238;204;159m127.0.0.1 \x1b[0m\x1b[38;2;130;139;184m- \x1b[0m\x1b[38;2;79;214;190m- \x1b[0m\x1b[38;2;192;153;255m[16/Feb/2024:00:01:01 +0000] \x1b[0m\x1b[38;2;195;232;141m\"GET / HTTP/1.1\" \x1b[0m\x1b[38;2;255;0;255;1m503 \x1b[0m\x1b[38;2;99;109;166m162 \x1b[0m\x1b[38;2;252;167;234m\"-\" \x1b[0m\x1b[38;2;130;170;255m\"Mozilla/5.0 (iPhone; CPU iPhone OS 16_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Mobile/15E148 Safari/604.1\"\x1b[0m",
+			"combined-log-format",
+			`<remote-addr>127.0.0.1 </remote-addr><ident>- </ident><remote-user>- </remote-user><timestamp>[16/Feb/2024:00:01:01 +0000] </timestamp><request>"GET / HTTP/1.1" </request><status:5xx>503 </status:5xx><body-bytes-sent>162 </body-bytes-sent><http-referer>"-" </http-referer><http-user-agent>"Mozilla/5.0 (iPhone; CPU iPhone OS 16_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Mobile/15E148 Safari/604.1"</http-user-agent>`,
 		},
 		{
 			`127.0.0.1 - frank [10/Oct/2000:13:55:36 -0700] "GET /apache_pb.gif HTTP/1.0" 200 2326 "http://www.example.com/start.html" "Mozilla/4.08 [en] (Win98; I ;Nav)"`,
-			"\x1b[38;2;238;204;159m127.0.0.1 \x1b[0m\x1b[38;2;130;139;184m- \x1b[0m\x1b[38;2;79;214;190mfrank \x1b[0m\x1b[38;2;192;153;255m[10/Oct/2000:13:55:36 -0700] \x1b[0m\x1b[38;2;195;232;141m\"GET /apache_pb.gif HTTP/1.0\" \x1b[0m\x1b[38;2;0;255;0;1m200 \x1b[0m\x1b[38;2;99;109;166m2326 \x1b[0m\x1b[38;2;252;167;234m\"http://www.example.com/start.html\" \x1b[0m\x1b[38;2;130;170;255m\"Mozilla/4.08 [en] (Win98; I ;Nav)\"\x1b[0m",
+			"combined-log-format",
+			`<remote-addr>127.0.0.1 </remote-addr><ident>- </ident><remote-user>frank </remote-user><timestamp>[10/Oct/2000:13:55:36 -0700] </timestamp><request>"GET /apache_pb.gif HTTP/1.0" </request><status:2xx>200 </status:2xx><body-bytes-sent>2326 </body-bytes-sent><http-referer>"http://www.example.com/start.html" </http-referer><http-user-agent>"Mozilla/4.08 [en] (Win98; I ;Nav)"</http-user-agent>`,
 		},
 		{
 			`127.0.0.1 - - [16/Feb/2024:00:12:46 +0000] "GET /robots.txt HTTP/1.1" 304 - "-" "curl/8.4.0"`,
-			"\x1b[38;2;238;204;159m127.0.0.1 \x1b[0m\x1b[38;2;130;139;184m- \x1b[0m\x1b[38;2;79;214;190m- \x1b[0m\x1b[38;2;192;153;255m[16/Feb/2024:00:12:46 +0000] \x1b[0m\x1b[38;2;195;232;141m\"GET /robots.txt HTTP/1.1\" \x1b[0m\x1b[38;2;0;255;255;1m304 \x1b[0m\x1b[38;2;99;109;166m- \x1b[0m\x1b[38;2;252;167;234m\"-\" \x1b[0m\x1b[38;2;130;170;255m\"curl/8.4.0\"\x1b[0m",
+			"combined-log-format",
+			`<remote-addr>127.0.0.1 </remote-addr><ident>- </ident><remote-user>- </remote-user><timestamp>[16/Feb/2024:00:12:46 +0000] </timestamp><request>"GET /robots.txt HTTP/1.1" </request><status:3xx>304 </status:3xx><body-bytes-sent>- </body-bytes-sent><http-referer>"-" </http-referer><http-user-agent>"curl/8.4.0"</http-user-agent>`,
 		},
 		{
 			`2001:db8:85a3::8a2e:370:7334 - - [16/Feb/2024:00:13:02 +0000] "GET /index.html HTTP/2.0" 200 8193 "https://example.com/" "curl/8.4.0"`,
-			"\x1b[38;2;238;204;159m2001:db8:85a3::8a2e:370:7334 \x1b[0m\x1b[38;2;130;139;184m- \x1b[0m\x1b[38;2;79;214;190m- \x1b[0m\x1b[38;2;192;153;255m[16/Feb/2024:00:13:02 +0000] \x1b[0m\x1b[38;2;195;232;141m\"GET /index.html HTTP/2.0\" \x1b[0m\x1b[38;2;0;255;0;1m200 \x1b[0m\x1b[38;2;99;109;166m8193 \x1b[0m\x1b[38;2;252;167;234m\"https://example.com/\" \x1b[0m\x1b[38;2;130;170;255m\"curl/8.4.0\"\x1b[0m",
+			"combined-log-format",
+			`<remote-addr>2001:db8:85a3::8a2e:370:7334 </remote-addr><ident>- </ident><remote-user>- </remote-user><timestamp>[16/Feb/2024:00:13:02 +0000] </timestamp><request>"GET /index.html HTTP/2.0" </request><status:2xx>200 </status:2xx><body-bytes-sent>8193 </body-bytes-sent><http-referer>"https://example.com/" </http-referer><http-user-agent>"curl/8.4.0"</http-user-agent>`,
 		},
 		{
 			`::1 - - [16/Feb/2024:00:13:44 +0000] "OPTIONS * HTTP/1.0" 200 - "-" "Apache/2.4.58 (Unix) (internal dummy connection)"`,
-			"\x1b[38;2;238;204;159m::1 \x1b[0m\x1b[38;2;130;139;184m- \x1b[0m\x1b[38;2;79;214;190m- \x1b[0m\x1b[38;2;192;153;255m[16/Feb/2024:00:13:44 +0000] \x1b[0m\x1b[38;2;195;232;141m\"OPTIONS * HTTP/1.0\" \x1b[0m\x1b[38;2;0;255;0;1m200 \x1b[0m\x1b[38;2;99;109;166m- \x1b[0m\x1b[38;2;252;167;234m\"-\" \x1b[0m\x1b[38;2;130;170;255m\"Apache/2.4.58 (Unix) (internal dummy connection)\"\x1b[0m",
+			"combined-log-format",
+			`<remote-addr>::1 </remote-addr><ident>- </ident><remote-user>- </remote-user><timestamp>[16/Feb/2024:00:13:44 +0000] </timestamp><request>"OPTIONS * HTTP/1.0" </request><status:2xx>200 </status:2xx><body-bytes-sent>- </body-bytes-sent><http-referer>"-" </http-referer><http-user-agent>"Apache/2.4.58 (Unix) (internal dummy connection)"</http-user-agent>`,
 		},
 		{
 			`client.example.com - - [16/Feb/2024:00:14:07 +0000] "POST /api/v1/upload HTTP/1.1" 503 617 "-" "-"`,
-			"\x1b[38;2;238;204;159mclient.example.com \x1b[0m\x1b[38;2;130;139;184m- \x1b[0m\x1b[38;2;79;214;190m- \x1b[0m\x1b[38;2;192;153;255m[16/Feb/2024:00:14:07 +0000] \x1b[0m\x1b[38;2;195;232;141m\"POST /api/v1/upload HTTP/1.1\" \x1b[0m\x1b[38;2;255;0;255;1m503 \x1b[0m\x1b[38;2;99;109;166m617 \x1b[0m\x1b[38;2;252;167;234m\"-\" \x1b[0m\x1b[38;2;130;170;255m\"-\"\x1b[0m",
+			"combined-log-format",
+			`<remote-addr>client.example.com </remote-addr><ident>- </ident><remote-user>- </remote-user><timestamp>[16/Feb/2024:00:14:07 +0000] </timestamp><request>"POST /api/v1/upload HTTP/1.1" </request><status:5xx>503 </status:5xx><body-bytes-sent>617 </body-bytes-sent><http-referer>"-" </http-referer><http-user-agent>"-"</http-user-agent>`,
 		},
 		{
 			`198.51.100.42 - - [16/Feb/2024:00:15:21 +0000] "GET /search?q=\"quoted\" HTTP/1.1" 400 226 "-" "python-requests/2.31.0"`,
-			"\x1b[38;2;238;204;159m198.51.100.42 \x1b[0m\x1b[38;2;130;139;184m- \x1b[0m\x1b[38;2;79;214;190m- \x1b[0m\x1b[38;2;192;153;255m[16/Feb/2024:00:15:21 +0000] \x1b[0m\x1b[38;2;195;232;141m\"GET /search?q=\\\"quoted\\\" HTTP/1.1\" \x1b[0m\x1b[38;2;255;0;0;1m400 \x1b[0m\x1b[38;2;99;109;166m226 \x1b[0m\x1b[38;2;252;167;234m\"-\" \x1b[0m\x1b[38;2;130;170;255m\"python-requests/2.31.0\"\x1b[0m",
+			"combined-log-format",
+			`<remote-addr>198.51.100.42 </remote-addr><ident>- </ident><remote-user>- </remote-user><timestamp>[16/Feb/2024:00:15:21 +0000] </timestamp><request>"GET /search?q=\"quoted\" HTTP/1.1" </request><status:4xx>400 </status:4xx><body-bytes-sent>226 </body-bytes-sent><http-referer>"-" </http-referer><http-user-agent>"python-requests/2.31.0"</http-user-agent>`,
 		},
 		{
 			`127.0.0.1 - - [16/Feb/2024:00:16:03 +0000] "GET / HTTP/1.1" 000 0 "-" "-"`,
-			"\x1b[38;2;238;204;159m127.0.0.1 \x1b[0m\x1b[38;2;130;139;184m- \x1b[0m\x1b[38;2;79;214;190m- \x1b[0m\x1b[38;2;192;153;255m[16/Feb/2024:00:16:03 +0000] \x1b[0m\x1b[38;2;195;232;141m\"GET / HTTP/1.1\" \x1b[0m\x1b[38;2;130;139;184m000 \x1b[0m\x1b[38;2;99;109;166m0 \x1b[0m\x1b[38;2;252;167;234m\"-\" \x1b[0m\x1b[38;2;130;170;255m\"-\"\x1b[0m",
+			"combined-log-format",
+			`<remote-addr>127.0.0.1 </remote-addr><ident>- </ident><remote-user>- </remote-user><timestamp>[16/Feb/2024:00:16:03 +0000] </timestamp><request>"GET / HTTP/1.1" </request><status>000 </status><body-bytes-sent>0 </body-bytes-sent><http-referer>"-" </http-referer><http-user-agent>"-"</http-user-agent>`,
 		},
 
 		// traefik-common
 		{
 			`192.168.1.7 - - [16/Feb/2024:09:01:12 +0000] "GET /healthz HTTP/1.1" 100 2 "-" "kube-probe/1.29" 1 "web@docker" "http://172.17.0.3:80" 0ms`,
-			"\x1b[38;2;238;204;159m192.168.1.7 \x1b[0m\x1b[38;2;130;139;184m- \x1b[0m\x1b[38;2;79;214;190m- \x1b[0m\x1b[38;2;192;153;255m[16/Feb/2024:09:01:12 +0000] \x1b[0m\x1b[38;2;195;232;141m\"GET /healthz HTTP/1.1\" \x1b[0m\x1b[38;2;0;0;255;1m100 \x1b[0m\x1b[38;2;99;109;166m2 \x1b[0m\x1b[38;2;252;167;234m\"-\" \x1b[0m\x1b[38;2;130;170;255m\"kube-probe/1.29\" \x1b[0m\x1b[38;2;65;166;181m1 \x1b[0m\x1b[38;2;101;188;255m\"web@docker\" \x1b[0m\x1b[38;2;238;204;159m\"http://172.17.0.3:80\" \x1b[0m\x1b[38;2;100;198;213m0ms\x1b[0m",
+			"traefik-common",
+			`<remote-addr>192.168.1.7 </remote-addr><ident>- </ident><remote-user>- </remote-user><timestamp>[16/Feb/2024:09:01:12 +0000] </timestamp><request>"GET /healthz HTTP/1.1" </request><status:1xx>100 </status:1xx><content-length>2 </content-length><referer>"-" </referer><user-agent>"kube-probe/1.29" </user-agent><request-count>1 </request-count><router-name>"web@docker" </router-name><server-url>"http://172.17.0.3:80" </server-url><duration>0ms</duration>`,
 		},
 		{
 			`192.168.1.7 - - [16/Feb/2024:09:01:12 +0000] "GET /healthz HTTP/1.1" 200 2 "-" "kube-probe/1.29" 1 "web@docker" "http://172.17.0.3:80" 0ms`,
-			"\x1b[38;2;238;204;159m192.168.1.7 \x1b[0m\x1b[38;2;130;139;184m- \x1b[0m\x1b[38;2;79;214;190m- \x1b[0m\x1b[38;2;192;153;255m[16/Feb/2024:09:01:12 +0000] \x1b[0m\x1b[38;2;195;232;141m\"GET /healthz HTTP/1.1\" \x1b[0m\x1b[38;2;0;255;0;1m200 \x1b[0m\x1b[38;2;99;109;166m2 \x1b[0m\x1b[38;2;252;167;234m\"-\" \x1b[0m\x1b[38;2;130;170;255m\"kube-probe/1.29\" \x1b[0m\x1b[38;2;65;166;181m1 \x1b[0m\x1b[38;2;101;188;255m\"web@docker\" \x1b[0m\x1b[38;2;238;204;159m\"http://172.17.0.3:80\" \x1b[0m\x1b[38;2;100;198;213m0ms\x1b[0m",
+			"traefik-common",
+			`<remote-addr>192.168.1.7 </remote-addr><ident>- </ident><remote-user>- </remote-user><timestamp>[16/Feb/2024:09:01:12 +0000] </timestamp><request>"GET /healthz HTTP/1.1" </request><status:2xx>200 </status:2xx><content-length>2 </content-length><referer>"-" </referer><user-agent>"kube-probe/1.29" </user-agent><request-count>1 </request-count><router-name>"web@docker" </router-name><server-url>"http://172.17.0.3:80" </server-url><duration>0ms</duration>`,
 		},
 		{
 			`192.168.1.7 - - [16/Feb/2024:09:01:12 +0000] "GET /healthz HTTP/1.1" 302 2 "-" "kube-probe/1.29" 1 "web@docker" "http://172.17.0.3:80" 0ms`,
-			"\x1b[38;2;238;204;159m192.168.1.7 \x1b[0m\x1b[38;2;130;139;184m- \x1b[0m\x1b[38;2;79;214;190m- \x1b[0m\x1b[38;2;192;153;255m[16/Feb/2024:09:01:12 +0000] \x1b[0m\x1b[38;2;195;232;141m\"GET /healthz HTTP/1.1\" \x1b[0m\x1b[38;2;0;255;255;1m302 \x1b[0m\x1b[38;2;99;109;166m2 \x1b[0m\x1b[38;2;252;167;234m\"-\" \x1b[0m\x1b[38;2;130;170;255m\"kube-probe/1.29\" \x1b[0m\x1b[38;2;65;166;181m1 \x1b[0m\x1b[38;2;101;188;255m\"web@docker\" \x1b[0m\x1b[38;2;238;204;159m\"http://172.17.0.3:80\" \x1b[0m\x1b[38;2;100;198;213m0ms\x1b[0m",
+			"traefik-common",
+			`<remote-addr>192.168.1.7 </remote-addr><ident>- </ident><remote-user>- </remote-user><timestamp>[16/Feb/2024:09:01:12 +0000] </timestamp><request>"GET /healthz HTTP/1.1" </request><status:3xx>302 </status:3xx><content-length>2 </content-length><referer>"-" </referer><user-agent>"kube-probe/1.29" </user-agent><request-count>1 </request-count><router-name>"web@docker" </router-name><server-url>"http://172.17.0.3:80" </server-url><duration>0ms</duration>`,
 		},
 		{
 			`192.168.1.7 - - [16/Feb/2024:09:01:12 +0000] "GET /healthz HTTP/1.1" 404 2 "-" "kube-probe/1.29" 1 "web@docker" "http://172.17.0.3:80" 0ms`,
-			"\x1b[38;2;238;204;159m192.168.1.7 \x1b[0m\x1b[38;2;130;139;184m- \x1b[0m\x1b[38;2;79;214;190m- \x1b[0m\x1b[38;2;192;153;255m[16/Feb/2024:09:01:12 +0000] \x1b[0m\x1b[38;2;195;232;141m\"GET /healthz HTTP/1.1\" \x1b[0m\x1b[38;2;255;0;0;1m404 \x1b[0m\x1b[38;2;99;109;166m2 \x1b[0m\x1b[38;2;252;167;234m\"-\" \x1b[0m\x1b[38;2;130;170;255m\"kube-probe/1.29\" \x1b[0m\x1b[38;2;65;166;181m1 \x1b[0m\x1b[38;2;101;188;255m\"web@docker\" \x1b[0m\x1b[38;2;238;204;159m\"http://172.17.0.3:80\" \x1b[0m\x1b[38;2;100;198;213m0ms\x1b[0m",
+			"traefik-common",
+			`<remote-addr>192.168.1.7 </remote-addr><ident>- </ident><remote-user>- </remote-user><timestamp>[16/Feb/2024:09:01:12 +0000] </timestamp><request>"GET /healthz HTTP/1.1" </request><status:4xx>404 </status:4xx><content-length>2 </content-length><referer>"-" </referer><user-agent>"kube-probe/1.29" </user-agent><request-count>1 </request-count><router-name>"web@docker" </router-name><server-url>"http://172.17.0.3:80" </server-url><duration>0ms</duration>`,
 		},
 		{
 			`192.168.1.7 - - [16/Feb/2024:09:01:12 +0000] "GET /healthz HTTP/1.1" 503 2 "-" "kube-probe/1.29" 1 "web@docker" "http://172.17.0.3:80" 0ms`,
-			"\x1b[38;2;238;204;159m192.168.1.7 \x1b[0m\x1b[38;2;130;139;184m- \x1b[0m\x1b[38;2;79;214;190m- \x1b[0m\x1b[38;2;192;153;255m[16/Feb/2024:09:01:12 +0000] \x1b[0m\x1b[38;2;195;232;141m\"GET /healthz HTTP/1.1\" \x1b[0m\x1b[38;2;255;0;255;1m503 \x1b[0m\x1b[38;2;99;109;166m2 \x1b[0m\x1b[38;2;252;167;234m\"-\" \x1b[0m\x1b[38;2;130;170;255m\"kube-probe/1.29\" \x1b[0m\x1b[38;2;65;166;181m1 \x1b[0m\x1b[38;2;101;188;255m\"web@docker\" \x1b[0m\x1b[38;2;238;204;159m\"http://172.17.0.3:80\" \x1b[0m\x1b[38;2;100;198;213m0ms\x1b[0m",
+			"traefik-common",
+			`<remote-addr>192.168.1.7 </remote-addr><ident>- </ident><remote-user>- </remote-user><timestamp>[16/Feb/2024:09:01:12 +0000] </timestamp><request>"GET /healthz HTTP/1.1" </request><status:5xx>503 </status:5xx><content-length>2 </content-length><referer>"-" </referer><user-agent>"kube-probe/1.29" </user-agent><request-count>1 </request-count><router-name>"web@docker" </router-name><server-url>"http://172.17.0.3:80" </server-url><duration>0ms</duration>`,
 		},
 		{
 			`10.0.0.4 - admin [16/Feb/2024:09:02:44 +0000] "POST /api/v1/orders HTTP/2.0" 201 512 "https://shop.example.com/cart" "Mozilla/5.0 (X11; Linux x86_64) Gecko/20100101 Firefox/123.0" 137 "orders-router@kubernetes" "http://10.42.1.19:8000" 43.271ms`,
-			"\x1b[38;2;238;204;159m10.0.0.4 \x1b[0m\x1b[38;2;130;139;184m- \x1b[0m\x1b[38;2;79;214;190madmin \x1b[0m\x1b[38;2;192;153;255m[16/Feb/2024:09:02:44 +0000] \x1b[0m\x1b[38;2;195;232;141m\"POST /api/v1/orders HTTP/2.0\" \x1b[0m\x1b[38;2;0;255;0;1m201 \x1b[0m\x1b[38;2;99;109;166m512 \x1b[0m\x1b[38;2;252;167;234m\"https://shop.example.com/cart\" \x1b[0m\x1b[38;2;130;170;255m\"Mozilla/5.0 (X11; Linux x86_64) Gecko/20100101 Firefox/123.0\" \x1b[0m\x1b[38;2;65;166;181m137 \x1b[0m\x1b[38;2;101;188;255m\"orders-router@kubernetes\" \x1b[0m\x1b[38;2;238;204;159m\"http://10.42.1.19:8000\" \x1b[0m\x1b[38;2;100;198;213m43.271ms\x1b[0m",
+			"traefik-common",
+			`<remote-addr>10.0.0.4 </remote-addr><ident>- </ident><remote-user>admin </remote-user><timestamp>[16/Feb/2024:09:02:44 +0000] </timestamp><request>"POST /api/v1/orders HTTP/2.0" </request><status:2xx>201 </status:2xx><content-length>512 </content-length><referer>"https://shop.example.com/cart" </referer><user-agent>"Mozilla/5.0 (X11; Linux x86_64) Gecko/20100101 Firefox/123.0" </user-agent><request-count>137 </request-count><router-name>"orders-router@kubernetes" </router-name><server-url>"http://10.42.1.19:8000" </server-url><duration>43.271ms</duration>`,
 		},
 
 		// ingress-nginx-controller
 		{
 			`127.0.0.102 - - [27/Jun/2023:07:13:16 +0000] "GET /language/en-GB/en-GB.xml HTTP/1.1" 100 9 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36" 619 0.003 [imgproxy-imgproxy-imgproxy-80] [] 10.64.6.9:8080 9 0.003 403 07d2cd60741517a6d8222f40757b94c4`,
-			"\x1b[38;2;238;204;159m127.0.0.102 \x1b[0m\x1b[38;2;130;139;184m- \x1b[0m\x1b[38;2;79;214;190m- \x1b[0m\x1b[38;2;192;153;255m[27/Jun/2023:07:13:16 +0000] \x1b[0m\x1b[38;2;195;232;141m\"GET /language/en-GB/en-GB.xml HTTP/1.1\" \x1b[0m\x1b[38;2;0;0;255;1m100 \x1b[0m\x1b[38;2;99;109;166m9 \x1b[0m\x1b[38;2;252;167;234m\"-\" \x1b[0m\x1b[38;2;130;170;255m\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36\" \x1b[0m\x1b[38;2;65;166;181m619 \x1b[0m\x1b[38;2;195;232;141m0.003 \x1b[0m\x1b[38;2;101;188;255m[imgproxy-imgproxy-imgproxy-80] \x1b[0m\x1b[38;2;99;109;166m[] \x1b[0m\x1b[38;2;238;204;159m10.64.6.9:8080 \x1b[0m\x1b[38;2;192;153;255m9 \x1b[0m\x1b[38;2;100;198;213m0.003 \x1b[0m\x1b[38;2;255;0;0;1m403 \x1b[0m\x1b[38;2;99;109;166m07d2cd60741517a6d8222f40757b94c4\x1b[0m",
+			"ingress-nginx-controller",
+			`<remote-addr>127.0.0.102 </remote-addr><dash>- </dash><remote-user>- </remote-user><time-local>[27/Jun/2023:07:13:16 +0000] </time-local><request>"GET /language/en-GB/en-GB.xml HTTP/1.1" </request><status:1xx>100 </status:1xx><body-bytes-sent>9 </body-bytes-sent><http-referer>"-" </http-referer><http-user-agent>"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36" </http-user-agent><request-length>619 </request-length><request-time>0.003 </request-time><proxy-upstream-name>[imgproxy-imgproxy-imgproxy-80] </proxy-upstream-name><proxy-alternative-upstream-name>[] </proxy-alternative-upstream-name><upstream-addr>10.64.6.9:8080 </upstream-addr><upstream-response-length>9 </upstream-response-length><upstream-response-time>0.003 </upstream-response-time><upstream-status:4xx>403 </upstream-status:4xx><req-id>07d2cd60741517a6d8222f40757b94c4</req-id>`,
 		},
 		{
 			`127.0.0.102 - - [27/Jun/2023:07:13:16 +0000] "GET /language/en-GB/en-GB.xml HTTP/1.1" 200 9 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36" 619 0.003 [imgproxy-imgproxy-imgproxy-80] [] 10.64.6.9:8080 9 0.003 403 07d2cd60741517a6d8222f40757b94c4`,
-			"\x1b[38;2;238;204;159m127.0.0.102 \x1b[0m\x1b[38;2;130;139;184m- \x1b[0m\x1b[38;2;79;214;190m- \x1b[0m\x1b[38;2;192;153;255m[27/Jun/2023:07:13:16 +0000] \x1b[0m\x1b[38;2;195;232;141m\"GET /language/en-GB/en-GB.xml HTTP/1.1\" \x1b[0m\x1b[38;2;0;255;0;1m200 \x1b[0m\x1b[38;2;99;109;166m9 \x1b[0m\x1b[38;2;252;167;234m\"-\" \x1b[0m\x1b[38;2;130;170;255m\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36\" \x1b[0m\x1b[38;2;65;166;181m619 \x1b[0m\x1b[38;2;195;232;141m0.003 \x1b[0m\x1b[38;2;101;188;255m[imgproxy-imgproxy-imgproxy-80] \x1b[0m\x1b[38;2;99;109;166m[] \x1b[0m\x1b[38;2;238;204;159m10.64.6.9:8080 \x1b[0m\x1b[38;2;192;153;255m9 \x1b[0m\x1b[38;2;100;198;213m0.003 \x1b[0m\x1b[38;2;255;0;0;1m403 \x1b[0m\x1b[38;2;99;109;166m07d2cd60741517a6d8222f40757b94c4\x1b[0m",
+			"ingress-nginx-controller",
+			`<remote-addr>127.0.0.102 </remote-addr><dash>- </dash><remote-user>- </remote-user><time-local>[27/Jun/2023:07:13:16 +0000] </time-local><request>"GET /language/en-GB/en-GB.xml HTTP/1.1" </request><status:2xx>200 </status:2xx><body-bytes-sent>9 </body-bytes-sent><http-referer>"-" </http-referer><http-user-agent>"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36" </http-user-agent><request-length>619 </request-length><request-time>0.003 </request-time><proxy-upstream-name>[imgproxy-imgproxy-imgproxy-80] </proxy-upstream-name><proxy-alternative-upstream-name>[] </proxy-alternative-upstream-name><upstream-addr>10.64.6.9:8080 </upstream-addr><upstream-response-length>9 </upstream-response-length><upstream-response-time>0.003 </upstream-response-time><upstream-status:4xx>403 </upstream-status:4xx><req-id>07d2cd60741517a6d8222f40757b94c4</req-id>`,
 		},
 		{
 			`127.0.0.102 - - [27/Jun/2023:07:13:16 +0000] "GET /language/en-GB/en-GB.xml HTTP/1.1" 302 9 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36" 619 0.003 [imgproxy-imgproxy-imgproxy-80] [] 10.64.6.9:8080 9 0.003 403 07d2cd60741517a6d8222f40757b94c4`,
-			"\x1b[38;2;238;204;159m127.0.0.102 \x1b[0m\x1b[38;2;130;139;184m- \x1b[0m\x1b[38;2;79;214;190m- \x1b[0m\x1b[38;2;192;153;255m[27/Jun/2023:07:13:16 +0000] \x1b[0m\x1b[38;2;195;232;141m\"GET /language/en-GB/en-GB.xml HTTP/1.1\" \x1b[0m\x1b[38;2;0;255;255;1m302 \x1b[0m\x1b[38;2;99;109;166m9 \x1b[0m\x1b[38;2;252;167;234m\"-\" \x1b[0m\x1b[38;2;130;170;255m\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36\" \x1b[0m\x1b[38;2;65;166;181m619 \x1b[0m\x1b[38;2;195;232;141m0.003 \x1b[0m\x1b[38;2;101;188;255m[imgproxy-imgproxy-imgproxy-80] \x1b[0m\x1b[38;2;99;109;166m[] \x1b[0m\x1b[38;2;238;204;159m10.64.6.9:8080 \x1b[0m\x1b[38;2;192;153;255m9 \x1b[0m\x1b[38;2;100;198;213m0.003 \x1b[0m\x1b[38;2;255;0;0;1m403 \x1b[0m\x1b[38;2;99;109;166m07d2cd60741517a6d8222f40757b94c4\x1b[0m",
+			"ingress-nginx-controller",
+			`<remote-addr>127.0.0.102 </remote-addr><dash>- </dash><remote-user>- </remote-user><time-local>[27/Jun/2023:07:13:16 +0000] </time-local><request>"GET /language/en-GB/en-GB.xml HTTP/1.1" </request><status:3xx>302 </status:3xx><body-bytes-sent>9 </body-bytes-sent><http-referer>"-" </http-referer><http-user-agent>"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36" </http-user-agent><request-length>619 </request-length><request-time>0.003 </request-time><proxy-upstream-name>[imgproxy-imgproxy-imgproxy-80] </proxy-upstream-name><proxy-alternative-upstream-name>[] </proxy-alternative-upstream-name><upstream-addr>10.64.6.9:8080 </upstream-addr><upstream-response-length>9 </upstream-response-length><upstream-response-time>0.003 </upstream-response-time><upstream-status:4xx>403 </upstream-status:4xx><req-id>07d2cd60741517a6d8222f40757b94c4</req-id>`,
 		},
 		{
 			`127.0.0.102 - - [27/Jun/2023:07:13:16 +0000] "GET /language/en-GB/en-GB.xml HTTP/1.1" 404 9 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36" 619 0.003 [imgproxy-imgproxy-imgproxy-80] [] 10.64.6.9:8080 9 0.003 403 07d2cd60741517a6d8222f40757b94c4`,
-			"\x1b[38;2;238;204;159m127.0.0.102 \x1b[0m\x1b[38;2;130;139;184m- \x1b[0m\x1b[38;2;79;214;190m- \x1b[0m\x1b[38;2;192;153;255m[27/Jun/2023:07:13:16 +0000] \x1b[0m\x1b[38;2;195;232;141m\"GET /language/en-GB/en-GB.xml HTTP/1.1\" \x1b[0m\x1b[38;2;255;0;0;1m404 \x1b[0m\x1b[38;2;99;109;166m9 \x1b[0m\x1b[38;2;252;167;234m\"-\" \x1b[0m\x1b[38;2;130;170;255m\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36\" \x1b[0m\x1b[38;2;65;166;181m619 \x1b[0m\x1b[38;2;195;232;141m0.003 \x1b[0m\x1b[38;2;101;188;255m[imgproxy-imgproxy-imgproxy-80] \x1b[0m\x1b[38;2;99;109;166m[] \x1b[0m\x1b[38;2;238;204;159m10.64.6.9:8080 \x1b[0m\x1b[38;2;192;153;255m9 \x1b[0m\x1b[38;2;100;198;213m0.003 \x1b[0m\x1b[38;2;255;0;0;1m403 \x1b[0m\x1b[38;2;99;109;166m07d2cd60741517a6d8222f40757b94c4\x1b[0m",
+			"ingress-nginx-controller",
+			`<remote-addr>127.0.0.102 </remote-addr><dash>- </dash><remote-user>- </remote-user><time-local>[27/Jun/2023:07:13:16 +0000] </time-local><request>"GET /language/en-GB/en-GB.xml HTTP/1.1" </request><status:4xx>404 </status:4xx><body-bytes-sent>9 </body-bytes-sent><http-referer>"-" </http-referer><http-user-agent>"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36" </http-user-agent><request-length>619 </request-length><request-time>0.003 </request-time><proxy-upstream-name>[imgproxy-imgproxy-imgproxy-80] </proxy-upstream-name><proxy-alternative-upstream-name>[] </proxy-alternative-upstream-name><upstream-addr>10.64.6.9:8080 </upstream-addr><upstream-response-length>9 </upstream-response-length><upstream-response-time>0.003 </upstream-response-time><upstream-status:4xx>403 </upstream-status:4xx><req-id>07d2cd60741517a6d8222f40757b94c4</req-id>`,
 		},
 		{
 			`127.0.0.102 - - [27/Jun/2023:07:13:16 +0000] "GET /language/en-GB/en-GB.xml HTTP/1.1" 503 9 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36" 619 0.003 [imgproxy-imgproxy-imgproxy-80] [] 10.64.6.9:8080 9 0.003 403 07d2cd60741517a6d8222f40757b94c4`,
-			"\x1b[38;2;238;204;159m127.0.0.102 \x1b[0m\x1b[38;2;130;139;184m- \x1b[0m\x1b[38;2;79;214;190m- \x1b[0m\x1b[38;2;192;153;255m[27/Jun/2023:07:13:16 +0000] \x1b[0m\x1b[38;2;195;232;141m\"GET /language/en-GB/en-GB.xml HTTP/1.1\" \x1b[0m\x1b[38;2;255;0;255;1m503 \x1b[0m\x1b[38;2;99;109;166m9 \x1b[0m\x1b[38;2;252;167;234m\"-\" \x1b[0m\x1b[38;2;130;170;255m\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36\" \x1b[0m\x1b[38;2;65;166;181m619 \x1b[0m\x1b[38;2;195;232;141m0.003 \x1b[0m\x1b[38;2;101;188;255m[imgproxy-imgproxy-imgproxy-80] \x1b[0m\x1b[38;2;99;109;166m[] \x1b[0m\x1b[38;2;238;204;159m10.64.6.9:8080 \x1b[0m\x1b[38;2;192;153;255m9 \x1b[0m\x1b[38;2;100;198;213m0.003 \x1b[0m\x1b[38;2;255;0;0;1m403 \x1b[0m\x1b[38;2;99;109;166m07d2cd60741517a6d8222f40757b94c4\x1b[0m",
+			"ingress-nginx-controller",
+			`<remote-addr>127.0.0.102 </remote-addr><dash>- </dash><remote-user>- </remote-user><time-local>[27/Jun/2023:07:13:16 +0000] </time-local><request>"GET /language/en-GB/en-GB.xml HTTP/1.1" </request><status:5xx>503 </status:5xx><body-bytes-sent>9 </body-bytes-sent><http-referer>"-" </http-referer><http-user-agent>"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36" </http-user-agent><request-length>619 </request-length><request-time>0.003 </request-time><proxy-upstream-name>[imgproxy-imgproxy-imgproxy-80] </proxy-upstream-name><proxy-alternative-upstream-name>[] </proxy-alternative-upstream-name><upstream-addr>10.64.6.9:8080 </upstream-addr><upstream-response-length>9 </upstream-response-length><upstream-response-time>0.003 </upstream-response-time><upstream-status:4xx>403 </upstream-status:4xx><req-id>07d2cd60741517a6d8222f40757b94c4</req-id>`,
 		},
 		{
 			`127.0.0.102 - - [27/Jun/2023:07:13:16 +0000] "GET /language/en-GB/en-GB.xml HTTP/1.1" 403 9 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36" 619 0.003 [imgproxy-imgproxy-imgproxy-80] [] 10.64.6.9:8080 9 0.003 100 07d2cd60741517a6d8222f40757b94c4`,
-			"\x1b[38;2;238;204;159m127.0.0.102 \x1b[0m\x1b[38;2;130;139;184m- \x1b[0m\x1b[38;2;79;214;190m- \x1b[0m\x1b[38;2;192;153;255m[27/Jun/2023:07:13:16 +0000] \x1b[0m\x1b[38;2;195;232;141m\"GET /language/en-GB/en-GB.xml HTTP/1.1\" \x1b[0m\x1b[38;2;255;0;0;1m403 \x1b[0m\x1b[38;2;99;109;166m9 \x1b[0m\x1b[38;2;252;167;234m\"-\" \x1b[0m\x1b[38;2;130;170;255m\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36\" \x1b[0m\x1b[38;2;65;166;181m619 \x1b[0m\x1b[38;2;195;232;141m0.003 \x1b[0m\x1b[38;2;101;188;255m[imgproxy-imgproxy-imgproxy-80] \x1b[0m\x1b[38;2;99;109;166m[] \x1b[0m\x1b[38;2;238;204;159m10.64.6.9:8080 \x1b[0m\x1b[38;2;192;153;255m9 \x1b[0m\x1b[38;2;100;198;213m0.003 \x1b[0m\x1b[38;2;0;0;255;1m100 \x1b[0m\x1b[38;2;99;109;166m07d2cd60741517a6d8222f40757b94c4\x1b[0m",
+			"ingress-nginx-controller",
+			`<remote-addr>127.0.0.102 </remote-addr><dash>- </dash><remote-user>- </remote-user><time-local>[27/Jun/2023:07:13:16 +0000] </time-local><request>"GET /language/en-GB/en-GB.xml HTTP/1.1" </request><status:4xx>403 </status:4xx><body-bytes-sent>9 </body-bytes-sent><http-referer>"-" </http-referer><http-user-agent>"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36" </http-user-agent><request-length>619 </request-length><request-time>0.003 </request-time><proxy-upstream-name>[imgproxy-imgproxy-imgproxy-80] </proxy-upstream-name><proxy-alternative-upstream-name>[] </proxy-alternative-upstream-name><upstream-addr>10.64.6.9:8080 </upstream-addr><upstream-response-length>9 </upstream-response-length><upstream-response-time>0.003 </upstream-response-time><upstream-status:1xx>100 </upstream-status:1xx><req-id>07d2cd60741517a6d8222f40757b94c4</req-id>`,
 		},
 		{
 			`127.0.0.102 - - [27/Jun/2023:07:13:16 +0000] "GET /language/en-GB/en-GB.xml HTTP/1.1" 403 9 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36" 619 0.003 [imgproxy-imgproxy-imgproxy-80] [] 10.64.6.9:8080 9 0.003 200 07d2cd60741517a6d8222f40757b94c4`,
-			"\x1b[38;2;238;204;159m127.0.0.102 \x1b[0m\x1b[38;2;130;139;184m- \x1b[0m\x1b[38;2;79;214;190m- \x1b[0m\x1b[38;2;192;153;255m[27/Jun/2023:07:13:16 +0000] \x1b[0m\x1b[38;2;195;232;141m\"GET /language/en-GB/en-GB.xml HTTP/1.1\" \x1b[0m\x1b[38;2;255;0;0;1m403 \x1b[0m\x1b[38;2;99;109;166m9 \x1b[0m\x1b[38;2;252;167;234m\"-\" \x1b[0m\x1b[38;2;130;170;255m\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36\" \x1b[0m\x1b[38;2;65;166;181m619 \x1b[0m\x1b[38;2;195;232;141m0.003 \x1b[0m\x1b[38;2;101;188;255m[imgproxy-imgproxy-imgproxy-80] \x1b[0m\x1b[38;2;99;109;166m[] \x1b[0m\x1b[38;2;238;204;159m10.64.6.9:8080 \x1b[0m\x1b[38;2;192;153;255m9 \x1b[0m\x1b[38;2;100;198;213m0.003 \x1b[0m\x1b[38;2;0;255;0;1m200 \x1b[0m\x1b[38;2;99;109;166m07d2cd60741517a6d8222f40757b94c4\x1b[0m",
+			"ingress-nginx-controller",
+			`<remote-addr>127.0.0.102 </remote-addr><dash>- </dash><remote-user>- </remote-user><time-local>[27/Jun/2023:07:13:16 +0000] </time-local><request>"GET /language/en-GB/en-GB.xml HTTP/1.1" </request><status:4xx>403 </status:4xx><body-bytes-sent>9 </body-bytes-sent><http-referer>"-" </http-referer><http-user-agent>"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36" </http-user-agent><request-length>619 </request-length><request-time>0.003 </request-time><proxy-upstream-name>[imgproxy-imgproxy-imgproxy-80] </proxy-upstream-name><proxy-alternative-upstream-name>[] </proxy-alternative-upstream-name><upstream-addr>10.64.6.9:8080 </upstream-addr><upstream-response-length>9 </upstream-response-length><upstream-response-time>0.003 </upstream-response-time><upstream-status:2xx>200 </upstream-status:2xx><req-id>07d2cd60741517a6d8222f40757b94c4</req-id>`,
 		},
 		{
 			`127.0.0.102 - - [27/Jun/2023:07:13:16 +0000] "GET /language/en-GB/en-GB.xml HTTP/1.1" 403 9 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36" 619 0.003 [imgproxy-imgproxy-imgproxy-80] [] 10.64.6.9:8080 9 0.003 302 07d2cd60741517a6d8222f40757b94c4`,
-			"\x1b[38;2;238;204;159m127.0.0.102 \x1b[0m\x1b[38;2;130;139;184m- \x1b[0m\x1b[38;2;79;214;190m- \x1b[0m\x1b[38;2;192;153;255m[27/Jun/2023:07:13:16 +0000] \x1b[0m\x1b[38;2;195;232;141m\"GET /language/en-GB/en-GB.xml HTTP/1.1\" \x1b[0m\x1b[38;2;255;0;0;1m403 \x1b[0m\x1b[38;2;99;109;166m9 \x1b[0m\x1b[38;2;252;167;234m\"-\" \x1b[0m\x1b[38;2;130;170;255m\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36\" \x1b[0m\x1b[38;2;65;166;181m619 \x1b[0m\x1b[38;2;195;232;141m0.003 \x1b[0m\x1b[38;2;101;188;255m[imgproxy-imgproxy-imgproxy-80] \x1b[0m\x1b[38;2;99;109;166m[] \x1b[0m\x1b[38;2;238;204;159m10.64.6.9:8080 \x1b[0m\x1b[38;2;192;153;255m9 \x1b[0m\x1b[38;2;100;198;213m0.003 \x1b[0m\x1b[38;2;0;255;255;1m302 \x1b[0m\x1b[38;2;99;109;166m07d2cd60741517a6d8222f40757b94c4\x1b[0m",
+			"ingress-nginx-controller",
+			`<remote-addr>127.0.0.102 </remote-addr><dash>- </dash><remote-user>- </remote-user><time-local>[27/Jun/2023:07:13:16 +0000] </time-local><request>"GET /language/en-GB/en-GB.xml HTTP/1.1" </request><status:4xx>403 </status:4xx><body-bytes-sent>9 </body-bytes-sent><http-referer>"-" </http-referer><http-user-agent>"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36" </http-user-agent><request-length>619 </request-length><request-time>0.003 </request-time><proxy-upstream-name>[imgproxy-imgproxy-imgproxy-80] </proxy-upstream-name><proxy-alternative-upstream-name>[] </proxy-alternative-upstream-name><upstream-addr>10.64.6.9:8080 </upstream-addr><upstream-response-length>9 </upstream-response-length><upstream-response-time>0.003 </upstream-response-time><upstream-status:3xx>302 </upstream-status:3xx><req-id>07d2cd60741517a6d8222f40757b94c4</req-id>`,
 		},
 		{
 			`127.0.0.102 - - [27/Jun/2023:07:13:16 +0000] "GET /language/en-GB/en-GB.xml HTTP/1.1" 403 9 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36" 619 0.003 [imgproxy-imgproxy-imgproxy-80] [] 10.64.6.9:8080 9 0.003 404 07d2cd60741517a6d8222f40757b94c4`,
-			"\x1b[38;2;238;204;159m127.0.0.102 \x1b[0m\x1b[38;2;130;139;184m- \x1b[0m\x1b[38;2;79;214;190m- \x1b[0m\x1b[38;2;192;153;255m[27/Jun/2023:07:13:16 +0000] \x1b[0m\x1b[38;2;195;232;141m\"GET /language/en-GB/en-GB.xml HTTP/1.1\" \x1b[0m\x1b[38;2;255;0;0;1m403 \x1b[0m\x1b[38;2;99;109;166m9 \x1b[0m\x1b[38;2;252;167;234m\"-\" \x1b[0m\x1b[38;2;130;170;255m\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36\" \x1b[0m\x1b[38;2;65;166;181m619 \x1b[0m\x1b[38;2;195;232;141m0.003 \x1b[0m\x1b[38;2;101;188;255m[imgproxy-imgproxy-imgproxy-80] \x1b[0m\x1b[38;2;99;109;166m[] \x1b[0m\x1b[38;2;238;204;159m10.64.6.9:8080 \x1b[0m\x1b[38;2;192;153;255m9 \x1b[0m\x1b[38;2;100;198;213m0.003 \x1b[0m\x1b[38;2;255;0;0;1m404 \x1b[0m\x1b[38;2;99;109;166m07d2cd60741517a6d8222f40757b94c4\x1b[0m",
+			"ingress-nginx-controller",
+			`<remote-addr>127.0.0.102 </remote-addr><dash>- </dash><remote-user>- </remote-user><time-local>[27/Jun/2023:07:13:16 +0000] </time-local><request>"GET /language/en-GB/en-GB.xml HTTP/1.1" </request><status:4xx>403 </status:4xx><body-bytes-sent>9 </body-bytes-sent><http-referer>"-" </http-referer><http-user-agent>"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36" </http-user-agent><request-length>619 </request-length><request-time>0.003 </request-time><proxy-upstream-name>[imgproxy-imgproxy-imgproxy-80] </proxy-upstream-name><proxy-alternative-upstream-name>[] </proxy-alternative-upstream-name><upstream-addr>10.64.6.9:8080 </upstream-addr><upstream-response-length>9 </upstream-response-length><upstream-response-time>0.003 </upstream-response-time><upstream-status:4xx>404 </upstream-status:4xx><req-id>07d2cd60741517a6d8222f40757b94c4</req-id>`,
 		},
 		{
 			`127.0.0.102 - - [27/Jun/2023:07:13:16 +0000] "GET /language/en-GB/en-GB.xml HTTP/1.1" 403 9 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36" 619 0.003 [imgproxy-imgproxy-imgproxy-80] [] 10.64.6.9:8080 9 0.003 503 07d2cd60741517a6d8222f40757b94c4`,
-			"\x1b[38;2;238;204;159m127.0.0.102 \x1b[0m\x1b[38;2;130;139;184m- \x1b[0m\x1b[38;2;79;214;190m- \x1b[0m\x1b[38;2;192;153;255m[27/Jun/2023:07:13:16 +0000] \x1b[0m\x1b[38;2;195;232;141m\"GET /language/en-GB/en-GB.xml HTTP/1.1\" \x1b[0m\x1b[38;2;255;0;0;1m403 \x1b[0m\x1b[38;2;99;109;166m9 \x1b[0m\x1b[38;2;252;167;234m\"-\" \x1b[0m\x1b[38;2;130;170;255m\"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36\" \x1b[0m\x1b[38;2;65;166;181m619 \x1b[0m\x1b[38;2;195;232;141m0.003 \x1b[0m\x1b[38;2;101;188;255m[imgproxy-imgproxy-imgproxy-80] \x1b[0m\x1b[38;2;99;109;166m[] \x1b[0m\x1b[38;2;238;204;159m10.64.6.9:8080 \x1b[0m\x1b[38;2;192;153;255m9 \x1b[0m\x1b[38;2;100;198;213m0.003 \x1b[0m\x1b[38;2;255;0;255;1m503 \x1b[0m\x1b[38;2;99;109;166m07d2cd60741517a6d8222f40757b94c4\x1b[0m",
+			"ingress-nginx-controller",
+			`<remote-addr>127.0.0.102 </remote-addr><dash>- </dash><remote-user>- </remote-user><time-local>[27/Jun/2023:07:13:16 +0000] </time-local><request>"GET /language/en-GB/en-GB.xml HTTP/1.1" </request><status:4xx>403 </status:4xx><body-bytes-sent>9 </body-bytes-sent><http-referer>"-" </http-referer><http-user-agent>"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36" </http-user-agent><request-length>619 </request-length><request-time>0.003 </request-time><proxy-upstream-name>[imgproxy-imgproxy-imgproxy-80] </proxy-upstream-name><proxy-alternative-upstream-name>[] </proxy-alternative-upstream-name><upstream-addr>10.64.6.9:8080 </upstream-addr><upstream-response-length>9 </upstream-response-length><upstream-response-time>0.003 </upstream-response-time><upstream-status:5xx>503 </upstream-status:5xx><req-id>07d2cd60741517a6d8222f40757b94c4</req-id>`,
 		},
 
 		// klog
 		{
 			`I0410 23:18:43.650599       1 controller.go:175] "starting healthz server" logger="cert-manager.controller" address="[::]:9403"`,
-			"\x1b[38;2;130;170;255;1mI0410 \x1b[0m\x1b[38;2;252;167;234m23:18:43.650599\x1b[0m\x1b[38;2;99;109;166m       1 \x1b[0m\x1b[38;2;137;221;255mcontroller.go\x1b[0m\x1b[38;2;99;109;166m:175\x1b[0m\x1b[38;2;255;150;108m] \x1b[0m\"starting healthz server\" logger=\"cert-manager.controller\" address=\"[::]:9403\"",
+			"klog",
+			`<log-level:info>I0410 </log-level:info><time>23:18:43.650599</time><thread-id>       1 </thread-id><filename>controller.go</filename><line-number>:175</line-number><bracket>] </bracket>"<w:good>starting</w:good> healthz server"<p:logfmt-string:key> logger</p:logfmt-string:key><p:logfmt-string:equal-sign>=</p:logfmt-string:equal-sign><p:logfmt-string:opening-quotation-mark>"</p:logfmt-string:opening-quotation-mark>cert-manager.controller<p:logfmt-string:closing-quotation-mark>"</p:logfmt-string:closing-quotation-mark><p:logfmt-string:key> address</p:logfmt-string:key><p:logfmt-string:equal-sign>=</p:logfmt-string:equal-sign><p:logfmt-string:opening-quotation-mark>"</p:logfmt-string:opening-quotation-mark><p:ipv6-address:opening-bracket>[</p:ipv6-address:opening-bracket><p:ipv6-address:address>::</p:ipv6-address:address><p:ipv6-address:closing-bracket>]</p:ipv6-address:closing-bracket><p:ipv6-address:port>:9403</p:ipv6-address:port><p:logfmt-string:closing-quotation-mark>"</p:logfmt-string:closing-quotation-mark>`,
 		},
 		{
 			`W0704 20:01:06.932182       1 warnings.go:70] annotation "kubernetes.io/ingress.class" is deprecated, please use 'spec.ingressClassName' instead`,
-			"\x1b[38;2;255;199;119;1mW0704 \x1b[0m\x1b[38;2;252;167;234m20:01:06.932182\x1b[0m\x1b[38;2;99;109;166m       1 \x1b[0m\x1b[38;2;137;221;255mwarnings.go\x1b[0m\x1b[38;2;99;109;166m:70\x1b[0m\x1b[38;2;255;150;108m] \x1b[0mannotation \"kubernetes.io/ingress.class\" is deprecated, please use 'spec.ingressClassName' instead",
+			"klog",
+			`<log-level:warning>W0704 </log-level:warning><time>20:01:06.932182</time><thread-id>       1 </thread-id><filename>warnings.go</filename><line-number>:70</line-number><bracket>] </bracket>annotation "kubernetes.io/ingress.class" is deprecated, please use 'spec.ingressClassName' instead`,
 		},
 		{
 			`E0714 16:12:36.594249       1 controller.go:104] "Unhandled Error" err="ingress 'menetekel/main' in work queue no longer exists" logger="UnhandledError"`,
-			"\x1b[38;2;255;117;127;1mE0714 \x1b[0m\x1b[38;2;252;167;234m16:12:36.594249\x1b[0m\x1b[38;2;99;109;166m       1 \x1b[0m\x1b[38;2;137;221;255mcontroller.go\x1b[0m\x1b[38;2;99;109;166m:104\x1b[0m\x1b[38;2;255;150;108m] \x1b[0m\"Unhandled Error\" err=\"ingress 'menetekel/main' in work queue no longer exists\" logger=\"UnhandledError\"",
+			"klog",
+			`<log-level:error>E0714 </log-level:error><time>16:12:36.594249</time><thread-id>       1 </thread-id><filename>controller.go</filename><line-number>:104</line-number><bracket>] </bracket>"Unhandled <w:bad>Error</w:bad>"<p:logfmt-string:key> err</p:logfmt-string:key><p:logfmt-string:equal-sign>=</p:logfmt-string:equal-sign><p:logfmt-string:opening-quotation-mark>"</p:logfmt-string:opening-quotation-mark>ingress 'menetekel/main' in work queue no longer exists<p:logfmt-string:closing-quotation-mark>"</p:logfmt-string:closing-quotation-mark><p:logfmt-string:key> logger</p:logfmt-string:key><p:logfmt-string:equal-sign>=</p:logfmt-string:equal-sign><p:logfmt-string:opening-quotation-mark>"</p:logfmt-string:opening-quotation-mark>UnhandledError<p:logfmt-string:closing-quotation-mark>"</p:logfmt-string:closing-quotation-mark>`,
 		},
 		{
 			`F0123 00:12:34.567890       1 controller.go:4] "Fatal Error" err="fatal error"`,
-			"\x1b[38;2;197;59;83;1mF0123 \x1b[0m\x1b[38;2;252;167;234m00:12:34.567890\x1b[0m\x1b[38;2;99;109;166m       1 \x1b[0m\x1b[38;2;137;221;255mcontroller.go\x1b[0m\x1b[38;2;99;109;166m:4\x1b[0m\x1b[38;2;255;150;108m] \x1b[0m\"Fatal Error\" err=\"fatal error\"",
+			"klog",
+			`<log-level:fatal>F0123 </log-level:fatal><time>00:12:34.567890</time><thread-id>       1 </thread-id><filename>controller.go</filename><line-number>:4</line-number><bracket>] </bracket>"<w:bad>Fatal</w:bad> <w:bad>Error</w:bad>"<p:logfmt-string:key> err</p:logfmt-string:key><p:logfmt-string:equal-sign>=</p:logfmt-string:equal-sign><p:logfmt-string:opening-quotation-mark>"</p:logfmt-string:opening-quotation-mark><w:bad>fatal</w:bad> <w:bad>error</w:bad><p:logfmt-string:closing-quotation-mark>"</p:logfmt-string:closing-quotation-mark>`,
 		},
 
 		// redis
 		{
 			`1:M 01 Feb 2024 19:41:07.226 # monotonic clock: POSIX clock_gettime`,
-			"\x1b[38;2;154;173;236m1\x1b[0m\x1b[38;2;99;109;166m:\x1b[0m\x1b[38;2;255;117;127;1mM \x1b[0m\x1b[38;2;192;153;255m01 Feb 2024 \x1b[0m\x1b[38;2;252;167;234m19:41:07.226 \x1b[0m\x1b[38;2;255;199;119;1m# \x1b[0mmonotonic clock: POSIX clock_gettime",
+			"redis",
+			`<pid>1</pid><colon>:</colon><role:master>M </role:master><date>01 Feb 2024 </date><time>19:41:07.226 </time><log-level:warning># </log-level:warning>monotonic clock: POSIX clock_gettime`,
 		},
 		{
 			`22:S 17 Feb 2024 00:39:12.500 * Starting automatic rewriting of AOF on 3886% growth`,
-			"\x1b[38;2;154;173;236m22\x1b[0m\x1b[38;2;99;109;166m:\x1b[0m\x1b[38;2;130;170;255;1mS \x1b[0m\x1b[38;2;192;153;255m17 Feb 2024 \x1b[0m\x1b[38;2;252;167;234m00:39:12.500 \x1b[0m\x1b[38;2;137;221;255;1m* \x1b[0mStarting automatic rewriting of AOF on 3886% growth",
+			"redis",
+			`<pid>22</pid><colon>:</colon><role:replica>S </role:replica><date>17 Feb 2024 </date><time>00:39:12.500 </time><log-level:notice>* </log-level:notice><w:good>Starting</w:good> automatic rewriting of AOF on 3886% growth`,
 		},
 		{
 			`375:X 20 Jun 2025 13:27:11.773 - Sentinel ID is 2814dfe0610f4b8a99b4c6076693ed87d032af23`,
-			"\x1b[38;2;154;173;236m375\x1b[0m\x1b[38;2;99;109;166m:\x1b[0m\x1b[38;2;255;199;119;1mX \x1b[0m\x1b[38;2;192;153;255m20 Jun 2025 \x1b[0m\x1b[38;2;252;167;234m13:27:11.773 \x1b[0m\x1b[38;2;130;170;255;1m- \x1b[0mSentinel ID is 2814dfe0610f4b8a99b4c6076693ed87d032af23",
+			"redis",
+			`<pid>375</pid><colon>:</colon><role:sentinel>X </role:sentinel><date>20 Jun 2025 </date><time>13:27:11.773 </time><log-level:info>- </log-level:info>Sentinel ID is<p:duration:start> </p:duration:start><p:duration:number>2814</p:duration:number><p:duration:unit>d</p:duration:unit>fe0610f4b8a99b4c6076693ed87d032af23`,
 		},
 		{
 			`8792:C 01 Feb 2024 19:41:07.224 . oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo`,
-			"\x1b[38;2;154;173;236m8792\x1b[0m\x1b[38;2;99;109;166m:\x1b[0m\x1b[38;2;184;219;135;1mC \x1b[0m\x1b[38;2;192;153;255m01 Feb 2024 \x1b[0m\x1b[38;2;252;167;234m19:41:07.224 \x1b[0m\x1b[38;2;184;219;135;1m. \x1b[0moO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo",
+			"redis",
+			`<pid>8792</pid><colon>:</colon><role:rdb-aof-writing-child>C </role:rdb-aof-writing-child><date>01 Feb 2024 </date><time>19:41:07.224 </time><log-level:debug>. </log-level:debug>oO0OoO0OoO0Oo Redis is <w:good>starting</w:good> oO0OoO0OoO0Oo`,
 		},
 
 		// syslog-rfc3164
 		{
 			`Jul  3 08:27:19 menetekel systemd[1]: Condition check resulted in MD array scrubbing - continuation being skipped.`,
-			"\x1b[38;2;65;166;181m\x1b[0m\x1b[38;2;192;153;255mJul  3 \x1b[0m\x1b[38;2;252;167;234m08:27:19 \x1b[0m\x1b[38;2;137;221;255mmenetekel \x1b[0m\x1b[38;2;130;170;255msystemd\x1b[0m\x1b[38;2;238;204;159m[1]\x1b[0m\x1b[38;2;99;109;166m: \x1b[0mCondition check resulted in MD array scrubbing - continuation being skipped.",
+			"syslog-rfc3164",
+			`<priority></priority><date>Jul  3 </date><time>08:27:19 </time><hostname>menetekel </hostname><program>systemd</program><pid>[1]</pid><colon>: </colon>Condition check resulted in MD array scrubbing - continuation being <w:warning>skipped</w:warning>.`,
 		},
 		{
 			`Jul  3 09:17:01 menetekel CRON[1185749]: (root) CMD (   cd / && run-parts --report /etc/cron.hourly)`,
-			"\x1b[38;2;65;166;181m\x1b[0m\x1b[38;2;192;153;255mJul  3 \x1b[0m\x1b[38;2;252;167;234m09:17:01 \x1b[0m\x1b[38;2;137;221;255mmenetekel \x1b[0m\x1b[38;2;130;170;255mCRON\x1b[0m\x1b[38;2;238;204;159m[1185749]\x1b[0m\x1b[38;2;99;109;166m: \x1b[0m(root) CMD (   cd / && run-parts --report /etc/cron.hourly)",
+			"syslog-rfc3164",
+			`<priority></priority><date>Jul  3 </date><time>09:17:01 </time><hostname>menetekel </hostname><program>CRON</program><pid>[1185749]</pid><colon>: </colon>(root) CMD (   cd / && run-parts --report /etc/cron.hourly)`,
 		},
 		{
 			`Jul 13 10:17:02 menetekel CRON[1190762]: (root) CMD (   cd / && run-parts --report /etc/cron.hourly)`,
-			"\x1b[38;2;65;166;181m\x1b[0m\x1b[38;2;192;153;255mJul 13 \x1b[0m\x1b[38;2;252;167;234m10:17:02 \x1b[0m\x1b[38;2;137;221;255mmenetekel \x1b[0m\x1b[38;2;130;170;255mCRON\x1b[0m\x1b[38;2;238;204;159m[1190762]\x1b[0m\x1b[38;2;99;109;166m: \x1b[0m(root) CMD (   cd / && run-parts --report /etc/cron.hourly)",
+			"syslog-rfc3164",
+			`<priority></priority><date>Jul 13 </date><time>10:17:02 </time><hostname>menetekel </hostname><program>CRON</program><pid>[1190762]</pid><colon>: </colon>(root) CMD (   cd / && run-parts --report /etc/cron.hourly)`,
 		},
 		{
 			`Jul 13 10:20:04 menetekel systemd[1]: Starting Certbot...`,
-			"\x1b[38;2;65;166;181m\x1b[0m\x1b[38;2;192;153;255mJul 13 \x1b[0m\x1b[38;2;252;167;234m10:20:04 \x1b[0m\x1b[38;2;137;221;255mmenetekel \x1b[0m\x1b[38;2;130;170;255msystemd\x1b[0m\x1b[38;2;238;204;159m[1]\x1b[0m\x1b[38;2;99;109;166m: \x1b[0mStarting Certbot...",
+			"syslog-rfc3164",
+			`<priority></priority><date>Jul 13 </date><time>10:20:04 </time><hostname>menetekel </hostname><program>systemd</program><pid>[1]</pid><colon>: </colon><w:good>Starting</w:good> Certbot...`,
 		},
 		{
 			`Jul 13 10:17:02 menetekel CRON: (root) CMD (   cd / && run-parts --report /etc/cron.hourly)`,
-			"\x1b[38;2;65;166;181m\x1b[0m\x1b[38;2;192;153;255mJul 13 \x1b[0m\x1b[38;2;252;167;234m10:17:02 \x1b[0m\x1b[38;2;137;221;255mmenetekel \x1b[0m\x1b[38;2;130;170;255mCRON\x1b[0m\x1b[38;2;238;204;159m\x1b[0m\x1b[38;2;99;109;166m: \x1b[0m(root) CMD (   cd / && run-parts --report /etc/cron.hourly)",
+			"syslog-rfc3164",
+			`<priority></priority><date>Jul 13 </date><time>10:17:02 </time><hostname>menetekel </hostname><program>CRON</program><pid></pid><colon>: </colon>(root) CMD (   cd / && run-parts --report /etc/cron.hourly)`,
 		},
 		{
 			`Jul 13 10:20:04 menetekel systemd: Starting Certbot...`,
-			"\x1b[38;2;65;166;181m\x1b[0m\x1b[38;2;192;153;255mJul 13 \x1b[0m\x1b[38;2;252;167;234m10:20:04 \x1b[0m\x1b[38;2;137;221;255mmenetekel \x1b[0m\x1b[38;2;130;170;255msystemd\x1b[0m\x1b[38;2;238;204;159m\x1b[0m\x1b[38;2;99;109;166m: \x1b[0mStarting Certbot...",
+			"syslog-rfc3164",
+			`<priority></priority><date>Jul 13 </date><time>10:20:04 </time><hostname>menetekel </hostname><program>systemd</program><pid></pid><colon>: </colon><w:good>Starting</w:good> Certbot...`,
 		},
 		{
 			`<25>Jul 13 10:20:04 menetekel systemd[1]: certbot.service: Deactivated successfully.`,
-			"\x1b[38;2;65;166;181m<25>\x1b[0m\x1b[38;2;192;153;255mJul 13 \x1b[0m\x1b[38;2;252;167;234m10:20:04 \x1b[0m\x1b[38;2;137;221;255mmenetekel \x1b[0m\x1b[38;2;130;170;255msystemd\x1b[0m\x1b[38;2;238;204;159m[1]\x1b[0m\x1b[38;2;99;109;166m: \x1b[0mcertbot.service: Deactivated successfully.",
+			"syslog-rfc3164",
+			`<priority><25></priority><date>Jul 13 </date><time>10:20:04 </time><hostname>menetekel </hostname><program>systemd</program><pid>[1]</pid><colon>: </colon>certbot.service: Deactivated <w:good>successfully</w:good>.`,
 		},
 		{
 			`<123>Jul 13 10:20:04 menetekel systemd[1]: Finished Certbot.`,
-			"\x1b[38;2;65;166;181m<123>\x1b[0m\x1b[38;2;192;153;255mJul 13 \x1b[0m\x1b[38;2;252;167;234m10:20:04 \x1b[0m\x1b[38;2;137;221;255mmenetekel \x1b[0m\x1b[38;2;130;170;255msystemd\x1b[0m\x1b[38;2;238;204;159m[1]\x1b[0m\x1b[38;2;99;109;166m: \x1b[0mFinished Certbot.",
+			"syslog-rfc3164",
+			`<priority><123></priority><date>Jul 13 </date><time>10:20:04 </time><hostname>menetekel </hostname><program>systemd</program><pid>[1]</pid><colon>: </colon><w:good>Finished</w:good> Certbot.`,
 		},
 	}
 
-	cfg := koanf.New(".")
-	err := cfg.Load(file.Provider("./testdata/formats/builtins/theme.yaml"), yaml.Parser())
-	if err != nil {
-		t.Fatalf("cfg.Load(...) failed with this error: %s", err)
-	}
-
-	settings, err := config.NewSettings(repoRoot(), cfg, nil, true)
-	if err != nil {
-		t.Fatalf("config.NewSettings(...) failed with this error: %s", err)
-	}
-	settings.ColorProfile = termenv.TrueColor
-
-	hl, err := NewHighlighter(settings)
-	if err != nil {
-		t.Fatalf("NewHighlighter() failed with this error: %s", err)
-	}
-
-	formats, err := newFormats(settings.Config, "test")
-	if err != nil {
-		t.Fatalf("newWords() failed with this error: %s", err)
-	}
+	hl, labels := newLabeledHighlighter(t)
 
 	for _, tt := range tests {
-		t.Run("TestFormatsHighlight"+tt.plain, func(t *testing.T) {
-			for _, lf := range formats {
-				if lf.match(tt.plain) {
-					colored := lf.highlight(tt.plain, hl)
-					if colored != tt.colored {
-						t.Errorf("got %v, want %v", colored, tt.colored)
-					}
+		t.Run("TestFormatsBuiltins"+tt.plain, func(t *testing.T) {
+			// formats are tried in alphabetical order with no tie-breaker, so
+			// overlapping formats must stay distinguishable by their anchors
+			var matched []string
+			for _, format := range hl.formats {
+				if format.match(tt.plain) {
+					matched = append(matched, format.Name)
 				}
+			}
+			if len(matched) != 1 || matched[0] != tt.format {
+				t.Errorf("got %v, want exactly one format: [%s]", matched, tt.format)
+
+				return
+			}
+
+			if labeled := labels.decode(hl.Colorize(tt.plain)); labeled != tt.labeled {
+				t.Errorf("got %v, want %v", labeled, tt.labeled)
 			}
 		})
 	}

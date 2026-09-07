@@ -48,9 +48,9 @@ var (
 		// CSI (Control Sequence Introducer)
 		`(?:\x1B\[|\x9B)` +
 		// opening sequence (attributes that set color or text style)
-		`\d{1,4}(?:[;:]\d{0,4})*m` +
+		`(\d{1,4}(?:[;:]\d{0,4})*)m` +
 		// text that will be displayed in according to attributes from the opening sequence above
-		`.*?` +
+		`(.*?)` +
 		// closing sequence
 		`(?:\x1B\[|\x9B)0?m`,
 	)
