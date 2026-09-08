@@ -35,7 +35,7 @@ formats:
     - regexp: (\d{2}:\d{2}:\d{2}\.\d{3} )
       name: time
     # log-level-char
-    - regexp: ([#*-.] )
+    - regexp: ([#*.-] )
       name: log-level
       alternatives:
         - regexp: (# )
