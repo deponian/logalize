@@ -130,10 +130,9 @@ func newLabelTheme(config *koanf.Koanf, profile termenv.Profile) (*labelTheme, e
 	if err != nil {
 		return nil, err
 	}
-
 	// Which fields delegate is a property of the log format rather than of a
-	// palette, so the shipped themes agree about it and any one of them can be
-	// read for all
+	// palette, so the shipped themes agree about it and any one of them can be read for all.
+	// TestThemesAreComplete() tests it.
 	reference := config.MapKeys("themes")[0]
 
 	for _, c := range all {
