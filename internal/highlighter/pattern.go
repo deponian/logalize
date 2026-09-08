@@ -105,9 +105,18 @@ func initPattern(p *pattern, config *koanf.Koanf, theme string) error {
 	return nil
 }
 
+// isEmpty reports whether there are no patterns to look for.
+func (patterns patternList) isEmpty() bool {
+	return len(patterns) == 0
+}
+
 // highlight colorizes various patterns like IP address, date, HTTP response code, etc.
 // It doesn't touch already colored parts of the input.
 func (patterns patternList) highlight(str string, h Highlighter) string {
+	if patterns.isEmpty() {
+		return str
+	}
+
 	return walkNonSGR(str, func(part string) string {
 		if part == "" {
 			return part

@@ -67,9 +67,18 @@ func newWords(config *koanf.Koanf, theme string) (wordGroups, error) {
 	return words, nil
 }
 
+// isEmpty reports whether there are no words to look for.
+func (words wordGroups) isEmpty() bool {
+	return len(words.Good.List) == 0 && len(words.Bad.List) == 0 && len(words.Other) == 0
+}
+
 // highlight colors all words in a string.
 // It doesn't touch already colored parts of the input.
 func (words wordGroups) highlight(str string, h Highlighter) string {
+	if words.isEmpty() {
+		return str
+	}
+
 	return walkNonSGR(str, func(part string) string {
 		if part == "" {
 			return part

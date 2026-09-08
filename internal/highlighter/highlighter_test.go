@@ -357,6 +357,57 @@ func TestHighlighterNewHighlightOnlyWords(t *testing.T) {
 	})
 }
 
+func TestHighlighterColorizeOnlyModes(t *testing.T) {
+	tests := []struct {
+		option  string
+		plain   string
+		colored string
+	}{
+		{"settings.only-formats", `hello toni`, "hello toni"},
+		{"settings.only-formats", `1 - 777 hello 1.1.1.1 true toni rufus`, "\x1b[38;2;245;206;65m1 - \x1b[0m777 hello 1.1.1.1 true toni rufus"},
+		{"settings.only-formats", `22 - 777 hello 1.1.1.1 true toni rufus`, "\x1b[38;2;245;17;65m22 - \x1b[0m777 hello 1.1.1.1 true toni rufus"},
+		{"settings.only-formats", `333 - 777 hello 1.1.1.1 true toni rufus`, "\x1b[38;2;17;206;65m333 - \x1b[0m777 hello 1.1.1.1 true toni rufus"},
+		{
+			"settings.only-formats",
+			`4444 - "777 hello 1.1.1.1 true toni rufus" "777 hello 1.1.1.1 true toni rufus" «777 hello 1.1.1.1 true toni rufus»`,
+			"\x1b[38;2;80;206;255m4444 - \x1b[0m\"777 hello 1.1.1.1 true toni rufus\" \"777 hello 1.1.1.1 true toni rufus\" «777 hello 1.1.1.1 true toni rufus»",
+		},
+		{"settings.only-patterns", `333 - 777 hello 1.1.1.1 true toni rufus`, "\x1b[38;2;0;255;255;9m333\x1b[0m - \x1b[38;2;255;255;255m777\x1b[0m hello \x1b[38;2;255;0;0;48;2;255;255;0;1m1.1.1.1\x1b[0m true toni rufus"},
+		{"settings.only-words", `333 - 777 hello 1.1.1.1 true toni rufus`, "333 - 777 hello 1.1.1.1 \x1b[38;2;81;250;138;1mtrue\x1b[0m \x1b[38;2;248;52;178;4mtoni\x1b[0m rufus"},
+	}
+
+	for _, tt := range tests {
+		t.Run("TestHighlighterColorizeOnlyModes"+tt.option+tt.plain, func(t *testing.T) {
+			cfg := koanf.New(".")
+			err := cfg.Load(file.Provider("./testdata/highlighter/Colorize/01_main.yaml"), yaml.Parser())
+			if err != nil {
+				t.Fatalf("cfg.Load(...) failed with this error: %s", err)
+			}
+			if err := cfg.Set("settings.theme", "test"); err != nil {
+				t.Fatalf("cfg.Set(...) failed with this error: %s", err)
+			}
+			if err := cfg.Set(tt.option, true); err != nil {
+				t.Fatalf("cfg.Set(...) failed with this error: %s", err)
+			}
+
+			settings, err := config.NewSettings(embed.FS{}, cfg, nil, true)
+			if err != nil {
+				t.Fatalf("config.NewSettings(...) failed with this error: %s", err)
+			}
+			settings.ColorProfile = termenv.TrueColor
+
+			hl, err := NewHighlighter(settings)
+			if err != nil {
+				t.Fatalf("NewHighlighter() failed with this error: %s", err)
+			}
+
+			if colored := hl.Colorize(tt.plain); colored != tt.colored {
+				t.Errorf("got %v, want %v", colored, tt.colored)
+			}
+		})
+	}
+}
+
 func TestHighlighterColorize(t *testing.T) {
 	tests := []struct {
 		plain string
