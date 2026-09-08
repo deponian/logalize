@@ -300,6 +300,11 @@ func TestFormatsBuiltins(t *testing.T) {
 			"ingress-nginx-controller",
 			`<remote-addr>127.0.0.102 </remote-addr><dash>- </dash><remote-user>- </remote-user><time-local>[27/Jun/2023:07:13:16 +0000] </time-local><request>"GET /language/en-GB/en-GB.xml HTTP/1.1" </request><status:4xx>403 </status:4xx><body-bytes-sent>9 </body-bytes-sent><http-referer>"-" </http-referer><http-user-agent>"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36" </http-user-agent><request-length>619 </request-length><request-time>0.003 </request-time><proxy-upstream-name>[imgproxy-imgproxy-imgproxy-80] </proxy-upstream-name><proxy-alternative-upstream-name>[] </proxy-alternative-upstream-name><upstream-addr>10.64.6.9:8080 </upstream-addr><upstream-response-length>9 </upstream-response-length><upstream-response-time>0.003 </upstream-response-time><upstream-status:5xx>503 </upstream-status:5xx><req-id>07d2cd60741517a6d8222f40757b94c4</req-id>`,
 		},
+		{
+			`127.0.0.102 - - [27/Jun/2023:07:13:16 +0000] "GET /language/en-GB/en-GB.xml HTTP/1.1" 000 9 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36" 619 0.003 [imgproxy-imgproxy-imgproxy-80] [] 10.64.6.9:8080 9 0.003 - 07d2cd60741517a6d8222f40757b94c4`,
+			"ingress-nginx-controller",
+			`<remote-addr>127.0.0.102 </remote-addr><dash>- </dash><remote-user>- </remote-user><time-local>[27/Jun/2023:07:13:16 +0000] </time-local><request>"GET /language/en-GB/en-GB.xml HTTP/1.1" </request><status>000 </status><body-bytes-sent>9 </body-bytes-sent><http-referer>"-" </http-referer><http-user-agent>"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36" </http-user-agent><request-length>619 </request-length><request-time>0.003 </request-time><proxy-upstream-name>[imgproxy-imgproxy-imgproxy-80] </proxy-upstream-name><proxy-alternative-upstream-name>[] </proxy-alternative-upstream-name><upstream-addr>10.64.6.9:8080 </upstream-addr><upstream-response-length>9 </upstream-response-length><upstream-response-time>0.003 </upstream-response-time><upstream-status>- </upstream-status><req-id>07d2cd60741517a6d8222f40757b94c4</req-id>`,
+		},
 
 		// klog
 		{

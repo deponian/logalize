@@ -129,6 +129,10 @@ themes:
         request:
           fg: "#ebdbb2"
         status:
+          fg: "#83a598"
+          1xx:
+            fg: "#83a598"
+            style: bold
           2xx:
             fg: "#98971a"
             style: bold
@@ -162,6 +166,10 @@ themes:
         upstream-response-time:
           fg: "#83a598"
         upstream-status:
+          fg: "#83a598"
+          1xx:
+            fg: "#83a598"
+            style: bold
           2xx:
             fg: "#98971a"
             style: bold
