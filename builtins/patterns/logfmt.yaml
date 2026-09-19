@@ -12,7 +12,8 @@ patterns:
 
   # xxxxx="xxxxxxx"
   logfmt-string:
-    priority: 2
+    # must stay above "url" (see builtins/patterns/network.yaml)
+    priority: 3
     regexps:
       - regexp: ((?:^|[\t ]+)[^=\t ]+)
         name: key

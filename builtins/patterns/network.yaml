@@ -35,3 +35,45 @@ patterns:
   # 3D-F2-C9-A6-B3-4F
   mac-address:
     regexp: ((?:[[:xdigit:]]{2}[:-]){5}[[:xdigit:]]{2})
+
+  # https://example.com
+  # https://user:password@10.0.0.200:8080/path/to/file?q=value#fragment
+  # git+ssh://git@example.com:22/deponian/logalize.git
+  url:
+    # must stay above "logfmt-general" (it would tear a URL apart at its
+    # first "=" sign) and below "logfmt-string" (a URL inside a quoted
+    # value is found when that value comes back to the patterns)
+    priority: 2
+    regexps:
+      # separate the URL from the previous word-ish thing;
+      # a URL right after an equals sign is left alone on purpose:
+      # "logfmt-general" claims the whole key=value pair and sends
+      # the value back here, where the URL starts the string
+      - regexp: (^["']?|[^[:alnum:]="']|[^=]["'])
+        name: start
+      # https
+      - regexp: ([[:alpha:]][[:alnum:]+.-]*)
+        name: scheme
+      # ://
+      - regexp: (://)
+        name: separator
+      # user:password@
+      - regexp: ((?:[^\s/?#@"'<>]*@)?)
+        name: userinfo
+      # example.com
+      # 10.0.0.200
+      # [2001:db8:4006:812::200e]
+      - regexp: (\[[^\s\]"'<>]*\]|[^\s/?#:"'<>]*)
+        name: host
+      # :8080
+      - regexp: ((?::\d{1,5})?)
+        name: port
+      # /path/to/file
+      - regexp: ((?:/(?:[^\s?#"'<>]*[^\s?#"'<>.,;:!)\]}])?)?)
+        name: path
+      # ?q=value
+      - regexp: ((?:\?(?:[^\s#"'<>]*[^\s#"'<>.,;:!)\]}])?)?)
+        name: query
+      # #fragment
+      - regexp: ((?:#(?:[^\s"'<>]*[^\s"'<>.,;:!)\]}])?)?)
+        name: fragment

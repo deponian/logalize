@@ -427,6 +427,34 @@ themes:
       mac-address:
         fg: "#076678"
 
+      # https://example.com
+      # https://user:password@10.0.0.200:8080/path/to/file?q=value#fragment
+      url:
+        # https
+        scheme:
+          fg: "#076678"
+        # ://
+        separator:
+          fg: "#076678"
+        # user:password@
+        userinfo:
+          fg: "#b57614"
+        # example.com
+        host:
+          fg: "#076678"
+        # :8080
+        port:
+          fg: "#076678"
+        # /path/to/file
+        path:
+          fg: "#504945"
+        # ?q=value
+        query:
+          fg: "#427b58"
+        # #fragment
+        fragment:
+          fg: "#8f3f71"
+
       # 0a99af43-0ad4-4237-b9cd-064966eb2803
       uuid:
         fg: "#076678"

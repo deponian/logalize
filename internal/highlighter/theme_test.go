@@ -10,6 +10,7 @@ import (
 // leave uncolored with the reason why.
 var deliberatelyUncolored = map[string]string{
 	"patterns.duration.start": "delimiter group; coloring it would tint the character in front of the duration",
+	"patterns.url.start":      "delimiter group; coloring it would tint the character(s) in front of the URL",
 
 	// A group whose alternatives cover every value its own regexp admits can
 	// never fall back on its own color, so an entry for it would be dead config.

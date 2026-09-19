@@ -598,6 +598,56 @@ func TestPatternsBuiltins(t *testing.T) {
 			`<p:mac-address>3d-f2-c9-a6-b3-4f</p:mac-address>`,
 		},
 
+		// url
+		{
+			`https://example.com`,
+			`<p:url:start></p:url:start><p:url:scheme>https</p:url:scheme><p:url:separator>://</p:url:separator><p:url:userinfo></p:url:userinfo><p:url:host>example.com</p:url:host><p:url:port></p:url:port><p:url:path></p:url:path><p:url:query></p:url:query><p:url:fragment></p:url:fragment>`,
+		},
+		{
+			`http://user:password@10.0.0.200:8080/path/to/file?q=value#fragment`,
+			`<p:url:start></p:url:start><p:url:scheme>http</p:url:scheme><p:url:separator>://</p:url:separator><p:url:userinfo>user:password@</p:url:userinfo><p:url:host>10.0.0.200</p:url:host><p:url:port>:8080</p:url:port><p:url:path>/path/to/file</p:url:path><p:url:query>?q=value</p:url:query><p:url:fragment>#fragment</p:url:fragment>`,
+		},
+		{
+			`git+ssh://git@example.com:22/deponian/logalize.git`,
+			`<p:url:start></p:url:start><p:url:scheme>git+ssh</p:url:scheme><p:url:separator>://</p:url:separator><p:url:userinfo>git@</p:url:userinfo><p:url:host>example.com</p:url:host><p:url:port>:22</p:url:port><p:url:path>/deponian/logalize.git</p:url:path><p:url:query></p:url:query><p:url:fragment></p:url:fragment>`,
+		},
+		{
+			`redis://[2001:db8:4006:812::200e]:6379/0`,
+			`<p:url:start></p:url:start><p:url:scheme>redis</p:url:scheme><p:url:separator>://</p:url:separator><p:url:userinfo></p:url:userinfo><p:url:host>[2001:db8:4006:812::200e]</p:url:host><p:url:port>:6379</p:url:port><p:url:path>/0</p:url:path><p:url:query></p:url:query><p:url:fragment></p:url:fragment>`,
+		},
+		{
+			`file:///var/log/syslog`,
+			`<p:url:start></p:url:start><p:url:scheme>file</p:url:scheme><p:url:separator>://</p:url:separator><p:url:userinfo></p:url:userinfo><p:url:host></p:url:host><p:url:port></p:url:port><p:url:path>/var/log/syslog</p:url:path><p:url:query></p:url:query><p:url:fragment></p:url:fragment>`,
+		},
+		{
+			`see https://github.com/deponian/logalize for details`,
+			`see<p:url:start> </p:url:start><p:url:scheme>https</p:url:scheme><p:url:separator>://</p:url:separator><p:url:userinfo></p:url:userinfo><p:url:host>github.com</p:url:host><p:url:port></p:url:port><p:url:path>/deponian/logalize</p:url:path><p:url:query></p:url:query><p:url:fragment></p:url:fragment> for details`,
+		},
+		{
+			`url=https://example.com/a`,
+			`<p:logfmt-general:key>url</p:logfmt-general:key><p:logfmt-general:equal-sign>=</p:logfmt-general:equal-sign><p:url:start></p:url:start><p:url:scheme>https</p:url:scheme><p:url:separator>://</p:url:separator><p:url:userinfo></p:url:userinfo><p:url:host>example.com</p:url:host><p:url:port></p:url:port><p:url:path>/a</p:url:path><p:url:query></p:url:query><p:url:fragment></p:url:fragment>`,
+		},
+		{
+			`msg="see https://example.com/a"`,
+			`<p:logfmt-string:key>msg</p:logfmt-string:key><p:logfmt-string:equal-sign>=</p:logfmt-string:equal-sign><p:logfmt-string:opening-quotation-mark>"</p:logfmt-string:opening-quotation-mark>see<p:url:start> </p:url:start><p:url:scheme>https</p:url:scheme><p:url:separator>://</p:url:separator><p:url:userinfo></p:url:userinfo><p:url:host>example.com</p:url:host><p:url:port></p:url:port><p:url:path>/a</p:url:path><p:url:query></p:url:query><p:url:fragment></p:url:fragment><p:logfmt-string:closing-quotation-mark>"</p:logfmt-string:closing-quotation-mark>`,
+		},
+		{
+			`{"url":"https://example.com/a","status":200}`,
+			`{"url"<p:url:start>:"</p:url:start><p:url:scheme>https</p:url:scheme><p:url:separator>://</p:url:separator><p:url:userinfo></p:url:userinfo><p:url:host>example.com</p:url:host><p:url:port></p:url:port><p:url:path>/a</p:url:path><p:url:query></p:url:query><p:url:fragment></p:url:fragment>","status":200}`,
+		},
+		{
+			`fetch of https://example.com/health failed: timeout`,
+			`fetch of<p:url:start> </p:url:start><p:url:scheme>https</p:url:scheme><p:url:separator>://</p:url:separator><p:url:userinfo></p:url:userinfo><p:url:host>example.com</p:url:host><p:url:port></p:url:port><p:url:path>/health</p:url:path><p:url:query></p:url:query><p:url:fragment></p:url:fragment> failed: timeout`,
+		},
+		{
+			`(docs at https://example.com/docs/intro.)`,
+			`(docs at<p:url:start> </p:url:start><p:url:scheme>https</p:url:scheme><p:url:separator>://</p:url:separator><p:url:userinfo></p:url:userinfo><p:url:host>example.com</p:url:host><p:url:port></p:url:port><p:url:path>/docs/intro</p:url:path><p:url:query></p:url:query><p:url:fragment></p:url:fragment>.)`,
+		},
+		{
+			`https://example.com/search?q=logalize&page=2#results`,
+			`<p:url:start></p:url:start><p:url:scheme>https</p:url:scheme><p:url:separator>://</p:url:separator><p:url:userinfo></p:url:userinfo><p:url:host>example.com</p:url:host><p:url:port></p:url:port><p:url:path>/search</p:url:path><p:url:query>?q=logalize&page=2</p:url:query><p:url:fragment>#results</p:url:fragment>`,
+		},
+
 		// uuid
 		{
 			`0a99af43-0ad4-4237-b9cd-064966eb2803`,
