@@ -65,7 +65,7 @@ It's fast and extensible alternative to ccze and colorize.`,
 
 	root.Flags().BoolP("debug", "d", false, "add debug info to the output")
 
-	root.Flags().BoolP("no-builtin-formats", "L", false, "disable built-in formats highlighting")
+	root.Flags().BoolP("no-builtin-formats", "F", false, "disable built-in formats highlighting")
 	root.Flags().BoolP("no-builtin-patterns", "P", false, "disable built-in patterns highlighting")
 	root.Flags().BoolP("no-builtin-words", "W", false, "disable built-in words highlighting")
 	root.Flags().BoolP("no-builtins", "N", false, "disable built-in formats, patterns and words highlighting")

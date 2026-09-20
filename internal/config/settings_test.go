@@ -66,7 +66,7 @@ func TestSettingsNewGood(t *testing.T) {
 
 	flags.StringP("theme", "t", "tokyonight-dark", "")
 
-	flags.BoolP("no-builtin-formats", "L", false, "")
+	flags.BoolP("no-builtin-formats", "F", false, "")
 	flags.BoolP("no-builtin-patterns", "P", false, "")
 	flags.BoolP("no-builtin-words", "W", false, "")
 	flags.BoolP("no-builtins", "N", false, "")
