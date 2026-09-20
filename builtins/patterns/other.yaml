@@ -1,4 +1,14 @@
 patterns:
+  # /etc/fstab
+  # /var/log/pods/argocd
+  # ~/.config/logalize/logalize.yaml
+  path:
+    priority: -6
+    # \B rejects a slash that merely separates two words ("and/or", "TCP/IP",
+    # "27/Jan/2023", "10.0.0.200/16"): it demands that the character in front
+    # of the path, if any, isn't a word character
+    regexp: (\B(?:~|\.{1,2})?(?:/[[:alnum:]_.@%+~-]*[[:alnum:]_@%+~-])+/?)
+
   # 0a99af43-0ad4-4237-b9cd-064966eb2803
   uuid:
     regexp: ([[:xdigit:]]{8}-[[:xdigit:]]{4}-[[:xdigit:]]{4}-[[:xdigit:]]{4}-[[:xdigit:]]{12})

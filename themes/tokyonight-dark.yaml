@@ -455,6 +455,11 @@ themes:
         fragment:
           fg: "#fca7ea"
 
+      # /etc/fstab
+      # /var/log/pods/argocd
+      path:
+        fg: "#c3e88d"
+
       # 0a99af43-0ad4-4237-b9cd-064966eb2803
       uuid:
         fg: "#86e1fc"

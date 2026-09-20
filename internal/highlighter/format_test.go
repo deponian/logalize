@@ -359,12 +359,12 @@ func TestFormatsBuiltins(t *testing.T) {
 		{
 			`Jul  3 09:17:01 menetekel CRON[1185749]: (root) CMD (   cd / && run-parts --report /etc/cron.hourly)`,
 			"syslog-rfc3164",
-			`<priority></priority><date>Jul  3 </date><time>09:17:01 </time><hostname>menetekel </hostname><program>CRON</program><pid>[1185749]</pid><colon>: </colon>(root) CMD (   cd / && run-parts --report /etc/cron.hourly)`,
+			`<priority></priority><date>Jul  3 </date><time>09:17:01 </time><hostname>menetekel </hostname><program>CRON</program><pid>[1185749]</pid><colon>: </colon>(root) CMD (   cd / && run-parts --report <p:path>/etc/cron.hourly</p:path>)`,
 		},
 		{
 			`Jul 13 10:17:02 menetekel CRON[1190762]: (root) CMD (   cd / && run-parts --report /etc/cron.hourly)`,
 			"syslog-rfc3164",
-			`<priority></priority><date>Jul 13 </date><time>10:17:02 </time><hostname>menetekel </hostname><program>CRON</program><pid>[1190762]</pid><colon>: </colon>(root) CMD (   cd / && run-parts --report /etc/cron.hourly)`,
+			`<priority></priority><date>Jul 13 </date><time>10:17:02 </time><hostname>menetekel </hostname><program>CRON</program><pid>[1190762]</pid><colon>: </colon>(root) CMD (   cd / && run-parts --report <p:path>/etc/cron.hourly</p:path>)`,
 		},
 		{
 			`Jul 13 10:20:04 menetekel systemd[1]: Starting Certbot...`,
@@ -374,7 +374,7 @@ func TestFormatsBuiltins(t *testing.T) {
 		{
 			`Jul 13 10:17:02 menetekel CRON: (root) CMD (   cd / && run-parts --report /etc/cron.hourly)`,
 			"syslog-rfc3164",
-			`<priority></priority><date>Jul 13 </date><time>10:17:02 </time><hostname>menetekel </hostname><program>CRON</program><pid></pid><colon>: </colon>(root) CMD (   cd / && run-parts --report /etc/cron.hourly)`,
+			`<priority></priority><date>Jul 13 </date><time>10:17:02 </time><hostname>menetekel </hostname><program>CRON</program><pid></pid><colon>: </colon>(root) CMD (   cd / && run-parts --report <p:path>/etc/cron.hourly</p:path>)`,
 		},
 		{
 			`Jul 13 10:20:04 menetekel systemd: Starting Certbot...`,

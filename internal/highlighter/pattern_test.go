@@ -598,6 +598,52 @@ func TestPatternsBuiltins(t *testing.T) {
 			`<p:mac-address>3d-f2-c9-a6-b3-4f</p:mac-address>`,
 		},
 
+		// path
+		{
+			`/etc/fstab`,
+			`<p:path>/etc/fstab</p:path>`,
+		},
+		{
+			`/var/log/pods/argocd`,
+			`<p:path>/var/log/pods/argocd</p:path>`,
+		},
+		{
+			`/usr/lib/x86_64-linux-gnu/libstdc++.so.6`,
+			`<p:path>/usr/lib/x86_64-linux-gnu/libstdc++.so.6</p:path>`,
+		},
+		{
+			`~/.config/logalize/logalize.yaml`,
+			`<p:path>~/.config/logalize/logalize.yaml</p:path>`,
+		},
+		{
+			`./dist/latest/logalize`,
+			`<p:path>./dist/latest/logalize</p:path>`,
+		},
+		{
+			`written to /var/log/syslog.`,
+			`written to <p:path>/var/log/syslog</p:path>.`,
+		},
+		{
+			`GET /api/v1/users HTTP/1.1`,
+			`GET <p:path>/api/v1/users</p:path> HTTP/1.1`,
+		},
+		{
+			`config=/etc/logalize/logalize.yaml`,
+			`<p:logfmt-general:key>config</p:logfmt-general:key><p:logfmt-general:equal-sign>=</p:logfmt-general:equal-sign><p:path>/etc/logalize/logalize.yaml</p:path>`,
+		},
+		{
+			`msg="reading /etc/hosts"`,
+			`<p:logfmt-string:key>msg</p:logfmt-string:key><p:logfmt-string:equal-sign>=</p:logfmt-string:equal-sign><p:logfmt-string:opening-quotation-mark>"</p:logfmt-string:opening-quotation-mark>reading <p:path>/etc/hosts</p:path><p:logfmt-string:closing-quotation-mark>"</p:logfmt-string:closing-quotation-mark>`,
+		},
+		{
+			`{"path":"/var/log/pods/argocd"}`,
+			`{"path":"<p:path>/var/log/pods/argocd</p:path>"}`,
+		},
+		{
+			`/var/lib/kubelet/pods/0a99af43-0ad4-4237-b9cd-064966eb2803/volumes`,
+			`<p:path>/var/lib/kubelet/pods/</p:path><p:uuid>0a99af43-0ad4-4237-b9cd-064966eb2803</p:uuid><p:path>/volumes</p:path>`,
+		},
+
 		// url
 		{
 			`https://example.com`,
