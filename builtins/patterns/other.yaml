@@ -11,4 +11,9 @@ patterns:
 
   # 0a99af43-0ad4-4237-b9cd-064966eb2803
   uuid:
-    regexp: ([[:xdigit:]]{8}-[[:xdigit:]]{4}-[[:xdigit:]]{4}-[[:xdigit:]]{4}-[[:xdigit:]]{12})
+    # the \b guards keep a UUID from being carved out of a longer run of hex
+    # digits ("10a99af43-0ad4-4237-b9cd-064966eb2803ff"). They also count "_"
+    # as a word character, so a UUID glued to a name by an underscore (the
+    # Kubernetes pod directories in testlogs/promtail.log) stays part of the
+    # surrounding "path" match instead of being colored on its own
+    regexp: (\b[[:xdigit:]]{8}-[[:xdigit:]]{4}-[[:xdigit:]]{4}-[[:xdigit:]]{4}-[[:xdigit:]]{12}\b)

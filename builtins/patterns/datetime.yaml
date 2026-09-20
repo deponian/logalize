@@ -5,7 +5,7 @@ patterns:
   rfc3339:
     regexps:
       # 2024-02-17
-      - regexp: ([1-9]\d{3}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1\d|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[1-9]\d(?:0[48]|[2468][048]|[13579][26])|(?:[2468][048]|[13579][26])00)-02-29)
+      - regexp: (\b[1-9]\d{3}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1\d|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[1-9]\d(?:0[48]|[2468][048]|[13579][26])|(?:[2468][048]|[13579][26])00)-02-29)
         name: date
       # T
       - regexp: (T|t)
@@ -15,14 +15,14 @@ patterns:
         name: time
       # Z
       # +01:00
-      - regexp: (Z|z|[+-][01]\d:[0-5]\d)
+      - regexp: (Z|z|[+-][01]\d:[0-5]\d\b)
         name: offset
 
   # 23:42:12
   # 23:42:12.034123
   time:
     priority: -1
-    regexp: (\d{2}:\d{2}:\d{2}(?:\.\d{1,9})?)
+    regexp: (\b\d{2}:\d{2}:\d{2}(?:\.\d{1,9})?\b)
 
   # 1999-07-10
   # 1999/07/10
@@ -30,7 +30,9 @@ patterns:
   # 07/10/1999
   date-1:
     priority: -1
-    regexp: (\d{4}[-/]\d{2}[-/]\d{2}|\d{2}[-/]\d{2}[-/]\d{4})
+    # the \b guards keep the date from being carved out of a longer run of
+    # digits ("112024-02-17", "2024-02-1789")
+    regexp: (\b(?:\d{4}[-/]\d{2}[-/]\d{2}|\d{2}[-/]\d{2}[-/]\d{4})\b)
 
   # 27 Jan
   # 27 January
@@ -42,7 +44,10 @@ patterns:
   # 27/August/2023
   date-2:
     priority: -1
-    regexp: (\d{1,2}[\t /-](?:January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(?:[\t /-]\d{4})?)
+    # the trailing \b stops an abbreviated month from being torn out of a
+    # longer word ("12-Marketing", "27-Maybe"); the leading one does the same
+    # for the day ("112-Jan-2023")
+    regexp: (\b\d{1,2}[\t /-](?:January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)(?:[\t /-]\d{4})?\b)
 
   # Jan 27
   # January 27
@@ -54,13 +59,15 @@ patterns:
   # August/27/2023
   date-3:
     priority: -2
-    regexp: ((?:January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[\t /-]\d{1,2}(?:[\t /-]\d{4})?)
+    # see the \b guards on "date-2"
+    regexp: (\b(?:January|February|March|April|May|June|July|August|September|October|November|December|Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[\t /-]\d{1,2}(?:[\t /-]\d{4})?\b)
 
   # Mon 17
   # Sunday 3
   date-4:
     priority: -1
-    regexp: ((?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|Mon|Tue|Wed|Thu|Fri|Sat|Sun)[\t ]\d{1,2})
+    # the trailing \b keeps the day number whole ("Sunday 3rd", "Monday 17th")
+    regexp: (\b(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|Mon|Tue|Wed|Thu|Fri|Sat|Sun)[\t ]\d{1,2}\b)
 
   # 5s
   # 7.5h
@@ -75,5 +82,7 @@ patterns:
       - regexp: (\d+(?:\.\d+)?)
         name: number
       # h
-      - regexp: (µs|ms|s|m|h|d)
+      # the \b separates the duration from the next word-ish thing, so that
+      # "5seconds" or "%22hello" don't leave "5s" and "%22h" behind
+      - regexp: ((?:µs|ms|s|m|h|d)\b)
         name: unit

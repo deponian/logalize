@@ -259,6 +259,15 @@ func TestPatternsBuiltins(t *testing.T) {
 			`07/10/1999`,
 			`<p:date-1>07/10/1999</p:date-1>`,
 		},
+		// the \b guards: a date inside a longer run of digits isn't one
+		{
+			`112024-02-17`,
+			`112024-02-17`,
+		},
+		{
+			`2024-02-1789`,
+			`2024-02-1789`,
+		},
 
 		// date-2
 		{
@@ -292,6 +301,15 @@ func TestPatternsBuiltins(t *testing.T) {
 		{
 			`27/August/2023`,
 			`<p:date-2>27/August/2023</p:date-2>`,
+		},
+		// the trailing \b: an abbreviated month is not a word prefix
+		{
+			`12-Marketing`,
+			`12-Marketing`,
+		},
+		{
+			`27-Maybe`,
+			`27-Maybe`,
 		},
 
 		// date-3
@@ -327,6 +345,11 @@ func TestPatternsBuiltins(t *testing.T) {
 			`August/27/2023`,
 			`<p:date-3>August/27/2023</p:date-3>`,
 		},
+		// the trailing \b: the day number has to end where the date does
+		{
+			`March 271999`,
+			`March 271999`,
+		},
 
 		// date-4
 		{
@@ -336,6 +359,11 @@ func TestPatternsBuiltins(t *testing.T) {
 		{
 			`Sunday 3`,
 			`<p:date-4>Sunday 3</p:date-4>`,
+		},
+		// the trailing \b: an ordinal suffix isn't part of the day number
+		{
+			`Sunday 3rd`,
+			`Sunday 3rd`,
 		},
 
 		// duration
@@ -358,6 +386,11 @@ func TestPatternsBuiltins(t *testing.T) {
 		{
 			`25d`,
 			`<p:duration:start></p:duration:start><p:duration:number>25</p:duration:number><p:duration:unit>d</p:duration:unit>`,
+		},
+		// the unit's \b: a unit letter that starts a word isn't a unit
+		{
+			`5seconds`,
+			`5seconds`,
 		},
 
 		// logfmt-general
@@ -416,6 +449,11 @@ func TestPatternsBuiltins(t *testing.T) {
 		{
 			`1.2.3.4:17846`,
 			`<p:ipv4-address:address>1.2.3.4</p:ipv4-address:address><p:ipv4-address:mask-or-port>:17846</p:ipv4-address:mask-or-port>`,
+		},
+		// the \b guards: an address inside a longer number isn't one
+		{
+			`1234567.1.1.1`,
+			`1234567.1.1.1`,
 		},
 
 		// ipv6-address
@@ -690,6 +728,11 @@ func TestPatternsBuiltins(t *testing.T) {
 		{
 			`0a99af43-0ad4-4237-b9cd-064966eb2803`,
 			`<p:uuid>0a99af43-0ad4-4237-b9cd-064966eb2803</p:uuid>`,
+		},
+		// the \b guards: a UUID inside a longer run of hex digits isn't one
+		{
+			`10a99af43-0ad4-4237-b9cd-064966eb2803ff`,
+			`10a99af43-0ad4-4237-b9cd-064966eb2803ff`,
 		},
 	}
 

@@ -342,7 +342,7 @@ func TestFormatsBuiltins(t *testing.T) {
 		{
 			`375:X 20 Jun 2025 13:27:11.773 - Sentinel ID is 2814dfe0610f4b8a99b4c6076693ed87d032af23`,
 			"redis",
-			`<pid>375</pid><colon>:</colon><role:sentinel>X </role:sentinel><date>20 Jun 2025 </date><time>13:27:11.773 </time><log-level:info>- </log-level:info>Sentinel ID is<p:duration:start> </p:duration:start><p:duration:number>2814</p:duration:number><p:duration:unit>d</p:duration:unit>fe0610f4b8a99b4c6076693ed87d032af23`,
+			`<pid>375</pid><colon>:</colon><role:sentinel>X </role:sentinel><date>20 Jun 2025 </date><time>13:27:11.773 </time><log-level:info>- </log-level:info>Sentinel ID is 2814dfe0610f4b8a99b4c6076693ed87d032af23`,
 		},
 		{
 			`8792:C 01 Feb 2024 19:41:07.224 . oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo`,
