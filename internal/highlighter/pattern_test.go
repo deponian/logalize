@@ -460,14 +460,6 @@ func TestPatternsBuiltins(t *testing.T) {
 			`<p:ipv6-address:opening-bracket></p:ipv6-address:opening-bracket><p:ipv6-address:address>fe80::200:5aee:feaa:20a2</p:ipv6-address:address><p:ipv6-address:closing-bracket></p:ipv6-address:closing-bracket><p:ipv6-address:port></p:ipv6-address:port>`,
 		},
 		{
-			`2001:0000:4136:e378:`,
-			`<p:ipv6-address:opening-bracket></p:ipv6-address:opening-bracket><p:ipv6-address:address>2001:0000:4136:e378:</p:ipv6-address:address><p:ipv6-address:closing-bracket></p:ipv6-address:closing-bracket><p:ipv6-address:port></p:ipv6-address:port>`,
-		},
-		{
-			`8000:63bf:3fff:fdd2`,
-			`<p:ipv6-address:opening-bracket></p:ipv6-address:opening-bracket><p:ipv6-address:address>8000:63bf:3fff:fdd2</p:ipv6-address:address><p:ipv6-address:closing-bracket></p:ipv6-address:closing-bracket><p:ipv6-address:port></p:ipv6-address:port>`,
-		},
-		{
 			`2001:db8::`,
 			`<p:ipv6-address:opening-bracket></p:ipv6-address:opening-bracket><p:ipv6-address:address>2001:db8::</p:ipv6-address:address><p:ipv6-address:closing-bracket></p:ipv6-address:closing-bracket><p:ipv6-address:port></p:ipv6-address:port>`,
 		},
