@@ -29,6 +29,7 @@ type Options struct {
 
 	PrintConfig   bool // print fully merged configuration file and exit the program
 	PrintBuiltins bool // print built-in configuration and exit the program
+	PrintPatterns bool // print all patterns sorted by priority
 	ListThemes    bool // print all available themes and exit the program
 }
 
@@ -61,6 +62,7 @@ func NewOptions(hasDarkBackground bool) *Options {
 
 		PrintConfig:   false,
 		PrintBuiltins: false,
+		PrintPatterns: false,
 		ListThemes:    false,
 	}
 }
@@ -165,6 +167,9 @@ func (opts *Options) ReadFromFlags(flags *pflag.FlagSet) {
 	}
 	if flags.Changed("print-builtins") {
 		opts.PrintBuiltins, _ = flags.GetBool("print-builtins")
+	}
+	if flags.Changed("print-patterns") {
+		opts.PrintPatterns, _ = flags.GetBool("print-patterns")
 	}
 	if flags.Changed("list-themes") {
 		opts.ListThemes, _ = flags.GetBool("list-themes")

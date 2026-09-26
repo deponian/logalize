@@ -1,0 +1,18 @@
+settings:
+  theme: test
+
+themes:
+  test: {}
+
+patterns:
+  no-priority:
+    regexp: (.*)
+  low:
+    priority: -10
+    regexp: (.*)
+  high:
+    priority: 5
+    regexp: (.*)
+  also-high:
+    priority: 5
+    regexp: (.*)

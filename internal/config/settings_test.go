@@ -394,3 +394,30 @@ func TestSettingsProcessSpecialFlagsNoFlags(t *testing.T) {
 		}
 	})
 }
+
+func TestSettingsProcessSpecialFlagsPrintPatterns(t *testing.T) {
+	cfg := koanf.New(".")
+	err := cfg.Load(file.Provider("./testdata/settings/ProcessSpecialFlags/05_print_patterns.yaml"), yaml.Parser())
+	if err != nil {
+		t.Fatalf("cfg.Load(...) failed with this error: %s", err)
+	}
+
+	settings, err := NewSettings(embed.FS{}, cfg, nil, true)
+	if err != nil {
+		t.Fatalf("NewSettings(...) failed with this error: %s", err)
+	}
+	settings.Opts.PrintPatterns = true
+
+	correctPatterns := "Patterns with higher priority are applied earlier:\n" +
+		"    5  also-high\n" +
+		"    5  high\n" +
+		"    0  no-priority\n" +
+		"  -10  low\n"
+
+	t.Run("TestSettingsProcessSpecialFlagsPrintPatterns", func(t *testing.T) {
+		output, _ := settings.ProcessSpecialFlags()
+		if output != correctPatterns {
+			t.Errorf("got %v, want %v", output, correctPatterns)
+		}
+	})
+}

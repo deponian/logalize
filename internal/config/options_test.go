@@ -96,6 +96,7 @@ func TestOptionsReadFromFlags(t *testing.T) {
 
 		PrintConfig:   true,
 		PrintBuiltins: true,
+		PrintPatterns: true,
 		ListThemes:    true,
 	}
 
@@ -122,6 +123,7 @@ func TestOptionsReadFromFlags(t *testing.T) {
 	flags.BoolP("print-config", "C", false, "")
 	flags.BoolP("list-themes", "T", false, "")
 	flags.BoolP("print-builtins", "B", false, "")
+	flags.BoolP("print-patterns", "R", false, "")
 
 	args := []string{
 		"--config", "test1",
@@ -141,6 +143,7 @@ func TestOptionsReadFromFlags(t *testing.T) {
 		"--print-config",
 		"--list-themes",
 		"--print-builtins",
+		"--print-patterns",
 	}
 
 	if err := flags.Parse(args); err != nil {

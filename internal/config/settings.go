@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"io/fs"
 	"os"
+	"sort"
+	"strconv"
 	"strings"
 
 	goyaml "github.com/goccy/go-yaml"
@@ -161,6 +163,9 @@ func (s Settings) ProcessSpecialFlags() (data string, exit bool) {
 	if s.Opts.PrintBuiltins {
 		return s.printBuiltins(), true
 	}
+	if s.Opts.PrintPatterns {
+		return s.printPatterns(), true
+	}
 	if s.Opts.ListThemes {
 		return s.listThemes(), true
 	}
@@ -192,6 +197,37 @@ func (s Settings) printBuiltins() string {
 	})
 
 	return b.String()
+}
+
+func (s Settings) printPatterns() string {
+	type patternInfo struct {
+		name     string
+		priority int
+	}
+
+	var patterns []patternInfo
+	priorityWidth := 0
+	for _, name := range s.Config.MapKeys("patterns") {
+		priority := s.Config.Int("patterns." + name + ".priority")
+		patterns = append(patterns, patternInfo{name, priority})
+		if width := len(strconv.Itoa(priority)); width > priorityWidth {
+			priorityWidth = width
+		}
+	}
+
+	// MapKeys is sorted, so a stable sort keeps patterns
+	// of equal priority in alphabetical order
+	sort.SliceStable(patterns, func(i, j int) bool {
+		return patterns[i].priority > patterns[j].priority
+	})
+
+	var result strings.Builder
+	fmt.Fprintln(&result, "Patterns with higher priority are applied earlier:")
+	for _, pattern := range patterns {
+		fmt.Fprintf(&result, "  %*d  %s\n", priorityWidth, pattern.priority, pattern.name)
+	}
+
+	return result.String()
 }
 
 func (s Settings) listThemes() string {
