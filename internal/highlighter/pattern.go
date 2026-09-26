@@ -35,7 +35,7 @@ func newPatterns(config *koanf.Koanf, theme string) (patternList, error) {
 		}
 	}
 
-	sort.Slice(patterns, func(i, j int) bool {
+	sort.SliceStable(patterns, func(i, j int) bool {
 		return patterns[i].Priority > patterns[j].Priority
 	})
 
