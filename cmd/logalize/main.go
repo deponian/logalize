@@ -75,12 +75,12 @@ It's fast and extensible alternative to ccze and colorize.`,
 	root.Flags().BoolP("only-words", "w", false, "highlight only words (can be combined with -f and -p)")
 	root.Flags().BoolP("dry-run", "n", false, "don't alter the input in any way")
 
-	root.Flags().BoolP("no-ansi-escape-sequences-stripping", "s", false, "disable removal of ANSI escape sequences (preserves input colors)")
+	root.Flags().BoolP("no-ansi-escape-sequence-stripping", "s", false, "disable removal of ANSI escape sequences (preserves input colors)")
 
 	// these flags will print something and stop the program
 	root.Flags().BoolP("print-config", "C", false, "print the full configuration file")
 	root.Flags().BoolP("list-themes", "T", false, "display a list of all available themes")
-	root.Flags().BoolP("print-builtins", "B", false, "print built-in formats, patterns and words as separate YAML documents")
+	root.Flags().BoolP("print-builtins", "B", false, "print built-in formats, patterns and words as separate YAML files")
 	root.Flags().BoolP("print-patterns", "R", false, "print all patterns sorted by priority")
 
 	return root

@@ -510,7 +510,7 @@ settings:
   only-patterns: false
   only-words: false
 
-  no-ansi-escape-sequences-stripping: false
+  no-ansi-escape-sequence-stripping: false
 
   debug: false
   dry-run: false

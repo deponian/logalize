@@ -35,7 +35,7 @@ var (
 	// based on https://github.com/chalk/ansi-regex
 	// with the addition of ":"-separated colors like '\x1B[38:5:185mTEST\e[0m'
 	// match (or try to match) all ANSI escape sequences
-	allANSIEscapeSequencesRegExp = regexp.MustCompile(`` +
+	fullANSIEscapeSequenceRegExp = regexp.MustCompile(`` +
 		`[\x1B\x9B]` +
 		`[[\]()#;?]*` +
 		`(?:(?:(?:(?:;[-a-zA-Z\d\\/#&.:=?%@~_]+)*|[a-zA-Z\d]+(?:;[-a-zA-Z\d\\/#&.:=?%@~_]*)*)?(?:\x07|\x1B\x5C|\x9C))` +

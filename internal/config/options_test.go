@@ -41,7 +41,7 @@ func TestOptionsReadFromConfig(t *testing.T) {
 		HighlightOnlyPatterns: true,
 		HighlightOnlyWords:    true,
 
-		NoANSIEscapeSequencesStripping: true,
+		NoANSIEscapeSequenceStripping: true,
 
 		Debug:  true,
 		DryRun: true,
@@ -89,7 +89,7 @@ func TestOptionsReadFromFlags(t *testing.T) {
 		HighlightOnlyPatterns: true,
 		HighlightOnlyWords:    true,
 
-		NoANSIEscapeSequencesStripping: true,
+		NoANSIEscapeSequenceStripping: true,
 
 		Debug:  true,
 		DryRun: true,
@@ -115,7 +115,7 @@ func TestOptionsReadFromFlags(t *testing.T) {
 	flags.BoolP("only-patterns", "p", false, "")
 	flags.BoolP("only-words", "w", false, "")
 
-	flags.BoolP("no-ansi-escape-sequences-stripping", "s", false, "")
+	flags.BoolP("no-ansi-escape-sequence-stripping", "s", false, "")
 
 	flags.BoolP("debug", "d", false, "")
 	flags.BoolP("dry-run", "n", false, "")
@@ -137,7 +137,7 @@ func TestOptionsReadFromFlags(t *testing.T) {
 		"--only-formats",
 		"--only-patterns",
 		"--only-words",
-		"--no-ansi-escape-sequences-stripping",
+		"--no-ansi-escape-sequence-stripping",
 		"--debug",
 		"--dry-run",
 		"--print-config",

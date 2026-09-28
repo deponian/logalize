@@ -96,8 +96,8 @@ func (h Highlighter) Colorize(line string) string {
 	}
 
 	// remove all ANSI escape sequences from the input by default
-	if !h.settings.Opts.NoANSIEscapeSequencesStripping {
-		line = allANSIEscapeSequencesRegExp.ReplaceAllString(line, "")
+	if !h.settings.Opts.NoANSIEscapeSequenceStripping {
+		line = fullANSIEscapeSequenceRegExp.ReplaceAllString(line, "")
 	}
 
 	// try one of the formats

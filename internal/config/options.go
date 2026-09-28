@@ -25,7 +25,7 @@ type Options struct {
 
 	DryRun bool // don't alter the input
 
-	NoANSIEscapeSequencesStripping bool // disable removing of ANSI escape sequences from the input
+	NoANSIEscapeSequenceStripping bool // disable removing of ANSI escape sequences from the input
 
 	PrintConfig   bool // print fully merged configuration file and exit the program
 	PrintBuiltins bool // print built-in configuration and exit the program
@@ -55,7 +55,7 @@ func NewOptions(hasDarkBackground bool) *Options {
 		HighlightOnlyPatterns: false,
 		HighlightOnlyWords:    false,
 
-		NoANSIEscapeSequencesStripping: false,
+		NoANSIEscapeSequenceStripping: false,
 
 		Debug:  false,
 		DryRun: false,
@@ -101,8 +101,8 @@ func (opts *Options) ReadFromConfig(cfg *koanf.Koanf) {
 		opts.HighlightOnlyWords = cfg.Bool("settings.only-words")
 	}
 
-	if cfg.Exists("settings.no-ansi-escape-sequences-stripping") {
-		opts.NoANSIEscapeSequencesStripping = cfg.Bool("settings.no-ansi-escape-sequences-stripping")
+	if cfg.Exists("settings.no-ansi-escape-sequence-stripping") {
+		opts.NoANSIEscapeSequenceStripping = cfg.Bool("settings.no-ansi-escape-sequence-stripping")
 	}
 
 	if cfg.Exists("settings.debug") {
@@ -151,8 +151,8 @@ func (opts *Options) ReadFromFlags(flags *pflag.FlagSet) {
 		opts.HighlightOnlyWords, _ = flags.GetBool("only-words")
 	}
 
-	if flags.Changed("no-ansi-escape-sequences-stripping") {
-		opts.NoANSIEscapeSequencesStripping, _ = flags.GetBool("no-ansi-escape-sequences-stripping")
+	if flags.Changed("no-ansi-escape-sequence-stripping") {
+		opts.NoANSIEscapeSequenceStripping, _ = flags.GetBool("no-ansi-escape-sequence-stripping")
 	}
 
 	if flags.Changed("debug") {

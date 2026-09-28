@@ -10,7 +10,7 @@ settings:
   only-patterns: true
   only-words: true
 
-  no-ansi-escape-sequences-stripping: true
+  no-ansi-escape-sequence-stripping: true
 
   debug: true
   dry-run: true

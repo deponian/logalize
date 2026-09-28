@@ -412,11 +412,11 @@ func TestHighlighterColorize(t *testing.T) {
 	tests := []struct {
 		plain string
 
-		coloredNormal                         string
-		coloredDefaultColor                   string
-		coloredDryRun                         string
-		coloredNoANSIEscapeSequencesStripping string
-		coloredDebug                          string
+		coloredNormal                        string
+		coloredDefaultColor                  string
+		coloredDryRun                        string
+		coloredNoANSIEscapeSequenceStripping string
+		coloredDebug                         string
 	}{
 		// formats
 		{
@@ -1052,7 +1052,7 @@ func TestHighlighterColorize(t *testing.T) {
 		})
 	}
 
-	// test "no-ansi-escape-sequences-stripping" option
+	// test "no-ansi-escape-sequence-stripping" option
 	cfg = koanf.New(".")
 	err = cfg.Load(file.Provider("./testdata/highlighter/Colorize/01_main.yaml"), yaml.Parser())
 	if err != nil {
@@ -1062,7 +1062,7 @@ func TestHighlighterColorize(t *testing.T) {
 	if err != nil {
 		t.Fatalf("cfg.Set(...) failed with this error: %s", err)
 	}
-	err = cfg.Set("settings.no-ansi-escape-sequences-stripping", true)
+	err = cfg.Set("settings.no-ansi-escape-sequence-stripping", true)
 	if err != nil {
 		t.Fatalf("cfg.Set(...) failed with this error: %s", err)
 	}
@@ -1079,11 +1079,11 @@ func TestHighlighterColorize(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		t.Run("TestHighlighterColorizeNoANSIEscapeSequencesStripping"+tt.plain, func(t *testing.T) {
+		t.Run("TestHighlighterColorizeNoANSIEscapeSequenceStripping"+tt.plain, func(t *testing.T) {
 			colored := hl.Colorize(tt.plain)
 
-			if colored != tt.coloredNoANSIEscapeSequencesStripping {
-				t.Errorf("got %v, want %v", colored, tt.coloredNoANSIEscapeSequencesStripping)
+			if colored != tt.coloredNoANSIEscapeSequenceStripping {
+				t.Errorf("got %v, want %v", colored, tt.coloredNoANSIEscapeSequenceStripping)
 			}
 		})
 	}
