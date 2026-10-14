@@ -1,6 +1,6 @@
 module github.com/deponian/logalize
 
-go 1.26.5
+go 1.27.2
 
 require (
 	github.com/aaaton/golem/v4 v4.0.2
@@ -11,7 +11,7 @@ require (
 	github.com/knadh/koanf/parsers/yaml v1.1.1
 	github.com/knadh/koanf/providers/file v1.2.1
 	github.com/knadh/koanf/providers/rawbytes v1.0.1
-	github.com/knadh/koanf/v2 v2.3.6
+	github.com/knadh/koanf/v2 v2.3.8
 	github.com/muesli/mango v0.2.0
 	github.com/muesli/mango-cobra v1.3.0
 	github.com/muesli/roff v0.1.0
@@ -33,5 +33,5 @@ require (
 	github.com/muesli/mango-pflag v0.1.0 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	go.yaml.in/yaml/v3 v3.0.5 // indirect
-	golang.org/x/sys v0.47.0 // indirect
+	golang.org/x/sys v0.49.0 // indirect
 )
