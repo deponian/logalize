@@ -5,13 +5,35 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.0] - 2026-11-21
+
+### Added
+
+- Add "solarized-dark" and "solarized-light" themes
+- Add "null" to the "bad" words
+- Add "url" pattern
+- Add "path" pattern
+- Add `\b` to some patterns to resolve the boundary issue
+- Add `--print-patterns/-R` flag
+
+### Changed
+
+- Switch to go v1.27.2 and update modules
+
+### Fixed
+
+- Rename `-L` flag to `-F` so that it matches the existing set of flags `-f`, `-p` and `-w`
+- Make the IPv6 pattern more accurate
+- Use `sort.SliceStable()` for patterns sorting instead of `sort.Slice()`
+- Rename `--no-ansi-escape-sequences-stripping` flag to `--no-ansi-escape-sequence-stripping`
+
 ## [0.8.2] - 2026-09-12
 
 ### Fixed
 
 - Improve "redis" log format
 - Improve "ingress-nginx-controller" log format
-- Don't panic in the --only-formats, --only-patterns and --only-words modes
+- Don't panic in the `--only-formats`, `--only-patterns` and `--only-words` modes
 
 ## [0.8.1] - 2026-08-16
 
@@ -269,6 +291,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Print version as "version (commit) date"
 
+[0.9.0]: https://github.com/deponian/logalize/compare/v0.8.2..v0.9.0
 [0.8.2]: https://github.com/deponian/logalize/compare/v0.8.1..v0.8.2
 [0.8.1]: https://github.com/deponian/logalize/compare/v0.8.0..v0.8.1
 [0.8.0]: https://github.com/deponian/logalize/compare/v0.7.1..v0.8.0
